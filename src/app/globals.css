@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading uppercase tracking-wide;
+  }
+}
+
+/* Skip link for keyboard/screen-reader users */
+.skip-link {
+  @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded focus:bg-brand focus:px-4 focus:py-2 focus:text-white;
+}
+
+.container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.input {
+  @apply w-full rounded border border-black/20 bg-white px-3 py-2.5 text-black placeholder:text-black/40 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center rounded px-6 py-3 text-sm font-semibold uppercase tracking-wide transition-colors;
+}
+
+.btn-primary {
+  @apply btn bg-brand text-white hover:bg-brand-700;
+}
+
+.btn-outline {
+  @apply btn border-2 border-white text-white hover:bg-white hover:text-black;
+}
+
+.nav-link {
+  @apply border-b-2 border-transparent px-1 py-2 text-sm font-semibold uppercase tracking-wide text-white/80 transition-colors hover:text-white;
+}
+
+.nav-link[aria-current="page"] {
+  @apply border-brand text-white;
+}

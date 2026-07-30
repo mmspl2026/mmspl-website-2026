@@ -175,7 +175,48 @@ as a `pushSubscription` document. The same game-cancellation/news-announcement w
 above then fans a push out to every stored subscription via `web-push`
 (`src/lib/push.ts`). No separate webhook config needed — it rides the same one.
 
-## 4. Images
+## 4. Admin score entry (`/admin`)
+
+A mobile-optimized, password-gated tool for entering scores during game nights, at
+`/admin` (login at `/admin/login`).
+
+### Setup
+
+```
+ADMIN_PASSWORD=whatever-you-want
+```
+
+That's the only requirement — login POSTs to `/api/admin/login`, which sets an
+httpOnly cookie holding an HMAC of today's date signed with `ADMIN_PASSWORD`. There's
+no session store: the token only verifies on the day it was issued, so it naturally
+expires at midnight UTC without a database or a manual "log out everyone" switch. Every
+`/api/admin/*` route re-checks this cookie independently (not just the `/admin` page),
+so the API can't be hit directly without a valid session.
+
+### How it works
+
+- The date picker's arrows jump between dates that actually have games in the **active
+  season** (`season.isActive == true`) — not just ±1 calendar day. The date input still
+  lets you jump anywhere.
+- Score `+`/`−` and the status toggle (Scheduled/Live/Final/Forfeit) only edit local
+  draft state — nothing hits Sanity until **Save Score**. Cards with unsaved edits get
+  an amber ring so you can see what still needs saving at a glance.
+- **Save Score** patches the `game` document, recalculates standings for that game's
+  season (`src/lib/standings.ts`, from `final` games only), and refreshes the standings
+  panel — all in one round trip. Every save shows a toast with a 30-second **Undo**,
+  which re-saves the pre-save values (itself triggering a fresh recalculation).
+- **Cancelled (Rain-Out)** is a separate action from the status toggle — it always sets
+  the score to 1-1 and status to `cancelled`, and requires a confirmation dialog because
+  it immediately emails and push-notifies every subscriber
+  (`POST /api/admin/games/cancel`, same `sendGameCancellationAlert` /
+  `sendPushToAll` helpers the Studio webhook uses, just called directly instead of via
+  webhook since these saves don't go through Studio). **Mark All Remaining as
+  Cancelled** does the same for every non-final game on the visible date in one batched
+  email/push instead of spamming one per game.
+- **Sync Standings** forces a full recalculation for the active season from scratch —
+  useful after bulk edits in Studio that didn't go through this page.
+
+## 5. Images
 
 Every content image (hero, news photos, award photos, gallery, team logos) goes through
 Sanity's asset pipeline — uploaded in Studio, served via `cdn.sanity.io`, resized with
@@ -183,7 +224,7 @@ Sanity's asset pipeline — uploaded in Studio, served via `cdn.sanity.io`, resi
 is `public/mmspl-logo.png`, the league's own brand mark, self-hosted so the site has no
 runtime dependency on `mmspl.ca`.
 
-## 5. Deploying to Vercel
+## 6. Deploying to Vercel
 
 ```bash
 npm i -g vercel   # or use the Vercel dashboard
@@ -198,20 +239,29 @@ After the first deploy, update the Sanity webhook URL (above) to point at your r
 Vercel domain, and add that domain under Sanity manage console → API → CORS Origins
 (with credentials) so `/studio` can talk to your dataset from production.
 
-## 6. Project structure
+## 7. Project structure
 
 ```
 src/
   app/                  routes (App Router)
-    (site pages)/       home, standings, schedule, awards, register, about, contact, notifications
-    news/[slug]/        individual news article
-    studio/[[...tool]]/ embedded Sanity Studio
-    api/                register, subscribe, contact, push/subscribe, webhooks/sanity
-  components/           shared UI (Header, Hero, GameRail, StandingsTable, forms, …)
+    (site)/              home, standings, schedule, awards, register, about, contact,
+                         notifications, news/[slug] — wrapped in the public Header/Footer
+    admin/               /admin (score entry) + /admin/login — no site chrome, dark theme
+    studio/[[...tool]]/ embedded Sanity Studio — no site chrome either
+    api/
+      admin/             login, logout, dates, games, games/save, games/cancel,
+                         standings, standings/sync — all cookie-auth guarded
+      register, subscribe, contact, push/subscribe, webhooks/sanity
+  components/
+    admin/               AdminDashboard, GameEntryCard, ScoreStepper, StatusToggle,
+                         DateNav, ConfirmDialog, ToastStack, AdminStandingsPanel, LoginForm
+    (site)               Header, Hero, GameRail, StandingsTable, forms, …
   lib/
     sanity/             client, image builder, GROQ queries, env
     resend.ts           email sending + templates
     push.ts             web-push sending helper
+    standings.ts         recalculateStandings(seasonId) — shared by admin save/cancel/sync
+    admin-auth.ts         session token + Server Component / Route Handler guards
     types.ts            shared content types
     seed-content.ts      seed-data.ts   real + sample fallback content
   sanity/
@@ -221,7 +271,7 @@ sanity.config.ts        Studio config (schema + plugins)
 public/sw.js            service worker for browser push notifications
 ```
 
-## 7. Accessibility & responsiveness
+## 8. Accessibility & responsiveness
 
 - Semantic landmarks (`header`, `nav`, `main`, `footer`, `address`), skip-to-content
   link, `aria-current` on active nav links, `aria-pressed` on filter/toggle buttons.

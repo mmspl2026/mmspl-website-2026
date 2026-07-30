@@ -48,19 +48,44 @@ export async function sendRegistrationConfirmation(to: string, playerName: strin
   return send(to, "MMSPL Registration Received", html);
 }
 
-export async function sendGameCancellationAlert(
-  to: string[],
-  game: { homeTeam: string; awayTeam: string; date: string; time: string; field: string; status: string }
-) {
-  if (to.length === 0) return { skipped: true };
-  const verb = game.status === "postponed" ? "Postponed" : "Cancelled";
+interface CancelledGameSummary {
+  homeTeam: string;
+  awayTeam: string;
+  date: string;
+  time: string;
+  field: string;
+  status: string;
+}
+
+export async function sendGameCancellationAlert(to: string[], games: CancelledGameSummary[]) {
+  if (to.length === 0 || games.length === 0) return { skipped: true };
+
+  const single = games.length === 1;
+  const rowsHtml = games
+    .map((game) => {
+      const verb = game.status === "postponed" ? "Postponed" : "Cancelled";
+      const dateStr = new Date(game.date).toLocaleDateString("en-CA", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+      });
+      return `<p style="margin: 16px 0;">
+        <span style="font-size:16px; font-weight:bold;">${game.homeTeam} vs ${game.awayTeam}</span><br/>
+        <span style="color:#AA1111; font-weight:600;">${verb}</span> &middot; ${dateStr} at ${game.time} &middot; ${game.field}
+      </p>`;
+    })
+    .join("");
+
+  const title = single ? `Game ${games[0].status === "postponed" ? "Postponed" : "Cancelled"}` : "Games Cancelled";
+  const subject = single
+    ? `MMSPL: Game ${games[0].status === "postponed" ? "Postponed" : "Cancelled"} — ${games[0].homeTeam} vs ${games[0].awayTeam}`
+    : `MMSPL: ${games.length} Games Cancelled`;
+
   const html = wrapEmail(
-    `Game ${verb}`,
-    `<p>The following game has been <strong>${verb.toLowerCase()}</strong>:</p>
-     <p style="font-size:16px; font-weight:bold;">${game.homeTeam} vs ${game.awayTeam}</p>
-     <p>${new Date(game.date).toLocaleDateString("en-CA", { weekday: "long", month: "long", day: "numeric" })} at ${game.time} &middot; ${game.field}</p>`
+    title,
+    `<p>${single ? "The following game has been affected" : `${games.length} games have been affected`}:</p>${rowsHtml}`
   );
-  return send(to, `MMSPL: Game ${verb} — ${game.homeTeam} vs ${game.awayTeam}`, html);
+  return send(to, subject, html);
 }
 
 export async function sendNewsAnnouncement(to: string[], title: string, slug: string) {

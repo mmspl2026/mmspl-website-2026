@@ -68,7 +68,9 @@ export default defineType({
       options: {
         list: [
           { title: "Scheduled", value: "scheduled" },
+          { title: "Live", value: "live" },
           { title: "Final", value: "final" },
+          { title: "Forfeit", value: "forfeit" },
           { title: "Cancelled", value: "cancelled" },
           { title: "Postponed", value: "postponed" },
         ],

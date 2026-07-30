@@ -9,14 +9,18 @@ const PARKS = ["Centennial Park", "Mintleaf Park"] as const;
 
 const STATUS_LABEL: Record<Game["status"], string> = {
   scheduled: "Scheduled",
+  live: "Live",
   final: "Final",
+  forfeit: "Forfeit",
   cancelled: "Cancelled",
   postponed: "Postponed",
 };
 
 const STATUS_CLASS: Record<Game["status"], string> = {
   scheduled: "bg-black/5 text-black/70",
+  live: "bg-green-600 text-white",
   final: "bg-brand text-white",
+  forfeit: "bg-amber-100 text-amber-700",
   cancelled: "bg-red-100 text-red-700",
   postponed: "bg-amber-100 text-amber-700",
 };
@@ -107,13 +111,13 @@ export default function ScheduleList({ games }: { games: Game[] }) {
                             <div className="flex items-center gap-2">
                               <TeamMark team={game.homeTeam} size={22} />
                               <span>{game.homeTeam.name}</span>
-                              {game.status === "final" && (
+                              {(game.status === "final" || game.status === "forfeit" || game.status === "live") && (
                                 <span className="font-heading">{game.homeScore}</span>
                               )}
                             </div>
                             <span className="text-black/40">vs</span>
                             <div className="flex items-center gap-2">
-                              {game.status === "final" && (
+                              {(game.status === "final" || game.status === "forfeit" || game.status === "live") && (
                                 <span className="font-heading">{game.awayScore}</span>
                               )}
                               <span>{game.awayTeam.name}</span>

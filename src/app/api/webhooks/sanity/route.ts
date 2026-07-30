@@ -12,7 +12,7 @@ import { sendPushToAll } from "@/lib/push";
 
 interface GameWebhookPayload {
   _type: "game";
-  status: "scheduled" | "final" | "cancelled" | "postponed";
+  status: "scheduled" | "live" | "final" | "forfeit" | "cancelled" | "postponed";
   notifyOnCancellation?: boolean;
   date: string;
   time: string;
@@ -51,14 +51,16 @@ export async function POST(req: NextRequest) {
       const verb = payload.status === "postponed" ? "Postponed" : "Cancelled";
 
       await Promise.all([
-        sendGameCancellationAlert(emails, {
-          homeTeam,
-          awayTeam,
-          date: payload.date,
-          time: payload.time,
-          field: payload.field,
-          status: payload.status,
-        }),
+        sendGameCancellationAlert(emails, [
+          {
+            homeTeam,
+            awayTeam,
+            date: payload.date,
+            time: payload.time,
+            field: payload.field,
+            status: payload.status,
+          },
+        ]),
         sendPushToAll({
           title: `Game ${verb}`,
           body: `${homeTeam} vs ${awayTeam} — ${payload.time} at ${payload.field}`,

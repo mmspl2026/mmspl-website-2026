@@ -4,14 +4,18 @@ import clsx from "clsx";
 
 const STATUS_LABEL: Record<Game["status"], string> = {
   scheduled: "Scheduled",
+  live: "Live",
   final: "Final",
+  forfeit: "Forfeit",
   cancelled: "Cancelled",
   postponed: "Postponed",
 };
 
 const STATUS_CLASS: Record<Game["status"], string> = {
   scheduled: "bg-white/10 text-white/80",
+  live: "bg-green-600 text-white",
   final: "bg-brand text-white",
+  forfeit: "bg-amber-900 text-amber-200",
   cancelled: "bg-red-950 text-red-200",
   postponed: "bg-amber-900 text-amber-200",
 };
@@ -33,7 +37,7 @@ export default function GameCard({
   today?: string;
   className?: string;
 }) {
-  const isFinal = game.status === "final";
+  const showScore = game.status === "final" || game.status === "forfeit" || game.status === "live";
   const dateLabel = today && game.date === today ? "Today" : formatDate(game.date);
 
   return (
@@ -67,14 +71,14 @@ export default function GameCard({
             <TeamMark team={game.homeTeam} size={28} />
             <span className="text-sm font-medium">{game.homeTeam.name}</span>
           </div>
-          {isFinal && <span className="font-heading text-lg">{game.homeScore}</span>}
+          {showScore && <span className="font-heading text-lg">{game.homeScore}</span>}
         </div>
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <TeamMark team={game.awayTeam} size={28} />
             <span className="text-sm font-medium">{game.awayTeam.name}</span>
           </div>
-          {isFinal && <span className="font-heading text-lg">{game.awayScore}</span>}
+          {showScore && <span className="font-heading text-lg">{game.awayScore}</span>}
         </div>
       </div>
 

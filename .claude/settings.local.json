@@ -45,7 +45,17 @@
       "Bash(lsof -i:3000 -i:3001)",
       "Bash(curl -s -X POST http://localhost:3000/api/push/subscribe -H \"Content-Type: application/json\" -d '{}' -w \"\\\\nstatus: %{http_code}\\\\n\")",
       "Bash(curl -s -X POST http://localhost:3000/api/subscribe -H \"Content-Type: application/json\" -d '{\"email\":\"not-an-email\"}' -w \"\\\\nstatus: %{http_code}\\\\n\")",
-      "Bash(curl -s -X POST http://localhost:3000/api/subscribe -H \"Content-Type: application/json\" -d '{\"email\":\"smoketest@example.com\",\"name\":\"Smoke Test\"}' -w \"\\\\nstatus: %{http_code}\\\\n\")"
+      "Bash(curl -s -X POST http://localhost:3000/api/subscribe -H \"Content-Type: application/json\" -d '{\"email\":\"smoketest@example.com\",\"name\":\"Smoke Test\"}' -w \"\\\\nstatus: %{http_code}\\\\n\")",
+      "Bash(mkdir -p \"\\(site\\)\")",
+      "Bash(mv page.tsx about awards contact news notifications register schedule standings \"\\(site\\)/\")",
+      "Bash(timeout 15 curl -s -i http://localhost:3000/admin)",
+      "Bash(curl -s -i --max-time 20 http://localhost:3000/admin -o /tmp/admin_response.txt -w \"HTTP_CODE:%{http_code}\\\\n\")",
+      "Bash(curl -s -i --max-time 30 http://localhost:3000/admin -o /tmp/admin_response.txt -w \"HTTP_CODE:%{http_code}\\\\n\")",
+      "Bash(lsof -i:3000)",
+      "Bash(disown)",
+      "Bash(curl *)",
+      "Bash(python3 -m json.tool)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('season:', d['season']['year']\\); print\\('standings count:', len\\(d['standings']\\)\\)\")"
     ]
   }
 }

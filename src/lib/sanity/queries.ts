@@ -82,3 +82,47 @@ export const subscriberEmailsQuery = groq`*[_type == "subscriber"].email`;
 export const allPushSubscriptionsQuery = groq`*[_type == "pushSubscription"]{
   _id, endpoint, p256dh, auth
 }`;
+
+// --- Admin score entry ---
+
+export const activeSeasonDatesQuery = groq`array::unique(*[_type == "game" && season->isActive == true].date) | order(@ asc)`;
+
+export const gamesByDateForActiveSeasonQuery = groq`*[_type == "game" && date == $date && season->isActive == true] | order(time asc){
+  _id,
+  date,
+  time,
+  field,
+  status,
+  homeScore,
+  awayScore,
+  homeTeam->{_id, name, logo, division, color},
+  awayTeam->{_id, name, logo, division, color},
+  "seasonId": season->_id,
+  "seasonYear": season->year
+}`;
+
+export const gamesByIdsQuery = groq`*[_type == "game" && _id in $ids]{
+  _id,
+  date,
+  time,
+  field,
+  status,
+  homeTeam->{_id, name},
+  awayTeam->{_id, name},
+  "seasonId": season->_id,
+  "seasonYear": season->year
+}`;
+
+export const gameByIdQuery = groq`*[_type == "game" && _id == $id][0]{
+  _id,
+  date,
+  time,
+  field,
+  status,
+  homeScore,
+  awayScore,
+  homeTeam->{_id, name},
+  awayTeam->{_id, name},
+  "seasonId": season->_id,
+  "seasonYear": season->year
+}`;

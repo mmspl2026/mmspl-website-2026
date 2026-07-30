@@ -30,7 +30,7 @@ export interface Game {
   awayTeam: Team;
   homeScore?: number;
   awayScore?: number;
-  status: "scheduled" | "final" | "cancelled" | "postponed";
+  status: "scheduled" | "live" | "final" | "forfeit" | "cancelled" | "postponed";
 }
 
 export interface Standing {
@@ -89,6 +89,11 @@ export interface AdminSettings {
   sponsorText?: string;
   registrationOpen: boolean;
   registrationFee?: number;
+}
+
+export interface AdminGame extends Game {
+  seasonId: string;
+  seasonYear: number;
 }
 
 export interface PushSubscriptionRecord {

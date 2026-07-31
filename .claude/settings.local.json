@@ -55,7 +55,9 @@
       "Bash(disown)",
       "Bash(curl *)",
       "Bash(python3 -m json.tool)",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('season:', d['season']['year']\\); print\\('standings count:', len\\(d['standings']\\)\\)\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('season:', d['season']['year']\\); print\\('standings count:', len\\(d['standings']\\)\\)\")",
+      "Bash(free -h)",
+      "Bash(vm_stat)"
     ]
   }
 }

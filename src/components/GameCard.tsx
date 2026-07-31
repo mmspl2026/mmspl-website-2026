@@ -44,7 +44,7 @@ export default function GameCard({
   return (
     <article
       className={clsx(
-        "flex w-[140px] shrink-0 snap-start flex-col gap-1.5 rounded-lg border border-white/15 bg-white/[0.08] px-3 py-2.5 text-white shadow-lg backdrop-blur-[10px] sm:w-40",
+        "flex w-[140px] shrink-0 snap-start flex-col gap-1.5 rounded-lg border border-white/15 bg-white/[0.15] px-3 py-2.5 text-white shadow-lg backdrop-blur-[10px] supports-[backdrop-filter]:bg-white/[0.08] sm:w-40",
         className
       )}
       aria-label={`${game.homeTeam.name} versus ${game.awayTeam.name}`}

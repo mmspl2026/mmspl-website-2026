@@ -48,10 +48,14 @@ export default function HomeHero({
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/10 bg-black/60 backdrop-blur-sm">
+      {/* No background of its own — the hero photo (darkened by the overlay
+          above) should show through directly behind the cards, not sit in a
+          separate solid band. Text gets a drop-shadow since it no longer has
+          a solid backdrop to guarantee contrast. */}
+      <div className="absolute inset-x-0 bottom-0 z-10">
         <div className="container-page py-4 sm:py-6">
-          <div className="flex items-baseline justify-between">
-            <h2 className="text-sm font-heading uppercase tracking-wide text-white/70">
+          <div className="flex items-baseline justify-between drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+            <h2 className="text-sm font-heading uppercase tracking-wide text-white/80">
               Upcoming Games &amp; Scores
             </h2>
             <Link href="/schedule" className="text-xs font-semibold text-brand-300 hover:underline">

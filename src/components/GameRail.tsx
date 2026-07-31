@@ -8,7 +8,7 @@ export default function GameRail({ games, today }: { games: Game[]; today?: stri
 
   return (
     <div
-      className="flex gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:thin]"
+      className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:thin]"
       role="region"
       aria-label="Upcoming and recent games"
       tabIndex={0}

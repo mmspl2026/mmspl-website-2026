@@ -23,7 +23,7 @@ export default function HomeHero({
       <Image src={imageUrl} alt={imageAlt} fill priority className="object-cover" />
       <div className="absolute inset-0 bg-hero-overlay" aria-hidden="true" />
 
-      <div className="container-page relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-20 pb-52 text-center sm:pb-56">
+      <div className="container-page relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-16 pb-40 text-center sm:py-20 sm:pb-48">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/80 sm:text-sm">
           2026 Season &middot; May &ndash; September
         </p>
@@ -38,14 +38,18 @@ export default function HomeHero({
           <Link href="/register" className="btn-primary">
             Join Our League
           </Link>
-          <Link href="/schedule" className="btn-outline">
+          {/* The game rail below already links to the full schedule, so this
+              second button is redundant on mobile — where the two buttons
+              stacking pushed into the rail's fixed footprint. Shown from
+              sm: up where there's room for both side by side. */}
+          <Link href="/schedule" className="btn-outline hidden sm:inline-flex">
             2026 Schedule
           </Link>
         </div>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-10 border-t border-white/10 bg-black/60 backdrop-blur-sm">
-        <div className="container-page py-6">
+        <div className="container-page py-4 sm:py-6">
           <div className="flex items-baseline justify-between">
             <h2 className="text-sm font-heading uppercase tracking-wide text-white/70">
               Upcoming Games &amp; Scores
@@ -54,7 +58,7 @@ export default function HomeHero({
               Full schedule &rarr;
             </Link>
           </div>
-          <div className="mt-4">
+          <div className="mt-3 sm:mt-4">
             <GameRail games={games} today={today} />
           </div>
         </div>

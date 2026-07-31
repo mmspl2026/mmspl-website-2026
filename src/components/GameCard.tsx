@@ -44,38 +44,47 @@ export default function GameCard({
   return (
     <article
       className={clsx(
-        "flex w-[140px] shrink-0 snap-start flex-col gap-1.5 rounded-lg border border-white/15 bg-white/[0.15] px-3 py-2.5 text-white shadow-lg backdrop-blur-[10px] supports-[backdrop-filter]:bg-white/[0.08] sm:w-40",
+        "flex w-[140px] shrink-0 snap-start flex-col gap-1.5 rounded-lg border border-white/10 bg-[rgba(20,20,20,0.75)] px-3 py-2.5 text-white shadow-lg backdrop-blur-[6px] sm:w-40",
         className
       )}
       aria-label={`${game.homeTeam.name} versus ${game.awayTeam.name}`}
     >
-      <span
-        className={clsx(
-          "truncate text-[10px] font-semibold uppercase tracking-wide",
-          isOff ? "text-brand-300" : dateLabel === "Today" ? "text-brand-200" : "text-white/50"
-        )}
-      >
-        {topLabel}
-      </span>
+      {!isOff && dateLabel === "Today" ? (
+        <span className="w-fit rounded-full bg-brand px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
+          Today
+        </span>
+      ) : (
+        <span
+          className={clsx(
+            "truncate text-[10px] font-semibold uppercase tracking-wide",
+            isOff ? "text-brand-300" : "text-white/50"
+          )}
+        >
+          {topLabel}
+        </span>
+      )}
 
       <div className="flex items-center justify-between gap-1">
-        <span className="truncate text-sm font-bold">{abbreviate(game.homeTeam.name)}</span>
+        <span className="truncate text-sm font-bold text-white">{abbreviate(game.homeTeam.name)}</span>
         {showScore && (
-          <span className="shrink-0 font-heading text-base tabular-nums">{game.homeScore}</span>
+          <span className="shrink-0 font-heading text-base font-bold tabular-nums">
+            {game.homeScore}
+          </span>
         )}
       </div>
+      <span className="text-[9px] font-semibold uppercase tracking-wide text-white/40">vs</span>
       <div className="flex items-center justify-between gap-1">
-        <span className="truncate text-sm font-bold text-white/70">
+        <span className="truncate text-sm font-semibold text-white/80">
           {abbreviate(game.awayTeam.name)}
         </span>
         {showScore && (
-          <span className="shrink-0 font-heading text-base tabular-nums text-white/70">
+          <span className="shrink-0 font-heading text-base font-bold tabular-nums text-white/80">
             {game.awayScore}
           </span>
         )}
       </div>
 
-      <p className="truncate text-[10px] leading-tight text-white/40">
+      <p className="truncate text-[10px] leading-tight text-white/50">
         {game.time} &middot; {game.field}
       </p>
     </article>

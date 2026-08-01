@@ -47,7 +47,7 @@ export default function GameCard({
         "flex w-[140px] shrink-0 snap-start flex-col gap-1.5 rounded-lg border border-white/10 px-3 py-2.5 text-white shadow-lg backdrop-blur-[6px] sm:w-40",
         className
       )}
-      style={{ background: "rgba(20,20,20,0.75)" }}
+      style={{ background: "rgba(0,0,0,0.55)" }}
       aria-label={`${game.homeTeam.name} versus ${game.awayTeam.name}`}
     >
       {!isOff && dateLabel === "Today" ? (

@@ -10,6 +10,20 @@
 body {
   color: var(--foreground);
   background: var(--background);
+  scrollbar-color: #aa1111 #111;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #aa1111;
+  border-radius: 3px;
 }
 
 @layer utilities {

@@ -22,7 +22,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-black text-white shadow-md">
+    <header className="sticky top-0 z-50 border-b-2 border-brand bg-black text-white shadow-md">
       <div className="container-page flex items-center justify-between gap-4 py-2">
         <Link href="/" className="flex flex-col items-center" aria-label="MMSPL home">
           <Image

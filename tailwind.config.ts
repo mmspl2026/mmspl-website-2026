@@ -37,7 +37,7 @@ const config: Config = {
         "hero-overlay":
           "linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.35) 60%, rgba(0,0,0,0.45))",
         "home-hero-overlay":
-          "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.15) 40%, rgba(0,0,0,0.65) 100%)",
+          "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.65) 100%)",
       },
     },
   },

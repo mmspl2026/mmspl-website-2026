@@ -17,11 +17,9 @@ function formatDate(dateStr: string) {
   });
 }
 
-function primaryName(name: string) {
+function displayName(name: string) {
   const trimmed = name.trim();
-  const words = trimmed.split(/\s+/);
-  if (words.length === 1 || trimmed.length <= 14) return trimmed;
-  return words[0];
+  return trimmed.length > 15 ? `${trimmed.slice(0, 15)}…` : trimmed;
 }
 
 export default function GameCard({
@@ -67,7 +65,7 @@ export default function GameCard({
       )}
 
       <div className="flex items-center justify-between gap-1">
-        <span className="truncate text-base font-bold text-white">{primaryName(game.homeTeam.name)}</span>
+        <span className="truncate text-base font-bold text-white">{displayName(game.homeTeam.name)}</span>
         {showScore && (
           <span className="shrink-0 font-heading text-lg font-bold tabular-nums text-white">
             {game.homeScore}
@@ -76,7 +74,7 @@ export default function GameCard({
       </div>
       <span className="text-xs uppercase tracking-wider text-gray-400">vs</span>
       <div className="flex items-center justify-between gap-1">
-        <span className="truncate text-sm text-white/80">{primaryName(game.awayTeam.name)}</span>
+        <span className="truncate text-sm text-white/80">{displayName(game.awayTeam.name)}</span>
         {showScore && (
           <span className="shrink-0 font-heading text-lg font-bold tabular-nums text-white">
             {game.awayScore}

@@ -52,16 +52,11 @@ export default function HomeHero({
           above) should show through directly behind the cards, not sit in a
           separate solid band. Text gets a drop-shadow since it no longer has
           a solid backdrop to guarantee contrast. */}
-      <div className="absolute inset-x-0 bottom-0 z-10">
+      <div className="absolute inset-x-0 bottom-6 z-10 sm:bottom-10">
         <div className="container-page py-4 sm:py-6">
-          <div className="flex items-baseline justify-between drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-            <h2 className="text-sm font-heading uppercase tracking-wide text-white/80">
-              Upcoming Games &amp; Scores
-            </h2>
-            <Link href="/schedule" className="text-xs font-semibold text-brand-300 hover:underline">
-              Full schedule &rarr;
-            </Link>
-          </div>
+          <h2 className="text-center text-sm font-heading uppercase tracking-wide text-white/80 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+            Upcoming Games &amp; Scores
+          </h2>
           <div className="mt-3 sm:mt-4">
             <GameRail games={games} today={today} />
           </div>

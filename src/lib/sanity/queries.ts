@@ -14,7 +14,8 @@ export const standingsBySeasonQuery = groq`*[_type == "standing" && season->year
   losses,
   ties,
   runDifferential,
-  team->{_id, name, division, color, logo}
+  defaults,
+  team->{_id, name, shortName, division, color, logo}
 }`;
 
 export const gamesBySeasonQuery = groq`*[_type == "game" && season->year == $year] | order(date asc, time asc){

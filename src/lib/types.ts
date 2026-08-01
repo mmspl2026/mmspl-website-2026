@@ -41,6 +41,7 @@ export interface Standing {
   losses: number;
   ties: number;
   runDifferential: number;
+  defaults?: number;
 }
 
 export interface NewsItem {

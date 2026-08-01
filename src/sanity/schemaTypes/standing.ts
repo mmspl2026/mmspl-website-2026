@@ -47,6 +47,14 @@ export default defineType({
       initialValue: 0,
       description: "Runs scored minus runs allowed (can be negative)",
     }),
+    defineField({
+      name: "defaults",
+      title: "Defaults",
+      type: "number",
+      initialValue: 0,
+      description: "Games decided by opponent default/forfeit — shown as \"D\" in the standings table.",
+      validation: (Rule) => Rule.min(0),
+    }),
   ],
   preview: {
     select: { team: "team.name", wins: "wins", losses: "losses", ties: "ties", year: "season.year" },

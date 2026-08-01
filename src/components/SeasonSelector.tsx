@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 
 export default function SeasonSelector({ years, selected }: { years: number[]; selected: number }) {
   const router = useRouter();
@@ -14,22 +15,24 @@ export default function SeasonSelector({ years, selected }: { years: number[]; s
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <label htmlFor="season-select" className="text-sm font-semibold uppercase tracking-wide text-black/60">
-        Season
-      </label>
+    <div className="relative inline-block h-9 w-40">
       <select
         id="season-select"
         value={selected}
         onChange={(e) => handleChange(e.target.value)}
-        className="rounded border border-black/20 bg-white px-3 py-2 text-sm font-medium focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
+        className="h-9 w-40 appearance-none rounded-md border-2 border-brand bg-transparent px-3 py-2 text-sm text-black focus:outline-none focus:ring-1 focus:ring-brand"
       >
         {years.map((year) => (
           <option key={year} value={year}>
-            {year}
+            {year} Season
           </option>
         ))}
       </select>
+      <ChevronDown
+        size={16}
+        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-black/60"
+        aria-hidden="true"
+      />
     </div>
   );
 }

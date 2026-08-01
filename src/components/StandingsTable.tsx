@@ -58,7 +58,7 @@ export default function StandingsTable({
               const points = row.wins * 2 + row.ties;
               return (
                 <tr key={row._id} className="border-b transition-colors hover:bg-gray-50">
-                  <td className="px-1.5 py-2.5 md:px-3 md:py-4">
+                  <td className="px-1.5 py-2.5 font-mono-brand md:px-3 md:py-4">
                     <div className="flex items-center space-x-2">
                       <span className="font-bold text-black">{rank}</span>
                     </div>
@@ -67,14 +67,24 @@ export default function StandingsTable({
                     <span className="md:hidden">{row.team.shortName?.trim() || row.team.name.split(/\s+/)[0]}</span>
                     <span className="hidden md:inline">{row.team.name}</span>
                   </td>
-                  <td className="px-1.5 py-2.5 text-center font-semibold text-gray-700 md:px-3 md:py-4">{gp}</td>
-                  <td className="px-1.5 py-2.5 text-center font-bold text-green-600 md:px-3 md:py-4">{row.wins}</td>
-                  <td className="px-1.5 py-2.5 text-center font-bold text-red-600 md:px-3 md:py-4">{row.losses}</td>
-                  <td className="px-1.5 py-2.5 text-center font-bold text-gray-600 md:px-3 md:py-4">{row.ties}</td>
-                  <td className="px-1.5 py-2.5 text-center font-bold text-orange-600 md:px-3 md:py-4">
+                  <td className="px-1.5 py-2.5 text-center font-mono-brand font-semibold text-gray-700 md:px-3 md:py-4">
+                    {gp}
+                  </td>
+                  <td className="px-1.5 py-2.5 text-center font-mono-brand font-bold text-green-600 md:px-3 md:py-4">
+                    {row.wins}
+                  </td>
+                  <td className="px-1.5 py-2.5 text-center font-mono-brand font-bold text-red-600 md:px-3 md:py-4">
+                    {row.losses}
+                  </td>
+                  <td className="px-1.5 py-2.5 text-center font-mono-brand font-bold text-gray-600 md:px-3 md:py-4">
+                    {row.ties}
+                  </td>
+                  <td className="px-1.5 py-2.5 text-center font-mono-brand font-bold text-orange-600 md:px-3 md:py-4">
                     {row.defaults ?? 0}
                   </td>
-                  <td className="px-1.5 py-2.5 text-center text-xl font-bold text-black md:px-3 md:py-4">{points}</td>
+                  <td className="px-1.5 py-2.5 text-center font-mono-brand text-xl font-bold text-black md:px-3 md:py-4">
+                    {points}
+                  </td>
                 </tr>
               );
             })}

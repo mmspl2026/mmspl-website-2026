@@ -2,8 +2,17 @@
 
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
+import clsx from "clsx";
 
-export default function SeasonSelector({ years, selected }: { years: number[]; selected: number }) {
+export default function SeasonSelector({
+  years,
+  selected,
+  variant = "red",
+}: {
+  years: number[];
+  selected: number;
+  variant?: "red" | "gray";
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -14,13 +23,19 @@ export default function SeasonSelector({ years, selected }: { years: number[]; s
     router.push(`${pathname}?${params.toString()}`);
   }
 
+  const width = variant === "red" ? "w-40" : "w-32";
+
   return (
-    <div className="relative inline-block h-9 w-40">
+    <div className={clsx("relative inline-block h-9", width)}>
       <select
         id="season-select"
         value={selected}
         onChange={(e) => handleChange(e.target.value)}
-        className="h-9 w-40 appearance-none rounded-md border-2 border-brand bg-transparent px-3 py-2 text-sm text-black focus:outline-none focus:ring-1 focus:ring-brand"
+        className={clsx(
+          "h-9 appearance-none rounded-md border-2 bg-transparent px-3 py-2 text-sm text-black focus:outline-none focus:ring-1 focus:ring-brand",
+          width,
+          variant === "red" ? "border-brand" : "border-gray-300"
+        )}
       >
         {years.map((year) => (
           <option key={year} value={year}>

@@ -60,7 +60,7 @@ export default function GameCard({
           Today
         </span>
       ) : (
-        <span className="mb-1 truncate font-mono text-[9px] font-bold tracking-wider text-red-400">
+        <span className="mb-1 truncate font-mono-brand text-[9px] font-bold tracking-wider text-red-400">
           {topLabel}
         </span>
       )}

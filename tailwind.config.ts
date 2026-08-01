@@ -29,6 +29,7 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
         heading: ["var(--font-anton)", "Impact", "sans-serif"],
+        "mono-brand": ["var(--font-space-mono)", "monospace"],
       },
       maxWidth: {
         "8xl": "90rem",

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Anton } from "next/font/google";
+import { Inter, Anton, Space_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -12,6 +12,13 @@ const anton = Anton({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-anton",
+  display: "swap",
+});
+
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-space-mono",
   display: "swap",
 });
 
@@ -32,7 +39,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${anton.variable} font-sans antialiased text-foreground bg-background`}>
+      <body
+        className={`${inter.variable} ${anton.variable} ${spaceMono.variable} font-sans antialiased text-foreground bg-background`}
+      >
         {children}
       </body>
     </html>

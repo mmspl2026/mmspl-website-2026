@@ -39,7 +39,7 @@ export default function GameCard({
   return (
     <article
       className={clsx(
-        "flex min-h-[100px] w-[130px] shrink-0 snap-start flex-col gap-1 rounded-lg border border-white/10 p-2.5 text-white shadow-lg sm:min-h-[110px] sm:w-40 sm:gap-1.5 sm:p-3",
+        "flex min-h-[100px] w-40 shrink-0 snap-start flex-col gap-1 rounded-lg border border-white/10 p-2.5 text-white shadow-lg sm:min-h-[110px] sm:gap-1.5 sm:p-3",
         className
       )}
       style={{

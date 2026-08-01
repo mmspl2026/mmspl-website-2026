@@ -35,7 +35,7 @@ export default function Header() {
             width={110}
             height={64}
             priority
-            className="h-9 w-auto lg:h-16"
+            className="h-14 w-auto lg:h-16"
           />
           <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/50 lg:mt-0.5 lg:text-[10px] lg:tracking-[0.2em]">
             Est. {LEAGUE_FOUNDING_YEAR}

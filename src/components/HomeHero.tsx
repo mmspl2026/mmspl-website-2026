@@ -22,7 +22,7 @@ export default function HomeHero({
     <section className="relative flex min-h-[85vh] flex-col overflow-hidden bg-black text-white">
       <Image src={imageUrl} alt={imageAlt} fill priority className="object-cover" />
       <div
-        className="absolute inset-0 bg-home-hero-overlay-mobile sm:bg-home-hero-overlay"
+        className="absolute inset-0 bg-home-hero-overlay-mobile md:bg-home-hero-overlay"
         aria-hidden="true"
       />
 
@@ -30,7 +30,7 @@ export default function HomeHero({
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/80 sm:text-sm">
           2026 Season &middot; May &ndash; September
         </p>
-        <h1 className="mt-3 text-4xl leading-[0.95] sm:mt-4 sm:text-6xl lg:text-7xl">
+        <h1 className="mt-3 text-6xl leading-[0.95] sm:mt-4 lg:text-7xl">
           <span className="block text-white">Markham Men&rsquo;s</span>
           <span className="block text-brand">Slo-Pitch League</span>
         </h1>

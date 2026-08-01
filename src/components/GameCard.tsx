@@ -39,7 +39,7 @@ export default function GameCard({
   return (
     <article
       className={clsx(
-        "flex min-h-[110px] w-[140px] shrink-0 snap-start flex-col gap-1.5 rounded-lg border border-white/10 p-3 text-white shadow-lg sm:w-40",
+        "flex min-h-[100px] w-[130px] shrink-0 snap-start flex-col gap-1 rounded-lg border border-white/10 p-2.5 text-white shadow-lg sm:min-h-[110px] sm:w-40 sm:gap-1.5 sm:p-3",
         className
       )}
       style={{
@@ -50,16 +50,11 @@ export default function GameCard({
       aria-label={`${game.homeTeam.name} versus ${game.awayTeam.name}`}
     >
       {!isOff && dateLabel === "Today" ? (
-        <span className="w-fit rounded-full bg-brand px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
+        <span className="mx-auto w-fit rounded-full bg-brand px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
           Today
         </span>
       ) : (
-        <span
-          className={clsx(
-            "truncate text-[10px] font-semibold uppercase tracking-wide",
-            isOff ? "text-brand" : "text-gray-400"
-          )}
-        >
+        <span className="block truncate text-center text-[10px] font-bold uppercase tracking-wide text-brand">
           {topLabel}
         </span>
       )}

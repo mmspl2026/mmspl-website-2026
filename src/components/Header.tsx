@@ -23,16 +23,21 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b-2 border-brand bg-black text-white shadow-md">
-      <div className="container-page flex items-center justify-between gap-4 py-2">
-        <Link href="/" className="flex flex-col items-center" aria-label="MMSPL home">
+      <div className="container-page flex items-center justify-between gap-2 py-1.5 sm:py-2">
+        <Link
+          href="/"
+          className="flex items-center gap-2 lg:flex-col lg:items-center lg:gap-0"
+          aria-label="MMSPL home"
+        >
           <Image
             src="/mmspl-logo.png"
             alt="Markham Men's Slo-Pitch League logo"
             width={110}
             height={64}
             priority
+            className="h-9 w-auto lg:h-16"
           />
-          <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50">
+          <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/50 lg:mt-0.5 lg:text-[10px] lg:tracking-[0.2em]">
             Est. {LEAGUE_FOUNDING_YEAR}
           </span>
         </Link>
@@ -71,16 +76,26 @@ export default function Header() {
           </Link>
         </div>
 
-        <button
-          type="button"
-          className="rounded p-2 text-white lg:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
-        </button>
+        <div className="flex items-center gap-1 lg:hidden">
+          <Link
+            href="/notifications"
+            aria-label="Notifications"
+            aria-current={pathname === "/notifications" ? "page" : undefined}
+            className="rounded-full p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white aria-[current=page]:text-brand"
+          >
+            <Bell size={20} aria-hidden="true" />
+          </Link>
+          <button
+            type="button"
+            className="rounded p-2 text-white"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            aria-label={open ? "Close menu" : "Open menu"}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
+          </button>
+        </div>
       </div>
 
       {open && (

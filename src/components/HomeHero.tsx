@@ -21,28 +21,27 @@ export default function HomeHero({
   return (
     <section className="relative flex min-h-[85vh] flex-col overflow-hidden bg-black text-white">
       <Image src={imageUrl} alt={imageAlt} fill priority className="object-cover" />
-      <div className="absolute inset-0 bg-home-hero-overlay" aria-hidden="true" />
+      <div
+        className="absolute inset-0 bg-home-hero-overlay-mobile sm:bg-home-hero-overlay"
+        aria-hidden="true"
+      />
 
-      <div className="container-page relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-16 pb-40 text-center sm:py-20 sm:pb-48">
+      <div className="container-page relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-10 pb-32 text-center sm:py-20 sm:pb-48">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/80 sm:text-sm">
           2026 Season &middot; May &ndash; September
         </p>
-        <h1 className="mt-4 text-5xl leading-[0.95] sm:text-6xl lg:text-7xl">
+        <h1 className="mt-3 text-4xl leading-[0.95] sm:mt-4 sm:text-6xl lg:text-7xl">
           <span className="block text-white">Markham Men&rsquo;s</span>
           <span className="block text-brand">Slo-Pitch League</span>
         </h1>
-        <p className="mt-6 max-w-xl text-base text-white/85 sm:text-lg">
+        <p className="mt-4 max-w-xl text-base text-white/85 sm:mt-6 sm:text-lg">
           Markham&rsquo;s longest active men&rsquo;s softball league since 1968.
         </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-4">
-          <Link href="/register" className="btn-primary">
+        <div className="mt-6 flex w-full max-w-xs flex-col gap-3 sm:mt-8 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
+          <Link href="/register" className="btn-primary w-full sm:w-auto">
             Join Our League
           </Link>
-          {/* The game rail below already links to the full schedule, so this
-              second button is redundant on mobile — where the two buttons
-              stacking pushed into the rail's fixed footprint. Shown from
-              sm: up where there's room for both side by side. */}
-          <Link href="/schedule" className="btn-outline hidden sm:inline-flex">
+          <Link href="/schedule" className="btn-outline w-full sm:w-auto">
             2026 Schedule
           </Link>
         </div>

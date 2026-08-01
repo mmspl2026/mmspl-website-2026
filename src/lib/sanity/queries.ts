@@ -25,8 +25,8 @@ export const gamesBySeasonQuery = groq`*[_type == "game" && season->year == $yea
   status,
   homeScore,
   awayScore,
-  homeTeam->{_id, name, logo, division, color},
-  awayTeam->{_id, name, logo, division, color}
+  homeTeam->{_id, name, shortName, logo, division, color},
+  awayTeam->{_id, name, shortName, logo, division, color}
 }`;
 
 export const upcomingGamesQuery = groq`*[_type == "game" && date >= $today] | order(date asc, time asc)[0...8]{
@@ -37,8 +37,8 @@ export const upcomingGamesQuery = groq`*[_type == "game" && date >= $today] | or
   status,
   homeScore,
   awayScore,
-  homeTeam->{_id, name, logo, division, color},
-  awayTeam->{_id, name, logo, division, color}
+  homeTeam->{_id, name, shortName, logo, division, color},
+  awayTeam->{_id, name, shortName, logo, division, color}
 }`;
 
 export const recentNewsQuery = groq`*[_type == "news"] | order(date desc)[0...6]{
@@ -95,8 +95,8 @@ export const gamesByDateForActiveSeasonQuery = groq`*[_type == "game" && date ==
   status,
   homeScore,
   awayScore,
-  homeTeam->{_id, name, logo, division, color},
-  awayTeam->{_id, name, logo, division, color},
+  homeTeam->{_id, name, shortName, logo, division, color},
+  awayTeam->{_id, name, shortName, logo, division, color},
   "seasonId": season->_id,
   "seasonYear": season->year
 }`;

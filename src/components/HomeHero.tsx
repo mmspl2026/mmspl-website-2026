@@ -19,25 +19,39 @@ export default function HomeHero({
   const imageAlt = heroImage?.alt || "Slo-pitch game at dusk at an MMSPL ballpark";
 
   return (
-    <section className="relative flex min-h-[85vh] flex-col overflow-hidden bg-black text-white">
-      <Image src={imageUrl} alt={imageAlt} fill priority className="object-cover" />
+    <section className="relative flex items-center justify-center text-white" style={{ minHeight: "640px" }}>
+      <Image
+        src={imageUrl}
+        alt={imageAlt}
+        fill
+        priority
+        className="object-cover object-[75%_center]"
+      />
+      {/* Exact gradient/stops measured from the Emergent reference build —
+          same at every breakpoint there, so no mobile/desktop split here. */}
       <div
-        className="absolute inset-0 bg-home-hero-overlay-mobile md:bg-home-hero-overlay"
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(10,10,12,0.55), rgba(10,10,12,0.2) 30%, rgba(10,10,12,0.9) 78%)",
+        }}
         aria-hidden="true"
       />
 
-      <div className="container-page relative z-10 flex flex-1 flex-col items-center justify-center px-4 py-10 pb-32 text-center sm:py-20 sm:pb-48">
+      <div className="relative z-10 mx-auto w-full max-w-5xl px-5 py-16 text-center">
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/80 sm:text-sm">
           2026 Season &middot; May &ndash; September
         </p>
-        <h1 className="mt-3 text-6xl leading-[0.95] sm:mt-4 lg:text-7xl">
+        {/* font-size is a fluid clamp(), matching Emergent's h1 exactly
+            instead of stepping across Tailwind breakpoints. */}
+        <h1 className="mt-3 font-heading uppercase leading-none text-[clamp(3rem,8vw,5.5rem)]">
           <span className="block text-white">Markham Men&rsquo;s</span>
           <span className="block text-brand">Slo-Pitch League</span>
         </h1>
-        <p className="mt-4 max-w-xl text-base text-white/85 sm:mt-6 sm:text-lg">
+        <p className="mt-4 max-w-xl text-base text-white/85 sm:mt-6 sm:text-lg mx-auto">
           Markham&rsquo;s longest active men&rsquo;s softball league since 1968.
         </p>
-        <div className="mt-6 flex w-full max-w-xs flex-col gap-3 sm:mt-8 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
+        <div className="mx-auto mt-6 flex w-full max-w-xs flex-col gap-3 sm:mt-8 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
           <Link href="/register" className="btn-primary w-full sm:w-auto">
             Join Our League
           </Link>
@@ -45,20 +59,15 @@ export default function HomeHero({
             2026 Schedule
           </Link>
         </div>
-      </div>
 
-      {/* No background of its own — the hero photo (darkened by the overlay
-          above) should show through directly behind the cards, not sit in a
-          separate solid band. Text gets a drop-shadow since it no longer has
-          a solid backdrop to guarantee contrast. */}
-      <div className="absolute inset-x-0 bottom-6 z-10 sm:bottom-10">
-        <div className="container-page py-4 sm:py-6">
-          <h2 className="text-center text-sm font-heading uppercase tracking-wide text-white/80 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
+        {/* Game rail sits in normal document flow right after the buttons —
+            Emergent doesn't absolutely-position it at the section's bottom
+            edge, it just stacks it in the same centered content column. */}
+        <div className="mx-auto mt-6 w-full max-w-4xl px-5">
+          <h2 className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-white/60">
             Upcoming Games &amp; Scores
           </h2>
-          <div className="mt-3 sm:mt-4">
-            <GameRail games={games} today={today} />
-          </div>
+          <GameRail games={games} today={today} />
         </div>
       </div>
     </section>

@@ -31,7 +31,7 @@ export default function GameRail({ games, today }: { games: Game[]; today?: stri
 
       <div
         ref={scrollerRef}
-        className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         role="region"
         aria-label="Upcoming and recent games"

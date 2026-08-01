@@ -7,6 +7,7 @@ export interface SanityImageWithAlt extends Image {
 export interface Team {
   _id: string;
   name: string;
+  shortName?: string;
   logo?: SanityImageWithAlt;
   division?: "A" | "B";
   color?: string;

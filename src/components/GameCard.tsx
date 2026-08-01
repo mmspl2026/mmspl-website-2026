@@ -17,14 +17,11 @@ function formatDate(dateStr: string) {
   });
 }
 
-function abbreviate(name: string) {
-  const words = name.trim().split(/\s+/);
-  if (words.length === 1) return words[0].slice(0, 4).toUpperCase();
-  return words
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 4)
-    .toUpperCase();
+function primaryName(name: string) {
+  const trimmed = name.trim();
+  const words = trimmed.split(/\s+/);
+  if (words.length === 1 || trimmed.length <= 14) return trimmed;
+  return words[0];
 }
 
 export default function GameCard({
@@ -44,7 +41,7 @@ export default function GameCard({
   return (
     <article
       className={clsx(
-        "flex w-[140px] shrink-0 snap-start flex-col gap-1.5 rounded-lg border border-white/10 px-3 py-2.5 text-white shadow-lg sm:w-40",
+        "flex min-h-[110px] w-[140px] shrink-0 snap-start flex-col gap-1.5 rounded-lg border border-white/10 p-3 text-white shadow-lg sm:w-40",
         className
       )}
       style={{
@@ -62,7 +59,7 @@ export default function GameCard({
         <span
           className={clsx(
             "truncate text-[10px] font-semibold uppercase tracking-wide",
-            isOff ? "text-brand-300" : "text-white/50"
+            isOff ? "text-brand" : "text-gray-400"
           )}
         >
           {topLabel}
@@ -70,26 +67,24 @@ export default function GameCard({
       )}
 
       <div className="flex items-center justify-between gap-1">
-        <span className="truncate text-sm font-bold text-white">{abbreviate(game.homeTeam.name)}</span>
+        <span className="truncate text-base font-bold text-white">{primaryName(game.homeTeam.name)}</span>
         {showScore && (
-          <span className="shrink-0 font-heading text-base font-bold tabular-nums">
+          <span className="shrink-0 font-heading text-lg font-bold tabular-nums text-white">
             {game.homeScore}
           </span>
         )}
       </div>
-      <span className="text-[9px] font-semibold uppercase tracking-wide text-white/40">vs</span>
+      <span className="text-xs uppercase tracking-wider text-gray-400">vs</span>
       <div className="flex items-center justify-between gap-1">
-        <span className="truncate text-sm font-semibold text-white/80">
-          {abbreviate(game.awayTeam.name)}
-        </span>
+        <span className="truncate text-sm text-white/80">{primaryName(game.awayTeam.name)}</span>
         {showScore && (
-          <span className="shrink-0 font-heading text-base font-bold tabular-nums text-white/80">
+          <span className="shrink-0 font-heading text-lg font-bold tabular-nums text-white">
             {game.awayScore}
           </span>
         )}
       </div>
 
-      <p className="truncate text-[10px] leading-tight text-white/50">
+      <p className="mt-auto truncate text-xs text-gray-400">
         {game.time} &middot; {game.field}
       </p>
     </article>

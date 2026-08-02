@@ -1,0 +1,15 @@
+{
+  "name": "MMSPL — Markham Men's Slo-Pitch League",
+  "short_name": "MMSPL",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "icons": [
+    {
+      "src": "/mmspl-logo.png",
+      "sizes": "216x125",
+      "type": "image/png"
+    }
+  ]
+}

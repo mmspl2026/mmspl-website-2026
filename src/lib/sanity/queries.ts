@@ -56,6 +56,10 @@ export const awardsByYearQuery = groq`*[_type == "award" && year == $year] | ord
   _id, year, category, winner, photo, description, team->{_id, name}
 }`;
 
+export const allAwardsQuery = groq`*[_type == "award"] | order(category asc, year desc){
+  _id, year, category, winner
+}`;
+
 export const upcomingImportantDatesQuery = groq`*[_type == "importantDate" && date >= $today] | order(date asc){
   _id, label, date, endDate, description
 }`;

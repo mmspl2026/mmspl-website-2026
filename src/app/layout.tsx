@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Anton, Space_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -30,6 +30,16 @@ export const metadata: Metadata = {
   description:
     "Markham's longest active men's softball league, established 1968. Standings, schedules, awards, registration and more.",
   metadataBase: new URL("https://mmspl.ca"),
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "MMSPL",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({

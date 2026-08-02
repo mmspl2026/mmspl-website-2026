@@ -18,6 +18,8 @@ export default async function SchedulePage({
 }: {
   searchParams: { season?: string };
 }) {
+  const today = new Date().toISOString().slice(0, 10);
+
   const [seasons, settings] = await Promise.all([
     sanityFetch<Season[]>(allSeasonsQuery, {}, []),
     sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
@@ -80,7 +82,7 @@ export default async function SchedulePage({
           </div>
         </div>
 
-        <ScheduleList games={displayGames} />
+        <ScheduleList games={displayGames} today={today} />
       </div>
     </div>
   );

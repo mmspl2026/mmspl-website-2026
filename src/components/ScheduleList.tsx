@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Game, Team } from "@/lib/types";
 import { Funnel, MapPin, Calendar, CalendarDays, Clock, RefreshCw } from "lucide-react";
 import clsx from "clsx";
 
+const TEAM_STORAGE_KEY = "mmspl-schedule-team";
 const PARKS = ["Centennial Park", "Mintleaf Park"] as const;
 const TABS = [
   { id: "season", label: "Season" },
@@ -85,13 +86,48 @@ function ScheduleGameCard({ game }: { game: Game }) {
   );
 }
 
-export default function ScheduleList({ games }: { games: Game[] }) {
+export default function ScheduleList({ games, today }: { games: Game[]; today: string }) {
   const [team, setTeam] = useState("all");
   const [park, setPark] = useState("all");
   const [month, setMonth] = useState("all");
   const [date, setDate] = useState<string | null>(null);
   const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("season");
   const [updatedAt] = useState(() => new Date());
+
+  // On first load: restore the remembered team (players filter to their own
+  // team and expect it to stick between visits), then default the date/month
+  // pickers to that team's next upcoming game — or the league's next game
+  // night if no team is remembered yet.
+  useEffect(() => {
+    const remembered = localStorage.getItem(TEAM_STORAGE_KEY);
+    const isValidTeam =
+      remembered && games.some((g) => g.homeTeam._id === remembered || g.awayTeam._id === remembered);
+    const effectiveTeam = isValidTeam ? remembered : "all";
+    if (effectiveTeam !== "all") setTeam(effectiveTeam);
+
+    const relevantGames =
+      effectiveTeam === "all"
+        ? games
+        : games.filter((g) => g.homeTeam._id === effectiveTeam || g.awayTeam._id === effectiveTeam);
+    const nextDate = relevantGames
+      .map((g) => g.date)
+      .filter((d) => d >= today)
+      .sort()[0];
+    if (nextDate) {
+      setDate(nextDate);
+      setMonth(nextDate.slice(5, 7));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleTeamChange(newTeam: string) {
+    setTeam(newTeam);
+    if (newTeam === "all") {
+      localStorage.removeItem(TEAM_STORAGE_KEY);
+    } else {
+      localStorage.setItem(TEAM_STORAGE_KEY, newTeam);
+    }
+  }
 
   const teamOptions = useMemo(() => {
     const map = new Map<string, string>();
@@ -135,7 +171,7 @@ export default function ScheduleList({ games }: { games: Game[] }) {
   }, [teamParkMonthFiltered, date]);
 
   function clearFilters() {
-    setTeam("all");
+    handleTeamChange("all");
     setPark("all");
     setMonth("all");
     setDate(null);
@@ -157,7 +193,7 @@ export default function ScheduleList({ games }: { games: Game[] }) {
             <select
               id="team-filter"
               value={team}
-              onChange={(e) => setTeam(e.target.value)}
+              onChange={(e) => handleTeamChange(e.target.value)}
               className="h-9 w-full rounded-md border-2 border-brand bg-transparent px-3 text-sm font-semibold sm:w-72"
             >
               <option value="all">All Teams</option>

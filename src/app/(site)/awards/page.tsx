@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { sanityFetch } from "@/lib/sanity/client";
-import { allAwardsQuery, adminSettingsQuery } from "@/lib/sanity/queries";
-import type { AdminSettings, Award } from "@/lib/types";
+import { allAwardsQuery, allAwardTrophyPhotosQuery, adminSettingsQuery } from "@/lib/sanity/queries";
+import type { AdminSettings, Award, AwardTrophyPhoto } from "@/lib/types";
 import { SEED_AWARDS } from "@/lib/seed-data";
 import { urlFor } from "@/lib/sanity/image";
 import { AWARD_CATEGORY_CONFIG } from "@/lib/awardCategories";
@@ -24,11 +24,13 @@ function fillGaps(entries: { year: number; winner: string }[]) {
 }
 
 export default async function AwardsPage() {
-  const [awards, settings] = await Promise.all([
+  const [awards, trophyPhotos, settings] = await Promise.all([
     sanityFetch<Award[]>(allAwardsQuery, {}, []),
+    sanityFetch<AwardTrophyPhoto[]>(allAwardTrophyPhotosQuery, {}, []),
     sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
   ]);
   const displayAwards = awards.length > 0 ? awards : SEED_AWARDS;
+  const photoByCategory = new Map(trophyPhotos.map((p) => [p.category, p.photo]));
 
   const byCategory = new Map<string, { year: number; winner: string }[]>();
   for (const a of displayAwards) {
@@ -40,7 +42,7 @@ export default async function AwardsPage() {
   const groups: CategoryGroup[] = Array.from(byCategory.entries()).flatMap(([category, entries]) => {
     const config = AWARD_CATEGORY_CONFIG[category];
     if (!config) return [];
-    return [{ category, config, entries: fillGaps(entries) }];
+    return [{ category, config, entries: fillGaps(entries), photo: photoByCategory.get(category) }];
   });
 
   const heroImage = settings?.awardsHeroImage || settings?.heroImage;
@@ -78,7 +80,9 @@ export default async function AwardsPage() {
 
         <div className="mt-8 rounded-xl border bg-gray-50 text-black shadow">
           <div className="p-6">
-            <h3 className="mb-3 font-bold text-black">Special Thanks to Markham Trophy</h3>
+            <h3 className="mb-3 font-sans font-bold normal-case tracking-normal text-black">
+              Special Thanks to Markham Trophy
+            </h3>
             <p className="mb-2 text-sm text-gray-700">Official trophy caretaker to the MMSPL</p>
             <div className="space-y-0.5 text-sm text-gray-600">
               <p>

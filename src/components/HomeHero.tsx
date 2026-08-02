@@ -39,7 +39,7 @@ export default function HomeHero({
       />
 
       <div className="relative z-10 mx-auto w-full max-w-5xl px-5 py-16 text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/80 sm:text-sm">
+        <p className="font-mono-brand text-[11px] uppercase tracking-[0.12em] text-white/55">
           2026 Season &middot; May &ndash; September
         </p>
         {/* font-size is a fluid clamp(), matching Emergent's h1 exactly
@@ -48,7 +48,7 @@ export default function HomeHero({
           <span className="block text-white">Markham Men&rsquo;s</span>
           <span className="block text-brand">Slo-Pitch League</span>
         </h1>
-        <p className="mt-4 max-w-xl text-base text-white/85 sm:mt-6 sm:text-lg mx-auto">
+        <p className="mx-auto mt-4 max-w-xl text-[clamp(1rem,2.5vw,1.25rem)] font-medium text-white/85 sm:mt-6">
           Markham&rsquo;s longest active men&rsquo;s softball league since 1968.
         </p>
         <div className="mx-auto mt-6 flex w-full max-w-xs flex-col gap-3 sm:mt-8 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
@@ -64,7 +64,7 @@ export default function HomeHero({
             Emergent doesn't absolutely-position it at the section's bottom
             edge, it just stacks it in the same centered content column. */}
         <div className="mx-auto mt-6 w-full max-w-4xl px-5">
-          <h2 className="mb-2 text-center text-xs font-semibold uppercase tracking-widest text-white/60">
+          <h2 className="mb-2 text-center font-sans text-xs font-semibold uppercase tracking-widest text-white/60">
             Upcoming Games &amp; Scores
           </h2>
           <GameRail games={games} today={today} />

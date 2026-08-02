@@ -61,7 +61,9 @@ export default async function SchedulePage({
       <div className="container-page py-10">
         <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h2 className="text-2xl font-bold text-black">{selectedYear} Regular Season</h2>
+            <h2 className="font-sans text-2xl font-bold normal-case tracking-normal text-black">
+              {selectedYear} Regular Season
+            </h2>
             <div className="mt-1 flex flex-wrap items-center gap-3">
               <p className="text-sm text-gray-500">Tuesdays &amp; Thursdays</p>
               <Link

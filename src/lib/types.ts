@@ -54,6 +54,12 @@ export interface NewsItem {
   tag?: string;
 }
 
+export interface AwardTrophyPhoto {
+  _id: string;
+  category: string;
+  photo: SanityImageWithAlt;
+}
+
 export interface Award {
   _id: string;
   year: number;

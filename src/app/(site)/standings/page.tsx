@@ -76,7 +76,7 @@ export default async function StandingsPage({
       </div>
 
       <div className="container-page py-10">
-        <h2 className="text-2xl font-bold text-black">Select Season</h2>
+        <h2 className="font-sans text-2xl font-bold normal-case tracking-normal text-black">Select Season</h2>
         <Link href="/schedule" className="mt-1 inline-block text-sm font-semibold text-brand hover:underline">
           View Schedule &amp; Scores &rarr;
         </Link>

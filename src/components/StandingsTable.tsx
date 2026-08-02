@@ -63,7 +63,7 @@ export default function StandingsTable({
                       <span className="font-bold text-black">{rank}</span>
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-1.5 py-2.5 text-sm font-bold text-black md:px-3 md:py-4">
+                  <td className="whitespace-nowrap px-1.5 py-2.5 font-mono-brand text-sm font-bold text-black md:px-3 md:py-4">
                     <span className="md:hidden">{row.team.shortName?.trim() || row.team.name.split(/\s+/)[0]}</span>
                     <span className="hidden md:inline">{row.team.name}</span>
                   </td>

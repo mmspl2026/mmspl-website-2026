@@ -1,18 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Trophy, Users } from "lucide-react";
 import clsx from "clsx";
+import type { SanityImageWithAlt } from "@/lib/types";
+import { urlFor } from "@/lib/sanity/image";
 import { AWARD_TABS, type AwardTab, type AwardCategoryConfig } from "@/lib/awardCategories";
 
 export interface CategoryGroup {
   category: string;
   config: AwardCategoryConfig;
   entries: { year: number; winner: string }[];
+  photo?: SanityImageWithAlt;
 }
 
 function AwardCategoryCard({ group }: { group: CategoryGroup }) {
-  const { config, entries } = group;
+  const { config, entries, photo } = group;
   return (
     <div className="rounded-xl border bg-white text-black shadow">
       <div
@@ -30,6 +34,17 @@ function AwardCategoryCard({ group }: { group: CategoryGroup }) {
         </div>
       </div>
       <div className="p-6">
+        {photo && (
+          <div className="mb-6 flex justify-center">
+            <Image
+              src={urlFor(photo).width(250).height(351).fit("max").url()}
+              alt={photo.alt || config.displayTitle}
+              width={250}
+              height={351}
+              className="h-64 w-auto object-contain"
+            />
+          </div>
+        )}
         <p className="mb-4 text-gray-700">{config.description}</p>
         <div className="max-h-96 overflow-y-auto rounded-lg border">
           <table className="w-full">

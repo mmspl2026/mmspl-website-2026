@@ -30,20 +30,21 @@ const STATS = [
 
 export default function StatsSection() {
   return (
-    <section aria-labelledby="stats-heading" className="bg-white py-16">
+    <section aria-labelledby="stats-heading" className="bg-white py-14">
       <h2 id="stats-heading" className="sr-only">
         League at a Glance
       </h2>
       <div className="container-page grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {STATS.map(({ label, value, icon: Icon }) => (
-          <div key={label} className="flex flex-col items-center rounded-lg border border-black/10 p-8 text-center">
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white">
-              <Icon size={26} aria-hidden="true" />
+          <div
+            key={label}
+            className="rounded-xl border border-gray-100 p-6 pb-4 pt-4 text-center shadow transition-all duration-300 hover:border-brand hover:shadow-lg"
+          >
+            <span className="mx-auto mb-2 flex h-11 w-11 items-center justify-center rounded-full bg-brand text-white">
+              <Icon size={20} aria-hidden="true" />
             </span>
-            <p className="mt-4 text-3xl font-heading text-brand">{value}</p>
-            <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-black/60">
-              {label}
-            </p>
+            <p className="mb-0.5 font-mono-brand text-[1.75rem] font-bold text-[#0d0d0e]">{value}</p>
+            <p className="text-sm font-medium text-[#9a968f]">{label}</p>
           </div>
         ))}
       </div>

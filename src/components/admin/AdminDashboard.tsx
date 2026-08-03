@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
 import { RefreshCw, Wifi } from "lucide-react";
@@ -315,7 +316,9 @@ export default function AdminDashboard({ displayName }: { displayName: string })
     <div className="min-h-screen bg-black text-white">
       <div className="sticky top-0 z-50 border-b border-gray-800 bg-gray-950 px-4 py-3">
         <div className="mx-auto flex max-w-lg flex-wrap items-center justify-between gap-x-3 gap-y-2">
-          <Image src="/mmspl-logo.png" alt="MMSPL" width={64} height={37} className="h-8 w-auto object-contain" />
+          <Link href="/" aria-label="Back to main site" className="shrink-0">
+            <Image src="/mmspl-logo.png" alt="MMSPL" width={64} height={37} className="h-8 w-auto object-contain" />
+          </Link>
 
           <div className="flex items-center gap-2">
             <button

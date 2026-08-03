@@ -70,9 +70,9 @@ export const CHARITY_BENEFICIARIES_RECENT = [
 ] as const;
 
 export const SOCIAL_LINKS = {
-  facebook: "https://www.facebook.com/MMSPLeague",
-  instagram: "https://www.instagram.com/mmspleague",
-  youtube: "https://www.youtube.com/@mmspleague",
+  facebook: "https://www.facebook.com/markhammmspl",
+  instagram: "https://www.instagram.com/markham_mens_slopitch/",
+  youtube: "https://www.youtube.com/@MarkhamMMSPL",
 } as const;
 
 export const LEAGUE_STATS = {

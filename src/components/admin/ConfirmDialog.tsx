@@ -42,10 +42,10 @@ export default function ConfirmDialog({
         aria-modal="true"
         aria-labelledby="confirm-dialog-title"
         aria-describedby="confirm-dialog-description"
-        className="w-full max-w-sm rounded-lg border border-white/10 bg-[#1a1a1a] p-6 text-white shadow-xl"
+        className="w-full max-w-sm rounded-2xl border border-gray-800 bg-gray-900 p-6 text-white shadow-xl"
       >
         <div className="flex items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand/20 text-brand-300">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-500/20 text-red-400">
             <AlertTriangle size={20} aria-hidden="true" />
           </span>
           <div>
@@ -70,7 +70,7 @@ export default function ConfirmDialog({
             ref={confirmRef}
             type="button"
             onClick={onConfirm}
-            className="rounded bg-brand px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white hover:bg-brand-700"
+            className="rounded bg-red-600 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-white hover:bg-red-500"
           >
             {confirmLabel}
           </button>

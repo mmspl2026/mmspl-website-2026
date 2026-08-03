@@ -53,10 +53,10 @@ export default async function AdminInfoPage() {
 
       <div className="mx-auto max-w-5xl px-5 py-12">
         <div className="mb-14">
-          <h2 className="mb-2 text-2xl font-bold text-black">League Administration</h2>
+          <h2 className="mb-2 font-sans text-2xl font-bold normal-case tracking-normal text-black">League Administration</h2>
           <div className="mb-8 h-1 w-16 bg-red-600" />
 
-          <h3 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-400">
+          <h3 className="mb-4 flex items-center gap-2 font-sans text-sm font-bold uppercase tracking-widest text-gray-400">
             <span className="h-px w-8 bg-gray-300" />
             2026 Executives
           </h3>
@@ -83,7 +83,7 @@ export default async function AdminInfoPage() {
             ))}
           </div>
 
-          <h3 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-400">
+          <h3 className="mb-4 flex items-center gap-2 font-sans text-sm font-bold uppercase tracking-widest text-gray-400">
             <span className="h-px w-8 bg-gray-300" />
             2026 Executive Council — Team Representatives
           </h3>

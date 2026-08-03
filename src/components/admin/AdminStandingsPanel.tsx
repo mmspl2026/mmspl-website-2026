@@ -5,12 +5,12 @@ import type { Standing } from "@/lib/types";
 
 export default function AdminStandingsPanel({ standings }: { standings: Standing[] }) {
   return (
-    <details className="group rounded-lg border border-white/10 bg-[#1a1a1a] text-white">
+    <details className="group rounded-2xl border border-gray-800 bg-gray-900 text-white">
       <summary className="flex cursor-pointer list-none items-center justify-between p-4">
-        <span className="text-sm font-heading uppercase tracking-wide">Current Standings</span>
+        <span className="text-sm font-bold uppercase tracking-wide">Current Standings</span>
         <ChevronDown size={18} className="transition-transform group-open:rotate-180" aria-hidden="true" />
       </summary>
-      <div className="border-t border-white/10 p-4">
+      <div className="border-t border-gray-800 p-4">
         {standings.length === 0 ? (
           <p className="text-sm text-white/50">No standings yet — save some Final games or hit Sync Standings.</p>
         ) : (

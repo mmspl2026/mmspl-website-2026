@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import clsx from "clsx";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, Wifi } from "lucide-react";
 import type { AdminGame, Game, Standing } from "@/lib/types";
-import AdminHeader from "./AdminHeader";
 import DateNav from "./DateNav";
 import GameEntryCard, { type EditableGame } from "./GameEntryCard";
 import AdminStandingsPanel from "./AdminStandingsPanel";
@@ -54,7 +54,7 @@ interface ConfirmState {
   onConfirm: () => void;
 }
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ displayName }: { displayName: string }) {
   const todayISO = useMemo(() => new Date().toISOString().slice(0, 10), []);
   const [selectedDate, setSelectedDate] = useState(todayISO);
   const [datesWithGames, setDatesWithGames] = useState<string[]>([]);
@@ -300,6 +300,11 @@ export default function AdminDashboard() {
     }
   }
 
+  async function handleLogout() {
+    await fetch("/api/admin/logout", { method: "POST" });
+    window.location.href = "/admin/login";
+  }
+
   const canPrev = findPrevDate(selectedDate, datesWithGames) !== null;
   const canNext = findNextDate(selectedDate, datesWithGames) !== null;
   const remainingGameIds = games
@@ -307,86 +312,89 @@ export default function AdminDashboard() {
     .map((g) => g._id);
 
   return (
-    <div className="min-h-screen bg-[#111111] text-white">
-      <div className="sticky top-0 z-50">
-        <AdminHeader />
+    <div className="min-h-screen bg-black text-white">
+      <div className="sticky top-0 z-50 border-b border-gray-800 bg-gray-950 px-4 py-3">
+        <div className="mx-auto flex max-w-lg flex-wrap items-center justify-between gap-x-3 gap-y-2">
+          <Image src="/mmspl-logo.png" alt="MMSPL" width={64} height={37} className="h-8 w-auto object-contain" />
 
-        <div className="border-b border-white/10 bg-[#111111]/95 backdrop-blur">
-          <div className="mx-auto max-w-3xl px-4 py-3">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wide text-green-400">
-                  <span className="h-1.5 w-1.5 rounded-full bg-green-400" aria-hidden="true" />
-                  Live Admin
-                </span>
-                <h1 className="hidden text-sm font-heading uppercase tracking-wide text-white/60 sm:inline">
-                  Score Entry
-                </h1>
-              </div>
-              <button
-                type="button"
-                onClick={handleSyncStandings}
-                disabled={syncing}
-                className="flex items-center gap-2 rounded bg-brand px-3 py-2 text-xs font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-700 disabled:opacity-50"
-              >
-                <RefreshCw size={14} className={clsx(syncing && "animate-spin")} aria-hidden="true" />
-                Sync Standings
-              </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleSyncStandings}
+              disabled={syncing}
+              className="rounded-lg border border-green-800 px-2 py-1 text-xs font-bold text-green-400 transition-all hover:bg-green-900/40 disabled:opacity-50"
+            >
+              <RefreshCw size={12} className={clsx("mr-1 inline", syncing && "animate-spin")} aria-hidden="true" />
+              <span className="hidden sm:inline">Sync Standings</span>
+              <span className="sm:hidden">Sync</span>
+            </button>
+            <div className="flex items-center gap-1">
+              <Wifi size={16} className="text-green-400" aria-hidden="true" />
+              <span className="hidden text-xs font-semibold text-green-400 sm:inline">LIVE ADMIN</span>
             </div>
+          </div>
 
-            <div className="mt-3">
-              <DateNav
-                date={selectedDate}
-                onChange={setSelectedDate}
-                onPrev={() => {
-                  const d = findPrevDate(selectedDate, datesWithGames);
-                  if (d) setSelectedDate(d);
-                }}
-                onNext={() => {
-                  const d = findNextDate(selectedDate, datesWithGames);
-                  if (d) setSelectedDate(d);
-                }}
-                canPrev={canPrev}
-                canNext={canNext}
-                isToday={selectedDate === todayISO}
-              />
-            </div>
+          <div className="flex items-center gap-3">
+            <span className="hidden text-xs text-gray-400 sm:inline">{displayName}</span>
+            <button type="button" onClick={handleLogout} className="text-xs text-gray-500 transition-colors hover:text-gray-300">
+              Sign Out
+            </button>
           </div>
         </div>
       </div>
 
-      <main className="mx-auto max-w-3xl px-4 py-6 pb-24">
+      <main className="mx-auto max-w-lg px-4 py-4 pb-24">
+        <DateNav
+          date={selectedDate}
+          onChange={setSelectedDate}
+          onPrev={() => {
+            const d = findPrevDate(selectedDate, datesWithGames);
+            if (d) setSelectedDate(d);
+          }}
+          onNext={() => {
+            const d = findNextDate(selectedDate, datesWithGames);
+            if (d) setSelectedDate(d);
+          }}
+          canPrev={canPrev}
+          canNext={canNext}
+          isToday={selectedDate === todayISO}
+        />
         {loadingInitial || loadingGames ? (
-          <p className="py-12 text-center text-white/50">Loading…</p>
+          <p className="py-16 text-center text-gray-500">Loading games…</p>
         ) : errorMessage ? (
-          <p className="py-12 text-center text-brand-300">{errorMessage}</p>
+          <p className="py-16 text-center text-red-400">{errorMessage}</p>
         ) : games.length === 0 ? (
-          <p className="py-12 text-center text-white/50">No games scheduled for this date.</p>
+          <div className="py-16 text-center">
+            <p className="mb-2 text-lg text-gray-600">No games scheduled</p>
+            <p className="text-sm text-gray-700">Use the arrows to navigate to a game day</p>
+          </div>
         ) : (
           <>
+            <p className="mb-4 text-center text-xs text-gray-500">
+              {games.length} game{games.length === 1 ? "" : "s"} &mdash; tap +/&minus; to update scores, then Save
+            </p>
+
             <div className="mb-4 flex justify-end">
               <button
                 type="button"
                 onClick={() => openCancelConfirm(remainingGameIds)}
                 disabled={remainingGameIds.length === 0}
-                className="rounded border border-brand-700 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-brand-200 transition-colors hover:bg-brand-950 disabled:opacity-30"
+                className="rounded-lg border border-amber-900 px-2 py-1 text-xs font-bold text-amber-400 transition-all hover:bg-amber-900/40 disabled:opacity-30"
               >
                 Mark All Remaining as Cancelled
               </button>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {games.map((game) => (
-                <GameEntryCard
-                  key={game._id}
-                  game={game}
-                  onScoreChange={(team, value) => handleScoreChange(game._id, team, value)}
-                  onStatusChange={(status) => handleStatusChange(game._id, status)}
-                  onSave={() => handleSave(game._id)}
-                  onRequestCancel={() => openCancelConfirm([game._id])}
-                />
-              ))}
-            </div>
+            {games.map((game) => (
+              <GameEntryCard
+                key={game._id}
+                game={game}
+                onScoreChange={(team, value) => handleScoreChange(game._id, team, value)}
+                onStatusChange={(status) => handleStatusChange(game._id, status)}
+                onSave={() => handleSave(game._id)}
+                onRequestCancel={() => openCancelConfirm([game._id])}
+              />
+            ))}
           </>
         )}
 

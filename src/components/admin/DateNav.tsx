@@ -19,19 +19,28 @@ export default function DateNav({
   canNext: boolean;
   isToday: boolean;
 }) {
+  const formatted = new Date(`${date}T12:00:00`).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
   return (
-    <div className="flex items-center gap-2">
+    <div className="mb-6 flex items-center justify-between gap-2 rounded-2xl bg-gray-900 p-3">
       <button
         type="button"
         onClick={onPrev}
         disabled={!canPrev}
         aria-label="Previous game night"
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 disabled:opacity-30"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-800 text-white transition-all hover:bg-gray-700 active:scale-95 disabled:opacity-30"
       >
         <ChevronLeft size={20} aria-hidden="true" />
       </button>
 
-      <div className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-white/10 bg-[#1a1a1a] px-3 py-2.5">
+      <div className="flex flex-1 flex-col items-center">
+        <p className="text-sm font-bold text-white">{formatted}</p>
+        {isToday && <span className="text-xs font-semibold text-red-400">TODAY</span>}
         <label htmlFor="admin-date" className="sr-only">
           Selected date
         </label>
@@ -40,13 +49,8 @@ export default function DateNav({
           type="date"
           value={date}
           onChange={(e) => onChange(e.target.value)}
-          className="bg-transparent text-sm font-semibold text-white [color-scheme:dark] focus:outline-none"
+          className="mt-1 w-full rounded-lg border border-gray-700 bg-gray-800 px-2 py-1 text-center text-xs text-gray-300 [color-scheme:dark] focus:outline-none"
         />
-        {isToday && (
-          <span className="rounded bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-            Today
-          </span>
-        )}
       </div>
 
       <button
@@ -54,7 +58,7 @@ export default function DateNav({
         onClick={onNext}
         disabled={!canNext}
         aria-label="Next game night"
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 disabled:opacity-30"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-800 text-white transition-all hover:bg-gray-700 active:scale-95 disabled:opacity-30"
       >
         <ChevronRight size={20} aria-hidden="true" />
       </button>

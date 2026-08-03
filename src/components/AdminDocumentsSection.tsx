@@ -22,7 +22,7 @@ export default function AdminDocumentsSection({ documents }: { documents: League
 
   return (
     <div id="documents">
-      <h2 className="mb-2 text-2xl font-bold text-black">Official Documents</h2>
+      <h2 className="mb-2 font-sans text-2xl font-bold normal-case tracking-normal text-black">Official Documents</h2>
       <div className="mb-8 h-1 w-16 bg-red-600" />
 
       <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
@@ -55,7 +55,7 @@ export default function AdminDocumentsSection({ documents }: { documents: League
         <div className="space-y-8">
           {Object.entries(grouped).map(([cat, items]) => (
             <div key={cat}>
-              <h3 className="mb-3 flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-gray-400">
+              <h3 className="mb-3 flex items-center gap-2 font-sans text-sm font-bold uppercase tracking-widest text-gray-400">
                 <span className="h-px w-8 bg-gray-300" />
                 {cat}
                 <span className="text-xs font-normal normal-case">({items.length})</span>

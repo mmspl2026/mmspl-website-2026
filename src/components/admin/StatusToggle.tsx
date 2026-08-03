@@ -3,11 +3,11 @@
 import clsx from "clsx";
 import type { Game } from "@/lib/types";
 
-const OPTIONS: Array<{ value: Game["status"]; label: string }> = [
-  { value: "scheduled", label: "Scheduled" },
-  { value: "live", label: "Live" },
-  { value: "final", label: "Final" },
-  { value: "forfeit", label: "Forfeit" },
+const OPTIONS: Array<{ value: Game["status"]; label: string; selectedClass: string }> = [
+  { value: "scheduled", label: "Scheduled", selectedClass: "bg-gray-600 text-white" },
+  { value: "live", label: "Live", selectedClass: "bg-red-600 text-white" },
+  { value: "final", label: "Final", selectedClass: "bg-green-700 text-white" },
+  { value: "forfeit", label: "Forfeit", selectedClass: "bg-orange-600 text-white" },
 ];
 
 export default function StatusToggle({
@@ -20,7 +20,7 @@ export default function StatusToggle({
   disabled?: boolean;
 }) {
   return (
-    <div role="group" aria-label="Game status" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+    <div role="group" aria-label="Game status" className="mb-2 flex flex-wrap gap-1.5">
       {OPTIONS.map((opt) => (
         <button
           key={opt.value}
@@ -29,8 +29,9 @@ export default function StatusToggle({
           onClick={() => onChange(opt.value)}
           aria-pressed={value === opt.value}
           className={clsx(
-            "rounded px-2 py-2.5 text-xs font-semibold uppercase tracking-wide transition-colors disabled:opacity-40",
-            value === opt.value ? "bg-brand text-white" : "bg-white/10 text-white/70 hover:bg-white/20"
+            "min-w-[4.5rem] flex-1 rounded-xl py-2 text-xs font-bold uppercase tracking-wide transition-all",
+            disabled && "opacity-40",
+            value === opt.value ? opt.selectedClass : "bg-gray-800 text-gray-400 hover:bg-gray-700"
           )}
         >
           {opt.label}

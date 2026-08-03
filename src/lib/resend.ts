@@ -1,25 +1,65 @@
 import { Resend } from "resend";
+import { writeClient } from "./sanity/client";
+import { isSanityConfigured } from "./sanity/env";
 
-const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "MMSPL <no-reply@mmspl.ca>";
 export const ADMIN_EMAIL = process.env.MMSPL_ADMIN_EMAIL || "info@mmspl.ca";
 
-let resendClient: Resend | null = null;
-
-function getResend(): Resend | null {
-  if (!process.env.RESEND_API_KEY) return null;
-  if (!resendClient) resendClient = new Resend(process.env.RESEND_API_KEY);
-  return resendClient;
+interface EmailConfig {
+  apiKey: string | undefined;
+  fromEmail: string;
+  contactRecipients: string[];
 }
 
-export const isResendConfigured = Boolean(process.env.RESEND_API_KEY);
+let cachedConfig: { value: EmailConfig; expiresAt: number } | null = null;
+
+/**
+ * Resolves email sending config from Sanity's adminSettings (editable via
+ * the admin panel's Email tab), falling back to environment variables.
+ * Cached briefly so every outgoing email doesn't re-query Sanity.
+ */
+async function getEmailConfig(): Promise<EmailConfig> {
+  if (cachedConfig && cachedConfig.expiresAt > Date.now()) return cachedConfig.value;
+
+  let resendApiKey: string | undefined;
+  let fromAddress: string | undefined;
+  let contactRecipients: string | undefined;
+
+  if (isSanityConfigured) {
+    const settings = await writeClient
+      .fetch<{ resendApiKey?: string; fromAddress?: string; contactRecipients?: string } | null>(
+        `*[_type == "adminSettings"][0]{ resendApiKey, fromAddress, contactRecipients }`
+      )
+      .catch(() => null);
+    resendApiKey = settings?.resendApiKey;
+    fromAddress = settings?.fromAddress;
+    contactRecipients = settings?.contactRecipients;
+  }
+
+  const value: EmailConfig = {
+    apiKey: resendApiKey || process.env.RESEND_API_KEY,
+    fromEmail: fromAddress || process.env.RESEND_FROM_EMAIL || "MMSPL <no-reply@mmspl.ca>",
+    contactRecipients: (contactRecipients || process.env.MMSPL_ADMIN_EMAIL || ADMIN_EMAIL)
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean),
+  };
+  cachedConfig = { value, expiresAt: Date.now() + 60_000 };
+  return value;
+}
+
+export async function isResendConfigured(): Promise<boolean> {
+  const config = await getEmailConfig();
+  return Boolean(config.apiKey);
+}
 
 async function send(to: string | string[], subject: string, html: string) {
-  const resend = getResend();
-  if (!resend) {
-    console.warn(`RESEND_API_KEY not set — skipping email "${subject}" to`, to);
-    return { skipped: true };
+  const config = await getEmailConfig();
+  if (!config.apiKey) {
+    console.warn(`Resend API key not set — skipping email "${subject}" to`, to);
+    return { skipped: true as const };
   }
-  return resend.emails.send({ from: FROM_EMAIL, to, subject, html });
+  const resend = new Resend(config.apiKey);
+  return resend.emails.send({ from: config.fromEmail, to, subject, html });
 }
 
 function wrapEmail(title: string, bodyHtml: string) {
@@ -36,6 +76,14 @@ function wrapEmail(title: string, bodyHtml: string) {
       </p>
     </div>
   </div>`;
+}
+
+/** True if the send actually went out (not skipped, no error reported). */
+export function wasEmailSent(result: Awaited<ReturnType<typeof send>>): boolean {
+  if (!result) return false;
+  if ("skipped" in result && result.skipped) return false;
+  if ("error" in result && result.error) return false;
+  return true;
 }
 
 export async function sendRegistrationConfirmation(to: string, playerName: string) {
@@ -58,7 +106,7 @@ interface CancelledGameSummary {
 }
 
 export async function sendGameCancellationAlert(to: string[], games: CancelledGameSummary[]) {
-  if (to.length === 0 || games.length === 0) return { skipped: true };
+  if (to.length === 0 || games.length === 0) return { skipped: true as const };
 
   const single = games.length === 1;
   const rowsHtml = games
@@ -89,7 +137,7 @@ export async function sendGameCancellationAlert(to: string[], games: CancelledGa
 }
 
 export async function sendNewsAnnouncement(to: string[], title: string, slug: string) {
-  if (to.length === 0) return { skipped: true };
+  if (to.length === 0) return { skipped: true as const };
   const url = `https://mmspl.ca/news/${slug}`;
   const html = wrapEmail(
     "New Announcement",
@@ -109,11 +157,39 @@ export async function sendSubscriptionWelcome(to: string) {
   return send(to, "Welcome to MMSPL Notifications", html);
 }
 
-export async function sendContactNotification(fields: { name: string; email: string; message: string }) {
+export async function sendContactNotification(fields: { name: string; email: string; subject?: string; message: string }) {
+  const config = await getEmailConfig();
   const html = wrapEmail(
     "New Contact Form Submission",
     `<p><strong>From:</strong> ${fields.name} (${fields.email})</p>
+     ${fields.subject ? `<p><strong>Subject:</strong> ${fields.subject}</p>` : ""}
      <p>${fields.message.replace(/\n/g, "<br/>")}</p>`
   );
-  return send(ADMIN_EMAIL, `MMSPL Contact Form: ${fields.name}`, html);
+  return send(config.contactRecipients, `MMSPL Contact Form: ${fields.subject || fields.name}`, html);
+}
+
+export async function sendCustomNotificationEmail(to: string[], subject: string, message: string) {
+  if (to.length === 0) return { skipped: true as const };
+  const html = wrapEmail(subject, `<p>${message.replace(/\n/g, "<br/>")}</p>`);
+  return send(to, `MMSPL: ${subject}`, html);
+}
+
+export async function sendBroadcastEmail(to: string[], subject: string, message: string) {
+  if (to.length === 0) return { skipped: true as const };
+  const config = await getEmailConfig();
+  if (!config.apiKey) {
+    console.warn(`Resend API key not set — skipping broadcast email "${subject}"`);
+    return { skipped: true as const };
+  }
+  const html = wrapEmail(subject, `<p>${message.replace(/\n/g, "<br/>")}</p>`);
+  const resend = new Resend(config.apiKey);
+  return resend.emails.send({ from: config.fromEmail, to: config.fromEmail, bcc: to, subject: `MMSPL: ${subject}`, html });
+}
+
+export async function sendTestEmail(to: string) {
+  const html = wrapEmail(
+    "Test Email",
+    `<p>This is a test email from the MMSPL admin panel's Email settings tab. If you're reading this, your Resend configuration works.</p>`
+  );
+  return send(to, "MMSPL Admin: Test Email", html);
 }

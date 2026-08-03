@@ -7,6 +7,7 @@ import { LEAGUE_FOUNDING_YEAR } from "@/lib/seed-content";
 
 export default function LoginForm() {
   const router = useRouter();
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -19,7 +20,7 @@ export default function LoginForm() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -51,23 +52,41 @@ export default function LoginForm() {
           Est. {LEAGUE_FOUNDING_YEAR}
         </span>
         <h1 className="mt-4 text-2xl">Admin Login</h1>
-        <p className="mt-1 text-sm text-white/50">Score entry access only.</p>
+        <p className="mt-1 text-sm text-white/50">Sign in with your credentials</p>
       </div>
 
-      <div className="mt-6">
-        <label htmlFor="admin-password" className="sr-only">
-          Password
-        </label>
-        <input
-          id="admin-password"
-          type="password"
-          autoFocus
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded border border-white/20 bg-black px-4 py-3 text-base text-white placeholder:text-white/30 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
-          placeholder="Password"
-        />
+      <div className="mt-6 space-y-3">
+        <div>
+          <label htmlFor="admin-username" className="sr-only">
+            Username
+          </label>
+          <input
+            id="admin-username"
+            type="text"
+            autoFocus
+            required
+            autoCapitalize="off"
+            autoCorrect="off"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full rounded border border-white/20 bg-black px-4 py-3 text-base text-white placeholder:text-white/30 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
+            placeholder="Username"
+          />
+        </div>
+        <div>
+          <label htmlFor="admin-password" className="sr-only">
+            Password
+          </label>
+          <input
+            id="admin-password"
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full rounded border border-white/20 bg-black px-4 py-3 text-base text-white placeholder:text-white/30 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40"
+            placeholder="Password"
+          />
+        </div>
       </div>
 
       {status === "error" && (

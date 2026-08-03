@@ -6,12 +6,19 @@ import { recalculateStandings } from "@/lib/standings";
 import type { Season, Standing } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
-  const unauthorized = requireAdminApiAuth(req);
-  if (unauthorized) return unauthorized;
+  const auth = requireAdminApiAuth(req);
+  if ("response" in auth) return auth.response;
 
-  const season = await writeClient.fetch<Season | null>(activeSeasonQuery);
+  const body = await req.json().catch(() => ({}));
+  const seasonId = typeof body?.seasonId === "string" ? body.seasonId : null;
+
+  const season = seasonId
+    ? await writeClient.fetch<Season | null>(`*[_type == "season" && _id == $id][0]{_id, year, isActive}`, {
+        id: seasonId,
+      })
+    : await writeClient.fetch<Season | null>(activeSeasonQuery);
   if (!season) {
-    return NextResponse.json({ error: "No active season is set in Studio." }, { status: 400 });
+    return NextResponse.json({ error: "Season not found." }, { status: 400 });
   }
 
   await recalculateStandings(season._id);

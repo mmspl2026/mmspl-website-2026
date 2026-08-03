@@ -29,6 +29,20 @@ export default defineType({
       title: "Description",
       type: "text",
     }),
+    defineField({
+      name: "category",
+      title: "Category",
+      type: "string",
+      options: {
+        list: [
+          { title: "Season", value: "Season" },
+          { title: "Tournament", value: "Tournament" },
+          { title: "Registration", value: "Registration" },
+          { title: "Admin", value: "Admin" },
+        ],
+      },
+      initialValue: "Admin",
+    }),
   ],
   orderings: [{ title: "Date", name: "dateAsc", by: [{ field: "date", direction: "asc" }] }],
   preview: {

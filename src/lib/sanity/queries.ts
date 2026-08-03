@@ -65,13 +65,16 @@ export const allAwardTrophyPhotosQuery = groq`*[_type == "awardTrophyPhoto"]{
 }`;
 
 export const upcomingImportantDatesQuery = groq`*[_type == "importantDate" && date >= $today] | order(date asc){
-  _id, label, date, endDate, description
+  _id, label, date, endDate, description, category
 }`;
 
 export const allImportantDatesQuery = groq`*[_type == "importantDate"] | order(date asc){
-  _id, label, date, endDate, description
+  _id, label, date, endDate, description, category
 }`;
 
+// NOTE: this query is used by public pages via sanityFetch() and its result
+// is sent to the browser — never add resendApiKey (a secret) here. It has
+// its own dedicated, admin-only query below.
 export const adminSettingsQuery = groq`*[_type == "adminSettings"][0]{
   heroImage,
   standingsHeroImage,
@@ -83,7 +86,19 @@ export const adminSettingsQuery = groq`*[_type == "adminSettings"][0]{
   notificationsHeroImage,
   sponsorText,
   registrationOpen,
-  registrationFee
+  registrationFee,
+  registrationClosedMessage
+}`;
+
+// Admin-only — includes the secret resendApiKey. Only ever fetch this from
+// server-side admin API routes, never from a public page.
+export const adminSettingsFullQuery = groq`*[_type == "adminSettings"][0]{
+  registrationOpen,
+  registrationFee,
+  registrationClosedMessage,
+  fromAddress,
+  contactRecipients,
+  resendApiKey
 }`;
 
 export const subscriberEmailsQuery = groq`*[_type == "subscriber"].email`;
@@ -135,3 +150,48 @@ export const gameByIdQuery = groq`*[_type == "game" && _id == $id][0]{
   "seasonId": season->_id,
   "seasonYear": season->year
 }`;
+
+// --- Admin data manager ---
+
+export const adminUserByUsernameQuery = groq`*[_type == "adminUser" && username == $username][0]{
+  _id, name, username, email, role, active, passwordHash
+}`;
+
+export const adminUserByIdQuery = groq`*[_type == "adminUser" && _id == $id][0]{
+  _id, name, username, email, role, active
+}`;
+
+export const allAdminUsersQuery = groq`*[_type == "adminUser"] | order(name asc){
+  _id, name, username, email, role, active, createdAt
+}`;
+
+export const allRegistrationsQuery = groq`*[_type == "registration"] | order(submittedAt desc){
+  _id, firstName, lastName, email, phone, birthYear, experience, position,
+  emergencyContact, emergencyPhone, status, emailStatus, submittedAt,
+  season->{_id, year}
+}`;
+
+export const allContactSubmissionsQuery = groq`*[_type == "contactSubmission"] | order(submittedAt desc){
+  _id, name, email, subject, message, status, submittedAt
+}`;
+
+export const allNotificationLogsQuery = groq`*[_type == "notificationLog"] | order(sentAt desc)[0...50]{
+  _id, title, message, emailCount, pushCount, sentAt
+}`;
+
+export const subscriberCountQuery = groq`count(*[_type == "subscriber"])`;
+export const pushSubscriptionCountQuery = groq`count(*[_type == "pushSubscription"])`;
+
+export const allNewsAdminQuery = groq`*[_type == "news"] | order(date desc){
+  _id, title, slug, body, photo, date, tag
+}`;
+
+export const newsByIdQuery = groq`*[_type == "news" && _id == $id][0]{
+  _id, title, slug, body, photo, date, tag
+}`;
+
+export const allGalleryPhotosQuery = groq`*[_type == "galleryPhoto"] | order(date desc){
+  _id, image, caption, date, category
+}`;
+
+export const galleryCategoriesQuery = groq`*[_type == "adminSettings"][0].galleryCategories`;

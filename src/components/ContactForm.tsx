@@ -3,7 +3,7 @@
 import { useState, type FormEvent } from "react";
 
 export default function ContactForm() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -22,7 +22,7 @@ export default function ContactForm() {
         throw new Error(data.error || "Something went wrong. Please try again.");
       }
       setStatus("success");
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: "", email: "", subject: "", message: "" });
     } catch (err) {
       setStatus("error");
       setErrorMessage(err instanceof Error ? err.message : "Something went wrong.");
@@ -62,6 +62,17 @@ export default function ContactForm() {
           required
           value={form.email}
           onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+          className="input"
+        />
+      </div>
+      <div>
+        <label htmlFor="contact-subject" className="mb-1 block text-sm font-semibold text-black/70">
+          Subject
+        </label>
+        <input
+          id="contact-subject"
+          value={form.subject}
+          onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
           className="input"
         />
       </div>

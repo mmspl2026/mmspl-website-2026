@@ -20,8 +20,8 @@ interface GameForCancel {
 }
 
 export async function POST(req: NextRequest) {
-  const unauthorized = requireAdminApiAuth(req);
-  if (unauthorized) return unauthorized;
+  const auth = requireAdminApiAuth(req);
+  if ("response" in auth) return auth.response;
 
   const body = await req.json().catch(() => null);
   const gameIds = Array.isArray(body?.gameIds) ? body.gameIds.filter((id: unknown) => typeof id === "string") : [];

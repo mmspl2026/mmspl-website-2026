@@ -51,6 +51,38 @@ export default defineType({
       title: "Registration Fee (CAD)",
       type: "number",
     }),
+    defineField({
+      name: "registrationClosedMessage",
+      title: "Registration Closed Message",
+      type: "text",
+      description: "Shown on the Register page when registration is closed.",
+    }),
+    defineField({
+      name: "fromAddress",
+      title: "Email From Address",
+      type: "string",
+      description: "Falls back to RESEND_FROM_EMAIL if left blank.",
+    }),
+    defineField({
+      name: "contactRecipients",
+      title: "Contact Form Recipients",
+      type: "string",
+      description: "Comma-separated email addresses. Falls back to MMSPL_ADMIN_EMAIL if left blank.",
+    }),
+    defineField({
+      name: "resendApiKey",
+      title: "Resend API Key",
+      type: "string",
+      description: "Falls back to the RESEND_API_KEY environment variable if left blank. Managed via the admin panel's Email tab.",
+      hidden: true,
+    }),
+    defineField({
+      name: "galleryCategories",
+      title: "Gallery Categories",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Managed via the admin panel's Gallery tab.",
+    }),
   ],
   preview: {
     prepare() {

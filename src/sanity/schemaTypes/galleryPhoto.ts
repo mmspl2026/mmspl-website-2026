@@ -30,6 +30,11 @@ export default defineType({
       title: "Date",
       type: "date",
     }),
+    defineField({
+      name: "category",
+      title: "Category",
+      type: "string",
+    }),
   ],
   preview: {
     select: { title: "caption", media: "image", date: "date" },

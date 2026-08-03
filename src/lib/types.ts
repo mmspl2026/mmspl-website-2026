@@ -76,6 +76,7 @@ export interface ImportantDate {
   date: string;
   endDate?: string;
   description?: string;
+  category?: "Season" | "Tournament" | "Registration" | "Admin";
 }
 
 export interface GalleryPhoto {
@@ -83,6 +84,7 @@ export interface GalleryPhoto {
   image: SanityImageWithAlt;
   caption?: string;
   date?: string;
+  category?: string;
 }
 
 export interface AdminSettings {
@@ -97,6 +99,11 @@ export interface AdminSettings {
   sponsorText?: string;
   registrationOpen: boolean;
   registrationFee?: number;
+  registrationClosedMessage?: string;
+  fromAddress?: string;
+  contactRecipients?: string;
+  resendApiKey?: string;
+  galleryCategories?: string[];
 }
 
 export interface AdminGame extends Game {
@@ -109,4 +116,56 @@ export interface PushSubscriptionRecord {
   endpoint: string;
   p256dh: string;
   auth: string;
+}
+
+export type AdminRole = "superadmin" | "exec";
+
+export interface AdminUser {
+  _id: string;
+  name: string;
+  username: string;
+  email: string;
+  role: AdminRole;
+  active: boolean;
+  createdAt: string;
+}
+
+export type RegistrationStatus = "unpaid" | "call-up" | "completed";
+
+export interface Registration {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  birthYear?: string;
+  experience?: string;
+  position?: string;
+  emergencyContact?: string;
+  emergencyPhone?: string;
+  season?: Season;
+  status: RegistrationStatus;
+  emailStatus: "sent" | "failed";
+  submittedAt: string;
+}
+
+export type ContactStatus = "new" | "read" | "replied" | "email-failed";
+
+export interface ContactSubmission {
+  _id: string;
+  name: string;
+  email: string;
+  subject?: string;
+  message: string;
+  status: ContactStatus;
+  submittedAt: string;
+}
+
+export interface NotificationLog {
+  _id: string;
+  title: string;
+  message: string;
+  emailCount: number;
+  pushCount: number;
+  sentAt: string;
 }

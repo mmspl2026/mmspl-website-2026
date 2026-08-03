@@ -5,10 +5,17 @@ import { activeSeasonQuery, standingsBySeasonQuery } from "@/lib/sanity/queries"
 import type { Season, Standing } from "@/lib/types";
 
 export async function GET(req: NextRequest) {
-  const unauthorized = requireAdminApiAuth(req);
-  if (unauthorized) return unauthorized;
+  const auth = requireAdminApiAuth(req);
+  if ("response" in auth) return auth.response;
 
-  const season = await writeClient.fetch<Season | null>(activeSeasonQuery);
+  const seasonId = req.nextUrl.searchParams.get("seasonId");
+
+  const season = seasonId
+    ? await writeClient.fetch<Season | null>(`*[_type == "season" && _id == $id][0]{_id, year, isActive}`, {
+        id: seasonId,
+      })
+    : await writeClient.fetch<Season | null>(activeSeasonQuery);
+
   if (!season) {
     return NextResponse.json({ season: null, standings: [] });
   }

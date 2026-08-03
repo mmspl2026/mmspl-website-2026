@@ -10,6 +10,10 @@ import galleryPhoto from "./galleryPhoto";
 import adminSettings from "./adminSettings";
 import subscriber from "./subscriber";
 import pushSubscription from "./pushSubscription";
+import adminUser from "./adminUser";
+import registration from "./registration";
+import contactSubmission from "./contactSubmission";
+import notificationLog from "./notificationLog";
 
 export const schemaTypes = [
   season,
@@ -24,4 +28,8 @@ export const schemaTypes = [
   subscriber,
   pushSubscription,
   adminSettings,
+  adminUser,
+  registration,
+  contactSubmission,
+  notificationLog,
 ];

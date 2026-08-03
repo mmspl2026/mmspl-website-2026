@@ -1,33 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  ADMIN_SESSION_COOKIE,
-  createSessionToken,
-  isAdminAuthConfigured,
-  verifyPassword,
-} from "@/lib/admin-auth";
+import { isAdminAuthConfigured, setSessionCookie, verifyPasswordHash } from "@/lib/admin-auth";
+import { writeClient } from "@/lib/sanity/client";
+import { isSanityConfigured } from "@/lib/sanity/env";
+import { adminUserByUsernameQuery } from "@/lib/sanity/queries";
+
+interface AdminUserRow {
+  _id: string;
+  role: "superadmin" | "exec";
+  active: boolean;
+  passwordHash?: string;
+}
 
 export async function POST(req: NextRequest) {
-  if (!isAdminAuthConfigured) {
+  if (!isAdminAuthConfigured || !isSanityConfigured) {
     return NextResponse.json(
-      { error: "Admin login is not configured. Set ADMIN_PASSWORD." },
+      { error: "Admin login is not configured. Set ADMIN_SESSION_SECRET and Sanity env vars." },
       { status: 503 }
     );
   }
 
   const body = await req.json().catch(() => null);
+  const username = typeof body?.username === "string" ? body.username.trim().toLowerCase() : "";
   const password = typeof body?.password === "string" ? body.password : "";
 
-  if (!verifyPassword(password)) {
-    return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
+  if (!username || !password) {
+    return NextResponse.json({ error: "Username and password are required." }, { status: 400 });
+  }
+
+  const user = await writeClient.fetch<AdminUserRow | null>(adminUserByUsernameQuery, { username });
+
+  if (!user || !user.active || !user.passwordHash || !verifyPasswordHash(password, user.passwordHash)) {
+    return NextResponse.json({ error: "Incorrect username or password." }, { status: 401 });
   }
 
   const res = NextResponse.json({ ok: true });
-  res.cookies.set(ADMIN_SESSION_COOKIE, createSessionToken(), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24,
-  });
+  setSessionCookie(res, { uid: user._id, role: user.role });
   return res;
 }

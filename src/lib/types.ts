@@ -96,6 +96,7 @@ export interface AdminSettings {
   aboutHeroImage?: SanityImageWithAlt;
   contactHeroImage?: SanityImageWithAlt;
   notificationsHeroImage?: SanityImageWithAlt;
+  adminInfoHeroImage?: SanityImageWithAlt;
   sponsorText?: string;
   registrationOpen: boolean;
   registrationFee?: number;
@@ -168,4 +169,35 @@ export interface NotificationLog {
   emailCount: number;
   pushCount: number;
   sentAt: string;
+}
+
+export interface LeagueExecutive {
+  _id: string;
+  role: string;
+  name: string;
+  email: string;
+  order: number;
+}
+
+export interface TeamRepresentative {
+  _id: string;
+  repName: string;
+  team: Team;
+}
+
+export interface SanityFileAsset {
+  asset: {
+    url: string;
+    originalFilename?: string;
+  };
+}
+
+export interface LeagueDocument {
+  _id: string;
+  title: string;
+  description?: string;
+  category: "Rules & Regulations" | "AGM Documents" | "General";
+  file?: SanityFileAsset;
+  badge?: "PASSED" | "FAILED";
+  order: number;
 }

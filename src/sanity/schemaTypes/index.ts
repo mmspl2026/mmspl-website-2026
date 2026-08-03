@@ -14,6 +14,9 @@ import adminUser from "./adminUser";
 import registration from "./registration";
 import contactSubmission from "./contactSubmission";
 import notificationLog from "./notificationLog";
+import leagueExecutive from "./leagueExecutive";
+import teamRepresentative from "./teamRepresentative";
+import leagueDocument from "./leagueDocument";
 
 export const schemaTypes = [
   season,
@@ -32,4 +35,7 @@ export const schemaTypes = [
   registration,
   contactSubmission,
   notificationLog,
+  leagueExecutive,
+  teamRepresentative,
+  leagueDocument,
 ];

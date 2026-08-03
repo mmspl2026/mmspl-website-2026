@@ -84,6 +84,7 @@ export const adminSettingsQuery = groq`*[_type == "adminSettings"][0]{
   aboutHeroImage,
   contactHeroImage,
   notificationsHeroImage,
+  adminInfoHeroImage,
   sponsorText,
   registrationOpen,
   registrationFee,
@@ -181,6 +182,21 @@ export const allNotificationLogsQuery = groq`*[_type == "notificationLog"] | ord
 
 export const subscriberCountQuery = groq`count(*[_type == "subscriber"])`;
 export const pushSubscriptionCountQuery = groq`count(*[_type == "pushSubscription"])`;
+
+// --- Admin info page (public) ---
+
+export const allLeagueExecutivesQuery = groq`*[_type == "leagueExecutive"] | order(order asc){
+  _id, role, name, email, order
+}`;
+
+export const allTeamRepresentativesQuery = groq`*[_type == "teamRepresentative"]{
+  _id, repName, team->{_id, name, shortName}
+} | order(team.name asc)`;
+
+export const allLeagueDocumentsQuery = groq`*[_type == "leagueDocument"] | order(category asc, order asc){
+  _id, title, description, category, badge, order,
+  file{asset->{url, originalFilename}}
+}`;
 
 export const allNewsAdminQuery = groq`*[_type == "news"] | order(date desc){
   _id, title, slug, body, photo, date, tag

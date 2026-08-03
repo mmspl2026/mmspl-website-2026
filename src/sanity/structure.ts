@@ -21,6 +21,10 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("importantDate").title("Important Dates"),
       S.documentTypeListItem("galleryPhoto").title("Gallery Photos"),
       S.divider(),
+      S.documentTypeListItem("leagueExecutive").title("Executives"),
+      S.documentTypeListItem("teamRepresentative").title("Team Representatives"),
+      S.documentTypeListItem("leagueDocument").title("Official Documents"),
+      S.divider(),
       S.documentTypeListItem("subscriber").title("Subscribers"),
       S.documentTypeListItem("pushSubscription").title("Push Subscriptions"),
     ]);

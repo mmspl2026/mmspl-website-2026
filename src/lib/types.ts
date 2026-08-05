@@ -87,6 +87,19 @@ export interface GalleryPhoto {
   category?: string;
 }
 
+export interface PublicGalleryPhoto {
+  _id: string;
+  caption?: string;
+  date?: string;
+  category?: string;
+  image: SanityImageWithAlt & {
+    asset?: {
+      url: string;
+      metadata?: { dimensions?: { width: number; height: number } };
+    };
+  };
+}
+
 export interface AdminSettings {
   heroImage?: SanityImageWithAlt;
   standingsHeroImage?: SanityImageWithAlt;
@@ -97,7 +110,9 @@ export interface AdminSettings {
   contactHeroImage?: SanityImageWithAlt;
   notificationsHeroImage?: SanityImageWithAlt;
   adminInfoHeroImage?: SanityImageWithAlt;
+  galleryHeroImage?: SanityImageWithAlt;
   sponsorText?: string;
+  homeCommunityPhotos?: { image: SanityImageWithAlt; position?: string }[];
   registrationOpen: boolean;
   registrationFee?: number;
   registrationClosedMessage?: string;

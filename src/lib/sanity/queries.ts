@@ -85,7 +85,9 @@ export const adminSettingsQuery = groq`*[_type == "adminSettings"][0]{
   contactHeroImage,
   notificationsHeroImage,
   adminInfoHeroImage,
+  galleryHeroImage,
   sponsorText,
+  homeCommunityPhotos[]{ image, position },
   registrationOpen,
   registrationFee,
   registrationClosedMessage
@@ -211,3 +213,20 @@ export const allGalleryPhotosQuery = groq`*[_type == "galleryPhoto"] | order(dat
 }`;
 
 export const galleryCategoriesQuery = groq`*[_type == "adminSettings"][0].galleryCategories`;
+
+// Public gallery page — includes asset dimensions so the masonry layout can
+// render each photo at its natural aspect ratio (matching the Emergent
+// reference page, which uses plain <img> tags with no fixed crop).
+export const publicGalleryPhotosQuery = groq`*[_type == "galleryPhoto"] | order(date desc){
+  _id,
+  caption,
+  date,
+  category,
+  image{
+    ...,
+    asset->{
+      url,
+      metadata{ dimensions{ width, height } }
+    }
+  }
+}`;

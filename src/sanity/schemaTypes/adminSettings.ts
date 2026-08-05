@@ -34,6 +34,7 @@ export default defineType({
     heroImageField("contactHeroImage", "Contact Hero Image"),
     heroImageField("notificationsHeroImage", "Notifications Hero Image"),
     heroImageField("adminInfoHeroImage", "Admin Page Hero Image"),
+    heroImageField("galleryHeroImage", "Gallery Hero Image"),
     defineField({
       name: "sponsorText",
       title: "Sponsor CTA Text",
@@ -83,6 +84,40 @@ export default defineType({
       type: "array",
       of: [{ type: "string" }],
       description: "Managed via the admin panel's Gallery tab.",
+    }),
+    defineField({
+      name: "homeCommunityPhotos",
+      title: "Homepage Community Photo Strip",
+      description: "The 4 photos shown in a row near the bottom of the homepage, below \"Follow the League\".",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "image",
+              title: "Photo",
+              type: "image",
+              options: { hotspot: true },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "position",
+              title: "Image Position",
+              description: "CSS object-position value, e.g. \"center\" or \"top\".",
+              type: "string",
+              initialValue: "center",
+            }),
+          ],
+          preview: {
+            select: { media: "image", subtitle: "position" },
+            prepare({ media, subtitle }) {
+              return { title: "Community photo", subtitle, media };
+            },
+          },
+        },
+      ],
+      validation: (Rule) => Rule.max(4),
     }),
   ],
   preview: {

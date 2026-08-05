@@ -13,7 +13,16 @@ export default function BallparksSection() {
             <div key={park.name} className="flex items-start gap-4 rounded-lg border border-black/10 p-6">
               <MapPin className="mt-1 shrink-0 text-brand" size={24} aria-hidden="true" />
               <div>
-                <h3 className="text-xl">{park.name}</h3>
+                <h3 className="text-xl">
+                  <a
+                    href={park.mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition-colors hover:text-blue-600"
+                  >
+                    {park.name}
+                  </a>
+                </h3>
                 <p className="mt-1 text-black/60">{park.address}</p>
               </div>
             </div>

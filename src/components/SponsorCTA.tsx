@@ -2,20 +2,21 @@ import Link from "next/link";
 
 export default function SponsorCTA({ text }: { text?: string }) {
   return (
-    <section aria-labelledby="sponsor-heading" className="bg-brand py-16 text-white">
-      <div className="container-page flex flex-col items-center gap-6 text-center">
-        <h2 id="sponsor-heading" className="text-3xl sm:text-4xl">
-          Become a Sponsor
+    <section aria-labelledby="sponsor-heading" className="bg-black py-16 text-white">
+      <div className="mx-auto max-w-7xl px-5 text-center">
+        <h2 id="sponsor-heading" className="mb-4 font-sans text-4xl font-bold normal-case tracking-normal">
+          Sponsorship Opportunities
         </h2>
-        <p className="max-w-2xl text-white/90">
+        <div className="mx-auto mb-6 h-1 w-24 bg-red-600" />
+        <p className="mx-auto mb-8 max-w-3xl leading-relaxed text-gray-300">
           {text ||
-            "MMSPL is proud to partner with local Markham businesses. Sponsorship supports our charity tournament, equipment, and league operations while putting your brand in front of hundreds of players and families."}
+            "We are welcoming new sponsorships to our league. If you are a local business in Markham and would like to sponsor a team in the MMSPL, please get in touch with us."}
         </p>
         <Link
           href="/contact"
-          className="rounded bg-black px-6 py-3 font-semibold uppercase tracking-wide text-white transition-colors hover:bg-black/80"
+          className="inline-flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-[3px] bg-red-600 px-8 py-4 text-lg font-bold text-white transition-colors hover:bg-red-700"
         >
-          Get in Touch
+          Become a Sponsor
         </Link>
       </div>
     </section>

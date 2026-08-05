@@ -41,10 +41,12 @@ export const BALLPARKS = [
   {
     name: "Centennial Park",
     address: "Bullock Dr. & McCowan Rd., Markham, ON",
+    mapUrl: "https://maps.app.goo.gl/KXYXR4snLHc7WKzy5",
   },
   {
     name: "Mintleaf Park",
     address: "Fincham Ave. & Wootten Way N., Markham, ON",
+    mapUrl: "https://maps.app.goo.gl/PgHasbFa7G6vmo82A",
   },
 ] as const;
 

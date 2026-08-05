@@ -18,8 +18,10 @@ import ChampionsSection from "@/components/ChampionsSection";
 import UpcomingDates from "@/components/UpcomingDates";
 import BallparksSection from "@/components/BallparksSection";
 import SponsorCTA from "@/components/SponsorCTA";
-import SocialLinks from "@/components/SocialLinks";
 import StandingsTable from "@/components/StandingsTable";
+import CommunityPhotoStrip from "@/components/CommunityPhotoStrip";
+import { FacebookIcon, YoutubeIcon, InstagramIcon } from "@/components/icons/BrandSocialIcons";
+import { SOCIAL_LINKS } from "@/lib/seed-content";
 
 const SEED_DATES: ImportantDate[] = IMPORTANT_DATES_2026.map((d, i) => ({
   _id: `seed-date-${i}`,
@@ -85,20 +87,54 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <SponsorCTA text={settings?.sponsorText} />
-
       <ChampionsSection />
 
       <BallparksSection />
 
-      <section aria-labelledby="social-heading" className="bg-white py-12">
-        <div className="container-page flex flex-col items-center gap-4 text-center">
-          <h2 id="social-heading" className="text-2xl sm:text-3xl">
-            Follow the League
-          </h2>
-          <SocialLinks iconClassName="bg-black/5 text-black hover:bg-brand hover:text-white" />
+      <section className="border-t border-gray-200 bg-gray-50 py-8">
+        <div className="mx-auto max-w-7xl px-5 text-center">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-gray-500">Follow the League</p>
+          <div className="flex items-center justify-center gap-4">
+            <a
+              href={SOCIAL_LINKS.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="MMSPL on Facebook"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-all hover:scale-110 hover:opacity-90"
+              style={{ background: "#1877F2" }}
+            >
+              <FacebookIcon className="h-5 w-5" />
+            </a>
+            <a
+              href={SOCIAL_LINKS.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="MMSPL on YouTube"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-all hover:scale-110 hover:opacity-90"
+              style={{ background: "#FF0000" }}
+            >
+              <YoutubeIcon className="h-5 w-5" />
+            </a>
+            <a
+              href={SOCIAL_LINKS.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="MMSPL on Instagram"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-all hover:scale-110 hover:opacity-90"
+              style={{
+                background:
+                  "radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)",
+              }}
+            >
+              <InstagramIcon className="h-5 w-5" />
+            </a>
+          </div>
         </div>
       </section>
+
+      <CommunityPhotoStrip photos={settings?.homeCommunityPhotos} />
+
+      <SponsorCTA text={settings?.sponsorText} />
     </>
   );
 }

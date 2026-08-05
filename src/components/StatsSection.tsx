@@ -34,7 +34,7 @@ export default function StatsSection() {
       <h2 id="stats-heading" className="sr-only">
         League at a Glance
       </h2>
-      <div className="container-page grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="container-page grid grid-cols-2 gap-6 lg:grid-cols-4">
         {STATS.map(({ label, value, icon: Icon }) => (
           <div
             key={label}

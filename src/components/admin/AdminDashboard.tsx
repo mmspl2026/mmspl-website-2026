@@ -123,38 +123,37 @@ export default function AdminDashboard({ displayName }: { displayName: string })
     updateGame(gameId, (g) => ({ ...g, draftStatus: status }));
   }
 
+  // Takes the season info + values to save directly from the caller instead
+  // of re-deriving them from `games` state internally. An earlier version
+  // read the "current" game via a `setGames(prev => { target = ...; return
+  // prev; })` side-channel, relying on React's setState-eager-bailout
+  // optimization to run that updater synchronously. That optimization is
+  // only a best-effort fast path — it doesn't fire once another state
+  // update is already pending in the same batch — so `target` could stay
+  // undefined and throw "Game not found" for a game that was genuinely on
+  // screen. Passing the values in directly removes the race entirely.
   const saveGame = useCallback(
     async (
       gameId: string,
-      overrides?: Partial<{ homeScore: number; awayScore: number; status: Game["status"] }>
+      seasonInfo: { seasonId: string; seasonYear: number },
+      values: { homeScore: number; awayScore: number; status: Game["status"] }
     ) => {
-      let target: EditableGame | undefined;
-      setGames((prev) => {
-        target = prev.find((g) => g._id === gameId);
-        return prev;
-      });
-      if (!target) throw new Error("Game not found.");
-
-      const previousSnapshot = {
-        homeScore: target.savedHomeScore,
-        awayScore: target.savedAwayScore,
-        status: target.savedStatus,
-      };
-
       updateGame(gameId, (g) => ({ ...g, saving: true }));
 
       try {
+        const payload = {
+          gameId,
+          homeScore: values.homeScore,
+          awayScore: values.awayScore,
+          status: values.status,
+          seasonId: seasonInfo.seasonId,
+          seasonYear: seasonInfo.seasonYear,
+        };
+        console.log("[admin] saving game", payload);
         const res = await fetch("/api/admin/games/save", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            gameId,
-            homeScore: overrides?.homeScore ?? target.draftHomeScore,
-            awayScore: overrides?.awayScore ?? target.draftAwayScore,
-            status: overrides?.status ?? target.draftStatus,
-            seasonId: target.seasonId,
-            seasonYear: target.seasonYear,
-          }),
+          body: JSON.stringify(payload),
         });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
@@ -173,7 +172,6 @@ export default function AdminDashboard({ displayName }: { displayName: string })
           saving: false,
         }));
         setStandings(data.standings ?? []);
-        return { previousSnapshot };
       } catch (err) {
         updateGame(gameId, (g) => ({ ...g, saving: false }));
         throw err;
@@ -185,13 +183,23 @@ export default function AdminDashboard({ displayName }: { displayName: string })
   async function handleSave(gameId: string) {
     const game = games.find((g) => g._id === gameId);
     if (!game) return;
+    const seasonInfo = { seasonId: game.seasonId, seasonYear: game.seasonYear };
+    const previousSnapshot = {
+      homeScore: game.savedHomeScore,
+      awayScore: game.savedAwayScore,
+      status: game.savedStatus,
+    };
     try {
-      const result = await saveGame(gameId);
+      await saveGame(gameId, seasonInfo, {
+        homeScore: game.draftHomeScore,
+        awayScore: game.draftAwayScore,
+        status: game.draftStatus,
+      });
       push({
         tone: "success",
         message: `Score saved: ${game.homeTeam.name} vs ${game.awayTeam.name}`,
         onUndo: () => {
-          saveGame(gameId, result.previousSnapshot)
+          saveGame(gameId, seasonInfo, previousSnapshot)
             .then(() => push({ tone: "info", message: "Save undone." }))
             .catch(() => push({ tone: "error", message: "Couldn't undo — edit and save manually." }));
         },
@@ -229,7 +237,13 @@ export default function AdminDashboard({ displayName }: { displayName: string })
     const previousSnapshots = new Map(
       gameIds.map((id) => {
         const g = games.find((x) => x._id === id)!;
-        return [id, { homeScore: g.savedHomeScore, awayScore: g.savedAwayScore, status: g.savedStatus }] as const;
+        return [
+          id,
+          {
+            seasonInfo: { seasonId: g.seasonId, seasonYear: g.seasonYear },
+            values: { homeScore: g.savedHomeScore, awayScore: g.savedAwayScore, status: g.savedStatus },
+          },
+        ] as const;
       })
     );
 
@@ -270,7 +284,7 @@ export default function AdminDashboard({ displayName }: { displayName: string })
           Promise.all(
             gameIds.map((id) => {
               const snap = previousSnapshots.get(id)!;
-              return saveGame(id, snap);
+              return saveGame(id, snap.seasonInfo, snap.values);
             })
           )
             .then(() => push({ tone: "info", message: "Cancellation undone (scores restored)." }))

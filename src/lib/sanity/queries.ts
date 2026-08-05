@@ -46,6 +46,10 @@ export const recentNewsQuery = groq`*[_type == "news"] | order(date desc)[0...6]
   _id, title, slug, photo, date, tag
 }`;
 
+export const allNewsQuery = groq`*[_type == "news"] | order(date desc){
+  _id, title, slug, photo, date, tag
+}`;
+
 export const newsBySlugQuery = groq`*[_type == "news" && slug.current == $slug][0]{
   _id, title, slug, body, photo, date, tag
 }`;
@@ -65,6 +69,13 @@ export const allAwardTrophyPhotosQuery = groq`*[_type == "awardTrophyPhoto"]{
 }`;
 
 export const upcomingImportantDatesQuery = groq`*[_type == "importantDate" && date >= $today] | order(date asc){
+  _id, label, date, endDate, description, category
+}`;
+
+// Full season list (from May 1 of $seasonYear) for the homepage's Upcoming
+// Dates rail — shows the whole season at a glance, not just future dates,
+// so the horizontal scroll row isn't sparse right after the season starts.
+export const seasonImportantDatesQuery = groq`*[_type == "importantDate" && date >= $seasonStart] | order(date asc){
   _id, label, date, endDate, description, category
 }`;
 
@@ -213,6 +224,10 @@ export const allGalleryPhotosQuery = groq`*[_type == "galleryPhoto"] | order(dat
 }`;
 
 export const galleryCategoriesQuery = groq`*[_type == "adminSettings"][0].galleryCategories`;
+
+export const recentGalleryPhotosQuery = groq`*[_type == "galleryPhoto"] | order(date desc)[0...6]{
+  _id, image, caption
+}`;
 
 // Public gallery page — includes asset dimensions so the masonry layout can
 // render each photo at its natural aspect ratio (matching the Emergent

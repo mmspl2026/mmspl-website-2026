@@ -58,17 +58,32 @@ export const CHAMPIONS_2026 = {
   yearEndTournament: { champion: "TBD", finalist: "TBD" },
 };
 
-export const EXECUTIVE_TEAM = [
-  { name: "Sean Bansavatar", title: "First Vice-President" },
-  { name: "Evange Bethanis", title: "Second Vice-President" },
-] as const;
+// Real content extracted from the Emergent reference site's /about page.
+// Images downloaded from mmspl.ca and re-hosted as real Sanity assets
+// (see scripts/migrate-about-page-images.js) — mmspl.ca is being retired.
+export const ABOUT_PAGE_IMAGES = {
+  hero: "https://cdn.sanity.io/images/9mdmc1ml/production/647556e124b1540d869abbde70c4d8702632b07e-640x480.jpg",
+  logo50: "https://cdn.sanity.io/images/9mdmc1ml/production/2769604e4a292aeb7571ade1ea792f1fe4bea7fa-1280x1102.png",
+} as const;
 
-export const CHARITY_BENEFICIARIES_RECENT = [
-  "Markham Food Bank",
-  "Sandgate Women's Shelter",
-  "Noah's Clubhouse",
-  "Diabetes Canada",
-  "TNT Foundation",
+export const CHARITY_PRESENTATIONS = [
+  {
+    year: 2025,
+    recipients: [
+      { name: "Markham Mariners", amount: 1400, image: "https://cdn.sanity.io/images/9mdmc1ml/production/179d0cef222ef0d43810dc4223d6138b7e9a0dd5-478x356.jpg" },
+      { name: "Sandgate Women's Shelter", amount: 1400, image: "https://cdn.sanity.io/images/9mdmc1ml/production/5a36790bd67429881e0380d3d500fbc006965b28-456x351.jpg" },
+      { name: "Noah's Clubhouse", amount: 1400, image: "https://cdn.sanity.io/images/9mdmc1ml/production/b31dd9edcabd46b66eb31de90b7f0f11f92d8121-560x364.jpg" },
+    ],
+  },
+  {
+    year: 2024,
+    recipients: [
+      { name: "Markham Food Bank", amount: 1500, image: "https://cdn.sanity.io/images/9mdmc1ml/production/a524a624e0b2e1e6ea0a9c134b3b2e9df18ceb38-640x480.jpg" },
+      { name: "Sandgate Women's Shelter", amount: 1500, image: ABOUT_PAGE_IMAGES.hero },
+      { name: "TNT Foundation", amount: 500, image: "https://cdn.sanity.io/images/9mdmc1ml/production/01069b24eb15e86faa55560dedc6794b24653ade-640x480.jpg" },
+      { name: "Markham District Baseball Association", amount: 1200, image: "https://cdn.sanity.io/images/9mdmc1ml/production/bd967f42c11f39bb2c8c3b1d9697a81e64ce1761-640x480.jpg" },
+    ],
+  },
 ] as const;
 
 export const SOCIAL_LINKS = {

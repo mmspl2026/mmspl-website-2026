@@ -3,9 +3,12 @@ import type { Standing } from "@/lib/types";
 export default function StandingsTable({
   standings,
   year,
+  alwaysFullName = false,
 }: {
   standings: Standing[];
   year: number;
+  /** Skip the mobile short-name / desktop full-name toggle and always render the full team name. */
+  alwaysFullName?: boolean;
 }) {
   if (standings.length === 0) {
     return <p className="text-black/60">No standings posted for this season yet.</p>;
@@ -64,8 +67,14 @@ export default function StandingsTable({
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-1.5 py-2.5 font-mono-brand text-sm font-bold text-black md:px-3 md:py-4">
-                    <span className="md:hidden">{row.team.shortName?.trim() || row.team.name.split(/\s+/)[0]}</span>
-                    <span className="hidden md:inline">{row.team.name}</span>
+                    {alwaysFullName ? (
+                      row.team.name
+                    ) : (
+                      <>
+                        <span className="md:hidden">{row.team.shortName?.trim() || row.team.name.split(/\s+/)[0]}</span>
+                        <span className="hidden md:inline">{row.team.name}</span>
+                      </>
+                    )}
                   </td>
                   <td className="px-1.5 py-2.5 text-center font-mono-brand font-semibold text-gray-700 md:px-3 md:py-4">
                     {gp}

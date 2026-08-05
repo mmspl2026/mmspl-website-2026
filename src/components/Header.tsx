@@ -20,6 +20,33 @@ const NAV_LINKS = [
   { href: "/contact", label: "Contact" },
 ];
 
+const MOBILE_NAV_GROUPS: { label: string | null; links: { name: string; path: string }[] }[] = [
+  { label: null, links: [{ name: "Home", path: "/" }] },
+  {
+    label: "Play",
+    links: [
+      { name: "Schedule", path: "/schedule" },
+      { name: "Standings", path: "/standings" },
+    ],
+  },
+  {
+    label: "Community",
+    links: [
+      { name: "News", path: "/news" },
+      { name: "Gallery", path: "/gallery" },
+      { name: "Awards", path: "/awards" },
+    ],
+  },
+  {
+    label: "League",
+    links: [
+      { name: "About", path: "/about" },
+      { name: "Admin", path: "/admin-info" },
+      { name: "Contact", path: "/contact" },
+    ],
+  },
+];
+
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -101,56 +128,110 @@ export default function Header() {
         </div>
       </div>
 
-      {open && (
-        <nav id="mobile-nav" aria-label="Primary mobile" className="border-t border-white/10 lg:hidden">
-          <ul className="container-page flex flex-col py-2">
-            {NAV_LINKS.map((link) => {
-              const isActive =
-                link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
-              return (
-                <li key={link.href}>
+      <div
+        className={clsx(
+          "fixed inset-0 z-40 bg-black/55 transition-opacity duration-300 lg:hidden",
+          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        )}
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+
+      <div
+        id="mobile-nav"
+        className={clsx(
+          "fixed right-0 top-0 z-50 flex h-full flex-col transition-transform duration-300 ease-in-out lg:hidden",
+          open ? "translate-x-0" : "translate-x-full"
+        )}
+        style={{
+          width: "82%",
+          maxWidth: "340px",
+          background: "#0d0d0e",
+          boxShadow: "-20px 0 40px rgba(0,0,0,.4)",
+          visibility: open ? "visible" : "hidden",
+        }}
+      >
+        <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+          <Image src="/mmspl-logo.png" alt="MMSPL" width={110} height={64} className="h-9 w-auto object-contain" />
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="text-white/70 transition-colors hover:text-white"
+            aria-label="Close menu"
+          >
+            <X size={22} aria-hidden="true" />
+          </button>
+        </div>
+
+        <nav aria-label="Primary mobile" className="flex-1 overflow-y-auto py-2">
+          {MOBILE_NAV_GROUPS.map((group, i) => (
+            <div key={i}>
+              {group.label && (
+                <p
+                  style={{
+                    fontFamily: "var(--font-space-mono)",
+                    fontSize: "10px",
+                    letterSpacing: ".14em",
+                    textTransform: "uppercase",
+                    color: "#7a7a7d",
+                    padding: "14px 20px 6px",
+                  }}
+                >
+                  {group.label}
+                </p>
+              )}
+              {group.links.map((link) => {
+                const isActive = link.path === "/" ? pathname === "/" : pathname.startsWith(link.path);
+                return (
                   <Link
-                    href={link.href}
-                    aria-current={isActive ? "page" : undefined}
+                    key={link.path}
+                    href={link.path}
                     onClick={() => setOpen(false)}
-                    className={clsx(
-                      "block rounded px-3 py-3 text-base font-semibold uppercase tracking-wide",
-                      isActive ? "bg-brand text-white" : "text-white/80 hover:bg-white/10 hover:text-white"
-                    )}
+                    aria-current={isActive ? "page" : undefined}
+                    style={{
+                      display: "block",
+                      padding: "11px 20px 11px 24px",
+                      color: isActive ? "#fff" : "#e6e6e6",
+                      textDecoration: "none",
+                      fontFamily: "var(--font-inter)",
+                      fontSize: "15px",
+                      fontWeight: isActive ? 700 : 500,
+                      borderLeft: isActive ? "3px solid #c8202b" : "3px solid transparent",
+                      background: isActive ? "rgba(200,32,43,.14)" : "transparent",
+                      transition: "background .15s",
+                    }}
                   >
-                    {link.label}
+                    {link.name}
                   </Link>
-                </li>
-              );
-            })}
-            <li>
-              <Link
-                href="/notifications"
-                aria-current={pathname === "/notifications" ? "page" : undefined}
-                onClick={() => setOpen(false)}
-                className={clsx(
-                  "flex items-center gap-2 rounded px-3 py-3 text-base font-semibold uppercase tracking-wide",
-                  pathname === "/notifications"
-                    ? "bg-brand text-white"
-                    : "text-white/80 hover:bg-white/10 hover:text-white"
-                )}
-              >
-                <Bell size={18} aria-hidden="true" />
-                Notifications
-              </Link>
-            </li>
-            <li className="px-3 pb-2 pt-3">
-              <Link
-                href="/register"
-                onClick={() => setOpen(false)}
-                className="btn-primary w-full"
-              >
-                Register Now
-              </Link>
-            </li>
-          </ul>
+                );
+              })}
+            </div>
+          ))}
         </nav>
-      )}
+
+        <div className="border-t border-white/10 px-4 py-4">
+          <Link
+            href="/register"
+            onClick={() => setOpen(false)}
+            style={{
+              display: "block",
+              width: "100%",
+              background: "#c8202b",
+              color: "#fff",
+              textAlign: "center",
+              padding: "14px",
+              borderRadius: "3px",
+              fontFamily: "var(--font-inter)",
+              fontWeight: 700,
+              fontSize: "14.5px",
+              letterSpacing: ".02em",
+              textDecoration: "none",
+            }}
+          >
+            Register Now
+          </Link>
+        </div>
+      </div>
     </header>
   );
 }

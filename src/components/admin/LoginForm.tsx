@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { LEAGUE_FOUNDING_YEAR } from "@/lib/seed-content";
 
@@ -41,18 +42,23 @@ export default function LoginForm() {
       noValidate
     >
       <div className="flex flex-col items-center text-center">
-        <Image
-          src="/mmspl-logo.png"
-          alt="Markham Men's Slo-Pitch League logo"
-          width={110}
-          height={64}
-          priority
-        />
+        <Link href="/" aria-label="Back to main site">
+          <Image
+            src="/mmspl-logo.png"
+            alt="Markham Men's Slo-Pitch League logo"
+            width={110}
+            height={64}
+            priority
+          />
+        </Link>
         <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50">
           Est. {LEAGUE_FOUNDING_YEAR}
         </span>
         <h1 className="mt-4 text-2xl">Admin Login</h1>
         <p className="mt-1 text-sm text-white/50">Sign in with your credentials</p>
+        <Link href="/" className="mt-2 text-xs text-white/40 underline-offset-2 hover:text-white/70 hover:underline">
+          &larr; Back to main site
+        </Link>
       </div>
 
       <div className="mt-6 space-y-3">

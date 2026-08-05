@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendContactNotification, wasEmailSent } from "@/lib/resend";
+import { sendContactNotification, sendContactConfirmation, wasEmailSent } from "@/lib/resend";
 import { writeClient } from "@/lib/sanity/client";
 import { isSanityConfigured } from "@/lib/sanity/env";
 
@@ -14,7 +14,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Please fill in your name, a valid email, and a message." }, { status: 400 });
   }
 
-  const emailResult = await sendContactNotification({ name, email, subject, message });
+  const [emailResult] = await Promise.all([
+    sendContactNotification({ name, email, subject, message }),
+    sendContactConfirmation(email, name),
+  ]);
   const emailSent = wasEmailSent(emailResult);
 
   if (isSanityConfigured) {

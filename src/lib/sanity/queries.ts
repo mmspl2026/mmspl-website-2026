@@ -180,8 +180,12 @@ export const allAdminUsersQuery = groq`*[_type == "adminUser"] | order(name asc)
 }`;
 
 export const allRegistrationsQuery = groq`*[_type == "registration"] | order(submittedAt desc){
-  _id, firstName, lastName, email, phone, birthYear, experience, position,
-  emergencyContact, emergencyPhone, status, emailStatus, submittedAt,
+  _id, firstName, lastName,
+  streetAddress, unit, city, postalCode,
+  homeNumber, mobileNumber, email, alternateEmail, dateOfBirth, heardAbout,
+  highestLevel, category, preferredPosition, yearsExperience, experienceComments,
+  canPitch, yearsPitched, pitchingComments,
+  status, emailStatus, submittedAt,
   season->{_id, year}
 }`;
 

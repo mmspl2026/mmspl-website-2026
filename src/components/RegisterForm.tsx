@@ -1,38 +1,117 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import clsx from "clsx";
+import { ChevronDown, CheckCircle2 } from "lucide-react";
 
 interface FormState {
   firstName: string;
   lastName: string;
+  streetAddress: string;
+  unit: string;
+  city: string;
+  postalCode: string;
+  homeNumber: string;
+  mobileNumber: string;
   email: string;
-  phone: string;
-  birthYear: string;
-  experience: string;
-  position: string;
-  emergencyContact: string;
-  emergencyPhone: string;
-  agreeToTerms: boolean;
+  alternateEmail: string;
+  dateOfBirth: string;
+  heardAbout: string;
+  highestLevel: string;
+  category: string;
+  preferredPosition: string;
+  yearsExperience: string;
+  experienceComments: string;
+  canPitch: string;
+  yearsPitched: string;
+  pitchingComments: string;
 }
 
 const INITIAL_STATE: FormState = {
   firstName: "",
   lastName: "",
+  streetAddress: "",
+  unit: "",
+  city: "",
+  postalCode: "",
+  homeNumber: "",
+  mobileNumber: "",
   email: "",
-  phone: "",
-  birthYear: "",
-  experience: "returning",
-  position: "",
-  emergencyContact: "",
-  emergencyPhone: "",
-  agreeToTerms: false,
+  alternateEmail: "",
+  dateOfBirth: "",
+  heardAbout: "",
+  highestLevel: "",
+  category: "",
+  preferredPosition: "",
+  yearsExperience: "",
+  experienceComments: "",
+  canPitch: "",
+  yearsPitched: "",
+  pitchingComments: "",
 };
 
-const STEPS = ["Player Info", "Experience", "Emergency Contact", "Review"] as const;
+const CONTROL_CLASS =
+  "flex h-9 w-full rounded-md border border-[#e5e5e5] bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-[#737373] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black disabled:cursor-not-allowed disabled:opacity-50 md:text-sm mt-1";
 
-export default function RegisterForm({ registrationOpen }: { registrationOpen: boolean }) {
-  const [step, setStep] = useState(0);
+function Label({ htmlFor, children }: { htmlFor: string; children: React.ReactNode }) {
+  return (
+    <label htmlFor={htmlFor} className="text-sm font-medium leading-none">
+      {children}
+    </label>
+  );
+}
+
+function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
+  return <input {...props} className={CONTROL_CLASS} />;
+}
+
+function TextareaField(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return (
+    <textarea
+      {...props}
+      className="mt-1 flex min-h-[60px] w-full rounded-md border border-[#e5e5e5] bg-transparent px-3 py-2 text-base shadow-sm transition-colors placeholder:text-[#737373] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+    />
+  );
+}
+
+function SelectField({
+  id,
+  value,
+  onChange,
+  required,
+  placeholder,
+  options,
+}: {
+  id: string;
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+  placeholder: string;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <div className="relative mt-1">
+      <select
+        id={id}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        className="flex h-9 w-full appearance-none items-center justify-between rounded-md border border-[#e5e5e5] bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-black disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <option value="" disabled>
+          {placeholder}
+        </option>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-50" aria-hidden="true" />
+    </div>
+  );
+}
+
+export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -41,19 +120,8 @@ export default function RegisterForm({ registrationOpen }: { registrationOpen: b
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  function canAdvance() {
-    if (step === 0) return form.firstName && form.lastName && form.email && form.phone;
-    if (step === 1) return form.experience && form.position;
-    if (step === 2) return form.emergencyContact && form.emergencyPhone;
-    return true;
-  }
-
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!form.agreeToTerms) {
-      setErrorMessage("Please agree to the league terms before submitting.");
-      return;
-    }
     setStatus("submitting");
     setErrorMessage("");
     try {
@@ -67,270 +135,229 @@ export default function RegisterForm({ registrationOpen }: { registrationOpen: b
         throw new Error(data.error || "Something went wrong. Please try again.");
       }
       setStatus("success");
+      setForm(INITIAL_STATE);
+      onSuccess();
     } catch (err) {
       setStatus("error");
       setErrorMessage(err instanceof Error ? err.message : "Something went wrong.");
     }
   }
 
-  if (!registrationOpen) {
-    return (
-      <div className="rounded-lg border border-black/10 bg-black/5 p-8 text-center">
-        <h2 className="text-xl">Registration Is Currently Closed</h2>
-        <p className="mt-2 text-black/60">
-          Check back closer to the season, or follow us on social media for the announcement.
-        </p>
-      </div>
-    );
-  }
-
-  if (status === "success") {
-    return (
-      <div role="status" className="rounded-lg border border-green-200 bg-green-50 p-8 text-center">
-        <h2 className="text-xl text-green-800">You&rsquo;re Registered!</h2>
-        <p className="mt-2 text-green-700">
-          A confirmation email is on its way to {form.email}. We&rsquo;ll be in touch with next
-          steps, including your Rookie Evaluation date if applicable.
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      <ol className="flex flex-wrap gap-2" aria-label="Registration steps">
-        {STEPS.map((label, i) => (
-          <li key={label}>
-            <span
-              className={clsx(
-                "flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wide",
-                i === step ? "bg-brand text-white" : i < step ? "bg-brand-100 text-brand-700" : "bg-black/5 text-black/50"
-              )}
-              aria-current={i === step ? "step" : undefined}
-            >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black/10 text-[10px]">
-                {i + 1}
-              </span>
-              {label}
-            </span>
-          </li>
-        ))}
-      </ol>
-
-      <div className="mt-8 space-y-5">
-        {step === 0 && (
-          <fieldset className="space-y-5">
-            <legend className="sr-only">Player information</legend>
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="First name" id="firstName" required>
-                <input
-                  id="firstName"
-                  required
-                  value={form.firstName}
-                  onChange={(e) => update("firstName", e.target.value)}
-                  className="input"
-                />
-              </Field>
-              <Field label="Last name" id="lastName" required>
-                <input
-                  id="lastName"
-                  required
-                  value={form.lastName}
-                  onChange={(e) => update("lastName", e.target.value)}
-                  className="input"
-                />
-              </Field>
+    <div className="rounded-xl border bg-white text-black shadow">
+      <div className="rounded-t-xl bg-gradient-to-r from-black to-gray-900 px-6 py-6 text-white">
+        <h2 className="text-2xl font-semibold">Registration Form</h2>
+        <p className="text-gray-300">Please fill out all required fields</p>
+      </div>
+      <form onSubmit={handleSubmit} noValidate className="space-y-6 px-6 pb-6 pt-6">
+        <div>
+          <h3 className="mb-4 text-xl font-bold text-black">Personal Information</h3>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="firstName">First Name *</Label>
+              <TextInput id="firstName" required value={form.firstName} onChange={(e) => update("firstName", e.target.value)} />
             </div>
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Email" id="email" required>
-                <input
-                  id="email"
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) => update("email", e.target.value)}
-                  className="input"
-                />
-              </Field>
-              <Field label="Phone" id="phone" required>
-                <input
-                  id="phone"
-                  type="tel"
-                  required
-                  value={form.phone}
-                  onChange={(e) => update("phone", e.target.value)}
-                  className="input"
-                />
-              </Field>
+            <div>
+              <Label htmlFor="lastName">Last Name *</Label>
+              <TextInput id="lastName" required value={form.lastName} onChange={(e) => update("lastName", e.target.value)} />
             </div>
-            <Field label="Birth year" id="birthYear">
-              <input
-                id="birthYear"
-                inputMode="numeric"
-                placeholder="e.g. 1988"
-                value={form.birthYear}
-                onChange={(e) => update("birthYear", e.target.value)}
-                className="input max-w-[160px]"
-              />
-            </Field>
-          </fieldset>
-        )}
-
-        {step === 1 && (
-          <fieldset className="space-y-5">
-            <legend className="sr-only">Playing experience</legend>
-            <Field label="Experience" id="experience" required>
-              <select
-                id="experience"
-                value={form.experience}
-                onChange={(e) => update("experience", e.target.value)}
-                className="input"
-              >
-                <option value="returning">Returning MMSPL player</option>
-                <option value="rookie">New / rookie player</option>
-                <option value="other-league">Experienced elsewhere, new to MMSPL</option>
-              </select>
-            </Field>
-            <Field label="Preferred position" id="position" required>
-              <input
-                id="position"
-                required
-                placeholder="e.g. Shortstop, Outfield, Pitcher"
-                value={form.position}
-                onChange={(e) => update("position", e.target.value)}
-                className="input"
-              />
-            </Field>
-            {form.experience === "rookie" && (
-              <p className="rounded border border-brand-100 bg-brand-50 p-3 text-sm text-brand-700">
-                As a rookie, you&rsquo;ll attend one Rookie Evaluation session (April 11, 19, or 25)
-                before the Entry Draft on April 29. We&rsquo;ll email you the details.
-              </p>
-            )}
-          </fieldset>
-        )}
-
-        {step === 2 && (
-          <fieldset className="space-y-5">
-            <legend className="sr-only">Emergency contact</legend>
-            <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Emergency contact name" id="emergencyContact" required>
-                <input
-                  id="emergencyContact"
-                  required
-                  value={form.emergencyContact}
-                  onChange={(e) => update("emergencyContact", e.target.value)}
-                  className="input"
-                />
-              </Field>
-              <Field label="Emergency contact phone" id="emergencyPhone" required>
-                <input
-                  id="emergencyPhone"
-                  type="tel"
-                  required
-                  value={form.emergencyPhone}
-                  onChange={(e) => update("emergencyPhone", e.target.value)}
-                  className="input"
-                />
-              </Field>
-            </div>
-          </fieldset>
-        )}
-
-        {step === 3 && (
-          <div>
-            <h2 className="text-lg font-heading uppercase tracking-wide">Review Your Registration</h2>
-            <dl className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
-              <ReviewItem label="Name" value={`${form.firstName} ${form.lastName}`} />
-              <ReviewItem label="Email" value={form.email} />
-              <ReviewItem label="Phone" value={form.phone} />
-              <ReviewItem label="Birth year" value={form.birthYear || "—"} />
-              <ReviewItem label="Experience" value={form.experience} />
-              <ReviewItem label="Position" value={form.position} />
-              <ReviewItem label="Emergency contact" value={form.emergencyContact} />
-              <ReviewItem label="Emergency phone" value={form.emergencyPhone} />
-            </dl>
-
-            <label className="mt-6 flex items-start gap-3 text-sm">
-              <input
-                type="checkbox"
-                checked={form.agreeToTerms}
-                onChange={(e) => update("agreeToTerms", e.target.checked)}
-                className="mt-1 h-4 w-4 rounded border-black/30 text-brand focus:ring-brand"
-              />
-              <span>
-                I agree to the MMSPL constitution, code of conduct, and confirm the information
-                above is accurate.
-              </span>
-            </label>
           </div>
-        )}
+        </div>
+
+        <div>
+          <h3 className="mb-4 text-xl font-bold text-black">Address</h3>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="streetAddress">Street Address *</Label>
+              <TextInput id="streetAddress" required value={form.streetAddress} onChange={(e) => update("streetAddress", e.target.value)} />
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              <div>
+                <Label htmlFor="unit">Unit</Label>
+                <TextInput id="unit" value={form.unit} onChange={(e) => update("unit", e.target.value)} />
+              </div>
+              <div>
+                <Label htmlFor="city">City *</Label>
+                <TextInput id="city" required value={form.city} onChange={(e) => update("city", e.target.value)} />
+              </div>
+              <div>
+                <Label htmlFor="postalCode">Postal Code *</Label>
+                <TextInput id="postalCode" required value={form.postalCode} onChange={(e) => update("postalCode", e.target.value)} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="mb-4 text-xl font-bold text-black">Contact Information</h3>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="homeNumber">Home Number</Label>
+              <TextInput id="homeNumber" type="tel" value={form.homeNumber} onChange={(e) => update("homeNumber", e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="mobileNumber">Mobile Number *</Label>
+              <TextInput id="mobileNumber" type="tel" required value={form.mobileNumber} onChange={(e) => update("mobileNumber", e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="email">Email *</Label>
+              <TextInput id="email" type="email" required value={form.email} onChange={(e) => update("email", e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="alternateEmail">Alternate Email</Label>
+              <TextInput id="alternateEmail" type="email" value={form.alternateEmail} onChange={(e) => update("alternateEmail", e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="dateOfBirth">Date of Birth (MM/DD/YYYY) *</Label>
+              <TextInput id="dateOfBirth" type="date" required value={form.dateOfBirth} onChange={(e) => update("dateOfBirth", e.target.value)} />
+            </div>
+            <div>
+              <Label htmlFor="heardAbout">I heard about this league *</Label>
+              <SelectField
+                id="heardAbout"
+                value={form.heardAbout}
+                onChange={(v) => update("heardAbout", v)}
+                required
+                placeholder="Select an option"
+                options={[
+                  { value: "internet", label: "Internet search" },
+                  { value: "family", label: "Family League Member" },
+                  { value: "friend", label: "Friend" },
+                  { value: "facebook", label: "Facebook" },
+                  { value: "community", label: "Ads Within Community" },
+                  { value: "online", label: "Online Ad" },
+                ]}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="mb-4 text-xl font-bold text-black">Playing Experience</h3>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="highestLevel">Highest Level Played *</Label>
+              <TextInput
+                id="highestLevel"
+                required
+                placeholder="e.g., Recreational, Competitive, etc."
+                value={form.highestLevel}
+                onChange={(e) => update("highestLevel", e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="category">SPN/SPO/NSA Category *</Label>
+              <SelectField
+                id="category"
+                value={form.category}
+                onChange={(v) => update("category", v)}
+                required
+                placeholder="Select category"
+                options={[
+                  { value: "not-sure", label: "Not Sure" },
+                  { value: "a", label: "A" },
+                  { value: "b", label: "B" },
+                  { value: "c", label: "C" },
+                  { value: "d", label: "D" },
+                  { value: "e", label: "E / Rec" },
+                ]}
+              />
+            </div>
+            <div>
+              <Label htmlFor="preferredPosition">Preferred Position *</Label>
+              <SelectField
+                id="preferredPosition"
+                value={form.preferredPosition}
+                onChange={(v) => update("preferredPosition", v)}
+                required
+                placeholder="Select position"
+                options={[
+                  { value: "no-preference", label: "No Preference" },
+                  { value: "infield", label: "Infield" },
+                  { value: "outfield", label: "Outfield" },
+                ]}
+              />
+            </div>
+            <div>
+              <Label htmlFor="yearsExperience">Years of Experience *</Label>
+              <SelectField
+                id="yearsExperience"
+                value={form.yearsExperience}
+                onChange={(v) => update("yearsExperience", v)}
+                required
+                placeholder="Select years"
+                options={[
+                  { value: "0-3", label: "0-3" },
+                  { value: "4-6", label: "4-6" },
+                  { value: "7-9", label: "7-9" },
+                  { value: "10+", label: "10+" },
+                ]}
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <Label htmlFor="experienceComments">Comments on Experience</Label>
+            <TextareaField id="experienceComments" rows={3} value={form.experienceComments} onChange={(e) => update("experienceComments", e.target.value)} />
+          </div>
+        </div>
+
+        <div>
+          <h3 className="mb-4 text-xl font-bold text-black">Pitching Experience</h3>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div>
+              <Label htmlFor="canPitch">I am able to Pitch *</Label>
+              <SelectField
+                id="canPitch"
+                value={form.canPitch}
+                onChange={(v) => update("canPitch", v)}
+                required
+                placeholder="Select option"
+                options={[
+                  { value: "no", label: "No" },
+                  { value: "occasional", label: "On an occasional basis" },
+                  { value: "primary", label: "As my primary position" },
+                ]}
+              />
+            </div>
+            <div>
+              <Label htmlFor="yearsPitched">Years Pitched</Label>
+              <SelectField
+                id="yearsPitched"
+                value={form.yearsPitched}
+                onChange={(v) => update("yearsPitched", v)}
+                placeholder="Select years"
+                options={[
+                  { value: "0-3", label: "0-3" },
+                  { value: "4-6", label: "4-6" },
+                  { value: "7-9", label: "7-9" },
+                  { value: "10+", label: "10+" },
+                ]}
+              />
+            </div>
+          </div>
+          <div className="mt-4">
+            <Label htmlFor="pitchingComments">Comments on Pitching Experience</Label>
+            <TextareaField id="pitchingComments" rows={3} value={form.pitchingComments} onChange={(e) => update("pitchingComments", e.target.value)} />
+          </div>
+        </div>
 
         {errorMessage && (
-          <p role="alert" className="text-sm text-brand-700">
+          <p role="alert" className="text-sm text-red-600">
             {errorMessage}
           </p>
         )}
-      </div>
 
-      <div className="mt-8 flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => setStep((s) => Math.max(0, s - 1))}
-          disabled={step === 0}
-          className="rounded border border-black/20 px-5 py-2.5 font-semibold uppercase tracking-wide text-black/70 disabled:opacity-40"
-        >
-          Back
-        </button>
-
-        {step < STEPS.length - 1 ? (
-          <button
-            type="button"
-            onClick={() => canAdvance() && setStep((s) => Math.min(STEPS.length - 1, s + 1))}
-            className="rounded bg-brand px-6 py-2.5 font-semibold uppercase tracking-wide text-white hover:bg-brand-700"
-          >
-            Next
-          </button>
-        ) : (
+        <div className="flex gap-4">
           <button
             type="submit"
-            disabled={status === "submitting" || !form.agreeToTerms}
-            className="rounded bg-brand px-6 py-2.5 font-semibold uppercase tracking-wide text-white hover:bg-brand-700 disabled:opacity-50"
+            disabled={status === "submitting"}
+            className="flex flex-1 items-center justify-center rounded-md bg-red-600 py-6 text-lg font-bold text-white shadow transition-colors hover:bg-red-700 disabled:opacity-50"
           >
+            <CheckCircle2 className="mr-2 h-5 w-5" aria-hidden="true" />
             {status === "submitting" ? "Submitting…" : "Submit Registration"}
           </button>
-        )}
-      </div>
-    </form>
-  );
-}
-
-function Field({
-  label,
-  id,
-  required,
-  children,
-}: {
-  label: string;
-  id: string;
-  required?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <label htmlFor={id} className="mb-1 block text-sm font-semibold text-black/70">
-        {label} {required && <span className="text-brand">*</span>}
-      </label>
-      {children}
-    </div>
-  );
-}
-
-function ReviewItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <dt className="text-xs font-semibold uppercase tracking-wide text-black/50">{label}</dt>
-      <dd className="text-black/90">{value}</dd>
+        </div>
+      </form>
     </div>
   );
 }

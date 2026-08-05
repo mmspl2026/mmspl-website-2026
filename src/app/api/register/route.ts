@@ -8,21 +8,46 @@ import type { Season } from "@/lib/types";
 interface RegistrationPayload {
   firstName: string;
   lastName: string;
+  streetAddress: string;
+  unit: string;
+  city: string;
+  postalCode: string;
+  homeNumber: string;
+  mobileNumber: string;
   email: string;
-  phone: string;
-  birthYear: string;
-  experience: string;
-  position: string;
-  emergencyContact: string;
-  emergencyPhone: string;
-  agreeToTerms: boolean;
+  alternateEmail: string;
+  dateOfBirth: string;
+  heardAbout: string;
+  highestLevel: string;
+  category: string;
+  preferredPosition: string;
+  yearsExperience: string;
+  experienceComments: string;
+  canPitch: string;
+  yearsPitched: string;
+  pitchingComments: string;
 }
 
 export async function POST(req: NextRequest) {
   const body = (await req.json().catch(() => null)) as Partial<RegistrationPayload> | null;
 
-  if (!body?.firstName || !body?.lastName || !body?.email || !body?.agreeToTerms) {
-    return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+  if (
+    !body?.firstName ||
+    !body?.lastName ||
+    !body?.email ||
+    !body?.streetAddress ||
+    !body?.city ||
+    !body?.postalCode ||
+    !body?.mobileNumber ||
+    !body?.dateOfBirth ||
+    !body?.heardAbout ||
+    !body?.highestLevel ||
+    !body?.category ||
+    !body?.preferredPosition ||
+    !body?.yearsExperience ||
+    !body?.canPitch
+  ) {
+    return NextResponse.json({ error: "Please fill in all required fields." }, { status: 400 });
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
@@ -54,13 +79,24 @@ export async function POST(req: NextRequest) {
       _type: "registration",
       firstName: body.firstName,
       lastName: body.lastName,
+      streetAddress: body.streetAddress,
+      unit: body.unit || undefined,
+      city: body.city,
+      postalCode: body.postalCode,
+      homeNumber: body.homeNumber || undefined,
+      mobileNumber: body.mobileNumber,
       email: body.email,
-      phone: body.phone,
-      birthYear: body.birthYear,
-      experience: body.experience,
-      position: body.position,
-      emergencyContact: body.emergencyContact,
-      emergencyPhone: body.emergencyPhone,
+      alternateEmail: body.alternateEmail || undefined,
+      dateOfBirth: body.dateOfBirth,
+      heardAbout: body.heardAbout,
+      highestLevel: body.highestLevel,
+      category: body.category,
+      preferredPosition: body.preferredPosition,
+      yearsExperience: body.yearsExperience,
+      experienceComments: body.experienceComments || undefined,
+      canPitch: body.canPitch,
+      yearsPitched: body.yearsPitched || undefined,
+      pitchingComments: body.pitchingComments || undefined,
       ...(activeSeason ? { season: { _type: "reference", _ref: activeSeason._id } } : {}),
       status: "unpaid",
       emailStatus,

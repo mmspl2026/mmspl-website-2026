@@ -53,7 +53,7 @@ export default function GameCard({
         backdropFilter: "blur(10px)",
         WebkitBackdropFilter: "blur(10px)",
       }}
-      aria-label={`${game.homeTeam.name} versus ${game.awayTeam.name}`}
+      aria-label={`${game.awayTeam.name} at ${game.homeTeam.name}`}
     >
       {!isOff && dateLabel === "Today" ? (
         <span className="mx-auto mb-1 w-fit rounded-full bg-brand px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wide text-white">
@@ -68,15 +68,15 @@ export default function GameCard({
       <p
         className={clsx(
           "mb-0.5 truncate text-[9px] leading-[1.3]",
-          homeDim ? "font-semibold text-white/50" : showScore ? "font-bold text-white" : "font-semibold text-white"
+          awayDim ? "font-semibold text-white/50" : showScore ? "font-bold text-white" : "font-semibold text-white"
         )}
       >
-        {teamShortName(game.homeTeam)}
+        {teamShortName(game.awayTeam)}
       </p>
 
       {showScore ? (
         <p className="mb-0.5 text-[13px] font-extrabold tracking-[0.02em] text-white">
-          {game.homeScore} &ndash; {game.awayScore}
+          {game.awayScore} &ndash; {game.homeScore}
         </p>
       ) : (
         <p className="mb-0.5 text-[8px] font-medium tracking-[0.08em] text-white/35">vs</p>
@@ -85,10 +85,10 @@ export default function GameCard({
       <p
         className={clsx(
           "mb-1.5 truncate text-[9px] leading-[1.3]",
-          awayDim ? "font-semibold text-white/50" : showScore ? "font-bold text-white" : "font-semibold text-white"
+          homeDim ? "font-semibold text-white/50" : showScore ? "font-bold text-white" : "font-semibold text-white"
         )}
       >
-        {teamShortName(game.awayTeam)}
+        {teamShortName(game.homeTeam)}
       </p>
 
       <div className="border-t border-white/[0.15] pt-1">

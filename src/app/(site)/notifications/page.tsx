@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Mail, Bell } from "lucide-react";
 import { sanityFetch } from "@/lib/sanity/client";
 import { adminSettingsQuery } from "@/lib/sanity/queries";
 import type { AdminSettings } from "@/lib/types";
-import Hero from "@/components/Hero";
+import { urlFor } from "@/lib/sanity/image";
 import EmailSubscribeForm from "@/components/EmailSubscribeForm";
 import PushNotificationButton from "@/components/PushNotificationButton";
 
@@ -12,13 +13,35 @@ export const metadata: Metadata = { title: "Notifications" };
 export default async function NotificationsPage() {
   const settings = await sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null);
 
+  const heroImage = settings?.notificationsHeroImage || settings?.heroImage;
+  const heroImageUrl = heroImage ? urlFor(heroImage).width(1920).height(1080).fit("crop").url() : "/hero.jpg";
+
   return (
     <div>
-      <Hero
-        heroImage={settings?.notificationsHeroImage || settings?.heroImage}
-        title="Stay Updated"
-        subtitle="Get instant alerts for game cancellations & league news."
-      />
+      <div
+        className="relative h-[260px] overflow-hidden"
+        style={{
+          backgroundImage: `linear-gradient(rgba(10,10,12,0.65), rgba(10,10,12,0.25) 35%, rgba(10,10,12,0.85) 80%), url(${heroImageUrl})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="absolute left-0 top-0 px-5 pt-5">
+          <p className="text-[10px] uppercase tracking-[0.14em] text-white/45">
+            <Link href="/" className="no-underline hover:underline">
+              Home
+            </Link>{" "}
+            / Notifications
+          </p>
+        </div>
+        <div className="absolute bottom-0 left-0 px-5 pb-7">
+          <h1 className="font-heading uppercase leading-none tracking-[0.01em] text-white text-[clamp(2rem,5vw,3.2rem)]">
+            Stay Updated
+          </h1>
+          <p className="mt-1.5 text-base text-white/70">Get instant alerts for game cancellations &amp; league news</p>
+        </div>
+      </div>
 
       <div className="bg-neutral-50 py-16">
         <div className="container-page">

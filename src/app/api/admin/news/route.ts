@@ -3,6 +3,7 @@ import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
 import { allNewsAdminQuery } from "@/lib/sanity/queries";
 import type { NewsItem } from "@/lib/types";
+import { plainTextToBlocks } from "@/lib/newsBody";
 
 function slugify(title: string): string {
   return title
@@ -38,7 +39,7 @@ export async function POST(req: NextRequest) {
     _type: "news",
     title: body.title,
     slug: { _type: "slug", current: uniqueSlug },
-    body: [{ _type: "block", _key: "body0", style: "normal", children: [{ _type: "span", _key: "span0", text: body.body }] }],
+    body: plainTextToBlocks(body.body),
     photo: body.photo || undefined,
     date: body.date || new Date().toISOString(),
     tag: body.tag || undefined,

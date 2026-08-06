@@ -54,11 +54,7 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b-2 border-brand bg-black text-white shadow-md">
       <div className="container-page flex items-center justify-between gap-2 py-1.5 sm:py-2">
-        <Link
-          href="/"
-          className="flex items-center gap-2 lg:flex-col lg:items-center lg:gap-0"
-          aria-label="MMSPL home"
-        >
+        <Link href="/" className="flex items-center gap-2 sm:gap-3" aria-label="MMSPL home">
           <Image
             src="/mmspl-logo.png"
             alt="Markham Men's Slo-Pitch League logo"
@@ -67,9 +63,11 @@ export default function Header() {
             priority
             className="h-14 w-auto lg:h-16"
           />
-          <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-white/50 lg:mt-0.5 lg:text-[10px] lg:tracking-[0.2em]">
-            Est. {LEAGUE_FOUNDING_YEAR}
-          </span>
+          <div className="flex flex-col justify-center">
+            <span className="font-mono-brand text-[9.5px] uppercase leading-tight tracking-[0.12em] text-[#9a968f]">
+              Est. {LEAGUE_FOUNDING_YEAR}
+            </span>
+          </div>
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:block">

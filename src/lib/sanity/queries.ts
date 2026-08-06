@@ -54,6 +54,15 @@ export const newsBySlugQuery = groq`*[_type == "news" && slug.current == $slug][
   _id, title, slug, body, photo, date, tag
 }`;
 
+// Adjacent articles for the news detail page's prev/next navigation, relative
+// to the current article's `date`. "prev" is the next-newer article (matches
+// moving up toward the top of the newest-first index); "next" is the
+// next-older one (matches moving down the index).
+export const adjacentNewsQuery = groq`{
+  "prev": *[_type == "news" && date > $date] | order(date asc)[0]{title, "slug": slug.current},
+  "next": *[_type == "news" && date < $date] | order(date desc)[0]{title, "slug": slug.current}
+}`;
+
 export const allAwardYearsQuery = groq`array::unique(*[_type == "award"].year) | order(@ desc)`;
 
 export const awardsByYearQuery = groq`*[_type == "award" && year == $year] | order(category asc){

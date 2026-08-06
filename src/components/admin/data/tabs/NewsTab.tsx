@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Plus, Pencil, Trash2, Upload } from "lucide-react";
 import type { NewsItem } from "@/lib/types";
 import { urlFor } from "@/lib/sanity/image";
+import { blocksToPlainText } from "@/lib/newsBody";
 import { Card, CardHeader, PrimaryButton, SecondaryButton, DangerButton, StatusBadge, TextInput, TextArea, Select, Spinner, EmptyState } from "../ui";
 import { useToasts } from "@/components/admin/useToasts";
 import ToastStack from "@/components/admin/ToastStack";
@@ -16,17 +17,6 @@ const TAG_OPTIONS = [
   { value: "announcement", label: "Announcement" },
   { value: "registration", label: "Registration" },
 ];
-
-function portableTextToPlain(body: unknown): string {
-  if (!Array.isArray(body)) return "";
-  return body
-    .map((block) =>
-      block && typeof block === "object" && Array.isArray((block as { children?: unknown }).children)
-        ? (block as { children: { text?: string }[] }).children.map((c) => c.text ?? "").join("")
-        : ""
-    )
-    .join("\n\n");
-}
 
 type Draft = {
   _id?: string;
@@ -70,7 +60,7 @@ export default function NewsTab() {
       title: item.title,
       date: item.date?.slice(0, 10) ?? "",
       tag: item.tag ?? "league",
-      body: portableTextToPlain(item.body),
+      body: blocksToPlainText(item.body),
       photo: item.photo,
     });
   }
@@ -180,7 +170,12 @@ export default function NewsTab() {
               </div>
             </div>
             <div>
-              <label className="mb-1 block text-xs font-semibold text-gray-600">Body</label>
+              <label className="mb-1 block text-xs font-semibold text-gray-600">
+                Body{" "}
+                <span className="font-normal text-gray-400">
+                  — separate paragraphs with a blank line; add a link with [link text](https://example.com)
+                </span>
+              </label>
               <TextArea rows={6} value={editing.body} onChange={(e) => setEditing({ ...editing, body: e.target.value })} />
             </div>
             <div>
@@ -222,7 +217,7 @@ export default function NewsTab() {
                     {item.tag && <StatusBadge tone="gray">{TAG_OPTIONS.find((t) => t.value === item.tag)?.label ?? item.tag}</StatusBadge>}
                   </div>
                   <p className="font-mono-brand text-xs text-gray-400">{item.date ? new Date(item.date).toLocaleDateString() : ""}</p>
-                  <p className="mt-1 line-clamp-1 text-sm text-gray-500">{portableTextToPlain(item.body)}</p>
+                  <p className="mt-1 line-clamp-1 text-sm text-gray-500">{blocksToPlainText(item.body)}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <SecondaryButton className="h-8 px-2.5" onClick={() => startEdit(item)}>

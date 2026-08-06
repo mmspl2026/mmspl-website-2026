@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
+import { plainTextToBlocks } from "@/lib/newsBody";
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = requireAdminApiAuth(req);
@@ -17,9 +18,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if ("tag" in body) patch.tag = body.tag;
   if ("photo" in body) patch.photo = body.photo;
   if ("body" in body && typeof body.body === "string") {
-    patch.body = [
-      { _type: "block", _key: "body0", style: "normal", children: [{ _type: "span", _key: "span0", text: body.body }] },
-    ];
+    patch.body = plainTextToBlocks(body.body);
   }
 
   await writeClient.patch(params.id).set(patch).commit();

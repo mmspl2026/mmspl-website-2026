@@ -22,7 +22,35 @@ export default defineType({
       name: "body",
       title: "Body",
       type: "array",
-      of: [{ type: "block" }],
+      of: [
+        {
+          type: "block",
+          marks: {
+            annotations: [
+              {
+                name: "link",
+                title: "Link",
+                type: "object",
+                fields: [
+                  defineField({
+                    name: "href",
+                    title: "URL",
+                    type: "url",
+                    validation: (Rule) =>
+                      Rule.required().uri({ scheme: ["http", "https", "mailto"] }),
+                  }),
+                  defineField({
+                    name: "blank",
+                    title: "Open in new tab",
+                    type: "boolean",
+                    initialValue: true,
+                  }),
+                ],
+              },
+            ],
+          },
+        },
+      ],
       validation: (Rule) => Rule.required(),
     }),
     defineField({

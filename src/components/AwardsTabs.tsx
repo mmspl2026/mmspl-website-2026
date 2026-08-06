@@ -6,7 +6,13 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
 import type { SanityImageWithAlt } from "@/lib/types";
 import { urlFor } from "@/lib/sanity/image";
-import { AWARD_CATEGORY_DISPLAY_TITLE, HONORARY_MEMBERS, HONORARY_MEMBERS_DESCRIPTION } from "@/lib/awardCategories";
+import {
+  AWARD_CATEGORY_DISPLAY_TITLE,
+  HONORARY_MEMBERS,
+  HONORARY_MEMBERS_CRITERIA,
+  HONORARY_MEMBERS_CRITERIA_INTRO,
+  HONORARY_MEMBERS_DESCRIPTION,
+} from "@/lib/awardCategories";
 
 export interface CategoryGroup {
   category: string;
@@ -110,6 +116,15 @@ function HonoraryMembersPanel() {
       </div>
       <div className="rounded-xl border bg-white p-6 text-black shadow-sm">
         <p className="leading-relaxed text-gray-700">{HONORARY_MEMBERS_DESCRIPTION}</p>
+        <p className="mt-4 font-semibold text-black">{HONORARY_MEMBERS_CRITERIA_INTRO}</p>
+        <ul className="mt-2 space-y-2 text-gray-700">
+          {HONORARY_MEMBERS_CRITERIA.map((item) => (
+            <li key={item} className="flex items-start">
+              <span className="mr-2 text-brand">&bull;</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
         {HONORARY_MEMBERS.map((name) => (

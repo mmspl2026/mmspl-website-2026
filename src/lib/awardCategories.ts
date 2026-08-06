@@ -30,6 +30,14 @@ export const HONORARY_MEMBERS_TAB = "Honorary Members";
 export const HONORARY_MEMBERS_DESCRIPTION =
   "In order to permanently recognize individuals who, through personal involvement with the league, have contributed to its growth, organization or enjoyment by its members, the league offers a status of honourary membership. This membership entitles the individual to participate in all social activities of the league that would otherwise be restricted to league members.";
 
+export const HONORARY_MEMBERS_CRITERIA_INTRO = "In order to maintain this status an individual must:";
+
+export const HONORARY_MEMBERS_CRITERIA = [
+  "No longer be an active player in the MMSPL",
+  "Must be nominated for the position at the Annual General Meeting",
+  "Must be accepted by a majority vote at the Annual General Meeting",
+];
+
 export const HONORARY_MEMBERS = [
   "Jim McGregor",
   "Ernie Swift",

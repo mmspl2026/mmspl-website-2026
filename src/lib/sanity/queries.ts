@@ -61,11 +61,11 @@ export const awardsByYearQuery = groq`*[_type == "award" && year == $year] | ord
 }`;
 
 export const allAwardsQuery = groq`*[_type == "award"] | order(category asc, year desc){
-  _id, year, category, winner
+  _id, year, category, winner, photo
 }`;
 
 export const allAwardTrophyPhotosQuery = groq`*[_type == "awardTrophyPhoto"]{
-  _id, category, photo
+  _id, category, photo, description, namedAfter
 }`;
 
 export const upcomingImportantDatesQuery = groq`*[_type == "importantDate" && date >= $today] | order(date asc){
@@ -97,6 +97,7 @@ export const adminSettingsQuery = groq`*[_type == "adminSettings"][0]{
   notificationsHeroImage,
   adminInfoHeroImage,
   galleryHeroImage,
+  newsHeroImage,
   sponsorText,
   homeCommunityPhotos[]{ image, position },
   registrationOpen,

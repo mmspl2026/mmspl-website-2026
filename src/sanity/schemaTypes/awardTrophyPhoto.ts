@@ -2,7 +2,7 @@ import { defineField, defineType } from "sanity";
 
 export default defineType({
   name: "awardTrophyPhoto",
-  title: "Award Trophy Photo",
+  title: "Award Category",
   type: "document",
   fields: [
     defineField({
@@ -27,6 +27,19 @@ export default defineType({
           validation: (Rule) => Rule.required(),
         }),
       ],
+    }),
+    defineField({
+      name: "description",
+      title: "Description",
+      type: "text",
+      description: "What this award is presented for. Shown on the /awards page.",
+      rows: 3,
+    }),
+    defineField({
+      name: "namedAfter",
+      title: "Named After",
+      type: "string",
+      description: 'e.g. "Named in honour of Jim McGregor". Leave blank if not named after a person.',
     }),
   ],
   preview: {

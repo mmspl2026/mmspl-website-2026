@@ -16,7 +16,7 @@ export default async function NewsIndexPage() {
   ]);
   const displayNews = news.length > 0 ? news : SEED_NEWS;
 
-  const heroImage = settings?.heroImage;
+  const heroImage = settings?.newsHeroImage || settings?.heroImage;
   const heroImageUrl = heroImage ? urlFor(heroImage).width(1920).height(1080).fit("crop").url() : "/hero.jpg";
 
   return (

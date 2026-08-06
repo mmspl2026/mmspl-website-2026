@@ -58,6 +58,8 @@ export interface AwardTrophyPhoto {
   _id: string;
   category: string;
   photo: SanityImageWithAlt;
+  description?: string;
+  namedAfter?: string;
 }
 
 export interface Award {
@@ -111,6 +113,7 @@ export interface AdminSettings {
   notificationsHeroImage?: SanityImageWithAlt;
   adminInfoHeroImage?: SanityImageWithAlt;
   galleryHeroImage?: SanityImageWithAlt;
+  newsHeroImage?: SanityImageWithAlt;
   sponsorText?: string;
   homeCommunityPhotos?: { image: SanityImageWithAlt; position?: string }[];
   registrationOpen: boolean;

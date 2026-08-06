@@ -2,23 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { sanityFetch } from "@/lib/sanity/client";
 import { allAwardsQuery, allAwardTrophyPhotosQuery, adminSettingsQuery } from "@/lib/sanity/queries";
-import type { AdminSettings, Award, AwardTrophyPhoto } from "@/lib/types";
+import type { AdminSettings, Award, AwardTrophyPhoto, SanityImageWithAlt } from "@/lib/types";
 import { SEED_AWARDS } from "@/lib/seed-data";
 import { urlFor } from "@/lib/sanity/image";
-import { AWARD_CATEGORY_CONFIG } from "@/lib/awardCategories";
+import { AWARD_CATEGORY_ORDER } from "@/lib/awardCategories";
 import AwardsTabs, { type CategoryGroup } from "@/components/AwardsTabs";
 
 export const metadata: Metadata = { title: "Awards" };
 
-function fillGaps(entries: { year: number; winner: string }[]) {
+function fillGaps(entries: { year: number; winner: string; photo?: SanityImageWithAlt }[]) {
   if (entries.length === 0) return entries;
-  const byYear = new Map(entries.map((e) => [e.year, e.winner]));
+  const byYear = new Map(entries.map((e) => [e.year, e]));
   const years = entries.map((e) => e.year);
   const max = Math.max(...years);
   const min = Math.min(...years);
-  const filled: { year: number; winner: string }[] = [];
+  const filled: { year: number; winner: string; photo?: SanityImageWithAlt }[] = [];
   for (let y = max; y >= min; y--) {
-    filled.push({ year: y, winner: byYear.get(y) ?? "Not Awarded" });
+    const existing = byYear.get(y);
+    filled.push(existing ?? { year: y, winner: "Not Awarded" });
   }
   return filled;
 }
@@ -30,19 +31,31 @@ export default async function AwardsPage() {
     sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
   ]);
   const displayAwards = awards.length > 0 ? awards : SEED_AWARDS;
-  const photoByCategory = new Map(trophyPhotos.map((p) => [p.category, p.photo]));
+  const infoByCategory = new Map(trophyPhotos.map((p) => [p.category, p]));
 
-  const byCategory = new Map<string, { year: number; winner: string }[]>();
+  const byCategory = new Map<string, { year: number; winner: string; photo?: SanityImageWithAlt }[]>();
   for (const a of displayAwards) {
     const list = byCategory.get(a.category) ?? [];
-    list.push({ year: a.year, winner: a.winner });
+    list.push({ year: a.year, winner: a.winner, photo: a.photo });
     byCategory.set(a.category, list);
   }
 
-  const groups: CategoryGroup[] = Array.from(byCategory.entries()).flatMap(([category, entries]) => {
-    const config = AWARD_CATEGORY_CONFIG[category];
-    if (!config) return [];
-    return [{ category, config, entries: fillGaps(entries), photo: photoByCategory.get(category) }];
+  const orderedCategories = [
+    ...AWARD_CATEGORY_ORDER.filter((c) => byCategory.has(c)),
+    ...Array.from(byCategory.keys()).filter((c) => !(AWARD_CATEGORY_ORDER as readonly string[]).includes(c)),
+  ];
+
+  const groups: CategoryGroup[] = orderedCategories.map((category) => {
+    const info = infoByCategory.get(category);
+    return {
+      category,
+      entries: fillGaps(
+        (byCategory.get(category) ?? []).sort((a, b) => b.year - a.year)
+      ),
+      photo: info?.photo,
+      description: info?.description,
+      namedAfter: info?.namedAfter,
+    };
   });
 
   const heroImage = settings?.awardsHeroImage || settings?.heroImage;
@@ -69,9 +82,9 @@ export default async function AwardsPage() {
         </div>
         <div className="absolute bottom-0 left-0 px-5 pb-7">
           <h1 className="font-heading uppercase leading-none tracking-[0.01em] text-white text-[clamp(2rem,5vw,3.2rem)]">
-            League Awards
+            Awards
           </h1>
-          <p className="mt-1.5 text-base text-white/70">Celebrating excellence and achievement</p>
+          <p className="mt-1.5 text-base text-white/70">Recognizing excellence since 1968</p>
         </div>
       </div>
 

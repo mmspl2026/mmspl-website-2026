@@ -35,6 +35,7 @@ export default defineType({
     heroImageField("notificationsHeroImage", "Notifications Hero Image"),
     heroImageField("adminInfoHeroImage", "Admin Page Hero Image"),
     heroImageField("galleryHeroImage", "Gallery Hero Image"),
+    heroImageField("newsHeroImage", "News Hero Image"),
     defineField({
       name: "sponsorText",
       title: "Sponsor CTA Text",

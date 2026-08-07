@@ -17,6 +17,10 @@ import notificationLog from "./notificationLog";
 import leagueExecutive from "./leagueExecutive";
 import teamRepresentative from "./teamRepresentative";
 import leagueDocument from "./leagueDocument";
+import tournamentResult from "./tournamentResult";
+import tournamentPool from "./tournamentPool";
+import tournamentGame from "./tournamentGame";
+import wildCardRanking from "./wildCardRanking";
 
 export const schemaTypes = [
   season,
@@ -38,4 +42,8 @@ export const schemaTypes = [
   leagueExecutive,
   teamRepresentative,
   leagueDocument,
+  tournamentResult,
+  tournamentPool,
+  tournamentGame,
+  wildCardRanking,
 ];

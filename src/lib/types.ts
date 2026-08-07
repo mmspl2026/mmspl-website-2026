@@ -17,6 +17,8 @@ export interface Season {
   _id: string;
   year: number;
   isActive: boolean;
+  cancelled?: boolean;
+  cancelledReason?: string;
   regularSeasonStart?: string;
   regularSeasonEnd?: string;
   playoffCutoff?: number;
@@ -229,4 +231,67 @@ export interface LeagueDocument {
   file?: SanityFileAsset;
   badge?: "PASSED" | "FAILED";
   order: number;
+}
+
+export type TournamentType = "charity" | "mcgregor";
+
+export interface TournamentResult {
+  _id: string;
+  year: number;
+  type: TournamentType;
+  champion?: string;
+  finalist?: string;
+  mvp?: string;
+  mvpTrophy?: string;
+  championPhoto?: SanityImageWithAlt;
+  finalistPhoto?: SanityImageWithAlt;
+  mvpPhoto?: SanityImageWithAlt;
+  hasDetailedResults: boolean;
+  cancelled?: boolean;
+  notes?: string;
+}
+
+export interface TournamentPool {
+  _id: string;
+  year: number;
+  type: TournamentType;
+  poolLetter: string;
+  teams: string[];
+}
+
+export type TournamentRound = "roundRobin" | "wildCard" | "quarterFinal" | "semiFinal" | "final";
+export type TournamentGameResult = "W" | "-";
+
+export interface TournamentGame {
+  _id: string;
+  year: number;
+  type: TournamentType;
+  date: string;
+  sortOrder?: number;
+  time?: string;
+  field?: string;
+  homeTeam?: string;
+  awayTeam?: string;
+  homeScore?: number;
+  awayScore?: number;
+  round: TournamentRound;
+  pool?: string;
+  homeResult?: TournamentGameResult;
+  awayResult?: TournamentGameResult;
+  setupNote?: string;
+  teardownNote?: string;
+}
+
+export interface WildCardRanking {
+  _id: string;
+  year: number;
+  type: TournamentType;
+  rank: number;
+  teamName: string;
+  pool?: string;
+  points?: number;
+  wins?: number;
+  losses?: number;
+  runDifferential?: number;
+  advanced: boolean;
 }

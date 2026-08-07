@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CalendarOff } from "lucide-react";
 import { sanityFetch } from "@/lib/sanity/client";
-import { allSeasonsQuery, gamesBySeasonQuery, adminSettingsQuery } from "@/lib/sanity/queries";
-import type { AdminSettings, Game, Season } from "@/lib/types";
+import { allSeasonsQuery, gamesBySeasonQuery, adminSettingsQuery, allTournamentResultsQuery } from "@/lib/sanity/queries";
+import type { AdminSettings, Game, Season, TournamentResult } from "@/lib/types";
 import { SEED_GAMES } from "@/lib/seed-data";
 import { urlFor } from "@/lib/sanity/image";
 import ScheduleList from "@/components/ScheduleList";
@@ -20,15 +21,20 @@ export default async function SchedulePage({
 }) {
   const today = new Date().toISOString().slice(0, 10);
 
-  const [seasons, settings] = await Promise.all([
+  const [seasons, settings, tournamentResults] = await Promise.all([
     sanityFetch<Season[]>(allSeasonsQuery, {}, []),
     sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
+    sanityFetch<TournamentResult[]>(allTournamentResultsQuery, {}, []),
   ]);
   const years = seasons.length > 0 ? seasons.map((s) => s.year) : [CURRENT_YEAR];
   const selectedYear = searchParams.season ? Number(searchParams.season) : years[0];
+  const selectedSeason = seasons.find((s) => s.year === selectedYear);
+
+  const hasTournament = (type: "charity" | "mcgregor") =>
+    tournamentResults.some((r) => r.year === selectedYear && r.type === type);
 
   const games = await sanityFetch<Game[]>(gamesBySeasonQuery, { year: selectedYear }, []);
-  const displayGames = games.length > 0 ? games : SEED_GAMES;
+  const displayGames = selectedSeason?.cancelled ? [] : games.length > 0 ? games : SEED_GAMES;
 
   const heroImage = settings?.scheduleHeroImage || settings?.heroImage;
   const heroImageUrl = heroImage ? urlFor(heroImage).width(1920).height(1080).fit("crop").url() : "/hero.jpg";
@@ -78,11 +84,32 @@ export default async function SchedulePage({
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <SeasonSelector years={years} selected={selectedYear} variant="gray" />
-            <DownloadScheduleButton games={displayGames} year={selectedYear} />
+            {!selectedSeason?.cancelled && <DownloadScheduleButton games={displayGames} year={selectedYear} />}
           </div>
         </div>
 
-        <ScheduleList games={displayGames} today={today} />
+        {selectedSeason?.cancelled ? (
+          <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-gray-300 bg-white px-5 py-16 text-center">
+            <CalendarOff size={28} className="text-gray-400" aria-hidden="true" />
+            <p className="text-base font-semibold text-black">{selectedYear} Season Cancelled</p>
+            <p className="max-w-md text-sm text-gray-500">
+              {selectedSeason.cancelledReason || "This season was cancelled due to the COVID-19 pandemic."}
+            </p>
+          </div>
+        ) : (
+          <ScheduleList
+            games={displayGames}
+            today={today}
+            tournamentLinks={[
+              ...(hasTournament("charity")
+                ? [{ href: `/schedule/tournament/${selectedYear}/charity`, label: "Charity" }]
+                : []),
+              ...(hasTournament("mcgregor")
+                ? [{ href: `/schedule/tournament/${selectedYear}/mcgregor`, label: "Year-End" }]
+                : []),
+            ]}
+          />
+        )}
       </div>
     </div>
   );

@@ -1,17 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import type { Game, Team } from "@/lib/types";
 import { Funnel, MapPin, Calendar, CalendarDays, Clock, RefreshCw } from "lucide-react";
 import clsx from "clsx";
 
 const TEAM_STORAGE_KEY = "mmspl-schedule-team";
 const PARKS = ["Centennial Park", "Mintleaf Park"] as const;
-const TABS = [
-  { id: "season", label: "Season" },
-  { id: "charity", label: "Charity" },
-  { id: "yearend", label: "Year-End" },
-] as const;
+const TABS = [{ id: "season", label: "Season" }] as const;
 
 function pillClass(active: boolean, wide = false) {
   return clsx(
@@ -86,12 +83,19 @@ function ScheduleGameCard({ game }: { game: Game }) {
   );
 }
 
-export default function ScheduleList({ games, today }: { games: Game[]; today: string }) {
+export default function ScheduleList({
+  games,
+  today,
+  tournamentLinks,
+}: {
+  games: Game[];
+  today: string;
+  tournamentLinks: { href: string; label: string }[];
+}) {
   const [team, setTeam] = useState("all");
   const [park, setPark] = useState("all");
   const [month, setMonth] = useState("all");
   const [date, setDate] = useState<string | null>(null);
-  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("season");
   const [updatedAt] = useState(() => new Date());
 
   // On first load: restore the remembered team (players filter to their own
@@ -285,27 +289,29 @@ export default function ScheduleList({ games, today }: { games: Game[]; today: s
 
       <div role="tablist" className="my-6 grid h-9 w-full grid-cols-3 items-center justify-center rounded-lg bg-gray-100 p-1">
         {TABS.map((t) => (
-          <button
+          <span
             key={t.id}
-            type="button"
             role="tab"
-            aria-selected={tab === t.id}
-            onClick={() => setTab(t.id)}
-            className={clsx(
-              "rounded-md px-3 py-1 text-xs font-medium transition-all sm:text-sm",
-              tab === t.id ? "bg-white text-black shadow" : "text-gray-600"
-            )}
+            aria-selected="true"
+            className="rounded-md bg-white px-3 py-1 text-center text-xs font-medium text-black shadow sm:text-sm"
           >
             {t.label}
-          </button>
+          </span>
+        ))}
+        {tournamentLinks.map((t) => (
+          <Link
+            key={t.href}
+            href={t.href}
+            role="tab"
+            aria-selected="false"
+            className="rounded-md px-3 py-1 text-center text-xs font-medium text-gray-600 transition-all hover:text-black sm:text-sm"
+          >
+            {t.label}
+          </Link>
         ))}
       </div>
 
-      {tab !== "season" ? (
-        <p className="py-8 text-center text-sm text-black/60">
-          {TABS.find((t) => t.id === tab)?.label} games haven&rsquo;t been scheduled yet — check back soon.
-        </p>
-      ) : filtered.length === 0 ? (
+      {filtered.length === 0 ? (
         <p className="py-8 text-center text-sm text-black/60">No games match these filters.</p>
       ) : (
         <div className="space-y-2">

@@ -5,7 +5,7 @@ export const activeSeasonQuery = groq`*[_type == "season" && isActive == true][0
 }`;
 
 export const allSeasonsQuery = groq`*[_type == "season"] | order(year desc){
-  _id, year, isActive, regularSeasonStart, regularSeasonEnd, playoffCutoff
+  _id, year, isActive, cancelled, cancelledReason, regularSeasonStart, regularSeasonEnd, playoffCutoff
 }`;
 
 export const standingsBySeasonQuery = groq`*[_type == "standing" && season->year == $year] | order((wins * 2 + ties) desc, runDifferential desc){
@@ -258,4 +258,29 @@ export const publicGalleryPhotosQuery = groq`*[_type == "galleryPhoto"] | order(
       metadata{ dimensions{ width, height } }
     }
   }
+}`;
+
+// --- Tournament results ---
+
+export const allTournamentResultsQuery = groq`*[_type == "tournamentResult"] | order(year desc){
+  _id, year, type, champion, finalist, hasDetailedResults, cancelled
+}`;
+
+export const latestTournamentYearQuery = groq`*[_type == "tournamentResult" && type == $type] | order(year desc)[0].year`;
+
+export const tournamentResultQuery = groq`*[_type == "tournamentResult" && year == $year && type == $type][0]{
+  _id, year, type, champion, finalist, mvp, mvpTrophy,
+  championPhoto, finalistPhoto, mvpPhoto, hasDetailedResults, cancelled, notes
+}`;
+
+export const tournamentPoolsQuery = groq`*[_type == "tournamentPool" && year == $year && type == $type] | order(poolLetter asc){
+  _id, poolLetter, teams
+}`;
+
+export const tournamentGamesQuery = groq`*[_type == "tournamentGame" && year == $year && type == $type] | order(date asc, sortOrder asc){
+  _id, date, sortOrder, time, field, homeTeam, awayTeam, homeScore, awayScore, round, pool, homeResult, awayResult, setupNote, teardownNote
+}`;
+
+export const wildCardRankingsQuery = groq`*[_type == "wildCardRanking" && year == $year && type == $type] | order(rank asc){
+  _id, rank, teamName, pool, points, wins, losses, runDifferential, advanced
 }`;

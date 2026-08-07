@@ -19,6 +19,20 @@ export default defineType({
       description: "Only one season should be active at a time — this is what Home/Standings/Schedule default to.",
     }),
     defineField({
+      name: "cancelled",
+      title: "Season Cancelled",
+      type: "boolean",
+      initialValue: false,
+      description: "e.g. 2020, cancelled league-wide due to COVID-19. Shows a notice instead of a game schedule.",
+    }),
+    defineField({
+      name: "cancelledReason",
+      title: "Cancellation Reason",
+      type: "string",
+      description: 'Shown on the Schedule page, e.g. "Cancelled due to the COVID-19 pandemic."',
+      hidden: ({ document }) => !document?.cancelled,
+    }),
+    defineField({
       name: "regularSeasonStart",
       title: "Regular season start",
       type: "date",

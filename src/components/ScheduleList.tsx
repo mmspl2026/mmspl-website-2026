@@ -87,10 +87,12 @@ export default function ScheduleList({
   games,
   today,
   tournamentLinks,
+  isCurrentSeason,
 }: {
   games: Game[];
   today: string;
   tournamentLinks: { href: string; label: string }[];
+  isCurrentSeason: boolean;
 }) {
   const [team, setTeam] = useState("all");
   const [park, setPark] = useState("all");
@@ -246,31 +248,33 @@ export default function ScheduleList({
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <label className="flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-black">
-              <CalendarDays size={16} className="text-brand" aria-hidden="true" />
-              Date:
-            </label>
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              <button
-                type="button"
-                onClick={() => setDate(null)}
-                className={clsx(pillClass(date === null), "shrink-0")}
-              >
-                All Dates
-              </button>
-              {dateOptions.map((d) => (
+          {isCurrentSeason && (
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="flex items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-black">
+                <CalendarDays size={16} className="text-brand" aria-hidden="true" />
+                Date:
+              </label>
+              <div className="flex gap-2 overflow-x-auto pb-1">
                 <button
-                  key={d}
                   type="button"
-                  onClick={() => setDate(d)}
-                  className={clsx(pillClass(date === d), "shrink-0")}
+                  onClick={() => setDate(null)}
+                  className={clsx(pillClass(date === null), "shrink-0")}
                 >
-                  {formatPillDate(d)}
+                  All Dates
                 </button>
-              ))}
+                {dateOptions.map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => setDate(d)}
+                    className={clsx(pillClass(date === d), "shrink-0")}
+                  >
+                    {formatPillDate(d)}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

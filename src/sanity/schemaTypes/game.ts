@@ -29,13 +29,13 @@ export default defineType({
       name: "field",
       title: "Field / Ballpark",
       type: "string",
+      description: "Left blank for 2010 — mmspl.ca's archived 2010 game log didn't record which diamond games were played on.",
       options: {
         list: [
           { title: "Centennial Park", value: "Centennial Park" },
           { title: "Mintleaf Park", value: "Mintleaf Park" },
         ],
       },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "homeTeam",

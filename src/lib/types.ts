@@ -28,7 +28,7 @@ export interface Game {
   _id: string;
   date: string;
   time: string;
-  field: string;
+  field?: string;
   homeTeam: Team;
   awayTeam: Team;
   homeScore?: number;

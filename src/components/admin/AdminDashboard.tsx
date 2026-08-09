@@ -33,7 +33,7 @@ function toEditable(g: AdminGame): EditableGame {
   return {
     _id: g._id,
     time: g.time,
-    field: g.field,
+    field: g.field ?? "",
     homeTeam: g.homeTeam,
     awayTeam: g.awayTeam,
     seasonId: g.seasonId,

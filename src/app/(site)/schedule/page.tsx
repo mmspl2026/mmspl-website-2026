@@ -98,8 +98,10 @@ export default async function SchedulePage({
           </div>
         ) : (
           <ScheduleList
+            key={selectedYear}
             games={displayGames}
             today={today}
+            isCurrentSeason={selectedYear === CURRENT_YEAR}
             tournamentLinks={[
               ...(hasTournament("charity")
                 ? [{ href: `/schedule/tournament/${selectedYear}/charity`, label: "Charity" }]

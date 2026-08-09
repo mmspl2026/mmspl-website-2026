@@ -183,10 +183,14 @@ function extractChampionBanner($) {
   $("p.pictureframe").each((_, el) => {
     const $el = $(el);
     const label = $el.find("span").text().trim();
+    const src = $el.find("img").attr("src");
+    const url = src ? new URL(src, BASE + "/").href : undefined;
     if (/^Champions?\s*-/.test(label)) {
       champion = label.replace(/^Champions?\s*-\s*/, "").trim();
+      championPhotoUrl = url;
     } else if (/^Finalists?\s*-/.test(label)) {
       finalist = label.replace(/^Finalists?\s*-\s*/, "").trim();
+      finalistPhotoUrl = url;
     }
   });
 
@@ -200,11 +204,11 @@ function extractChampionBanner($) {
   };
 
   const championCard = fromCardLayout("Champions");
-  championPhotoUrl = championCard.url;
+  if (!championPhotoUrl) championPhotoUrl = championCard.url;
   if (!champion) champion = championCard.name;
 
   const finalistCard = fromCardLayout("Finalists");
-  finalistPhotoUrl = finalistCard.url;
+  if (!finalistPhotoUrl) finalistPhotoUrl = finalistCard.url;
   if (!finalist) finalist = finalistCard.name;
 
   const mvpCard = fromCardLayout("MVP");

@@ -70,17 +70,19 @@ export default function GallerySection({
   return (
     <div className="mx-auto max-w-7xl px-5 py-12">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-2">
+        <div role="tablist" aria-label="Photo categories" className="flex flex-wrap gap-2">
           {categories.map((cat) => (
             <button
               key={cat}
               type="button"
+              role="tab"
+              aria-selected={categoryFilter === cat}
               onClick={() => setCategoryFilter(cat)}
               className={
-                "inline-flex h-8 items-center justify-center gap-2 whitespace-nowrap rounded-[3px] px-3 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring " +
+                "shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors " +
                 (categoryFilter === cat
-                  ? "bg-red-600 text-white hover:bg-red-700"
-                  : "border border-gray-300 bg-white text-gray-700 hover:border-red-600 hover:text-red-600")
+                  ? "bg-brand text-white"
+                  : "border border-gray-300 bg-white text-black hover:border-gray-400")
               }
             >
               {cat}

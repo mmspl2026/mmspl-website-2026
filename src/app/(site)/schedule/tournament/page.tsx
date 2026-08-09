@@ -27,10 +27,10 @@ function TournamentColumn({ type, results }: { type: TournamentType; results: To
             r.cancelled ? (
               <div
                 key={r._id}
-                className="flex items-center justify-between rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-3"
+                className="flex items-center justify-between gap-4 rounded-lg border border-dashed border-gray-300 bg-gray-50 px-4 py-3"
               >
-                <span className="font-mono-brand text-sm text-gray-400">{r.year}</span>
-                <span className="text-right text-sm italic text-gray-500">Cancelled &mdash; COVID-19</span>
+                <span className="font-mono-brand shrink-0 text-sm text-gray-400">{r.year}</span>
+                <span className="text-right text-sm italic text-gray-500">{r.notes || "Not held"}</span>
               </div>
             ) : (
               <Link

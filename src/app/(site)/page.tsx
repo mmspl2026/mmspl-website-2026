@@ -7,8 +7,9 @@ import {
   seasonImportantDatesQuery,
   activeSeasonQuery,
   standingsBySeasonQuery,
+  tournamentResultQuery,
 } from "@/lib/sanity/queries";
-import type { AdminSettings, Game, ImportantDate, NewsItem, Season, Standing } from "@/lib/types";
+import type { AdminSettings, Game, ImportantDate, NewsItem, Season, Standing, TournamentResult } from "@/lib/types";
 import { SEED_GAMES, SEED_NEWS, SEED_STANDINGS } from "@/lib/seed-data";
 import { IMPORTANT_DATES_2026 } from "@/lib/seed-content";
 import HomeHero from "@/components/HomeHero";
@@ -18,6 +19,7 @@ import UpcomingDates from "@/components/UpcomingDates";
 import BallparksSection from "@/components/BallparksSection";
 import SponsorCTA from "@/components/SponsorCTA";
 import StandingsTable from "@/components/StandingsTable";
+import ChampionsSection from "@/components/ChampionsSection";
 
 const SEED_DATES: ImportantDate[] = IMPORTANT_DATES_2026.map((d, i) => ({
   _id: `seed-date-${i}`,
@@ -37,15 +39,20 @@ export default async function HomePage() {
 
   const standingsYear = activeSeason?.year ?? currentYear;
   const seasonStart = `${standingsYear}-05-01`;
-  const [standings, dates] = await Promise.all([
+  const [standings, dates, charityResult, mcgregorResult] = await Promise.all([
     sanityFetch<Standing[]>(standingsBySeasonQuery, { year: standingsYear }, []),
     sanityFetch<ImportantDate[]>(seasonImportantDatesQuery, { seasonStart }, []),
+    sanityFetch<TournamentResult | null>(tournamentResultQuery, { year: standingsYear, type: "charity" }, null),
+    sanityFetch<TournamentResult | null>(tournamentResultQuery, { year: standingsYear, type: "mcgregor" }, null),
   ]);
 
   const displayGames = games.length > 0 ? games : SEED_GAMES;
   const displayNews = (news.length > 0 ? news : SEED_NEWS).slice(0, 3);
   const displayDates = dates.length > 0 ? dates : SEED_DATES;
   const displayStandings = (standings.length > 0 ? standings : SEED_STANDINGS).slice(0, 5);
+
+  const seasonComplete = Boolean(activeSeason?.regularSeasonEnd && today > activeSeason.regularSeasonEnd);
+  const regularSeasonChampion = seasonComplete && standings.length > 0 ? standings[0].team.name : null;
 
   return (
     <>
@@ -73,6 +80,13 @@ export default async function HomePage() {
 
       <StatsSection />
 
+      <ChampionsSection
+        year={standingsYear}
+        charity={charityResult}
+        mcgregor={mcgregorResult}
+        regularSeasonChampion={regularSeasonChampion}
+      />
+
       <section aria-labelledby="standings-heading" className="bg-white py-16">
         <div className="container-page">
           <div className="flex items-baseline justify-between">
@@ -83,7 +97,7 @@ export default async function HomePage() {
               Full standings &rarr;
             </Link>
           </div>
-          <p className="mt-1 text-sm italic text-black/50">The quest for the Reg. Season Championship</p>
+          <p className="mt-1 text-sm italic text-black/50">The quest for the President&apos;s trophy</p>
           <div className="mt-8">
             <StandingsTable standings={displayStandings} year={standingsYear} alwaysFullName />
           </div>

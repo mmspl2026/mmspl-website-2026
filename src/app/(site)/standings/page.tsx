@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Trophy } from "lucide-react";
+import { Trophy, CalendarOff } from "lucide-react";
 import { sanityFetch } from "@/lib/sanity/client";
 import { allSeasonsQuery, standingsBySeasonQuery, adminSettingsQuery } from "@/lib/sanity/queries";
 import type { AdminSettings, Season, Standing } from "@/lib/types";
@@ -38,13 +38,14 @@ export default async function StandingsPage({
   const heroImageUrl = heroImage ? urlFor(heroImage).width(1920).height(1080).fit("crop").url() : "/hero.jpg";
 
   const selectedYear = searchParams.season ? Number(searchParams.season) : years[0];
+  const selectedSeason = seasons.find((s) => s.year === selectedYear);
 
   const standings = await sanityFetch<Standing[]>(
     standingsBySeasonQuery,
     { year: selectedYear },
     []
   );
-  const displayStandings = standings.length > 0 ? standings : SEED_STANDINGS;
+  const displayStandings = selectedSeason?.cancelled ? [] : standings.length > 0 ? standings : SEED_STANDINGS;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -90,7 +91,17 @@ export default async function StandingsPage({
         </div>
 
         <div className="mt-6">
-          <StandingsTable standings={displayStandings} year={selectedYear} />
+          {selectedSeason?.cancelled ? (
+            <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-gray-300 bg-white px-5 py-16 text-center">
+              <CalendarOff size={28} className="text-gray-400" aria-hidden="true" />
+              <p className="text-base font-semibold text-black">{selectedYear} Season Cancelled</p>
+              <p className="max-w-md text-sm text-gray-500">
+                {selectedSeason.cancelledReason || "This season was cancelled due to the COVID-19 pandemic."}
+              </p>
+            </div>
+          ) : (
+            <StandingsTable standings={displayStandings} year={selectedYear} />
+          )}
         </div>
 
         <div className="rounded-xl border bg-white text-black shadow">

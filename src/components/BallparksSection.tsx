@@ -28,6 +28,7 @@ export default function BallparksSection() {
             </div>
           ))}
         </div>
+        <p className="mt-4 text-xs text-black/40">Tip: click a park name for directions.</p>
       </div>
     </section>
   );

@@ -263,7 +263,7 @@ export const publicGalleryPhotosQuery = groq`*[_type == "galleryPhoto"] | order(
 // --- Tournament results ---
 
 export const allTournamentResultsQuery = groq`*[_type == "tournamentResult"] | order(year desc){
-  _id, year, type, champion, finalist, hasDetailedResults, cancelled
+  _id, year, type, champion, finalist, hasDetailedResults, cancelled, notes
 }`;
 
 export const latestTournamentYearQuery = groq`*[_type == "tournamentResult" && type == $type] | order(year desc)[0].year`;

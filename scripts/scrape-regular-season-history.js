@@ -167,19 +167,25 @@ function extractGamesFromMonthPage(html, year) {
   return games;
 }
 
-const teamIdCache = new Map();
+// Loaded once at startup (all existing team _ids), then only ever appended
+// to — this turns "does this team exist" from a per-game round trip into a
+// single query for the whole run, which is what made the original
+// game-by-game version too slow to finish a year inside the watchdog window.
+const teamIdCache = new Set();
 
-async function resolveTeamId(name) {
+async function preloadTeamCache() {
+  if (dryRun) return;
+  const ids = await client.fetch(`*[_type == "team"]._id`);
+  for (const id of ids) teamIdCache.add(id);
+  console.log(`Preloaded ${teamIdCache.size} existing teams.\n`);
+}
+
+/** Resolves a team name to its _id, queuing a create for any team not yet seen. */
+function resolveTeamId(name, pendingCreates) {
   const id = `team-${slugify(name)}`;
-  if (teamIdCache.has(id)) return id;
-  if (!dryRun) {
-    const existing = await client.fetch(`*[_type == "team" && _id == $id][0]{_id}`, { id });
-    if (!existing) {
-      await client.createIfNotExists({ _id: id, _type: "team", name });
-      console.log(`  [team] created ${name}`);
-    }
+  if (!teamIdCache.has(id) && !pendingCreates.has(id)) {
+    pendingCreates.set(id, { _id: id, _type: "team", name });
   }
-  teamIdCache.set(id, true);
   return id;
 }
 
@@ -193,12 +199,12 @@ async function processYear(year) {
     const games = extractGamesFromMonthPage(html, year);
     if (games.length === 0) continue;
 
-    for (const g of games) {
-      try {
-        const homeTeamId = await resolveTeamId(g.homeTeamName);
-        const awayTeamId = await resolveTeamId(g.awayTeamName);
+    try {
+      const pendingTeams = new Map();
+      const gameDocs = games.map((g) => {
+        const homeTeamId = resolveTeamId(g.homeTeamName, pendingTeams);
+        const awayTeamId = resolveTeamId(g.awayTeamName, pendingTeams);
         const gid = `game-hist-${year}-${slugify(g.date)}-${slugify(g.time)}-${slugify(g.field || "unknown")}-${slugify(g.homeTeamName)}-${slugify(g.awayTeamName)}`;
-
         const doc = {
           _id: gid,
           _type: "game",
@@ -212,14 +218,27 @@ async function processYear(year) {
         if (g.field) doc.field = g.field;
         if (g.homeScore !== undefined) doc.homeScore = g.homeScore;
         if (g.awayScore !== undefined) doc.awayScore = g.awayScore;
+        return doc;
+      });
 
-        if (!dryRun) await client.createOrReplace(doc);
-        totalGames++;
-      } catch (err) {
-        console.warn(`  [game write error] ${year} ${month} ${g.date} ${g.time} ${g.homeTeamName} vs ${g.awayTeamName}: ${err.message}`);
+      if (!dryRun) {
+        if (pendingTeams.size > 0) {
+          const teamTx = client.transaction();
+          for (const teamDoc of pendingTeams.values()) teamTx.createIfNotExists(teamDoc);
+          await teamTx.commit();
+          for (const id of pendingTeams.keys()) teamIdCache.add(id);
+        }
+
+        const gameTx = client.transaction();
+        for (const doc of gameDocs) gameTx.createOrReplace(doc);
+        await gameTx.commit();
       }
+
+      totalGames += gameDocs.length;
+      console.log(`  [${year} ${month}] ${games.length} games (${pendingTeams.size} new teams)`);
+    } catch (err) {
+      console.warn(`  [month write error] ${year} ${month}: ${err.message}`);
     }
-    console.log(`  [${year} ${month}] ${games.length} games`);
   }
   return totalGames;
 }
@@ -235,6 +254,7 @@ async function main() {
   }, 240000);
 
   console.log(`Scraping regular season history for ${YEAR_START}-${YEAR_END}${dryRun ? " (dry run)" : ""}\n`);
+  await preloadTeamCache();
   let grandTotal = 0;
   for (let year = YEAR_END; year >= YEAR_START; year--) {
     console.log(`--- ${year} ---`);

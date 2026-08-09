@@ -86,9 +86,9 @@ export default async function TournamentDetailPage({ params }: { params: { year:
         {result.cancelled ? (
           <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-gray-300 bg-gray-50 px-5 py-10 text-center">
             <CalendarOff size={28} className="text-gray-400" aria-hidden="true" />
-            <p className="text-base font-semibold text-black">{year} Season Cancelled</p>
+            <p className="text-base font-semibold text-black">{year} {label.short} Not Held</p>
             <p className="max-w-md text-sm text-gray-500">
-              {result.notes || "This season was cancelled due to the COVID-19 pandemic."}
+              {result.notes || "This tournament was not held."}
             </p>
           </div>
         ) : result.hasDetailedResults ? (

@@ -9,7 +9,7 @@ import {
 } from "@/lib/sanity/queries";
 import type { AdminSettings, LeagueExecutive, TeamRepresentative, LeagueDocument } from "@/lib/types";
 import { urlFor } from "@/lib/sanity/image";
-import AdminDocumentsSection from "@/components/AdminDocumentsSection";
+import AdminInfoTabs from "@/components/AdminInfoTabs";
 
 export const metadata: Metadata = { title: "Admin" };
 
@@ -52,55 +52,7 @@ export default async function AdminInfoPage() {
       </div>
 
       <div className="mx-auto max-w-5xl px-5 py-12">
-        <div className="mb-14">
-          <h2 className="mb-2 font-sans text-2xl font-bold normal-case tracking-normal text-black">League Administration</h2>
-          <div className="mb-8 h-1 w-16 bg-red-600" />
-
-          <h3 className="mb-4 flex items-center gap-2 font-sans text-sm font-bold uppercase tracking-widest text-gray-400">
-            <span className="h-px w-8 bg-gray-300" />
-            2026 Executives
-          </h3>
-          <div className="mb-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {executives.map((e) => (
-              <div
-                key={e._id}
-                className="bg-white transition-all hover:shadow-sm"
-                style={{
-                  borderTop: "1px solid #e5e1da",
-                  borderRight: "1px solid #e5e1da",
-                  borderBottom: "1px solid #e5e1da",
-                  borderLeft: "3px solid #c8202b",
-                  borderRadius: "5px",
-                  padding: "14px 18px",
-                }}
-              >
-                <p className="font-mono-brand mb-1 text-[9px] uppercase tracking-[0.14em] text-[#9a968f]">{e.role}</p>
-                <p className="text-[15px] font-bold text-[#0d0d0e]">{e.name}</p>
-                <a href={`mailto:${e.email}`} className="mt-0.5 block text-xs text-[#c8202b] hover:underline">
-                  {e.email}
-                </a>
-              </div>
-            ))}
-          </div>
-
-          <h3 className="mb-4 flex items-center gap-2 font-sans text-sm font-bold uppercase tracking-widest text-gray-400">
-            <span className="h-px w-8 bg-gray-300" />
-            2026 Executive Council — Team Representatives
-          </h3>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {reps.map((r) => (
-              <div
-                key={r._id}
-                className="rounded-xl border border-gray-200 bg-white px-5 py-3 transition-all hover:border-red-200"
-              >
-                <p className="text-sm font-bold text-gray-900">{r.repName}</p>
-                <p className="mt-0.5 text-xs text-gray-500">{r.team?.name}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <AdminDocumentsSection documents={documents} />
+        <AdminInfoTabs executives={executives} reps={reps} documents={documents} />
       </div>
     </div>
   );

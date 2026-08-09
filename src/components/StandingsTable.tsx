@@ -1,14 +1,18 @@
+import { Trophy } from "lucide-react";
 import type { Standing } from "@/lib/types";
 
 export default function StandingsTable({
   standings,
   year,
   alwaysFullName = false,
+  seasonComplete = false,
 }: {
   standings: Standing[];
   year: number;
   /** Skip the mobile short-name / desktop full-name toggle and always render the full team name. */
   alwaysFullName?: boolean;
+  /** Shows the President's Trophy icon next to the first-place team once the season has finished. */
+  seasonComplete?: boolean;
 }) {
   if (standings.length === 0) {
     return <p className="text-black/60">No standings posted for this season yet.</p>;
@@ -62,8 +66,14 @@ export default function StandingsTable({
               return (
                 <tr key={row._id} className="border-b transition-colors hover:bg-gray-50">
                   <td className="px-1.5 py-2.5 font-mono-brand md:px-3 md:py-4">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center gap-1.5">
                       <span className="font-bold text-black">{rank}</span>
+                      {seasonComplete && rank === 1 && (
+                        <>
+                          <Trophy size={14} className="shrink-0 text-yellow-500" aria-hidden="true" />
+                          <span className="sr-only">President&apos;s Trophy &mdash; Regular Season Champion</span>
+                        </>
+                      )}
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-1.5 py-2.5 font-mono-brand text-sm font-bold text-black md:px-3 md:py-4">

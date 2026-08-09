@@ -100,7 +100,11 @@ export default async function StandingsPage({
               </p>
             </div>
           ) : (
-            <StandingsTable standings={displayStandings} year={selectedYear} />
+            <StandingsTable
+              standings={displayStandings}
+              year={selectedYear}
+              seasonComplete={!selectedSeason?.isActive}
+            />
           )}
         </div>
 

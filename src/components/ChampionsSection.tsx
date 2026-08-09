@@ -13,16 +13,16 @@ interface ChampionCardProps {
 function ChampionCard({ trophyName, label, champion, subtitle, href }: ChampionCardProps) {
   const content = (
     <div className="h-full overflow-hidden rounded-xl border border-white/10 bg-[#0d0d0e] text-white shadow transition-shadow hover:shadow-xl">
-      <div className="bg-brand px-5 py-2">
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.14em] text-white">{trophyName}</p>
+      <div className="bg-brand px-4 py-1.5">
+        <p className="text-center text-[10px] font-semibold uppercase tracking-[0.14em] text-white">{trophyName}</p>
       </div>
-      <div className="flex flex-col items-center gap-3 p-8 text-center">
-        <Trophy size={28} className="text-brand" aria-hidden="true" />
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-white/50">{label}</p>
+      <div className="flex flex-col items-center gap-1.5 p-5 text-center">
+        <Trophy size={20} className="text-brand" aria-hidden="true" />
+        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/50">{label}</p>
         {champion ? (
-          <p className="font-heading text-2xl uppercase leading-tight tracking-[0.01em] text-white">{champion}</p>
+          <p className="font-heading text-lg uppercase leading-tight tracking-[0.01em] text-white">{champion}</p>
         ) : (
-          <p className="font-heading text-2xl uppercase leading-tight tracking-[0.01em] text-white/30">TBD</p>
+          <p className="font-heading text-lg uppercase leading-tight tracking-[0.01em] text-white/30">TBD</p>
         )}
         {subtitle && <p className="text-xs text-white/50">{subtitle}</p>}
       </div>
@@ -54,7 +54,7 @@ export default function ChampionsSection({
         <h2 id="champions-heading" className="text-3xl sm:text-4xl">
           {year} Champions
         </h2>
-        <div className="mt-8 grid gap-6 sm:grid-cols-3">
+        <div className="mx-auto mt-8 grid max-w-2xl gap-4 sm:grid-cols-3">
           <ChampionCard
             trophyName="Kevan MacDonald Cup"
             label="Charity Tournament"

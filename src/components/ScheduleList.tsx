@@ -254,7 +254,7 @@ export default function ScheduleList({
                 <CalendarDays size={16} className="text-brand" aria-hidden="true" />
                 Date:
               </label>
-              <div className="flex gap-2 overflow-x-auto pb-1">
+              <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
                 <button
                   type="button"
                   onClick={() => setDate(null)}

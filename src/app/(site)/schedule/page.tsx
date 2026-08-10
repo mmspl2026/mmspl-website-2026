@@ -8,7 +8,7 @@ import { SEED_GAMES } from "@/lib/seed-data";
 import { urlFor } from "@/lib/sanity/image";
 import ScheduleList from "@/components/ScheduleList";
 import SeasonSelector from "@/components/SeasonSelector";
-import DownloadScheduleButton from "@/components/DownloadScheduleButton";
+import ScheduleDownloadPanel from "@/components/ScheduleDownloadPanel";
 
 export const metadata: Metadata = { title: "Schedule" };
 
@@ -84,7 +84,7 @@ export default async function SchedulePage({
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <SeasonSelector years={years} selected={selectedYear} variant="gray" />
-            {!selectedSeason?.cancelled && <DownloadScheduleButton games={displayGames} year={selectedYear} />}
+            {!selectedSeason?.cancelled && <ScheduleDownloadPanel games={displayGames} year={selectedYear} />}
           </div>
         </div>
 

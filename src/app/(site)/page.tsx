@@ -58,7 +58,7 @@ export default async function HomePage() {
     <>
       <HomeHero heroImage={settings?.heroImage} games={displayGames} today={today} />
 
-      <section aria-labelledby="news-heading" className="bg-white py-16">
+      <section aria-labelledby="news-heading" className="bg-white py-8 md:py-10">
         <div className="container-page">
           <div className="flex items-baseline justify-between">
             <h2 id="news-heading" className="text-3xl sm:text-4xl">
@@ -87,7 +87,7 @@ export default async function HomePage() {
         regularSeasonChampion={regularSeasonChampion}
       />
 
-      <section aria-labelledby="standings-heading" className="bg-white py-16">
+      <section aria-labelledby="standings-heading" className="bg-white py-8 md:py-10">
         <div className="container-page">
           <div className="flex items-baseline justify-between">
             <h2 id="standings-heading" className="text-3xl sm:text-4xl">

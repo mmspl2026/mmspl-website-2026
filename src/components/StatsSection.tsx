@@ -30,7 +30,7 @@ const STATS = [
 
 export default function StatsSection() {
   return (
-    <section aria-labelledby="stats-heading" className="bg-white py-14">
+    <section aria-labelledby="stats-heading" className="bg-white py-8 md:py-10">
       <h2 id="stats-heading" className="sr-only">
         League at a Glance
       </h2>

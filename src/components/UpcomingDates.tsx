@@ -41,7 +41,7 @@ export default function UpcomingDates({ dates }: { dates: ImportantDate[] }) {
   const nextUpId = dates.find((d) => d.date >= today)?._id;
 
   return (
-    <section aria-labelledby="dates-heading" className="bg-white py-16">
+    <section aria-labelledby="dates-heading" className="bg-white py-8 md:py-10">
       <div className="container-page">
         <h2 id="dates-heading" className="text-3xl sm:text-4xl">
           Upcoming Dates

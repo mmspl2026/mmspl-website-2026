@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function SponsorCTA({ text }: { text?: string }) {
   return (
-    <section aria-labelledby="sponsor-heading" className="bg-black py-16 text-white">
+    <section aria-labelledby="sponsor-heading" className="bg-black py-8 text-white md:py-10">
       <div className="mx-auto max-w-7xl px-5 text-center">
         <h2 id="sponsor-heading" className="mb-4 font-sans text-4xl font-bold normal-case tracking-normal">
           Sponsorship Opportunities

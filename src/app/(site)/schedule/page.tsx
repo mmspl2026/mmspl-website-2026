@@ -9,6 +9,7 @@ import { urlFor } from "@/lib/sanity/image";
 import ScheduleList from "@/components/ScheduleList";
 import SeasonSelector from "@/components/SeasonSelector";
 import ScheduleDownloadPanel from "@/components/ScheduleDownloadPanel";
+import ScheduleDownloadMobileSheet from "@/components/ScheduleDownloadMobileSheet";
 
 export const metadata: Metadata = { title: "Schedule" };
 
@@ -110,6 +111,7 @@ export default async function SchedulePage({
                 ? [{ href: `/schedule/tournament/${selectedYear}/mcgregor`, label: "Year-End" }]
                 : []),
             ]}
+            belowFiltersSlot={<ScheduleDownloadMobileSheet games={displayGames} year={selectedYear} />}
           />
         )}
       </div>

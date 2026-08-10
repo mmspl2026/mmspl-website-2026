@@ -88,11 +88,13 @@ export default function ScheduleList({
   today,
   tournamentLinks,
   isCurrentSeason,
+  belowFiltersSlot,
 }: {
   games: Game[];
   today: string;
   tournamentLinks: { href: string; label: string }[];
   isCurrentSeason: boolean;
+  belowFiltersSlot?: React.ReactNode;
 }) {
   const [team, setTeam] = useState("all");
   const [park, setPark] = useState("all");
@@ -277,6 +279,8 @@ export default function ScheduleList({
           )}
         </div>
       </div>
+
+      {belowFiltersSlot && <div className="mt-4">{belowFiltersSlot}</div>}
 
       <div className="flex flex-wrap items-center gap-3 pt-4">
         <span className="text-sm font-semibold text-black">{filtered.length} games shown</span>

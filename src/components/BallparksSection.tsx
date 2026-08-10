@@ -3,7 +3,7 @@ import { BALLPARKS } from "@/lib/seed-content";
 
 export default function BallparksSection() {
   return (
-    <section aria-labelledby="ballparks-heading" className="bg-white py-16">
+    <section aria-labelledby="ballparks-heading" className="bg-white py-8 md:py-10">
       <div className="container-page">
         <h2 id="ballparks-heading" className="text-3xl sm:text-4xl">
           Our Ballparks

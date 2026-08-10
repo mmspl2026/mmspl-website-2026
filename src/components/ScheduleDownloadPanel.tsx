@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { Download, ChevronDown } from "lucide-react";
 import clsx from "clsx";
 import type { Game } from "@/lib/types";
-import { slugifyTeamName } from "@/lib/scheduleExport";
+import { getTeamOptions, buildDownloadUrl } from "@/lib/scheduleExport";
 
 function DownloadLink({
   href,
@@ -35,27 +35,15 @@ export default function ScheduleDownloadPanel({ games, year }: { games: Game[]; 
   const [open, setOpen] = useState(false);
   const [team, setTeam] = useState("");
 
-  const teamOptions = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const g of games) {
-      map.set(slugifyTeamName(g.homeTeam.name), g.homeTeam.name);
-      map.set(slugifyTeamName(g.awayTeam.name), g.awayTeam.name);
-    }
-    return Array.from(map.entries())
-      .map(([slug, name]) => ({ slug, name }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [games]);
-
-  function downloadUrl(format: "ics" | "csv", teamSlug?: string) {
-    const params = new URLSearchParams({ format, season: String(year) });
-    if (teamSlug) params.set("team", teamSlug);
-    return `/api/schedule/download?${params.toString()}`;
-  }
+  const teamOptions = useMemo(() => getTeamOptions(games), [games]);
+  const downloadUrl = (format: "ics" | "csv", teamSlug?: string) => buildDownloadUrl(year, format, teamSlug);
 
   if (games.length === 0) return null;
 
+  // Desktop only — mobile gets a dedicated full-width button + bottom sheet
+  // (ScheduleDownloadMobileSheet), positioned below the filter bar instead.
   return (
-    <div className="relative">
+    <div className="relative hidden md:block">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}

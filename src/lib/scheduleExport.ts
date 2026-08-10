@@ -41,6 +41,23 @@ export function slugifyTeamName(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
+export function getTeamOptions(games: Game[]): { slug: string; name: string }[] {
+  const map = new Map<string, string>();
+  for (const g of games) {
+    map.set(slugifyTeamName(g.homeTeam.name), g.homeTeam.name);
+    map.set(slugifyTeamName(g.awayTeam.name), g.awayTeam.name);
+  }
+  return Array.from(map.entries())
+    .map(([slug, name]) => ({ slug, name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function buildDownloadUrl(year: number, format: "ics" | "csv", teamSlug?: string): string {
+  const params = new URLSearchParams({ format, season: String(year) });
+  if (teamSlug) params.set("team", teamSlug);
+  return `/api/schedule/download?${params.toString()}`;
+}
+
 // Games run entirely within the May–September EDT window, so the offset
 // from Eastern to UTC is always a fixed +4 hours (matches mmspl.ca's own
 // generator, which does not account for DST edge cases either).

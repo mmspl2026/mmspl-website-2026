@@ -49,7 +49,7 @@ export default function ChampionsSection({
   regularSeasonChampion: string | null;
 }) {
   return (
-    <section aria-labelledby="champions-heading" className="bg-white py-16">
+    <section aria-labelledby="champions-heading" className="bg-white py-8 md:py-10">
       <div className="container-page">
         <h2 id="champions-heading" className="text-3xl sm:text-4xl">
           {year} Champions

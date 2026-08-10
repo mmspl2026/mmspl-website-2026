@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { sanityFetch } from "@/lib/sanity/client";
-import { adminSettingsQuery } from "@/lib/sanity/queries";
-import type { AdminSettings } from "@/lib/types";
+import { adminSettingsQuery, publicGalleryPhotosQuery, galleryCategoriesQuery } from "@/lib/sanity/queries";
+import type { AdminSettings, PublicGalleryPhoto } from "@/lib/types";
 import { ABOUT_PAGE_IMAGES, CHARITY_PRESENTATIONS } from "@/lib/seed-content";
 import { urlFor } from "@/lib/sanity/image";
 import AboutTabs from "@/components/AboutTabs";
@@ -11,7 +11,11 @@ import AboutTabs from "@/components/AboutTabs";
 export const metadata: Metadata = { title: "About" };
 
 export default async function AboutPage() {
-  const settings = await sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null);
+  const [settings, galleryPhotos, galleryCategories] = await Promise.all([
+    sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
+    sanityFetch<PublicGalleryPhoto[]>(publicGalleryPhotosQuery, {}, []),
+    sanityFetch<string[] | null>(galleryCategoriesQuery, {}, null),
+  ]);
 
   const heroImage = settings?.aboutHeroImage || settings?.heroImage;
   const heroImageUrl = heroImage ? urlFor(heroImage).width(1920).height(1080).fit("crop").url() : ABOUT_PAGE_IMAGES.hero;
@@ -74,7 +78,12 @@ export default async function AboutPage() {
       </div>
 
       <div className="mx-auto max-w-7xl px-5 py-16">
-        <AboutTabs presentations={CHARITY_PRESENTATIONS} logo50={ABOUT_PAGE_IMAGES.logo50} />
+        <AboutTabs
+          presentations={CHARITY_PRESENTATIONS}
+          logo50={ABOUT_PAGE_IMAGES.logo50}
+          galleryPhotos={galleryPhotos}
+          galleryCategories={galleryCategories && galleryCategories.length > 0 ? galleryCategories : ["Tournament", "Charity", "Awards"]}
+        />
       </div>
     </div>
   );

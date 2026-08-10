@@ -13,7 +13,6 @@ const NAV_LINKS = [
   { href: "/standings", label: "Standings" },
   { href: "/schedule", label: "Schedule" },
   { href: "/news", label: "News" },
-  { href: "/gallery", label: "Gallery" },
   { href: "/awards", label: "Awards" },
   { href: "/admin-info", label: "Admin" },
   { href: "/about", label: "About" },
@@ -33,7 +32,6 @@ const MOBILE_NAV_GROUPS: { label: string | null; links: { name: string; path: st
     label: "Community",
     links: [
       { name: "News", path: "/news" },
-      { name: "Gallery", path: "/gallery" },
       { name: "Awards", path: "/awards" },
     ],
   },

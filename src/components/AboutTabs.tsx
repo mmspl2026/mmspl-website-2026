@@ -1,10 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
 import { LEAGUE_STATS } from "@/lib/seed-content";
+import type { PublicGalleryPhoto } from "@/lib/types";
+import AboutGalleryPanel from "@/components/AboutGalleryPanel";
 
 const HISTORY_MILESTONES = [
   {
@@ -54,6 +56,7 @@ const TABS = [
   { id: "community", label: "In The Community" },
   { id: "history", label: "Our History" },
   { id: "anniversary", label: "50th Anniversary" },
+  { id: "gallery", label: "Gallery" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -196,19 +199,29 @@ function AnniversaryPanel({ logo50 }: { logo50: string }) {
 export default function AboutTabs({
   presentations,
   logo50,
+  galleryPhotos,
+  galleryCategories,
 }: {
   presentations: readonly CharityPresentation[];
   logo50: string;
+  galleryPhotos: PublicGalleryPhoto[];
+  galleryCategories: string[];
 }) {
   const [tab, setTab] = useState<TabId>("league");
   const scrollerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (window.location.hash === "#gallery") {
+      setTab("gallery");
+    }
+  }, []);
 
   function scrollTabs(direction: -1 | 1) {
     scrollerRef.current?.scrollBy({ left: direction * 240, behavior: "smooth" });
   }
 
   return (
-    <div>
+    <div id="gallery">
       <div className="flex items-center gap-2">
         <button
           type="button"
@@ -257,6 +270,7 @@ export default function AboutTabs({
         {tab === "community" && <CommunityPanel presentations={presentations} />}
         {tab === "history" && <HistoryPanel />}
         {tab === "anniversary" && <AnniversaryPanel logo50={logo50} />}
+        {tab === "gallery" && <AboutGalleryPanel photos={galleryPhotos} categories={galleryCategories} />}
       </div>
     </div>
   );

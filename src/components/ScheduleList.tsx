@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { Game, Team } from "@/lib/types";
 import { Funnel, MapPin, Calendar, CalendarDays, Clock, RefreshCw } from "lucide-react";
@@ -99,6 +99,8 @@ export default function ScheduleList({
   const [month, setMonth] = useState("all");
   const [date, setDate] = useState<string | null>(null);
   const [updatedAt] = useState(() => new Date());
+  const dateScrollerRef = useRef<HTMLDivElement>(null);
+  const hasAutoScrolledRef = useRef(false);
 
   // On first load: restore the remembered team (players filter to their own
   // team and expect it to stick between visits), then default the date/month
@@ -125,6 +127,25 @@ export default function ScheduleList({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Mobile only: on first load, scroll the date pill row so the nearest
+  // upcoming (auto-selected) date is visible near the left edge, just past
+  // the pinned "All Dates" pill, rather than leaving it scrolled off-screen.
+  // Desktop never scrolls this row in practice, so it's left untouched.
+  useEffect(() => {
+    if (!date || hasAutoScrolledRef.current) return;
+    if (window.innerWidth >= 768) return;
+    const scroller = dateScrollerRef.current;
+    if (!scroller) return;
+    const target = scroller.querySelector<HTMLElement>(`[data-date="${date}"]`);
+    if (!target) return;
+    hasAutoScrolledRef.current = true;
+    requestAnimationFrame(() => {
+      const prev = target.previousElementSibling as HTMLElement | null;
+      const left = prev ? prev.offsetLeft : target.offsetLeft;
+      scroller.scrollTo({ left, behavior: "smooth" });
+    });
+  }, [date]);
 
   function handleTeamChange(newTeam: string) {
     setTeam(newTeam);
@@ -254,24 +275,35 @@ export default function ScheduleList({
                 <CalendarDays size={16} className="text-brand" aria-hidden="true" />
                 Date:
               </label>
-              <div className="flex gap-2 overflow-x-auto pb-1">
-                <button
-                  type="button"
-                  onClick={() => setDate(null)}
-                  className={clsx(pillClass(date === null), "shrink-0")}
-                >
-                  All Dates
-                </button>
+              <div
+                ref={dateScrollerRef}
+                className="flex gap-2 overflow-x-auto pb-1 snap-x snap-mandatory md:snap-none"
+              >
+                <div className="sticky left-0 z-10 flex shrink-0 snap-start md:static md:z-auto">
+                  <button
+                    type="button"
+                    onClick={() => setDate(null)}
+                    className={clsx(pillClass(date === null), "shrink-0")}
+                  >
+                    All Dates
+                  </button>
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none w-3 shrink-0 bg-gradient-to-r from-black/15 to-transparent md:hidden"
+                  />
+                </div>
                 {dateOptions.map((d) => (
                   <button
                     key={d}
                     type="button"
+                    data-date={d}
                     onClick={() => setDate(d)}
-                    className={clsx(pillClass(date === d), "shrink-0")}
+                    className={clsx(pillClass(date === d), "shrink-0 snap-start")}
                   >
                     {formatPillDate(d)}
                   </button>
                 ))}
+                <div className="w-4 shrink-0 md:w-0" aria-hidden="true" />
               </div>
             </div>
           )}

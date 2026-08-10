@@ -41,9 +41,11 @@ function toEditable(g: AdminGame): EditableGame {
     savedHomeScore: g.homeScore ?? 0,
     savedAwayScore: g.awayScore ?? 0,
     savedStatus: g.status,
+    savedForfeitingTeam: g.forfeitingTeam,
     draftHomeScore: g.homeScore ?? 0,
     draftAwayScore: g.awayScore ?? 0,
     draftStatus: g.status,
+    draftForfeitingTeam: g.forfeitingTeam,
     saving: false,
   };
 }
@@ -120,7 +122,23 @@ export default function AdminDashboard({ displayName }: { displayName: string })
   }
 
   function handleStatusChange(gameId: string, status: Game["status"]) {
-    updateGame(gameId, (g) => ({ ...g, draftStatus: status }));
+    updateGame(gameId, (g) => ({
+      ...g,
+      draftStatus: status,
+      draftForfeitingTeam: status === "forfeit" ? g.draftForfeitingTeam : undefined,
+    }));
+  }
+
+  // Auto-sets the forfeit score to the league's fixed 1-0 result — the
+  // forfeiting team is recorded with 0, the other team with 1 — rather than
+  // leaving whatever score was previously entered.
+  function handleForfeitingTeamChange(gameId: string, team: "home" | "away") {
+    updateGame(gameId, (g) => ({
+      ...g,
+      draftForfeitingTeam: team,
+      draftHomeScore: team === "home" ? 0 : 1,
+      draftAwayScore: team === "away" ? 0 : 1,
+    }));
   }
 
   // Takes the season info + values to save directly from the caller instead
@@ -136,7 +154,7 @@ export default function AdminDashboard({ displayName }: { displayName: string })
     async (
       gameId: string,
       seasonInfo: { seasonId: string; seasonYear: number },
-      values: { homeScore: number; awayScore: number; status: Game["status"] }
+      values: { homeScore: number; awayScore: number; status: Game["status"]; forfeitingTeam?: "home" | "away" }
     ) => {
       updateGame(gameId, (g) => ({ ...g, saving: true }));
 
@@ -146,6 +164,7 @@ export default function AdminDashboard({ displayName }: { displayName: string })
           homeScore: values.homeScore,
           awayScore: values.awayScore,
           status: values.status,
+          forfeitingTeam: values.status === "forfeit" ? values.forfeitingTeam : undefined,
           seasonId: seasonInfo.seasonId,
           seasonYear: seasonInfo.seasonYear,
         };
@@ -166,9 +185,11 @@ export default function AdminDashboard({ displayName }: { displayName: string })
           savedHomeScore: updated.homeScore ?? 0,
           savedAwayScore: updated.awayScore ?? 0,
           savedStatus: updated.status,
+          savedForfeitingTeam: updated.forfeitingTeam,
           draftHomeScore: updated.homeScore ?? 0,
           draftAwayScore: updated.awayScore ?? 0,
           draftStatus: updated.status,
+          draftForfeitingTeam: updated.forfeitingTeam,
           saving: false,
         }));
         setStandings(data.standings ?? []);
@@ -188,12 +209,14 @@ export default function AdminDashboard({ displayName }: { displayName: string })
       homeScore: game.savedHomeScore,
       awayScore: game.savedAwayScore,
       status: game.savedStatus,
+      forfeitingTeam: game.savedForfeitingTeam,
     };
     try {
       await saveGame(gameId, seasonInfo, {
         homeScore: game.draftHomeScore,
         awayScore: game.draftAwayScore,
         status: game.draftStatus,
+        forfeitingTeam: game.draftForfeitingTeam,
       });
       push({
         tone: "success",
@@ -241,7 +264,12 @@ export default function AdminDashboard({ displayName }: { displayName: string })
           id,
           {
             seasonInfo: { seasonId: g.seasonId, seasonYear: g.seasonYear },
-            values: { homeScore: g.savedHomeScore, awayScore: g.savedAwayScore, status: g.savedStatus },
+            values: {
+              homeScore: g.savedHomeScore,
+              awayScore: g.savedAwayScore,
+              status: g.savedStatus,
+              forfeitingTeam: g.savedForfeitingTeam,
+            },
           },
         ] as const;
       })
@@ -408,6 +436,7 @@ export default function AdminDashboard({ displayName }: { displayName: string })
                 game={game}
                 onScoreChange={(team, value) => handleScoreChange(game._id, team, value)}
                 onStatusChange={(status) => handleStatusChange(game._id, status)}
+                onForfeitingTeamChange={(team) => handleForfeitingTeamChange(game._id, team)}
                 onSave={() => handleSave(game._id)}
                 onRequestCancel={() => openCancelConfirm([game._id])}
               />

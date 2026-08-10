@@ -6,6 +6,7 @@ interface RawGame {
   awayScore?: number;
   homeTeam: string | null;
   awayTeam: string | null;
+  forfeitingTeam?: "home" | "away";
 }
 
 interface RawStanding {
@@ -20,14 +21,19 @@ interface TeamStat {
   ties: number;
   runsFor: number;
   runsAgainst: number;
+  defaults: number;
 }
 
 /**
  * Recomputes W/L/T and run differential for every team in a season from its
- * `final` games only (per league rule — cancelled/scheduled/live games don't
- * count), then upserts one Standing document per team. Teams that already
- * have a standings row for this season are kept even with zero final games
- * (shown at 0-0-0) rather than disappearing.
+ * `final` and `forfeit` games (per league rule — cancelled/scheduled/live
+ * games don't count), then upserts one Standing document per team. Forfeits
+ * count as a played game for both teams: the forfeiting team gets a loss
+ * recorded as a 0-1 score (plus a "D" default tally), the other team a win
+ * recorded as 1-0 — matching MMSPL's rule that a forfeit is scored
+ * identically to a real 1-0 game. Teams that already have a standings row
+ * for this season are kept even with zero counted games (shown at 0-0-0)
+ * rather than disappearing.
  */
 export async function recalculateStandings(seasonId: string) {
   const [games, existingStandings] = await Promise.all([
@@ -36,6 +42,7 @@ export async function recalculateStandings(seasonId: string) {
         status,
         homeScore,
         awayScore,
+        forfeitingTeam,
         "homeTeam": homeTeam._ref,
         "awayTeam": awayTeam._ref
       }`,
@@ -51,7 +58,7 @@ export async function recalculateStandings(seasonId: string) {
   const ensure = (teamId: string) => {
     let stat = stats.get(teamId);
     if (!stat) {
-      stat = { teamId, wins: 0, losses: 0, ties: 0, runsFor: 0, runsAgainst: 0 };
+      stat = { teamId, wins: 0, losses: 0, ties: 0, runsFor: 0, runsAgainst: 0, defaults: 0 };
       stats.set(teamId, stat);
     }
     return stat;
@@ -64,22 +71,40 @@ export async function recalculateStandings(seasonId: string) {
   }
 
   for (const game of games) {
-    if (game.status !== "final") continue;
     if (!game.homeTeam || !game.awayTeam) continue;
-    if (typeof game.homeScore !== "number" || typeof game.awayScore !== "number") continue;
+
+    let homeScore: number;
+    let awayScore: number;
+
+    if (game.status === "final") {
+      if (typeof game.homeScore !== "number" || typeof game.awayScore !== "number") continue;
+      homeScore = game.homeScore;
+      awayScore = game.awayScore;
+    } else if (game.status === "forfeit") {
+      // Always scored as a 1-0 decision in favour of the non-forfeiting team.
+      if (game.forfeitingTeam !== "home" && game.forfeitingTeam !== "away") continue;
+      homeScore = game.forfeitingTeam === "home" ? 0 : 1;
+      awayScore = game.forfeitingTeam === "away" ? 0 : 1;
+    } else {
+      continue;
+    }
 
     const home = ensure(game.homeTeam);
     const away = ensure(game.awayTeam);
 
-    home.runsFor += game.homeScore;
-    home.runsAgainst += game.awayScore;
-    away.runsFor += game.awayScore;
-    away.runsAgainst += game.homeScore;
+    if (game.status === "forfeit") {
+      (game.forfeitingTeam === "home" ? home : away).defaults += 1;
+    }
 
-    if (game.homeScore > game.awayScore) {
+    home.runsFor += homeScore;
+    home.runsAgainst += awayScore;
+    away.runsFor += awayScore;
+    away.runsAgainst += homeScore;
+
+    if (homeScore > awayScore) {
       home.wins += 1;
       away.losses += 1;
-    } else if (game.awayScore > game.homeScore) {
+    } else if (awayScore > homeScore) {
       away.wins += 1;
       home.losses += 1;
     } else {
@@ -99,6 +124,7 @@ export async function recalculateStandings(seasonId: string) {
       losses: stat.losses,
       ties: stat.ties,
       runDifferential: stat.runsFor - stat.runsAgainst,
+      defaults: stat.defaults,
     };
     const existingId = existingIdByTeam.get(stat.teamId);
     if (existingId) {

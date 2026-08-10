@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
   const status = typeof body?.status === "string" ? body.status : "";
   const seasonId = typeof body?.seasonId === "string" ? body.seasonId : "";
   const seasonYear = Number(body?.seasonYear);
+  const forfeitingTeam = body?.forfeitingTeam === "home" || body?.forfeitingTeam === "away" ? body.forfeitingTeam : null;
 
   if (!gameId || !seasonId || !Number.isFinite(seasonYear)) {
     return NextResponse.json({ error: "Missing gameId or season info." }, { status: 400 });
@@ -28,11 +29,17 @@ export async function POST(req: NextRequest) {
   if (!Number.isFinite(homeScore) || !Number.isFinite(awayScore) || homeScore < 0 || awayScore < 0) {
     return NextResponse.json({ error: "Scores must be non-negative numbers." }, { status: 400 });
   }
+  if (status === "forfeit" && !forfeitingTeam) {
+    return NextResponse.json({ error: "forfeitingTeam is required when status is forfeit." }, { status: 400 });
+  }
 
-  await writeClient
-    .patch(gameId)
-    .set({ homeScore, awayScore, status })
-    .commit();
+  const patch = writeClient.patch(gameId).set({ homeScore, awayScore, status });
+  if (status === "forfeit") {
+    patch.set({ forfeitingTeam });
+  } else {
+    patch.unset(["forfeitingTeam"]);
+  }
+  await patch.commit();
 
   await recalculateStandings(seasonId);
 

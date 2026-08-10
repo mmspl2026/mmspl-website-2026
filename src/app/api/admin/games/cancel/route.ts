@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
   const tx = writeClient.transaction();
   for (const game of games) {
-    tx.patch(game._id, (p) => p.set({ status: "cancelled", homeScore: 1, awayScore: 1 }));
+    tx.patch(game._id, (p) => p.set({ status: "cancelled", homeScore: 1, awayScore: 1 }).unset(["forfeitingTeam"]));
   }
   await tx.commit();
 

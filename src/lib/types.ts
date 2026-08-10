@@ -34,6 +34,7 @@ export interface Game {
   homeScore?: number;
   awayScore?: number;
   status: "scheduled" | "live" | "final" | "forfeit" | "cancelled" | "postponed";
+  forfeitingTeam?: "home" | "away";
 }
 
 export interface Standing {

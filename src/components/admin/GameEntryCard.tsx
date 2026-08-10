@@ -18,9 +18,11 @@ export interface EditableGame {
   savedHomeScore: number;
   savedAwayScore: number;
   savedStatus: Game["status"];
+  savedForfeitingTeam?: "home" | "away";
   draftHomeScore: number;
   draftAwayScore: number;
   draftStatus: Game["status"];
+  draftForfeitingTeam?: "home" | "away";
   saving: boolean;
 }
 
@@ -28,21 +30,26 @@ export default function GameEntryCard({
   game,
   onScoreChange,
   onStatusChange,
+  onForfeitingTeamChange,
   onSave,
   onRequestCancel,
 }: {
   game: EditableGame;
   onScoreChange: (team: "home" | "away", value: number) => void;
   onStatusChange: (status: Game["status"]) => void;
+  onForfeitingTeamChange: (team: "home" | "away") => void;
   onSave: () => void;
   onRequestCancel: () => void;
 }) {
   const dirty =
     game.draftHomeScore !== game.savedHomeScore ||
     game.draftAwayScore !== game.savedAwayScore ||
-    game.draftStatus !== game.savedStatus;
+    game.draftStatus !== game.savedStatus ||
+    game.draftForfeitingTeam !== game.savedForfeitingTeam;
   const isCancelledLike = game.savedStatus === "cancelled" || game.savedStatus === "postponed";
   const isLive = game.draftStatus === "live";
+  const isForfeit = game.draftStatus === "forfeit";
+  const forfeitIncomplete = isForfeit && !game.draftForfeitingTeam;
 
   const wasSaving = useRef(false);
   const [justSaved, setJustSaved] = useState(false);
@@ -104,6 +111,40 @@ export default function GameEntryCard({
 
       <StatusToggle value={game.draftStatus} onChange={onStatusChange} disabled={game.saving} />
 
+      {isForfeit && (
+        <div className="mb-3 rounded-xl border-2 border-orange-600/50 bg-orange-950/20 p-3">
+          <p className="mb-2 text-xs font-bold uppercase tracking-wide text-orange-300">Which team is forfeiting?</p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={game.saving}
+              onClick={() => onForfeitingTeamChange("home")}
+              className={clsx(
+                "flex-1 rounded-lg py-2 text-xs font-bold transition-all",
+                game.draftForfeitingTeam === "home"
+                  ? "bg-orange-600 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              )}
+            >
+              {game.homeTeam.name} is forfeiting
+            </button>
+            <button
+              type="button"
+              disabled={game.saving}
+              onClick={() => onForfeitingTeamChange("away")}
+              className={clsx(
+                "flex-1 rounded-lg py-2 text-xs font-bold transition-all",
+                game.draftForfeitingTeam === "away"
+                  ? "bg-orange-600 text-white"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+              )}
+            >
+              {game.awayTeam.name} is forfeiting
+            </button>
+          </div>
+        </div>
+      )}
+
       <button
         type="button"
         onClick={onRequestCancel}
@@ -121,18 +162,24 @@ export default function GameEntryCard({
       <button
         type="button"
         onClick={onSave}
-        disabled={!dirty || game.saving}
+        disabled={!dirty || game.saving || forfeitIncomplete}
         className={clsx(
           "flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition-all",
           justSaved
             ? "bg-green-600 text-white"
-            : dirty
+            : dirty && !forfeitIncomplete
               ? "bg-red-600 text-white hover:bg-red-500 active:scale-[0.98]"
               : "cursor-not-allowed bg-gray-800 text-gray-600"
         )}
       >
         {justSaved && <Check size={16} aria-hidden="true" />}
-        {game.saving ? "Saving…" : justSaved ? "Saved!" : "Save Score"}
+        {game.saving
+          ? "Saving…"
+          : justSaved
+            ? "Saved!"
+            : forfeitIncomplete
+              ? "Select forfeiting team"
+              : "Save Score"}
       </button>
     </article>
   );

@@ -79,6 +79,25 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "forfeitingTeam",
+      title: "Forfeiting Team",
+      type: "string",
+      description: "Which team forfeited. Required when Status is Forfeit — the other team is recorded as a 1-0 win.",
+      options: {
+        list: [
+          { title: "Home Team", value: "home" },
+          { title: "Away Team", value: "away" },
+        ],
+      },
+      hidden: ({ document }) => document?.status !== "forfeit",
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const doc = context.document as { status?: string } | undefined;
+          if (doc?.status === "forfeit" && !value) return "Required when status is Forfeit.";
+          return true;
+        }),
+    }),
+    defineField({
       name: "notifyOnCancellation",
       title: "Email subscribers on cancellation",
       type: "boolean",

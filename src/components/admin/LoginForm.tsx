@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { LEAGUE_FOUNDING_YEAR } from "@/lib/seed-content";
 
-export default function LoginForm() {
+export default function LoginForm({ next = "/admin" }: { next?: string }) {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -27,7 +27,7 @@ export default function LoginForm() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Login failed.");
       }
-      router.replace("/admin");
+      router.replace(next);
       router.refresh();
     } catch (err) {
       setStatus("error");

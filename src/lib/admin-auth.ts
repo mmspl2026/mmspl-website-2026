@@ -71,17 +71,22 @@ export function readSessionToken(token: string | undefined | null): AdminSession
   }
 }
 
-/** Server Component guard: redirects to /admin/login when the session is invalid. Returns the session. */
-export function requireAdminSession(): AdminSession {
+/**
+ * Server Component guard: redirects to /admin/login when the session is
+ * invalid. Pass the calling page's own path (e.g. "/admin/data") so the
+ * login page can send the user back there after signing in, instead of
+ * always dropping them at the default /admin score-entry page.
+ */
+export function requireAdminSession(path?: string): AdminSession {
   const token = cookies().get(ADMIN_SESSION_COOKIE)?.value;
   const session = readSessionToken(token);
-  if (!session) redirect("/admin/login");
+  if (!session) redirect(path ? `/admin/login?next=${encodeURIComponent(path)}` : "/admin/login");
   return session;
 }
 
 /** Server Component guard: like requireAdminSession, but also requires the superadmin role. */
-export function requireSuperAdminSession(): AdminSession {
-  const session = requireAdminSession();
+export function requireSuperAdminSession(path?: string): AdminSession {
+  const session = requireAdminSession(path);
   if (session.role !== "superadmin") redirect("/admin");
   return session;
 }

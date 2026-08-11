@@ -55,10 +55,15 @@ export default function UpcomingDates({ dates }: { dates: ImportantDate[] }) {
 
     const timer = setTimeout(() => {
       const card = document.getElementById(`date-card-${dates[nextIndex]._id}`);
-      // scrollIntoView respects scroll-snap-align on the cards (set below),
-      // so every way this row can scroll — this auto-scroll, arrow clicks,
-      // manual swipes — lands on the same consistent card boundary.
-      card?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+      const scroller = scrollerRef.current;
+      // Set scrollLeft directly rather than card.scrollIntoView() — that API
+      // walks up and scrolls every scrollable ancestor needed to bring the
+      // element into view, including the whole page, which is what was
+      // yanking the page down on mobile load when this section starts below
+      // the fold. Setting scrollLeft only ever touches this one row.
+      if (card && scroller) {
+        scroller.scrollLeft = card.offsetLeft - scroller.offsetLeft;
+      }
     }, 500);
     return () => clearTimeout(timer);
   }, [dates]);
@@ -86,7 +91,7 @@ export default function UpcomingDates({ dates }: { dates: ImportantDate[] }) {
             disabled={!canScrollLeft}
             aria-label="Scroll to earlier dates"
             className={clsx(
-              "absolute left-0 top-1/2 z-20 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-[rgba(20,20,20,0.85)] text-white shadow-lg transition-opacity hover:bg-black sm:h-12 sm:w-12",
+              "absolute left-0 top-1/2 z-20 hidden h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-[rgba(20,20,20,0.85)] text-white shadow-lg transition-opacity hover:bg-black sm:flex",
               canScrollLeft ? "opacity-100" : "pointer-events-none opacity-0"
             )}
           >
@@ -134,7 +139,7 @@ export default function UpcomingDates({ dates }: { dates: ImportantDate[] }) {
             disabled={!canScrollRight}
             aria-label="Scroll to later dates"
             className={clsx(
-              "absolute right-0 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-white/10 bg-[rgba(20,20,20,0.85)] text-white shadow-lg transition-opacity hover:bg-black sm:h-12 sm:w-12",
+              "absolute right-0 top-1/2 z-20 hidden h-12 w-12 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-white/10 bg-[rgba(20,20,20,0.85)] text-white shadow-lg transition-opacity hover:bg-black sm:flex",
               canScrollRight ? "opacity-100" : "pointer-events-none opacity-0"
             )}
           >

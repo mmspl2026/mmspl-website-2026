@@ -1,13 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail, MapPin, Calendar } from "lucide-react";
+import { MapPin, Calendar, Share2 } from "lucide-react";
 import { sanityFetch } from "@/lib/sanity/client";
 import { adminSettingsQuery } from "@/lib/sanity/queries";
 import type { AdminSettings } from "@/lib/types";
 import { urlFor } from "@/lib/sanity/image";
+import { SOCIAL_LINKS } from "@/lib/seed-content";
+import { FacebookIcon, YoutubeIcon, InstagramIcon } from "@/components/icons/BrandSocialIcons";
 import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = { title: "Contact" };
+
+const PARKS = [
+  {
+    name: "Centennial Park",
+    directionsUrl: "https://maps.app.goo.gl/571s8V1jaKktCr198",
+  },
+  {
+    name: "Mintleaf Park",
+    directionsUrl: "https://maps.app.goo.gl/ye3zLdqtVUeCqBnf6",
+  },
+];
 
 export default async function ContactPage() {
   const settings = await sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null);
@@ -38,36 +51,56 @@ export default async function ContactPage() {
           <h1 className="font-heading uppercase leading-none tracking-[0.01em] text-white text-[clamp(2rem,5vw,3.2rem)]">
             Contact Us
           </h1>
-          <p className="mt-1.5 text-base text-white/70">Get in touch with MMSPL Execs</p>
+          <p className="mt-1.5 text-base text-white/70">Get in touch with MMSPL</p>
         </div>
       </div>
 
       <div className="mx-auto max-w-7xl px-5 py-16">
         <div className="grid gap-8 md:grid-cols-2">
-          <ContactForm />
-
           <div className="space-y-6">
             <div className="overflow-hidden rounded-xl border bg-white shadow">
               <div className="px-6 pt-6">
                 <h3 className="flex items-center gap-2 text-xl font-semibold text-black">
-                  <Mail className="h-6 w-6 text-red-600" aria-hidden="true" />
-                  <span>Email Us</span>
+                  <Share2 className="h-6 w-6 text-brand" aria-hidden="true" />
+                  <span>Follow Us</span>
                 </h3>
               </div>
               <div className="px-6 pb-6 pt-4">
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-700">
-                    <strong>President:</strong>{" "}
-                    <a href="mailto:president@mmspl.ca" className="text-red-600 hover:underline">
-                      president@mmspl.ca
-                    </a>
-                  </p>
-                  <p className="text-sm text-gray-700">
-                    <strong>Secretary:</strong>{" "}
-                    <a href="mailto:secretary@mmspl.ca" className="text-red-600 hover:underline">
-                      secretary@mmspl.ca
-                    </a>
-                  </p>
+                <p className="mb-4 text-sm text-gray-700">Follow us for the latest updates</p>
+                <div className="flex gap-3">
+                  <a
+                    href={SOCIAL_LINKS.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="MMSPL on Facebook"
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-white transition-opacity hover:opacity-80"
+                    style={{ background: "#1877F2" }}
+                  >
+                    <FacebookIcon />
+                  </a>
+                  <a
+                    href={SOCIAL_LINKS.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="MMSPL on YouTube"
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-white transition-opacity hover:opacity-80"
+                    style={{ background: "#FF0000" }}
+                  >
+                    <YoutubeIcon />
+                  </a>
+                  <a
+                    href={SOCIAL_LINKS.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="MMSPL on Instagram"
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-white transition-opacity hover:opacity-80"
+                    style={{
+                      background:
+                        "radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)",
+                    }}
+                  >
+                    <InstagramIcon />
+                  </a>
                 </div>
               </div>
             </div>
@@ -75,36 +108,24 @@ export default async function ContactPage() {
             <div className="overflow-hidden rounded-xl border bg-white shadow">
               <div className="px-6 pt-6">
                 <h3 className="flex items-center gap-2 text-xl font-semibold text-black">
-                  <MapPin className="h-6 w-6 text-red-600" aria-hidden="true" />
-                  <span>Game Locations</span>
+                  <MapPin className="h-6 w-6 text-brand" aria-hidden="true" />
+                  <span>Where We Play</span>
                 </h3>
               </div>
               <div className="px-6 pb-6 pt-4">
-                <div className="space-y-3">
-                  <div>
-                    <h4 className="font-bold text-black">Centennial Park</h4>
-                    <p className="text-sm text-gray-600">Bullock and McCowan, Markham, ON</p>
+                <p className="mb-3 text-sm text-gray-700">We play at Centennial Park and Mintleaf Park in Markham.</p>
+                <div className="space-y-1">
+                  {PARKS.map((park) => (
                     <a
-                      href="https://maps.google.com/?q=Centennial+Park,+Bullock+and+McCowan,+Markham+ON"
+                      key={park.name}
+                      href={park.directionsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-red-600 hover:underline"
+                      className="block text-sm text-brand hover:underline"
                     >
-                      Get Directions &rarr;
+                      {park.name} &mdash; Get Directions &rarr;
                     </a>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-black">Mintleaf Park</h4>
-                    <p className="text-sm text-gray-600">Fincham and Wootten Way N., Markham, ON</p>
-                    <a
-                      href="https://maps.google.com/?q=Mintleaf+Park,+Fincham+and+Wootten+Way+N,+Markham+ON"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-red-600 hover:underline"
-                    >
-                      Get Directions &rarr;
-                    </a>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -112,36 +133,20 @@ export default async function ContactPage() {
             <div className="overflow-hidden rounded-xl border bg-white shadow">
               <div className="px-6 pt-6">
                 <h3 className="flex items-center gap-2 text-xl font-semibold text-black">
-                  <Calendar className="h-6 w-6 text-red-600" aria-hidden="true" />
-                  <span>Season Schedule</span>
+                  <Calendar className="h-6 w-6 text-brand" aria-hidden="true" />
+                  <span>Season</span>
                 </h3>
               </div>
               <div className="px-6 pb-6 pt-4">
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-700">
-                    <strong>Regular Season:</strong> May to September
-                  </p>
-                  <p className="text-sm text-gray-700">
-                    <strong>Game Days:</strong> Tuesdays and Thursdays
-                  </p>
-                  <p className="text-sm text-gray-700">
-                    <strong>Tournaments:</strong> Charity Tournament (early June) and Year-End Playoffs (mid-September)
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="overflow-hidden rounded-xl border bg-gradient-to-r from-black to-gray-900 text-white shadow">
-              <div className="px-6 pb-6 pt-6">
-                <h3 className="mb-3 text-xl font-bold">Sponsorship Opportunities</h3>
-                <p className="mb-3 text-sm text-gray-300">
-                  We are welcoming new sponsorships to our league. If you are a local business in Markham and would
-                  like to sponsor a team in the MMSPL, please contact us using the form.
+                <p className="text-sm text-gray-700">Regular season May&ndash;September &middot; Tuesdays &amp; Thursdays</p>
+                <p className="mt-2 text-sm text-gray-700">
+                  Plus the Charity Tournament (early June) and Year-End Tournament (mid-September)
                 </p>
-                <p className="text-xs text-gray-400">Help support our community while getting your business recognized!</p>
               </div>
             </div>
           </div>
+
+          <ContactForm />
         </div>
       </div>
     </div>

@@ -21,35 +21,20 @@ function ExecutivesPanel({
 }) {
   return (
     <div>
-      <h3 className="mb-4 flex items-center gap-2 font-heading text-sm uppercase tracking-widest text-gray-400">
-        <span className="h-px w-8 bg-gray-300" />
-        2026 Executives
-      </h3>
+      <h3 className="mb-4 font-heading text-xl uppercase tracking-[0.01em] text-black">2026 Executives</h3>
       <div className="mb-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {executives.map((e) => (
           <div
             key={e._id}
-            className="bg-white transition-all hover:shadow-sm"
-            style={{
-              borderTop: "1px solid #e5e1da",
-              borderRight: "1px solid #e5e1da",
-              borderBottom: "1px solid #e5e1da",
-              borderLeft: "3px solid #c8202b",
-              borderRadius: "5px",
-              padding: "14px 18px",
-            }}
+            className="rounded-xl border border-gray-200 bg-white px-5 py-3 transition-all hover:border-red-200"
           >
-            <p className="font-mono-brand mb-1 text-[9px] uppercase tracking-[0.14em] text-[#9a968f]">{e.role}</p>
-            <p className="text-[15px] font-bold text-[#0d0d0e]">{e.name}</p>
-            <a href={`mailto:${e.email}`} className="mt-0.5 block text-xs text-[#c8202b] hover:underline">
-              {e.email}
-            </a>
+            <p className="font-mono-brand mb-1 text-[9px] uppercase tracking-[0.14em] text-brand">{e.role}</p>
+            <p className="text-sm font-bold text-gray-900">{e.name}</p>
           </div>
         ))}
       </div>
 
-      <h3 className="mb-4 flex items-center gap-2 font-heading text-sm uppercase tracking-widest text-gray-400">
-        <span className="h-px w-8 bg-gray-300" />
+      <h3 className="mb-4 font-heading text-xl uppercase tracking-[0.01em] text-black">
         2026 Executive Council &mdash; Team Representatives
       </h3>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -59,7 +44,7 @@ function ExecutivesPanel({
             className="rounded-xl border border-gray-200 bg-white px-5 py-3 transition-all hover:border-red-200"
           >
             <p className="text-sm font-bold text-gray-900">{r.repName}</p>
-            <p className="mt-0.5 text-xs text-gray-500">{r.team?.name}</p>
+            <p className="mt-0.5 text-xs font-semibold text-brand">{r.team?.name}</p>
           </div>
         ))}
       </div>

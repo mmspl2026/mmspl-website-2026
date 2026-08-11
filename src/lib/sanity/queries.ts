@@ -214,8 +214,11 @@ export const pushSubscriptionCountQuery = groq`count(*[_type == "pushSubscriptio
 
 // --- Admin info page (public) ---
 
+// Deliberately excludes email — this feeds the public /admin-info page, and
+// exec emails should not be shipped in the page's HTML/JSON payload at all,
+// not just hidden from the rendered UI.
 export const allLeagueExecutivesQuery = groq`*[_type == "leagueExecutive"] | order(order asc){
-  _id, role, name, email, order
+  _id, role, name, order
 }`;
 
 export const allTeamRepresentativesQuery = groq`*[_type == "teamRepresentative"]{

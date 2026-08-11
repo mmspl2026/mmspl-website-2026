@@ -207,7 +207,7 @@ export interface LeagueExecutive {
   _id: string;
   role: string;
   name: string;
-  email: string;
+  email?: string;
   order: number;
 }
 

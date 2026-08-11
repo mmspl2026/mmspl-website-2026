@@ -32,6 +32,11 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "year",
+      title: "Year",
+      type: "number",
+    }),
+    defineField({
       name: "file",
       title: "PDF File",
       type: "file",
@@ -46,8 +51,10 @@ export default defineType({
         list: [
           { title: "Passed", value: "PASSED" },
           { title: "Failed", value: "FAILED" },
+          { title: "N/A", value: "NA" },
         ],
       },
+      hidden: ({ document }) => document?.category !== "AGM Documents",
     }),
     defineField({
       name: "order",

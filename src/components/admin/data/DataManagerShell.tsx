@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import {
@@ -14,6 +15,7 @@ import {
   Trophy,
   Newspaper,
   Image as ImageIcon,
+  FileText,
   Bell,
   Users,
 } from "lucide-react";
@@ -28,6 +30,7 @@ import KeyDatesTab from "./tabs/KeyDatesTab";
 import AwardsTab from "./tabs/AwardsTab";
 import NewsTab from "./tabs/NewsTab";
 import GalleryTab from "./tabs/GalleryTab";
+import DocumentsTab from "./tabs/DocumentsTab";
 import NotifyTab from "./tabs/NotifyTab";
 import UsersTab from "./tabs/UsersTab";
 
@@ -41,6 +44,7 @@ const TABS = [
   { id: "awards", label: "Awards", icon: Trophy },
   { id: "news", label: "News", icon: Newspaper },
   { id: "gallery", label: "Gallery", icon: ImageIcon },
+  { id: "documents", label: "Documents", icon: FileText },
   { id: "notify", label: "Notify", icon: Bell },
   { id: "users", label: "Users", icon: Users },
 ] as const;
@@ -76,6 +80,12 @@ export default function DataManagerShell({ user, role }: { user: AdminUser | nul
                 {user.name} <span className="text-white/40">· {role}</span>
               </span>
             )}
+            <Link
+              href="/admin"
+              className="rounded-[3px] border border-white/20 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-white/80 transition-colors hover:border-brand hover:text-white"
+            >
+              📋 Score Entry
+            </Link>
             <button
               type="button"
               onClick={handleLogout}
@@ -120,6 +130,7 @@ export default function DataManagerShell({ user, role }: { user: AdminUser | nul
         {tab === "awards" && <AwardsTab />}
         {tab === "news" && <NewsTab />}
         {tab === "gallery" && <GalleryTab />}
+        {tab === "documents" && <DocumentsTab />}
         {tab === "notify" && <NotifyTab />}
         {tab === "users" && <UsersTab role={role} />}
       </main>

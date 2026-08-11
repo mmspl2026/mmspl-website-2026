@@ -219,6 +219,7 @@ export interface TeamRepresentative {
 
 export interface SanityFileAsset {
   asset: {
+    _id?: string;
     url: string;
     originalFilename?: string;
   };
@@ -229,8 +230,9 @@ export interface LeagueDocument {
   title: string;
   description?: string;
   category: "Rules & Regulations" | "AGM Documents" | "General";
+  year?: number;
   file?: SanityFileAsset;
-  badge?: "PASSED" | "FAILED";
+  badge?: "PASSED" | "FAILED" | "NA";
   order: number;
 }
 

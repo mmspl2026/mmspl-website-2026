@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import clsx from "clsx";
+import { X } from "lucide-react";
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
   return <div className={clsx("rounded-xl border border-gray-200 bg-white shadow-sm", className)}>{children}</div>;
@@ -146,6 +147,50 @@ export function Select({ children, className, ...props }: React.SelectHTMLAttrib
     >
       {children}
     </select>
+  );
+}
+
+export function Modal({
+  open,
+  onClose,
+  title,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+}) {
+  if (!open) return null;
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 px-4"
+      onClick={onClose}
+      aria-hidden="true"
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="admin-modal-title"
+        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+          <h3 id="admin-modal-title" className="text-base font-bold text-black">
+            {title}
+          </h3>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            className="rounded p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-black"
+          >
+            <X size={18} aria-hidden="true" />
+          </button>
+        </div>
+        <div className="p-5">{children}</div>
+      </div>
+    </div>
   );
 }
 

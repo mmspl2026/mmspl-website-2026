@@ -381,6 +381,12 @@ export default function AdminDashboard({ displayName }: { displayName: string })
 
           <div className="flex items-center gap-3">
             <span className="hidden text-xs text-gray-400 sm:inline">{displayName}</span>
+            <Link
+              href="/admin/data"
+              className="rounded-lg border border-gray-700 px-2 py-1 text-xs font-semibold text-gray-300 transition-all hover:border-brand hover:text-white"
+            >
+              ⚙ Data Manager
+            </Link>
             <button type="button" onClick={handleLogout} className="text-xs text-gray-500 transition-colors hover:text-gray-300">
               Sign Out
             </button>

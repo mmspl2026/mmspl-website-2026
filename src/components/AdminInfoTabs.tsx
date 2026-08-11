@@ -90,7 +90,11 @@ function DocumentsPanel({ documents }: { documents: LeagueDocument[] }) {
               {doc.badge && (
                 <span
                   className={`flex-shrink-0 rounded-full px-2 py-0.5 text-xs font-bold ${
-                    doc.badge === "PASSED" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"
+                    doc.badge === "PASSED"
+                      ? "bg-green-100 text-green-700"
+                      : doc.badge === "FAILED"
+                        ? "bg-red-100 text-red-600"
+                        : "bg-gray-100 text-gray-600"
                   }`}
                 >
                   {doc.badge}

@@ -39,6 +39,9 @@ export default function StandingsTable({
                 Team
               </th>
               <th scope="col" className="px-1.5 py-2.5 text-center text-sm font-bold text-gray-700 md:px-3 md:py-4">
+                PTS
+              </th>
+              <th scope="col" className="px-1.5 py-2.5 text-center text-sm font-bold text-gray-700 md:px-3 md:py-4">
                 GP
               </th>
               <th scope="col" className="px-1.5 py-2.5 text-center text-sm font-bold text-gray-700 md:px-3 md:py-4">
@@ -52,9 +55,6 @@ export default function StandingsTable({
               </th>
               <th scope="col" className="px-1.5 py-2.5 text-center text-sm font-bold text-gray-700 md:px-3 md:py-4">
                 D
-              </th>
-              <th scope="col" className="px-1.5 py-2.5 text-center text-sm font-bold text-gray-700 md:px-3 md:py-4">
-                PTS
               </th>
             </tr>
           </thead>
@@ -86,6 +86,9 @@ export default function StandingsTable({
                       </>
                     )}
                   </td>
+                  <td className="px-1.5 py-2.5 text-center font-mono-brand text-xl font-bold text-black md:px-3 md:py-4">
+                    {points}
+                  </td>
                   <td className="px-1.5 py-2.5 text-center font-mono-brand font-semibold text-gray-700 md:px-3 md:py-4">
                     {gp}
                   </td>
@@ -100,9 +103,6 @@ export default function StandingsTable({
                   </td>
                   <td className="px-1.5 py-2.5 text-center font-mono-brand font-bold text-orange-600 md:px-3 md:py-4">
                     {row.defaults ?? 0}
-                  </td>
-                  <td className="px-1.5 py-2.5 text-center font-mono-brand text-xl font-bold text-black md:px-3 md:py-4">
-                    {points}
                   </td>
                 </tr>
               );

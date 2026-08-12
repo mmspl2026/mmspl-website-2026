@@ -81,13 +81,6 @@ export default async function HomePage() {
 
       <StatsSection />
 
-      <ChampionsSection
-        year={standingsYear}
-        charity={charityResult}
-        mcgregor={mcgregorResult}
-        regularSeasonChampion={regularSeasonChampion}
-      />
-
       <section aria-labelledby="standings-heading" className="bg-white py-8 md:py-10">
         <div className="container-page">
           <div className="flex items-baseline justify-between">
@@ -104,6 +97,13 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <ChampionsSection
+        year={standingsYear}
+        charity={charityResult}
+        mcgregor={mcgregorResult}
+        regularSeasonChampion={regularSeasonChampion}
+      />
 
       <BallparksSection />
 

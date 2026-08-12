@@ -14,7 +14,6 @@ import type { AdminSettings, Game, ImportantDate, NewsItem, Season, Standing, To
 import { SEED_GAMES, SEED_NEWS, SEED_STANDINGS } from "@/lib/seed-data";
 import { IMPORTANT_DATES_2026 } from "@/lib/seed-content";
 import HomeHero from "@/components/HomeHero";
-import StatsSection from "@/components/StatsSection";
 import NewsCard from "@/components/NewsCard";
 import UpcomingDates from "@/components/UpcomingDates";
 import BallparksSection from "@/components/BallparksSection";
@@ -78,8 +77,6 @@ export default async function HomePage() {
       </section>
 
       <UpcomingDates dates={displayDates} />
-
-      <StatsSection />
 
       <section aria-labelledby="standings-heading" className="bg-white py-8 md:py-10">
         <div className="container-page">

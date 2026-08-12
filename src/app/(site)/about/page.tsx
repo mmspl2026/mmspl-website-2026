@@ -7,6 +7,7 @@ import type { AdminSettings, PublicGalleryPhoto } from "@/lib/types";
 import { ABOUT_PAGE_IMAGES, CHARITY_PRESENTATIONS } from "@/lib/seed-content";
 import { urlFor } from "@/lib/sanity/image";
 import AboutTabs from "@/components/AboutTabs";
+import StatsSection from "@/components/StatsSection";
 
 export const metadata: Metadata = { title: "About" };
 
@@ -76,6 +77,8 @@ export default async function AboutPage() {
           <p className="mt-1.5 text-base text-white/70">Over 50 years of tradition and community</p>
         </div>
       </div>
+
+      <StatsSection />
 
       <div className="mx-auto max-w-7xl px-5 py-16">
         <AboutTabs

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Menu, X, Bell } from "lucide-react";
 import clsx from "clsx";
 import { LEAGUE_FOUNDING_YEAR } from "@/lib/seed-content";
+import { usePlatformInfo } from "@/hooks/usePlatformInfo";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -48,6 +49,9 @@ const MOBILE_NAV_GROUPS: { label: string | null; links: { name: string; path: st
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const platform = usePlatformInfo();
+  const iosInstallHint = platform.ready && platform.isIOS && !platform.isStandalone;
+  const bellLabel = iosInstallHint ? "Install app for notifications" : "Notifications";
 
   return (
     <header className="sticky top-0 z-50 border-b-2 border-brand bg-black text-white shadow-md">
@@ -91,7 +95,8 @@ export default function Header() {
         <div className="hidden items-center gap-3 lg:flex">
           <Link
             href="/notifications"
-            aria-label="Notifications"
+            aria-label={bellLabel}
+            title={iosInstallHint ? bellLabel : undefined}
             aria-current={pathname === "/notifications" ? "page" : undefined}
             className="rounded-full p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white aria-[current=page]:text-brand"
           >
@@ -105,7 +110,8 @@ export default function Header() {
         <div className="flex items-center gap-1 lg:hidden">
           <Link
             href="/notifications"
-            aria-label="Notifications"
+            aria-label={bellLabel}
+            title={iosInstallHint ? bellLabel : undefined}
             aria-current={pathname === "/notifications" ? "page" : undefined}
             className="rounded-full p-2 text-white/70 transition-colors hover:bg-white/10 hover:text-white aria-[current=page]:text-brand"
           >

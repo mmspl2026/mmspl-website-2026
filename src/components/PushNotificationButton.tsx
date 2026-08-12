@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell, Check, Loader2, AlertCircle } from "lucide-react";
+import { Bell, Check, Loader2, AlertCircle, Share, PlusSquare, Smartphone, ArrowLeft } from "lucide-react";
+import { usePlatformInfo } from "@/hooks/usePlatformInfo";
 
-type Status = "idle" | "unsupported" | "subscribing" | "subscribed" | "denied" | "error";
+type Status = "idle" | "unsupported" | "ios-not-installed" | "subscribing" | "subscribed" | "denied" | "error";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -15,16 +16,22 @@ function urlBase64ToUint8Array(base64String: string) {
 export default function PushNotificationButton() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const platform = usePlatformInfo();
 
   useEffect(() => {
+    if (!platform.ready) return; // wait for the client-side iOS/standalone check
+
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
-      setStatus("unsupported");
+      // iOS Safari only exposes the Push API once the site has been added to
+      // the home screen (iOS 16.4+) — that's not "unsupported", it just
+      // needs one extra step, so it gets its own install-prompt state.
+      setStatus(platform.isIOS && !platform.isStandalone ? "ios-not-installed" : "unsupported");
       return;
     }
     if (Notification.permission === "denied") {
       setStatus("denied");
     }
-  }, []);
+  }, [platform]);
 
   async function handleEnable() {
     setStatus("subscribing");
@@ -66,6 +73,55 @@ export default function PushNotificationButton() {
       setStatus("error");
       setErrorMessage(err instanceof Error ? err.message : "Something went wrong.");
     }
+  }
+
+  if (status === "ios-not-installed") {
+    return (
+      <div className="rounded-lg border border-black/10 bg-neutral-50 p-4">
+        <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-black">
+          <Smartphone size={18} className="shrink-0 text-brand" aria-hidden="true" />
+          📲 Install MMSPL to your home screen to enable push notifications
+        </p>
+        <ol className="space-y-2.5 text-sm text-black/70">
+          <li className="flex items-center gap-2.5">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-black text-[11px] font-bold text-white">
+              1
+            </span>
+            <span className="flex items-center gap-1.5">
+              Tap the Share button
+              <span className="inline-flex items-center justify-center rounded border border-black/20 bg-white px-1.5 py-0.5">
+                <Share size={13} aria-hidden="true" />
+              </span>
+              in Safari
+            </span>
+          </li>
+          <li className="flex items-center gap-2.5">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-black text-[11px] font-bold text-white">
+              2
+            </span>
+            <span className="flex items-center gap-1.5">
+              Tap <PlusSquare size={14} className="inline shrink-0" aria-hidden="true" /> &ldquo;Add to Home
+              Screen&rdquo;
+            </span>
+          </li>
+          <li className="flex items-center gap-2.5">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-black text-[11px] font-bold text-white">
+              3
+            </span>
+            Open the MMSPL app from your home screen
+          </li>
+          <li className="flex items-center gap-2.5">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-black text-[11px] font-bold text-white">
+              4
+            </span>
+            <span className="flex items-center gap-1.5">
+              <ArrowLeft size={14} className="inline shrink-0" aria-hidden="true" /> Return here to enable
+              notifications
+            </span>
+          </li>
+        </ol>
+      </div>
+    );
   }
 
   if (status === "unsupported") {

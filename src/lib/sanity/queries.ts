@@ -121,6 +121,7 @@ export const adminSettingsFullQuery = groq`*[_type == "adminSettings"][0]{
   registrationFee,
   registrationClosedMessage,
   fromAddress,
+  registrationRecipients,
   contactRecipients,
   resendApiKey
 }`;

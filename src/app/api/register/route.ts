@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendRegistrationConfirmation, wasEmailSent } from "@/lib/resend";
+import { sendRegistrationConfirmation, sendRegistrationAdminNotification, wasEmailSent } from "@/lib/resend";
 import { writeClient } from "@/lib/sanity/client";
 import { isSanityConfigured } from "@/lib/sanity/env";
 import { activeSeasonQuery } from "@/lib/sanity/queries";
@@ -70,7 +70,10 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const emailResult = await sendRegistrationConfirmation(body.email, playerName);
+  const [emailResult] = await Promise.all([
+    sendRegistrationConfirmation(body.email, playerName),
+    sendRegistrationAdminNotification({ playerName, email: body.email, category: body.category }),
+  ]);
   const emailStatus = wasEmailSent(emailResult) ? "sent" : "failed";
 
   if (isSanityConfigured) {

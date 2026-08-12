@@ -8,10 +8,10 @@ export async function POST(req: NextRequest) {
   const auth = requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
-  const settings = await writeClient.fetch<{ contactRecipients?: string } | null>(
-    `*[_type == "adminSettings"][0]{ contactRecipients }`
+  const settings = await writeClient.fetch<{ registrationRecipients?: string } | null>(
+    `*[_type == "adminSettings"][0]{ registrationRecipients }`
   );
-  const recipients = (settings?.contactRecipients || process.env.MMSPL_ADMIN_EMAIL || "info@mmspl.ca")
+  const recipients = (settings?.registrationRecipients || process.env.MMSPL_ADMIN_EMAIL || "info@mmspl.ca")
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);

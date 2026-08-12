@@ -9,6 +9,7 @@ const EDITABLE_FIELDS = [
   "registrationFee",
   "registrationClosedMessage",
   "fromAddress",
+  "registrationRecipients",
   "contactRecipients",
   "resendApiKey",
 ] as const;

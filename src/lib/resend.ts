@@ -9,6 +9,7 @@ interface EmailConfig {
   apiKey: string | undefined;
   fromEmail: string;
   contactRecipients: string[];
+  registrationRecipients: string[];
 }
 
 let cachedConfig: { value: EmailConfig; expiresAt: number } | null = null;
@@ -24,25 +25,36 @@ async function getEmailConfig(): Promise<EmailConfig> {
   let resendApiKey: string | undefined;
   let fromAddress: string | undefined;
   let contactRecipients: string | undefined;
+  let registrationRecipients: string | undefined;
 
   if (isSanityConfigured) {
     const settings = await writeClient
-      .fetch<{ resendApiKey?: string; fromAddress?: string; contactRecipients?: string } | null>(
-        `*[_type == "adminSettings"][0]{ resendApiKey, fromAddress, contactRecipients }`
+      .fetch<{
+        resendApiKey?: string;
+        fromAddress?: string;
+        contactRecipients?: string;
+        registrationRecipients?: string;
+      } | null>(
+        `*[_type == "adminSettings"][0]{ resendApiKey, fromAddress, contactRecipients, registrationRecipients }`
       )
       .catch(() => null);
     resendApiKey = settings?.resendApiKey;
     fromAddress = settings?.fromAddress;
     contactRecipients = settings?.contactRecipients;
+    registrationRecipients = settings?.registrationRecipients;
   }
+
+  const splitRecipients = (value: string | undefined) =>
+    (value || process.env.MMSPL_ADMIN_EMAIL || ADMIN_EMAIL)
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
 
   const value: EmailConfig = {
     apiKey: resendApiKey || process.env.RESEND_API_KEY,
     fromEmail: fromAddress || process.env.RESEND_FROM_EMAIL || "MMSPL <no-reply@mmspl.ca>",
-    contactRecipients: (contactRecipients || process.env.MMSPL_ADMIN_EMAIL || ADMIN_EMAIL)
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean),
+    contactRecipients: splitRecipients(contactRecipients),
+    registrationRecipients: splitRecipients(registrationRecipients),
   };
   cachedConfig = { value, expiresAt: Date.now() + 60_000 };
   return value;
@@ -80,6 +92,19 @@ export async function sendRegistrationConfirmation(to: string, playerName: strin
     cta: { label: "Visit Website", url: SITE_URL },
   });
   return send(to, "MMSPL Registration Received", html);
+}
+
+/** Notifies the league's configured registration recipients that a new player signed up. */
+export async function sendRegistrationAdminNotification(fields: { playerName: string; email: string; category: string }) {
+  const config = await getEmailConfig();
+  const html = renderEmail({
+    title: "New Registration Received",
+    bodyHtml: `<p><strong>Player:</strong> ${fields.playerName}</p>
+     <p><strong>Email:</strong> ${fields.email}</p>
+     <p><strong>Category:</strong> ${fields.category}</p>`,
+    cta: { label: "View in Admin", url: `${SITE_URL}/admin/data` },
+  });
+  return send(config.registrationRecipients, `MMSPL Registration: ${fields.playerName}`, html);
 }
 
 interface CancelledGameSummary {

@@ -123,6 +123,7 @@ export interface AdminSettings {
   registrationFee?: number;
   registrationClosedMessage?: string;
   fromAddress?: string;
+  registrationRecipients?: string;
   contactRecipients?: string;
   resendApiKey?: string;
   galleryCategories?: string[];

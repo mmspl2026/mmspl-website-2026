@@ -67,6 +67,13 @@ export default defineType({
       description: "Falls back to RESEND_FROM_EMAIL if left blank.",
     }),
     defineField({
+      name: "registrationRecipients",
+      title: "Registration Notification Recipients",
+      type: "string",
+      description:
+        "These addresses receive a notification when someone submits a registration. Separate multiple emails with commas. Falls back to MMSPL_ADMIN_EMAIL if left blank.",
+    }),
+    defineField({
       name: "contactRecipients",
       title: "Contact Form Recipients",
       type: "string",

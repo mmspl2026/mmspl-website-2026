@@ -11,6 +11,7 @@ export default function EmailTab() {
   const [settings, setSettings] = useState<AdminSettings | null>(null);
   const [apiKeyConfigured, setApiKeyConfigured] = useState(false);
   const [fromAddress, setFromAddress] = useState("");
+  const [registrationRecipients, setRegistrationRecipients] = useState("");
   const [contactRecipients, setContactRecipients] = useState("");
   const [replacingKey, setReplacingKey] = useState(false);
   const [newApiKey, setNewApiKey] = useState("");
@@ -27,6 +28,7 @@ export default function EmailTab() {
     setSettings(data.settings ?? {});
     setApiKeyConfigured(data.resendApiKeyConfigured ?? false);
     setFromAddress(data.settings?.fromAddress ?? "");
+    setRegistrationRecipients(data.settings?.registrationRecipients ?? "");
     setContactRecipients(data.settings?.contactRecipients ?? "");
     setLoading(false);
   }
@@ -40,7 +42,7 @@ export default function EmailTab() {
   async function handleSave() {
     setSaving(true);
     try {
-      const payload: Record<string, string> = { fromAddress, contactRecipients };
+      const payload: Record<string, string> = { fromAddress, registrationRecipients, contactRecipients };
       if (replacingKey && newApiKey.trim()) payload.resendApiKey = newApiKey.trim();
 
       const res = await fetch("/api/admin/settings", {
@@ -102,25 +104,6 @@ export default function EmailTab() {
 
         <div className="space-y-4 border-t border-gray-100 p-5">
           <div>
-            <label className="mb-1 block text-sm font-semibold text-black">From Address</label>
-            <TextInput
-              value={fromAddress}
-              onChange={(e) => setFromAddress(e.target.value)}
-              placeholder="MMSPL <no-reply@mmspl.ca>"
-            />
-          </div>
-
-          <div>
-            <label className="mb-1 block text-sm font-semibold text-black">Contact Recipients</label>
-            <TextInput
-              value={contactRecipients}
-              onChange={(e) => setContactRecipients(e.target.value)}
-              placeholder="info@mmspl.ca, president@mmspl.ca"
-            />
-            <p className="mt-1 text-xs text-gray-500">Comma-separated — receives contact form notifications.</p>
-          </div>
-
-          <div>
             <label className="mb-1 block text-sm font-semibold text-black">Resend API Key</label>
             {!replacingKey ? (
               <div className="flex items-center gap-3">
@@ -151,6 +134,38 @@ export default function EmailTab() {
                 </SecondaryButton>
               </div>
             )}
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-semibold text-black">From Address</label>
+            <TextInput
+              value={fromAddress}
+              onChange={(e) => setFromAddress(e.target.value)}
+              placeholder="MMSPL <no-reply@mmspl.ca>"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-semibold text-black">Registration Notification Recipients</label>
+            <TextInput
+              value={registrationRecipients}
+              onChange={(e) => setRegistrationRecipients(e.target.value)}
+              placeholder="avneetb@gmail.com, president@mmspl.ca, secretary@mmspl.ca"
+            />
+            <p className="mt-1 text-xs text-gray-500">
+              These addresses receive a notification when someone submits a registration. Separate multiple emails
+              with commas.
+            </p>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-semibold text-black">Contact Form Recipients</label>
+            <TextInput
+              value={contactRecipients}
+              onChange={(e) => setContactRecipients(e.target.value)}
+              placeholder="info@mmspl.ca, president@mmspl.ca"
+            />
+            <p className="mt-1 text-xs text-gray-500">Comma-separated — receives contact form notifications.</p>
           </div>
 
           <div className="flex justify-end">

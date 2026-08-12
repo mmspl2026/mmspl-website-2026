@@ -6,6 +6,7 @@ import Image from "next/image";
 import clsx from "clsx";
 import { RefreshCw, Wifi } from "lucide-react";
 import type { AdminGame, Game, Standing } from "@/lib/types";
+import { getTodayEastern } from "@/utils/timezone";
 import DateNav from "./DateNav";
 import GameEntryCard, { type EditableGame } from "./GameEntryCard";
 import AdminStandingsPanel from "./AdminStandingsPanel";
@@ -58,7 +59,7 @@ interface ConfirmState {
 }
 
 export default function AdminDashboard({ displayName }: { displayName: string }) {
-  const todayISO = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const todayISO = useMemo(() => getTodayEastern(), []);
   const [selectedDate, setSelectedDate] = useState(todayISO);
   const [datesWithGames, setDatesWithGames] = useState<string[]>([]);
   const [games, setGames] = useState<EditableGame[]>([]);

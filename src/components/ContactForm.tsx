@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ChevronDown, Send } from "lucide-react";
 
 const SUBJECT_OPTIONS = [
@@ -30,6 +30,16 @@ export default function ContactForm() {
   const [form, setForm] = useState(INITIAL_STATE);
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const successRef = useRef<HTMLDivElement>(null);
+
+  // On mobile the form can extend well below the fold — without this, the
+  // success message renders in place but the page stays scrolled wherever
+  // the user left it, so they never see the confirmation.
+  useEffect(() => {
+    if (status === "sent") {
+      successRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [status]);
 
   function update<K extends keyof typeof INITIAL_STATE>(key: K, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -67,7 +77,7 @@ export default function ContactForm() {
       </div>
 
       {status === "sent" ? (
-        <div className="flex flex-col items-center gap-2 px-6 py-16 text-center">
+        <div ref={successRef} className="flex flex-col items-center gap-2 px-6 py-16 text-center">
           <p className="text-lg font-semibold text-black">✅ Message sent! We&apos;ll get back to you shortly.</p>
         </div>
       ) : (

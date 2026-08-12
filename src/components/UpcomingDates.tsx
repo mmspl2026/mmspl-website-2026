@@ -4,17 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
 import type { ImportantDate } from "@/lib/types";
+import { getTodayEastern } from "@/utils/timezone";
 
 function formatDateLabel(date: string) {
   return new Date(`${date}T00:00:00`)
     .toLocaleDateString("en-CA", { month: "short", day: "numeric" })
     .toUpperCase();
-}
-
-// Matches the league's home timezone, so "today" is computed consistently
-// regardless of the server's or visitor's own timezone.
-function todayInLeagueTZ() {
-  return new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
 }
 
 // Card width (150px, see the `w-[150px]` article below) + the row's gap-3
@@ -49,7 +44,7 @@ export default function UpcomingDates({ dates }: { dates: ImportantDate[] }) {
 
   useEffect(() => {
     if (dates.length === 0 || !scrollerRef.current) return;
-    const today = todayInLeagueTZ();
+    const today = getTodayEastern();
     const nextIndex = dates.findIndex((d) => d.date >= today);
     if (nextIndex <= 0) return; // already at the start, or everything is in the past
 
@@ -70,7 +65,7 @@ export default function UpcomingDates({ dates }: { dates: ImportantDate[] }) {
 
   if (dates.length === 0) return null;
 
-  const today = todayInLeagueTZ();
+  const today = getTodayEastern();
   const nextUpId = dates.find((d) => d.date >= today)?._id;
 
   function scrollByCards(direction: 1 | -1) {

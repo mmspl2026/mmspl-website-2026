@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CalendarOff } from "lucide-react";
+import { getTodayEastern } from "@/utils/timezone";
 import { sanityFetch } from "@/lib/sanity/client";
 import { allSeasonsQuery, gamesBySeasonQuery, adminSettingsQuery, allTournamentResultsQuery } from "@/lib/sanity/queries";
 import type { AdminSettings, Game, Season, TournamentResult } from "@/lib/types";
@@ -20,7 +21,7 @@ export default async function SchedulePage({
 }: {
   searchParams: { season?: string };
 }) {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getTodayEastern();
 
   const [seasons, settings, tournamentResults] = await Promise.all([
     sanityFetch<Season[]>(allSeasonsQuery, {}, []),

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import clsx from "clsx";
 import type { ImportantDate } from "@/lib/types";
+import { getTodayEastern } from "@/utils/timezone";
 import { Card, CardHeader, PrimaryButton, SecondaryButton, DangerButton, StatusBadge, TextInput, Select, Spinner, EmptyState } from "../ui";
 import { useToasts } from "@/components/admin/useToasts";
 import ToastStack from "@/components/admin/ToastStack";
@@ -27,7 +28,7 @@ export default function KeyDatesTab() {
   const [saving, setSaving] = useState(false);
   const { toasts, push, dismiss } = useToasts();
 
-  const todayISO = new Date().toISOString().slice(0, 10);
+  const todayISO = getTodayEastern();
 
   async function load() {
     setLoading(true);

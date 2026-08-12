@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import RegisterForm from "@/components/RegisterForm";
 
@@ -19,6 +19,15 @@ const AFTER_STEPS = [
 export default function RegisterPageClient({ registrationFee, seasonYear }: { registrationFee: number; seasonYear: number }) {
   const formTopRef = useRef<HTMLDivElement>(null);
   const [success, setSuccess] = useState(false);
+
+  // The success view replaces the form in place — without this, a user who
+  // scrolled down while filling out the (long) form never sees the
+  // confirmation message unless they scroll back up manually.
+  useEffect(() => {
+    if (success) {
+      formTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [success]);
 
   if (success) {
     return (

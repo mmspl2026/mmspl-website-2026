@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTodayEastern } from "@/utils/timezone";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
   adminSettingsQuery,
@@ -27,8 +28,8 @@ const SEED_DATES: ImportantDate[] = IMPORTANT_DATES_2026.map((d, i) => ({
 }));
 
 export default async function HomePage() {
-  const today = new Date().toISOString().slice(0, 10);
-  const currentYear = new Date().getFullYear();
+  const today = getTodayEastern();
+  const currentYear = Number(today.slice(0, 4));
 
   const [settings, games, news, activeSeason] = await Promise.all([
     sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),

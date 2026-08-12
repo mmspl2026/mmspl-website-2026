@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Save, Loader2 } from "lucide-react";
 import clsx from "clsx";
 import type { AdminGame, Game } from "@/lib/types";
+import { getTodayEastern } from "@/utils/timezone";
 import { Card, EmptyState, Spinner } from "../ui";
 import { useToasts } from "@/components/admin/useToasts";
 import ToastStack from "@/components/admin/ToastStack";
@@ -36,7 +37,7 @@ function findNextDate(current: string, dates: string[]): string | null {
 }
 
 export default function ScoresTab() {
-  const todayISO = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const todayISO = useMemo(() => getTodayEastern(), []);
   const [selectedDate, setSelectedDate] = useState(todayISO);
   const [dates, setDates] = useState<string[]>([]);
   const [games, setGames] = useState<EditableGame[]>([]);

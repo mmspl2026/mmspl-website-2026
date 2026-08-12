@@ -124,6 +124,7 @@ export default defineType({
           { title: "Unpaid", value: "unpaid" },
           { title: "Call-Up", value: "call-up" },
           { title: "Completed", value: "completed" },
+          { title: "Spam", value: "spam" },
         ],
       },
       initialValue: "unpaid",

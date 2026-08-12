@@ -1,10 +1,23 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Download, Send } from "lucide-react";
+import { Download, Send, Trash2, Flag } from "lucide-react";
 import clsx from "clsx";
 import type { AdminSettings, Registration, RegistrationStatus } from "@/lib/types";
-import { Card, CardHeader, Pill, PrimaryButton, SecondaryButton, Select, StatusBadge, TextArea, Spinner, EmptyState } from "../ui";
+import {
+  Card,
+  CardHeader,
+  Pill,
+  PrimaryButton,
+  SecondaryButton,
+  DangerButton,
+  Select,
+  StatusBadge,
+  TextArea,
+  Modal,
+  Spinner,
+  EmptyState,
+} from "../ui";
 import { useToasts } from "@/components/admin/useToasts";
 import ToastStack from "@/components/admin/ToastStack";
 
@@ -14,12 +27,14 @@ const FILTERS = [
   { id: "call-up", label: "Call-Up" },
   { id: "completed", label: "Completed" },
   { id: "email-failed", label: "Email Failed" },
+  { id: "spam", label: "Spam" },
 ] as const;
 
-const STATUS_TONE: Record<RegistrationStatus, "yellow" | "blue" | "green"> = {
+const STATUS_TONE: Record<RegistrationStatus, "yellow" | "blue" | "green" | "gray"> = {
   unpaid: "yellow",
   "call-up": "blue",
   completed: "green",
+  spam: "gray",
 };
 
 export default function RegistrationsTab() {
@@ -31,6 +46,10 @@ export default function RegistrationsTab() {
   const [seasonYear, setSeasonYear] = useState<string>("all");
   const [loading, setLoading] = useState(true);
   const [sendingDigest, setSendingDigest] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [deleteTarget, setDeleteTarget] = useState<Registration | null>(null);
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const { toasts, push, dismiss } = useToasts();
 
   async function load() {
@@ -59,11 +78,37 @@ export default function RegistrationsTab() {
   const filtered = useMemo(() => {
     return registrations.filter((r) => {
       if (seasonYear !== "all" && String(r.season?.year) !== seasonYear) return false;
-      if (filter === "all") return true;
+      if (filter === "all") return r.status !== "spam";
       if (filter === "email-failed") return r.emailStatus === "failed";
+      if (filter === "spam") return r.status === "spam";
       return r.status === filter;
     });
   }, [registrations, filter, seasonYear]);
+
+  // Selection only tracks IDs currently visible under the active filter, so
+  // switching filters can't silently carry over a stale selection.
+  useEffect(() => {
+    setSelectedIds((prev) => {
+      const visible = new Set(filtered.map((r) => r._id));
+      const next = new Set([...prev].filter((id) => visible.has(id)));
+      return next.size === prev.size ? prev : next;
+    });
+  }, [filtered]);
+
+  function toggleSelected(id: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    setSelectedIds((prev) =>
+      prev.size === filtered.length ? new Set() : new Set(filtered.map((r) => r._id))
+    );
+  }
 
   async function toggleRegistrationOpen() {
     if (!settings) return;
@@ -99,6 +144,55 @@ export default function RegistrationsTab() {
       body: JSON.stringify({ status }),
     });
     if (!res.ok) push({ tone: "error", message: "Failed to update status." });
+  }
+
+  function markAsSpam(r: Registration) {
+    updateStatus(r._id, "spam");
+    push({ tone: "success", message: `Marked ${r.firstName} ${r.lastName} as spam.` });
+  }
+
+  async function confirmDeleteOne() {
+    if (!deleteTarget) return;
+    const target = deleteTarget;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/admin/registrations/${target._id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Delete failed.");
+      setRegistrations((prev) => prev.filter((r) => r._id !== target._id));
+      setSelectedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(target._id);
+        return next;
+      });
+      push({ tone: "success", message: "Registration deleted" });
+      setDeleteTarget(null);
+    } catch {
+      push({ tone: "error", message: "Failed to delete registration." });
+    } finally {
+      setDeleting(false);
+    }
+  }
+
+  async function confirmBulkDelete() {
+    const ids = Array.from(selectedIds);
+    setDeleting(true);
+    try {
+      const results = await Promise.all(
+        ids.map((id) => fetch(`/api/admin/registrations/${id}`, { method: "DELETE" }))
+      );
+      const failedCount = results.filter((res) => !res.ok).length;
+      const deletedIds = new Set(ids.filter((_, i) => results[i].ok));
+      setRegistrations((prev) => prev.filter((r) => !deletedIds.has(r._id)));
+      setSelectedIds(new Set());
+      setBulkDeleteOpen(false);
+      if (failedCount > 0) {
+        push({ tone: "error", message: `${failedCount} registration(s) failed to delete.` });
+      } else {
+        push({ tone: "success", message: `${deletedIds.size} registration(s) deleted.` });
+      }
+    } finally {
+      setDeleting(false);
+    }
   }
 
   async function sendDigestNow() {
@@ -183,6 +277,12 @@ export default function RegistrationsTab() {
           subtitle={`${filtered.length} of ${registrations.length}`}
           action={
             <div className="flex items-center gap-3">
+              {selectedIds.size > 0 && (
+                <DangerButton className="h-9 px-3 text-sm" onClick={() => setBulkDeleteOpen(true)}>
+                  <Trash2 size={14} aria-hidden="true" />
+                  Delete Selected ({selectedIds.size})
+                </DangerButton>
+              )}
               <Select value={seasonYear} onChange={(e) => setSeasonYear(e.target.value)}>
                 <option value="all">All Seasons</option>
                 {seasonYears.map((y) => (
@@ -215,16 +315,35 @@ export default function RegistrationsTab() {
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
+                  <th className="w-10 px-4 py-2">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.size === filtered.length}
+                      onChange={toggleSelectAll}
+                      aria-label="Select all visible registrations"
+                      className="h-4 w-4 rounded border-gray-300 text-brand focus:ring-brand"
+                    />
+                  </th>
                   <th className="px-4 py-2 text-left text-xs font-bold uppercase text-gray-500">Player</th>
                   <th className="px-4 py-2 text-left text-xs font-bold uppercase text-gray-500">Email</th>
                   <th className="px-4 py-2 text-left text-xs font-bold uppercase text-gray-500">Submitted</th>
                   <th className="px-4 py-2 text-left text-xs font-bold uppercase text-gray-500">Email</th>
                   <th className="px-4 py-2 text-left text-xs font-bold uppercase text-gray-500">Status</th>
+                  <th className="px-4 py-2 text-right text-xs font-bold uppercase text-gray-500">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((r) => (
                   <tr key={r._id} className="border-b border-gray-100">
+                    <td className="px-4 py-2">
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.has(r._id)}
+                        onChange={() => toggleSelected(r._id)}
+                        aria-label={`Select ${r.firstName} ${r.lastName}`}
+                        className="h-4 w-4 rounded border-gray-300 text-brand focus:ring-brand"
+                      />
+                    </td>
                     <td className="px-4 py-2 text-sm font-semibold text-black">
                       {r.firstName} {r.lastName}
                     </td>
@@ -249,7 +368,24 @@ export default function RegistrationsTab() {
                         <option value="unpaid">Unpaid</option>
                         <option value="call-up">Call-Up</option>
                         <option value="completed">Completed</option>
+                        <option value="spam">Spam</option>
                       </Select>
+                    </td>
+                    <td className="px-4 py-2">
+                      <div className="flex justify-end gap-1.5">
+                        {r.status !== "spam" && (
+                          <SecondaryButton
+                            className="h-8 px-2.5 text-xs"
+                            onClick={() => markAsSpam(r)}
+                            aria-label={`Mark ${r.firstName} ${r.lastName} as spam`}
+                          >
+                            <Flag size={12} aria-hidden="true" />
+                          </SecondaryButton>
+                        )}
+                        <DangerButton onClick={() => setDeleteTarget(r)} aria-label={`Delete registration for ${r.firstName} ${r.lastName}`}>
+                          <Trash2 size={12} aria-hidden="true" />
+                        </DangerButton>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -258,6 +394,43 @@ export default function RegistrationsTab() {
           </div>
         )}
       </Card>
+
+      <Modal open={!!deleteTarget} onClose={() => setDeleteTarget(null)} title="Delete registration?">
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Are you sure you want to delete this registration for{" "}
+            <strong className="text-black">
+              {deleteTarget?.firstName} {deleteTarget?.lastName}
+            </strong>
+            ? This cannot be undone.
+          </p>
+          <div className="flex justify-end gap-2">
+            <SecondaryButton onClick={() => setDeleteTarget(null)} disabled={deleting}>
+              Cancel
+            </SecondaryButton>
+            <DangerButton className="h-9 px-4 text-sm" onClick={confirmDeleteOne} disabled={deleting}>
+              {deleting ? "Deleting…" : "Delete"}
+            </DangerButton>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={bulkDeleteOpen} onClose={() => setBulkDeleteOpen(false)} title="Delete selected registrations?">
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Are you sure you want to delete <strong className="text-black">{selectedIds.size}</strong> registration
+            {selectedIds.size === 1 ? "" : "s"}? This cannot be undone.
+          </p>
+          <div className="flex justify-end gap-2">
+            <SecondaryButton onClick={() => setBulkDeleteOpen(false)} disabled={deleting}>
+              Cancel
+            </SecondaryButton>
+            <DangerButton className="h-9 px-4 text-sm" onClick={confirmBulkDelete} disabled={deleting}>
+              {deleting ? "Deleting…" : "Delete"}
+            </DangerButton>
+          </div>
+        </div>
+      </Modal>
 
       <ToastStack toasts={toasts} onDismiss={dismiss} />
     </div>

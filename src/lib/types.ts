@@ -153,7 +153,7 @@ export interface AdminUser {
   createdAt: string;
 }
 
-export type RegistrationStatus = "unpaid" | "call-up" | "completed";
+export type RegistrationStatus = "unpaid" | "call-up" | "completed" | "spam";
 
 export interface Registration {
   _id: string;

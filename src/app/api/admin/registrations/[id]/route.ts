@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
 
-const VALID_STATUSES = ["unpaid", "call-up", "completed"];
+const VALID_STATUSES = ["unpaid", "call-up", "completed", "spam"];
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = requireAdminApiAuth(req);

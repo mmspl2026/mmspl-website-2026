@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { Game, Team } from "@/lib/types";
 import { Funnel, MapPin, Calendar, CalendarDays, Clock, RefreshCw } from "lucide-react";
@@ -36,6 +36,14 @@ function formatPillDate(dateStr: string) {
 
 function ScheduleGameCard({ game }: { game: Game }) {
   const showScore = game.status === "final" || game.status === "forfeit" || game.status === "live";
+  const hasFinalResult = game.status === "final" || game.status === "forfeit";
+  const scoreDecided =
+    typeof game.homeScore === "number" && typeof game.awayScore === "number" && game.homeScore !== game.awayScore;
+
+  const homeWon =
+    hasFinalResult && (game.status === "forfeit" ? game.forfeitingTeam === "away" : scoreDecided && game.homeScore! > game.awayScore!);
+  const awayWon =
+    hasFinalResult && (game.status === "forfeit" ? game.forfeitingTeam === "home" : scoreDecided && game.awayScore! > game.homeScore!);
 
   return (
     <div className="rounded-xl border bg-white text-black shadow transition-all hover:shadow-md">
@@ -56,7 +64,12 @@ function ScheduleGameCard({ game }: { game: Game }) {
         </span>
 
         <div className="mt-2 flex items-center gap-2">
-          <p className="flex-1 text-sm leading-tight text-[#0d0d0e]">
+          <p
+            className={clsx(
+              "flex-1 text-sm leading-tight",
+              homeWon ? "font-bold text-brand" : "text-[#0d0d0e]"
+            )}
+          >
             <span className="hidden md:inline">{game.homeTeam.name}</span>
             <span className="md:hidden">{teamShortName(game.homeTeam)}</span>
             <span className="mt-0.5 block font-mono-brand text-[9px] tracking-[0.1em] text-[#9a968f]">HOME</span>
@@ -70,7 +83,12 @@ function ScheduleGameCard({ game }: { game: Game }) {
               <div className="text-center text-lg font-bold text-gray-400">VS</div>
             )}
           </div>
-          <p className="flex-1 text-right text-sm leading-tight text-[#0d0d0e]">
+          <p
+            className={clsx(
+              "flex-1 text-right text-sm leading-tight",
+              awayWon ? "font-bold text-brand" : "text-[#0d0d0e]"
+            )}
+          >
             <span className="hidden md:inline">{game.awayTeam.name}</span>
             <span className="md:hidden">{teamShortName(game.awayTeam)}</span>
             <span className="mt-0.5 block text-right font-mono-brand text-[9px] tracking-[0.1em] text-[#9a968f]">
@@ -101,6 +119,8 @@ export default function ScheduleList({
   const [month, setMonth] = useState("all");
   const [date, setDate] = useState<string | null>(null);
   const [updatedAt] = useState(() => new Date());
+  const dateScrollerRef = useRef<HTMLDivElement>(null);
+  const hasInteractedWithDateRef = useRef(false);
 
   // On first load: restore the remembered team (players filter to their own
   // team and expect it to stick between visits), then default the date/month
@@ -127,6 +147,27 @@ export default function ScheduleList({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Mobile only: once the initial date (today's game, or the next upcoming
+  // one) is set above, scroll that date pill into view so it isn't hidden
+  // off-screen. Direct scrollLeft math, not scrollIntoView — see AboutTabs
+  // for why (scrollIntoView scrolls the whole page, not just the row).
+  useEffect(() => {
+    if (hasInteractedWithDateRef.current || !date) return;
+    const scroller = dateScrollerRef.current;
+    const activeButton = scroller?.querySelector<HTMLElement>(`[data-date="${date}"]`);
+    if (!scroller || !activeButton || window.innerWidth >= 640) return;
+    scroller.scrollLeft = activeButton.offsetLeft - scroller.offsetLeft;
+  }, [date]);
+
+  // Bring a manually-selected date pill into focus the same way, on mobile.
+  function selectDate(newDate: string | null, button: HTMLButtonElement) {
+    hasInteractedWithDateRef.current = true;
+    setDate(newDate);
+    const scroller = dateScrollerRef.current;
+    if (!scroller || window.innerWidth >= 640) return;
+    scroller.scrollTo({ left: button.offsetLeft - scroller.offsetLeft, behavior: "smooth" });
+  }
 
   function handleTeamChange(newTeam: string) {
     setTeam(newTeam);
@@ -256,10 +297,11 @@ export default function ScheduleList({
                 <CalendarDays size={16} className="text-brand" aria-hidden="true" />
                 Date:
               </label>
-              <div className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
+              <div ref={dateScrollerRef} className="no-scrollbar flex gap-2 overflow-x-auto pb-1">
                 <button
                   type="button"
-                  onClick={() => setDate(null)}
+                  data-date="__all__"
+                  onClick={(e) => selectDate(null, e.currentTarget)}
                   className={clsx(pillClass(date === null), "shrink-0")}
                 >
                   All Dates
@@ -268,12 +310,14 @@ export default function ScheduleList({
                   <button
                     key={d}
                     type="button"
-                    onClick={() => setDate(d)}
+                    data-date={d}
+                    onClick={(e) => selectDate(d, e.currentTarget)}
                     className={clsx(pillClass(date === d), "shrink-0")}
                   >
                     {formatPillDate(d)}
                   </button>
                 ))}
+                <div className="w-4 shrink-0 sm:hidden" aria-hidden="true" />
               </div>
             </div>
           )}

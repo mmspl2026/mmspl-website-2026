@@ -129,6 +129,10 @@ export default function Footer() {
         <div className="mt-8 border-t border-gray-800 pt-8 text-center">
           <p className="text-sm text-gray-400">
             &copy; {new Date().getFullYear()} Markham Men&apos;s Slo-Pitch League. All rights reserved.
+            {" "}&middot;{" "}
+            <Link href="/privacy" className="transition-colors hover:text-red-600 hover:underline">
+              Privacy Policy
+            </Link>
           </p>
           <p className="mt-2 text-xs text-gray-500">Proudly supporting local Markham charities since 1982</p>
         </div>

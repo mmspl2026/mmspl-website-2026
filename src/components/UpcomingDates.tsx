@@ -102,7 +102,6 @@ export default function UpcomingDates({ dates }: { dates: ImportantDate[] }) {
             tabIndex={0}
           >
             {dates.map((d) => {
-              const isPast = d.date < today;
               const isNextUp = d._id === nextUpId;
               return (
                 <article
@@ -110,8 +109,7 @@ export default function UpcomingDates({ dates }: { dates: ImportantDate[] }) {
                   id={`date-card-${d._id}`}
                   className={clsx(
                     "flex w-[150px] shrink-0 snap-start flex-col items-center rounded-[10px] border px-3 py-3 text-center text-white backdrop-blur-sm",
-                    isNextUp ? "border-brand bg-brand-950/80" : "border-white/10 bg-black/90",
-                    isPast && "opacity-50"
+                    isNextUp ? "border-brand bg-brand-950/80" : "border-white/10 bg-black/90"
                   )}
                 >
                   {isNextUp && (

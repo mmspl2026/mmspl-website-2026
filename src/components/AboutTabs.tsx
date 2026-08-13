@@ -220,6 +220,16 @@ export default function AboutTabs({
     scrollerRef.current?.scrollBy({ left: direction * 240, behavior: "smooth" });
   }
 
+  // Mobile only: bring the newly-selected tab into view within the scroller
+  // (not the page — direct scrollLeft math, same reasoning as the date pills).
+  // Seeing the tab shift into focus is what tells the reader there's more to scroll.
+  function selectTab(id: TabId, button: HTMLButtonElement) {
+    setTab(id);
+    const scroller = scrollerRef.current;
+    if (!scroller || window.innerWidth >= 640) return;
+    scroller.scrollTo({ left: button.offsetLeft - scroller.offsetLeft, behavior: "smooth" });
+  }
+
   return (
     <div id="gallery">
       <div className="flex items-center gap-2">
@@ -244,7 +254,7 @@ export default function AboutTabs({
               type="button"
               role="tab"
               aria-selected={tab === t.id}
-              onClick={() => setTab(t.id)}
+              onClick={(e) => selectTab(t.id, e.currentTarget)}
               className={clsx(
                 "shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors",
                 tab === t.id ? "bg-brand text-white" : "border border-gray-300 bg-white text-black hover:border-gray-400"

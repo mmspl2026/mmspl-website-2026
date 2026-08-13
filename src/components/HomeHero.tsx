@@ -19,7 +19,10 @@ export default function HomeHero({
   const imageAlt = heroImage?.alt || "Slo-pitch game at dusk at an MMSPL ballpark";
 
   return (
-    <section className="relative flex items-center justify-center text-white" style={{ minHeight: "640px" }}>
+    <section
+      className="relative flex h-[100svh] items-center justify-center text-white sm:h-auto"
+      style={{ minHeight: "640px" }}
+    >
       <Image
         src={imageUrl}
         alt={imageAlt}

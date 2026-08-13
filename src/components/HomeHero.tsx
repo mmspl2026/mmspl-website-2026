@@ -20,7 +20,7 @@ export default function HomeHero({
 
   return (
     <section
-      className="relative flex h-[100svh] items-center justify-center text-white sm:h-auto"
+      className="relative flex h-[85svh] items-center justify-center text-white sm:h-auto"
       style={{ minHeight: "640px" }}
     >
       <Image

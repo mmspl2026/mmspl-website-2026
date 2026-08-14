@@ -31,6 +31,7 @@ export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "sent">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const successRef = useRef<HTMLDivElement>(null);
+  const formCardRef = useRef<HTMLDivElement>(null);
 
   // On mobile the form can extend well below the fold — without this, the
   // success message renders in place but the page stays scrolled wherever
@@ -40,6 +41,15 @@ export default function ContactForm() {
       successRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, [status]);
+
+  // Mobile only: the contact page stacks info cards above this form, so
+  // landing here from a "Contact Us" link leaves the form off-screen below
+  // the fold. Bring it into view on load so it's immediately visible.
+  useEffect(() => {
+    if (window.innerWidth < 640) {
+      formCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
 
   function update<K extends keyof typeof INITIAL_STATE>(key: K, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -70,7 +80,7 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="h-full overflow-hidden rounded-xl border bg-white text-black shadow">
+    <div ref={formCardRef} className="h-full overflow-hidden rounded-xl border bg-white text-black shadow">
       <div className="bg-gradient-to-r from-black to-gray-900 px-6 py-6 text-white">
         <h2 className="text-2xl font-semibold">Send Us a Message</h2>
         <p className="text-sm text-gray-300">Your message will be sent directly to the league executive</p>

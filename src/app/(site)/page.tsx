@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getTodayEastern } from "@/utils/timezone";
+import { getTodayEastern, getDateDaysAgoEastern } from "@/utils/timezone";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
   adminSettingsQuery,
@@ -32,7 +32,7 @@ export default async function HomePage() {
 
   const [settings, games, news, activeSeason] = await Promise.all([
     sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
-    sanityFetch<Game[]>(upcomingGamesQuery, { today }, []),
+    sanityFetch<Game[]>(upcomingGamesQuery, { from: getDateDaysAgoEastern(7) }, []),
     sanityFetch<NewsItem[]>(recentNewsQuery, {}, []),
     sanityFetch<Season | null>(activeSeasonQuery, {}, null),
   ]);

@@ -30,7 +30,7 @@ export const gamesBySeasonQuery = groq`*[_type == "game" && season->year == $yea
   awayTeam->{_id, name, shortName, logo, division, color}
 }`;
 
-export const upcomingGamesQuery = groq`*[_type == "game" && date >= $today] | order(date asc, time asc)[0...8]{
+export const upcomingGamesQuery = groq`*[_type == "game" && date >= $from] | order(date asc, time asc)[0...30]{
   _id,
   date,
   time,

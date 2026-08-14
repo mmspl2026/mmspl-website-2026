@@ -1,12 +1,28 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Game } from "@/lib/types";
 import GameCard from "./GameCard";
 
 export default function GameRail({ games, today }: { games: Game[]; today?: string }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+
+  // The rail includes the past week's games alongside upcoming ones (so
+  // recent scores stay visible), which means today's games usually aren't
+  // the first cards in the row. Bring them into view on load — direct
+  // scrollLeft math against the row itself, not scrollIntoView, so this
+  // never scrolls the page.
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller || !today) return;
+    const cards = Array.from(scroller.querySelectorAll<HTMLElement>("[data-game-date]"));
+    const target = cards.find((el) => (el.dataset.gameDate as string) >= today);
+    if (target) {
+      scroller.scrollLeft = target.offsetLeft - scroller.offsetLeft;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [games, today]);
 
   if (games.length === 0) {
     return <p className="text-white/60">No games scheduled yet — check back soon.</p>;

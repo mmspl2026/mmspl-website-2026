@@ -10,7 +10,6 @@ const SECTIONS: { heading: string; items: React.ReactNode[] }[] = [
       "Registration information (name, email, phone) when you register for the league",
       "Contact form submissions (name, email, message)",
       "Notification subscription (email address if you subscribe)",
-      "Basic analytics (anonymous page views via Vercel Analytics — no personal data)",
     ],
   },
   {
@@ -25,8 +24,8 @@ const SECTIONS: { heading: string; items: React.ReactNode[] }[] = [
   {
     heading: "Data Storage",
     items: [
-      "All data is stored securely in Sanity CMS",
-      "Images and files stored on Sanity CDN",
+      "All data is stored securely on encrypted cloud servers",
+      "Images and files are stored securely in the cloud",
       "We retain registration data for the current season plus one year",
     ],
   },

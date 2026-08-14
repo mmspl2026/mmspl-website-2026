@@ -44,6 +44,7 @@ export default function GameCard({
 
   return (
     <article
+      data-game-date={game.date}
       className={clsx(
         "flex w-[108px] shrink-0 snap-start flex-col rounded-[10px] border border-white/20 px-2 pb-1.5 pt-[9px] text-center text-white",
         className

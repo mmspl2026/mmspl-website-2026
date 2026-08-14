@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { Game, Team } from "@/lib/types";
-import { Funnel, MapPin, Calendar, CalendarDays, Clock, RefreshCw } from "lucide-react";
+import { Funnel, MapPin, Calendar, CalendarDays, Clock, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
 
 const TEAM_STORAGE_KEY = "mmspl-schedule-team";
@@ -319,6 +319,12 @@ export default function ScheduleList({
                 ))}
                 <div className="w-4 shrink-0 sm:hidden" aria-hidden="true" />
               </div>
+
+              <p className="flex w-full items-center justify-center gap-1 text-[11px] text-gray-400 sm:hidden">
+                <ChevronLeft size={11} aria-hidden="true" />
+                <span>Swipe to see more dates</span>
+                <ChevronRight size={11} aria-hidden="true" />
+              </p>
             </div>
           )}
         </div>

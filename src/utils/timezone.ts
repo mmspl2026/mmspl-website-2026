@@ -17,3 +17,9 @@ export function isGameToday(gameDate: string): boolean {
 export function isGamePast(gameDate: string): boolean {
   return gameDate < getTodayEastern();
 }
+
+export function getDateDaysAgoEastern(days: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+  return d.toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+}

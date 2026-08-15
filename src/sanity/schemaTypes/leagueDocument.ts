@@ -54,10 +54,10 @@ export default defineType({
       name: "file",
       title: "Document File",
       type: "file",
-      description: "PDF, TXT, DOC, or DOCX.",
+      description: "PDF, TXT, DOC, DOCX, PPT, or PPTX.",
       options: {
         accept:
-          ".pdf,.txt,.doc,.docx,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          ".pdf,.txt,.doc,.docx,.ppt,.pptx,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation",
       },
       hidden: ({ document }) => document?.contentType === "page",
     }),

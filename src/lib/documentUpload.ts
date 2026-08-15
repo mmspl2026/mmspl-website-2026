@@ -6,9 +6,11 @@ export const ACCEPTED_DOCUMENT_MIME_TYPES = [
   "text/plain",
   "application/msword", // .doc
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+  "application/vnd.ms-powerpoint", // .ppt
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
 ] as const;
 
-export const ACCEPTED_DOCUMENT_EXTENSIONS = [".pdf", ".txt", ".doc", ".docx"] as const;
+export const ACCEPTED_DOCUMENT_EXTENSIONS = [".pdf", ".txt", ".doc", ".docx", ".ppt", ".pptx"] as const;
 
 export const ACCEPTED_DOCUMENT_ACCEPT_ATTR = [
   ...ACCEPTED_DOCUMENT_MIME_TYPES,

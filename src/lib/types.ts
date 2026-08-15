@@ -248,6 +248,7 @@ export interface LeagueDocument {
   slug?: { current: string };
   pageBody?: unknown;
   file?: SanityFileAsset;
+  hasFile?: boolean;
   badge?: "PASSED" | "FAILED" | "NA";
   order: number;
 }

@@ -359,7 +359,7 @@ export default function DocumentsTab() {
           )}
           {draft.contentType === "file" ? (
             <div>
-              <label className="mb-1 block text-xs font-semibold text-gray-600">Document File (PDF, TXT, DOC, DOCX)</label>
+              <label className="mb-1 block text-xs font-semibold text-gray-600">Document File (PDF, TXT, DOC, DOCX, PPT, PPTX)</label>
               <div className="flex items-center gap-3">
                 <SecondaryButton onClick={() => fileRef.current?.click()} disabled={uploading}>
                   <Upload size={14} aria-hidden="true" />

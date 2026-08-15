@@ -66,7 +66,7 @@ function DocumentsPanel({ documents }: { documents: LeagueDocument[] }) {
   return (
     <div className="space-y-2">
       {documents.map((doc) => {
-        const fileUrl = doc.file?.asset?.url;
+        const hasFile = doc.hasFile;
         return (
           <div
             key={doc._id}
@@ -96,10 +96,10 @@ function DocumentsPanel({ documents }: { documents: LeagueDocument[] }) {
                     <Eye className="h-3 w-3" aria-hidden="true" />
                     Read
                   </Link>
-                ) : fileUrl ? (
+                ) : hasFile ? (
                   <>
                     <a
-                      href={fileUrl}
+                      href={`/api/documents/${doc._id}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex h-7 items-center justify-center rounded-md border border-gray-300 px-2 text-xs text-gray-700 transition-colors hover:border-red-600 hover:text-red-600"
@@ -108,7 +108,7 @@ function DocumentsPanel({ documents }: { documents: LeagueDocument[] }) {
                       <Eye className="h-3 w-3" aria-hidden="true" />
                     </a>
                     <a
-                      href={fileUrl}
+                      href={`/api/documents/${doc._id}?dl=1`}
                       download
                       target="_blank"
                       rel="noopener noreferrer"

@@ -235,9 +235,18 @@ export const allTeamRepresentativesQuery = groq`*[_type == "teamRepresentative"]
   _id, repName, team->{_id, name, shortName}
 } | order(team.name asc)`;
 
+// Public listing — deliberately does NOT select the raw file asset URL.
+// Downloads go through /api/documents/[id], which proxies the bytes so
+// visitors never see the underlying Sanity CDN address.
 export const allLeagueDocumentsQuery = groq`*[_type == "leagueDocument"] | order(category asc, order asc){
   _id, title, description, category, badge, order, contentType, slug,
-  file{asset->{url, originalFilename}}
+  "hasFile": defined(file.asset)
+}`;
+
+export const leagueDocumentFileByIdQuery = groq`*[_type == "leagueDocument" && _id == $id][0]{
+  "url": file.asset->url,
+  "filename": file.asset->originalFilename,
+  "mimeType": file.asset->mimeType
 }`;
 
 // Admin-only — also selects the file asset's _id (needed to delete the

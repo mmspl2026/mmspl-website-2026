@@ -28,6 +28,9 @@ function formatDateTime(value?: string) {
   return new Date(value).toLocaleString("en-CA", { dateStyle: "medium", timeStyle: "short" });
 }
 
+type BusyAction = { id: string; kind: "reset" | "delete" | "toggle" };
+type ConfirmTarget = { type: "delete" | "reset"; user: AdminUser };
+
 export default function UsersTab({ role }: { role: AdminRole }) {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [attempts, setAttempts] = useState<LoginAttempt[]>([]);
@@ -36,6 +39,8 @@ export default function UsersTab({ role }: { role: AdminRole }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
+  const [confirmTarget, setConfirmTarget] = useState<ConfirmTarget | null>(null);
+  const [busy, setBusy] = useState<BusyAction | null>(null);
   const { toasts, push, dismiss } = useToasts();
 
   async function load() {
@@ -99,42 +104,54 @@ export default function UsersTab({ role }: { role: AdminRole }) {
   }
 
   async function handleToggleActive(user: AdminUser) {
-    const res = await fetch(`/api/admin/users/${user._id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ active: !user.active }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      push({ tone: "error", message: data.error || "Failed to update user." });
-      return;
+    setBusy({ id: user._id, kind: "toggle" });
+    try {
+      const res = await fetch(`/api/admin/users/${user._id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: !user.active }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to update user.");
+      push({ tone: "success", message: user.active ? "User deactivated." : "User reactivated." });
+      load();
+    } catch (err) {
+      push({ tone: "error", message: err instanceof Error ? err.message : "Failed to update user." });
+    } finally {
+      setBusy(null);
     }
-    push({ tone: "success", message: user.active ? "User deactivated." : "User reactivated." });
-    load();
   }
 
-  async function handleDelete(user: AdminUser) {
-    if (!confirm(`Permanently delete ${user.name} (@${user.username})? This cannot be undone.`)) return;
-    const res = await fetch(`/api/admin/users/${user._id}`, { method: "DELETE" });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      push({ tone: "error", message: data.error || "Failed to delete user." });
-      return;
+  async function performDelete(user: AdminUser) {
+    setBusy({ id: user._id, kind: "delete" });
+    try {
+      const res = await fetch(`/api/admin/users/${user._id}`, { method: "DELETE" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to delete user.");
+      push({ tone: "success", message: "User deleted." });
+      load();
+    } catch (err) {
+      push({ tone: "error", message: err instanceof Error ? err.message : "Failed to delete user." });
+    } finally {
+      setBusy(null);
+      setConfirmTarget(null);
     }
-    push({ tone: "success", message: "User deleted." });
-    load();
   }
 
-  async function handleResetPassword(user: AdminUser) {
-    if (!confirm(`Reset the password for ${user.name}? A temporary password will be emailed to ${user.email}.`)) return;
-    const res = await fetch(`/api/admin/users/${user._id}/reset-password`, { method: "POST" });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      push({ tone: "error", message: data.error || "Failed to reset password." });
-      return;
+  async function performReset(user: AdminUser) {
+    setBusy({ id: user._id, kind: "reset" });
+    try {
+      const res = await fetch(`/api/admin/users/${user._id}/reset-password`, { method: "POST" });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to reset password.");
+      push({ tone: "success", message: `Temporary password emailed to ${user.email}.` });
+      load();
+    } catch (err) {
+      push({ tone: "error", message: err instanceof Error ? err.message : "Failed to reset password." });
+    } finally {
+      setBusy(null);
+      setConfirmTarget(null);
     }
-    push({ tone: "success", message: `Temporary password emailed to ${user.email}.` });
-    load();
   }
 
   if (loading) return <Spinner />;
@@ -174,15 +191,31 @@ export default function UsersTab({ role }: { role: AdminRole }) {
                   <p className="mt-0.5 text-xs text-gray-400">Last login: {formatDateTime(u.lastLogin)}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <SecondaryButton className="h-8 px-2.5 text-xs" onClick={() => handleResetPassword(u)}>
+                  <SecondaryButton
+                    className="h-8 px-2.5 text-xs"
+                    disabled={busy !== null}
+                    onClick={() => setConfirmTarget({ type: "reset", user: u })}
+                  >
                     <KeyRound size={12} aria-hidden="true" />
-                    Reset PW
+                    {busy?.id === u._id && busy.kind === "reset" ? "Sending…" : "Reset PW"}
                   </SecondaryButton>
-                  <SecondaryButton className="h-8 px-2.5 text-xs" onClick={() => handleToggleActive(u)}>
+                  <SecondaryButton
+                    className="h-8 px-2.5 text-xs"
+                    disabled={busy !== null}
+                    onClick={() => handleToggleActive(u)}
+                  >
                     {u.active ? <UserX size={12} aria-hidden="true" /> : <UserCheck size={12} aria-hidden="true" />}
-                    {u.active ? "Deactivate" : "Reactivate"}
+                    {busy?.id === u._id && busy.kind === "toggle"
+                      ? "Working…"
+                      : u.active
+                        ? "Deactivate"
+                        : "Reactivate"}
                   </SecondaryButton>
-                  <DangerButton className="h-8 px-2.5 text-xs" onClick={() => handleDelete(u)}>
+                  <DangerButton
+                    className="h-8 px-2.5 text-xs"
+                    disabled={busy !== null}
+                    onClick={() => setConfirmTarget({ type: "delete", user: u })}
+                  >
                     <Trash2 size={12} aria-hidden="true" />
                     Delete
                   </DangerButton>
@@ -284,6 +317,38 @@ export default function UsersTab({ role }: { role: AdminRole }) {
             </PrimaryButton>
           </div>
         </div>
+      </Modal>
+
+      <Modal
+        open={confirmTarget !== null}
+        onClose={() => {
+          if (!busy) setConfirmTarget(null);
+        }}
+        title={confirmTarget?.type === "delete" ? "Delete User" : "Reset Password"}
+      >
+        {confirmTarget && (
+          <div className="space-y-4">
+            <p className="text-sm text-gray-700">
+              {confirmTarget.type === "delete"
+                ? `Permanently delete ${confirmTarget.user.name} (@${confirmTarget.user.username})? This cannot be undone.`
+                : `A temporary password will be generated and emailed to ${confirmTarget.user.email}. They'll need to set a new password the next time they sign in.`}
+            </p>
+            <div className="flex justify-end gap-2">
+              <SecondaryButton onClick={() => setConfirmTarget(null)} disabled={busy !== null}>
+                Cancel
+              </SecondaryButton>
+              {confirmTarget.type === "delete" ? (
+                <DangerButton onClick={() => performDelete(confirmTarget.user)} disabled={busy !== null}>
+                  {busy ? "Deleting…" : "Delete"}
+                </DangerButton>
+              ) : (
+                <PrimaryButton onClick={() => performReset(confirmTarget.user)} disabled={busy !== null}>
+                  {busy ? "Sending…" : "Send Temporary Password"}
+                </PrimaryButton>
+              )}
+            </div>
+          </div>
+        )}
       </Modal>
 
       <ToastStack toasts={toasts} onDismiss={dismiss} />

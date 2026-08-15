@@ -244,6 +244,9 @@ export interface LeagueDocument {
   description?: string;
   category: "Rules & Regulations" | "AGM Documents" | "General";
   year?: number;
+  contentType: "file" | "page";
+  slug?: { current: string };
+  pageBody?: unknown;
   file?: SanityFileAsset;
   badge?: "PASSED" | "FAILED" | "NA";
   order: number;

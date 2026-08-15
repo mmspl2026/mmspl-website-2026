@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { Eye, Download, FileText } from "lucide-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import clsx from "clsx";
@@ -87,7 +88,15 @@ function DocumentsPanel({ documents }: { documents: LeagueDocument[] }) {
               )}
               <p className="min-w-0 flex-1 truncate text-sm font-semibold leading-snug text-gray-900">{doc.title}</p>
               <div className="flex flex-shrink-0 gap-1.5">
-                {fileUrl ? (
+                {doc.contentType === "page" && doc.slug?.current ? (
+                  <Link
+                    href={`/admin-info/documents/${doc.slug.current}`}
+                    className="inline-flex h-7 items-center justify-center gap-1 rounded-md bg-red-600 px-2.5 text-xs font-semibold text-white transition-colors hover:bg-red-700"
+                  >
+                    <Eye className="h-3 w-3" aria-hidden="true" />
+                    Read
+                  </Link>
+                ) : fileUrl ? (
                   <>
                     <a
                       href={fileUrl}

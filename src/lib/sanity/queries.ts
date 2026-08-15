@@ -236,16 +236,20 @@ export const allTeamRepresentativesQuery = groq`*[_type == "teamRepresentative"]
 } | order(team.name asc)`;
 
 export const allLeagueDocumentsQuery = groq`*[_type == "leagueDocument"] | order(category asc, order asc){
-  _id, title, description, category, badge, order,
+  _id, title, description, category, badge, order, contentType, slug,
   file{asset->{url, originalFilename}}
 }`;
 
 // Admin-only — also selects the file asset's _id (needed to delete the
-// underlying asset when the document is deleted) and year, which the
-// public page doesn't display.
+// underlying asset when the document is deleted), year, and pageBody, which
+// the public list page doesn't need.
 export const allLeagueDocumentsAdminQuery = groq`*[_type == "leagueDocument"] | order(category asc, order asc){
-  _id, title, description, category, year, badge, order,
+  _id, title, description, category, year, badge, order, contentType, slug, pageBody,
   file{asset->{_id, url, originalFilename}}
+}`;
+
+export const leagueDocumentPageBySlugQuery = groq`*[_type == "leagueDocument" && contentType == "page" && slug.current == $slug][0]{
+  _id, title, description, category, pageBody
 }`;
 
 export const allNewsAdminQuery = groq`*[_type == "news"] | order(date desc){

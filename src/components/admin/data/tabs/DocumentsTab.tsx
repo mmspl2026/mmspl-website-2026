@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Plus, Trash2, Upload, Eye, Download } from "lucide-react";
+import { Plus, Trash2, Upload, Eye, Download, FileText } from "lucide-react";
 import type { LeagueDocument } from "@/lib/types";
 import {
   Card,
@@ -19,6 +19,7 @@ import {
 } from "../ui";
 import { useToasts } from "@/components/admin/useToasts";
 import ToastStack from "@/components/admin/ToastStack";
+import { ACCEPTED_DOCUMENT_ACCEPT_ATTR, isAcceptedDocumentFile } from "@/lib/documentUpload";
 
 const CATEGORIES = ["Rules & Regulations", "AGM Documents", "General"] as const;
 const BADGES = [
@@ -36,8 +37,10 @@ interface Draft {
   year: string;
   description: string;
   badge: string;
+  contentType: "file" | "page";
   file: UploadedFile | null;
   fileName: string;
+  pageBody: string;
 }
 
 const EMPTY_DRAFT: Draft = {
@@ -46,8 +49,10 @@ const EMPTY_DRAFT: Draft = {
   year: String(new Date().getFullYear()),
   description: "",
   badge: "",
+  contentType: "file",
   file: null,
   fileName: "",
+  pageBody: "",
 };
 
 const BADGE_TONE: Record<string, "green" | "red" | "gray"> = {
@@ -88,8 +93,8 @@ export default function DocumentsTab() {
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.type !== "application/pdf") {
-      push({ tone: "error", message: "Only PDF files are accepted." });
+    if (!isAcceptedDocumentFile(file)) {
+      push({ tone: "error", message: "Only PDF, TXT, DOC, and DOCX files are accepted." });
       if (fileRef.current) fileRef.current.value = "";
       return;
     }
@@ -114,6 +119,10 @@ export default function DocumentsTab() {
       push({ tone: "error", message: "Title is required." });
       return;
     }
+    if (draft.contentType === "page" && !draft.pageBody.trim()) {
+      push({ tone: "error", message: "Page content is required." });
+      return;
+    }
     setSaving(true);
     try {
       const res = await fetch("/api/admin/documents", {
@@ -125,7 +134,9 @@ export default function DocumentsTab() {
           description: draft.description || undefined,
           year: draft.year || undefined,
           badge: draft.badge || undefined,
-          file: draft.file || undefined,
+          contentType: draft.contentType,
+          file: draft.contentType === "file" ? draft.file || undefined : undefined,
+          pageBody: draft.contentType === "page" ? draft.pageBody : undefined,
         }),
       });
       if (!res.ok) {
@@ -189,7 +200,7 @@ export default function DocumentsTab() {
               </Select>
               <PrimaryButton onClick={() => setModalOpen(true)}>
                 <Plus size={14} aria-hidden="true" />
-                Upload PDF
+                Upload Document
               </PrimaryButton>
             </div>
           }
@@ -225,7 +236,18 @@ export default function DocumentsTab() {
                         </div>
                         {doc.year && <span className="font-mono-brand text-xs text-gray-400">{doc.year}</span>}
                         <div className="flex shrink-0 gap-1.5">
-                          {fileUrl ? (
+                          {doc.contentType === "page" && doc.slug?.current ? (
+                            <SecondaryButton
+                              className="h-8 px-2.5 text-xs"
+                              onClick={() =>
+                                window.open(`/admin-info/documents/${doc.slug!.current}`, "_blank", "noopener,noreferrer")
+                              }
+                              aria-label={`Read ${doc.title}`}
+                            >
+                              <FileText size={13} aria-hidden="true" />
+                              Read
+                            </SecondaryButton>
+                          ) : fileUrl ? (
                             <>
                               <SecondaryButton
                                 className="h-8 px-2.5 text-xs"
@@ -262,11 +284,30 @@ export default function DocumentsTab() {
         )}
       </Card>
 
-      <Modal open={modalOpen} onClose={closeModal} title="Upload PDF">
+      <Modal open={modalOpen} onClose={closeModal} title="Add Document">
         <div className="space-y-4">
           <div>
             <label className="mb-1 block text-xs font-semibold text-gray-600">Title *</label>
             <TextInput value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-gray-600">Type</label>
+            <div className="flex gap-2">
+              <SecondaryButton
+                className={draft.contentType === "file" ? "border-brand text-brand" : ""}
+                onClick={() => setDraft({ ...draft, contentType: "file" })}
+              >
+                <Upload size={14} aria-hidden="true" />
+                Uploaded File
+              </SecondaryButton>
+              <SecondaryButton
+                className={draft.contentType === "page" ? "border-brand text-brand" : ""}
+                onClick={() => setDraft({ ...draft, contentType: "page" })}
+              >
+                <FileText size={14} aria-hidden="true" />
+                Written Page
+              </SecondaryButton>
+            </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
@@ -316,17 +357,42 @@ export default function DocumentsTab() {
               </Select>
             </div>
           )}
-          <div>
-            <label className="mb-1 block text-xs font-semibold text-gray-600">PDF File</label>
-            <div className="flex items-center gap-3">
-              <SecondaryButton onClick={() => fileRef.current?.click()} disabled={uploading}>
-                <Upload size={14} aria-hidden="true" />
-                {uploading ? "Uploading…" : draft.file ? "Replace PDF" : "Upload PDF"}
-              </SecondaryButton>
-              {draft.fileName && <span className="truncate text-sm text-gray-600">{draft.fileName}</span>}
-              <input ref={fileRef} type="file" accept="application/pdf" className="hidden" onChange={handleUpload} />
+          {draft.contentType === "file" ? (
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-gray-600">Document File (PDF, TXT, DOC, DOCX)</label>
+              <div className="flex items-center gap-3">
+                <SecondaryButton onClick={() => fileRef.current?.click()} disabled={uploading}>
+                  <Upload size={14} aria-hidden="true" />
+                  {uploading ? "Uploading…" : draft.file ? "Replace File" : "Upload File"}
+                </SecondaryButton>
+                {draft.fileName && <span className="truncate text-sm text-gray-600">{draft.fileName}</span>}
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept={ACCEPTED_DOCUMENT_ACCEPT_ATTR}
+                  className="hidden"
+                  onChange={handleUpload}
+                />
+              </div>
+              <p className="mt-1.5 text-xs text-gray-400">
+                Only upload files from a source you trust — this document becomes downloadable to site visitors.
+              </p>
             </div>
-          </div>
+          ) : (
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-gray-600">Page Content *</label>
+              <TextArea
+                rows={10}
+                value={draft.pageBody}
+                onChange={(e) => setDraft({ ...draft, pageBody: e.target.value })}
+                placeholder={"Write the page content here.\n\nSeparate paragraphs with a blank line. Add a link with [label](https://example.com)."}
+              />
+              <p className="mt-1.5 text-xs text-gray-400">
+                This becomes its own page on the site — no file upload needed. Visitors get a &ldquo;Read&rdquo; button
+                instead of a download.
+              </p>
+            </div>
+          )}
 
           <div className="flex justify-end gap-2 border-t border-gray-100 pt-4">
             <SecondaryButton onClick={closeModal}>Cancel</SecondaryButton>
@@ -340,7 +406,7 @@ export default function DocumentsTab() {
       <Modal open={!!deleteId} onClose={() => setDeleteId(null)} title="Delete document?">
         <div className="space-y-4">
           <p className="text-sm text-gray-600">
-            This permanently deletes the document and its PDF file. This can&apos;t be undone.
+            This permanently deletes the document and its file. This can&apos;t be undone.
           </p>
           <div className="flex justify-end gap-2">
             <SecondaryButton onClick={() => setDeleteId(null)}>Cancel</SecondaryButton>

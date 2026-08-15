@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
+import { isAcceptedDocumentFile } from "@/lib/documentUpload";
 
 export async function POST(req: NextRequest) {
   const auth = await requireAdminApiAuth(req);
@@ -11,14 +12,14 @@ export async function POST(req: NextRequest) {
   if (!file || !(file instanceof File)) {
     return NextResponse.json({ error: "No file provided." }, { status: 400 });
   }
-  if (file.type && file.type !== "application/pdf") {
-    return NextResponse.json({ error: "Only PDF files are accepted." }, { status: 400 });
+  if (!isAcceptedDocumentFile(file)) {
+    return NextResponse.json({ error: "Only PDF, TXT, DOC, and DOCX files are accepted." }, { status: 400 });
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
   const asset = await writeClient.assets.upload("file", buffer, {
     filename: file.name,
-    contentType: file.type || "application/pdf",
+    contentType: file.type || "application/octet-stream",
   });
 
   return NextResponse.json({

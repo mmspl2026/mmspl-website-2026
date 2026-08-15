@@ -2,10 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
 import { allLeagueDocumentsAdminQuery } from "@/lib/sanity/queries";
+import { plainTextToBlocks } from "@/lib/newsBody";
 import type { LeagueDocument } from "@/lib/types";
 
 const CATEGORIES = ["Rules & Regulations", "AGM Documents", "General"];
 const BADGES = ["PASSED", "FAILED", "NA"];
+
+function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .slice(0, 96);
+}
 
 export async function GET(req: NextRequest) {
   const auth = await requireAdminApiAuth(req);
@@ -26,6 +36,8 @@ export async function POST(req: NextRequest) {
   const year = Number.isFinite(Number(body?.year)) ? Number(body.year) : undefined;
   const badge = typeof body?.badge === "string" ? body.badge : "";
   const file = body?.file;
+  const contentType = body?.contentType === "page" ? "page" : "file";
+  const pageText = typeof body?.pageBody === "string" ? body.pageBody.trim() : "";
 
   if (!title) {
     return NextResponse.json({ error: "Title is required." }, { status: 400 });
@@ -36,6 +48,19 @@ export async function POST(req: NextRequest) {
   if (badge && !BADGES.includes(badge)) {
     return NextResponse.json({ error: "Invalid status." }, { status: 400 });
   }
+  if (contentType === "page" && !pageText) {
+    return NextResponse.json({ error: "Page content is required for a Written Page." }, { status: 400 });
+  }
+
+  let slug: { _type: "slug"; current: string } | undefined;
+  if (contentType === "page") {
+    const base = slugify(title);
+    const existing = await writeClient.fetch<number>(
+      `count(*[_type == "leagueDocument" && slug.current == $slug])`,
+      { slug: base }
+    );
+    slug = { _type: "slug", current: existing > 0 ? `${base}-${Date.now().toString(36)}` : base };
+  }
 
   const doc = await writeClient.create({
     _type: "leagueDocument",
@@ -44,7 +69,10 @@ export async function POST(req: NextRequest) {
     description: description || undefined,
     year,
     badge: category === "AGM Documents" && badge ? badge : undefined,
-    file: file || undefined,
+    contentType,
+    slug,
+    pageBody: contentType === "page" ? plainTextToBlocks(pageText) : undefined,
+    file: contentType === "file" ? file || undefined : undefined,
     order: 0,
   });
 

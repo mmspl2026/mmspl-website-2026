@@ -5,7 +5,7 @@ import { gamesByDateForActiveSeasonQuery } from "@/lib/sanity/queries";
 import type { AdminGame } from "@/lib/types";
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const date = req.nextUrl.searchParams.get("date");

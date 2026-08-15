@@ -181,16 +181,25 @@ export const gameByIdQuery = groq`*[_type == "game" && _id == $id][0]{
 // --- Admin data manager ---
 
 export const adminUserByUsernameQuery = groq`*[_type == "adminUser" && username == $username][0]{
-  _id, name, username, email, role, active, passwordHash
+  _id, name, username, email, role, active, passwordHash,
+  mustChangePassword, tempPasswordExpiresAt, failedAttempts, lockedUntil
 }`;
 
 export const adminUserByIdQuery = groq`*[_type == "adminUser" && _id == $id][0]{
-  _id, name, username, email, role, active
+  _id, name, username, email, role, active, currentSessionId, mustChangePassword
 }`;
 
 export const allAdminUsersQuery = groq`*[_type == "adminUser"] | order(name asc){
-  _id, name, username, email, role, active, createdAt
+  _id, name, username, email, role, active, createdAt, lastLogin, mustChangePassword, lockedUntil
 }`;
+
+export const recentLoginAttemptsQuery = groq`*[_type == "loginAttempt"] | order(createdAt desc)[0...50]{
+  _id, username, ip, success, reason, createdAt
+}`;
+
+export const recentFailedAttemptsByIpQuery = groq`count(*[
+  _type == "loginAttempt" && ip == $ip && success == false && createdAt > $since
+])`;
 
 export const allRegistrationsQuery = groq`*[_type == "registration"] | order(submittedAt desc){
   _id, firstName, lastName,

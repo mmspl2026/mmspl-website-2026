@@ -9,7 +9,7 @@ import AdminDashboard from "@/components/admin/AdminDashboard";
 export const metadata: Metadata = { title: "Admin — Score Entry" };
 
 export default async function AdminPage() {
-  const session = requireAdminSession();
+  const session = await requireAdminSession();
 
   if (!isSanityConfigured) {
     return (

@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { hashPassword, requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
 import { allAdminUsersQuery } from "@/lib/sanity/queries";
+import { validatePasswordPolicy } from "@/lib/passwordPolicy";
 import type { AdminUser } from "@/lib/types";
 
 const USERNAME_RE = /^[a-z0-9._-]+$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
   if (auth.session.role !== "superadmin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
   if (auth.session.role !== "superadmin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -36,8 +37,9 @@ export async function POST(req: NextRequest) {
   if (!EMAIL_RE.test(body.email)) {
     return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
   }
-  if (body.password.length < 8) {
-    return NextResponse.json({ error: "Password must be at least 8 characters." }, { status: 400 });
+  const policy = validatePasswordPolicy(body.password);
+  if (!policy.valid) {
+    return NextResponse.json({ error: policy.errors.join(" ") }, { status: 400 });
   }
 
   const existing = await writeClient.fetch<number>(`count(*[_type == "adminUser" && username == $username])`, { username });

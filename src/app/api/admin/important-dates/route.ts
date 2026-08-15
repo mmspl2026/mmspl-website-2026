@@ -5,7 +5,7 @@ import { allImportantDatesQuery } from "@/lib/sanity/queries";
 import type { ImportantDate } from "@/lib/types";
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const dates = await writeClient.fetch<ImportantDate[]>(allImportantDatesQuery);
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const body = await req.json().catch(() => null);

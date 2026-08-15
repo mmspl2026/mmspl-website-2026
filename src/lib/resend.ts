@@ -211,6 +211,18 @@ export async function sendBroadcastEmail(to: string[], subject: string, message:
   return resend.emails.send({ from: config.fromEmail, to: config.fromEmail, bcc: to, subject: `MMSPL: ${subject}`, html });
 }
 
+export async function sendAdminPasswordReset(to: string, name: string, tempPassword: string) {
+  const html = renderEmail({
+    title: "Admin Password Reset",
+    bodyHtml: `<p>Hi ${name},</p>
+     <p>A temporary password was generated for your MMSPL admin account. It expires in 24 hours and must be changed the next time you sign in.</p>
+     <p style="font-size:18px; font-weight:bold; font-family:monospace; letter-spacing:1px; background:#f5f5f5; padding:12px 16px; border-radius:6px; display:inline-block;">${tempPassword}</p>
+     <p>If you didn't request this, contact another superadmin right away.</p>`,
+    cta: { label: "Sign In", url: `${SITE_URL}/admin/login` },
+  });
+  return send(to, "MMSPL Admin: Temporary Password", html);
+}
+
 export async function sendTestEmail(to: string) {
   const html = renderEmail({
     title: "Test Email",

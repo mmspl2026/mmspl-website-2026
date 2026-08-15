@@ -5,7 +5,7 @@ import { allAwardsQuery } from "@/lib/sanity/queries";
 import type { Award } from "@/lib/types";
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const awards = await writeClient.fetch<Award[]>(allAwardsQuery);
@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const body = await req.json().catch(() => null);

@@ -9,7 +9,7 @@ import DataManagerShell from "@/components/admin/data/DataManagerShell";
 export const metadata: Metadata = { title: "Admin — Data Manager" };
 
 export default async function AdminDataPage() {
-  const session = requireAdminSession("/admin/data");
+  const session = await requireAdminSession("/admin/data");
 
   if (!isSanityConfigured) {
     return (

@@ -5,7 +5,7 @@ import { activeSeasonQuery, standingsBySeasonQuery } from "@/lib/sanity/queries"
 import type { Season, Standing } from "@/lib/types";
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const seasonId = req.nextUrl.searchParams.get("seasonId");

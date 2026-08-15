@@ -8,7 +8,7 @@ import type { AdminGame, Standing } from "@/lib/types";
 const VALID_STATUSES = ["scheduled", "live", "final", "forfeit", "cancelled", "postponed"];
 
 export async function POST(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const body = await req.json().catch(() => null);

@@ -11,6 +11,7 @@ import adminSettings from "./adminSettings";
 import subscriber from "./subscriber";
 import pushSubscription from "./pushSubscription";
 import adminUser from "./adminUser";
+import loginAttempt from "./loginAttempt";
 import registration from "./registration";
 import contactSubmission from "./contactSubmission";
 import notificationLog from "./notificationLog";
@@ -36,6 +37,7 @@ export const schemaTypes = [
   pushSubscription,
   adminSettings,
   adminUser,
+  loginAttempt,
   registration,
   contactSubmission,
   notificationLog,

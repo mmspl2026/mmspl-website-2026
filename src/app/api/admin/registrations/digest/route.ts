@@ -5,7 +5,7 @@ import { sendCustomNotificationEmail, wasEmailSent } from "@/lib/resend";
 import type { Registration } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const settings = await writeClient.fetch<{ registrationRecipients?: string } | null>(

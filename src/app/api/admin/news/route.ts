@@ -15,7 +15,7 @@ function slugify(title: string): string {
 }
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const news = await writeClient.fetch<NewsItem[]>(allNewsAdminQuery);
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const body = await req.json().catch(() => null);

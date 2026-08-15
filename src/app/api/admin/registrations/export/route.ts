@@ -10,7 +10,7 @@ function csvCell(value: unknown) {
 }
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const registrations = await writeClient.fetch<Registration[]>(allRegistrationsQuery);

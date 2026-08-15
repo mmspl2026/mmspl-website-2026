@@ -4,7 +4,7 @@ import { writeClient } from "@/lib/sanity/client";
 import { subscriberCountQuery, pushSubscriptionCountQuery } from "@/lib/sanity/queries";
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const [emailCount, pushCount] = await Promise.all([

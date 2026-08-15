@@ -151,6 +151,18 @@ export interface AdminUser {
   role: AdminRole;
   active: boolean;
   createdAt: string;
+  lastLogin?: string;
+  mustChangePassword?: boolean;
+  lockedUntil?: string;
+}
+
+export interface LoginAttempt {
+  _id: string;
+  username?: string;
+  ip?: string;
+  success: boolean;
+  reason?: string;
+  createdAt: string;
 }
 
 export type RegistrationStatus = "unpaid" | "call-up" | "completed" | "spam";

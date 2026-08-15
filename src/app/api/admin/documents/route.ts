@@ -8,7 +8,7 @@ const CATEGORIES = ["Rules & Regulations", "AGM Documents", "General"];
 const BADGES = ["PASSED", "FAILED", "NA"];
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const documents = await writeClient.fetch<LeagueDocument[]>(allLeagueDocumentsAdminQuery);
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const body = await req.json().catch(() => null);

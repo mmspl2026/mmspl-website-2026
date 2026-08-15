@@ -13,6 +13,8 @@
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "3.99.0",
     "@sanity/webhook": "^4.0.4",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "lucide-react": "^1.28.0",
     "mongodb": "^7.5.0",

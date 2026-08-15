@@ -3,7 +3,7 @@ import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
 
 export async function POST(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const form = await req.formData().catch(() => null);

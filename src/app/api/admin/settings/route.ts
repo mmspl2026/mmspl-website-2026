@@ -22,7 +22,7 @@ async function getOrCreateSettingsId(): Promise<string> {
 }
 
 export async function GET(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const settings = await writeClient.fetch<AdminSettings | null>(adminSettingsFullQuery);
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const body = await req.json().catch(() => null);

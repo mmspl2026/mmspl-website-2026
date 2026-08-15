@@ -23,11 +23,11 @@ export default function LoginForm({ next = "/admin" }: { next?: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Login failed.");
       }
-      router.replace(next);
+      router.replace(data.mustChangePassword ? "/admin/change-password" : next);
       router.refresh();
     } catch (err) {
       setStatus("error");

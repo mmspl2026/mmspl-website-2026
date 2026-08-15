@@ -4,7 +4,7 @@ import { writeClient } from "@/lib/sanity/client";
 import { sendContactNotification, wasEmailSent } from "@/lib/resend";
 
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
-  const auth = requireAdminApiAuth(req);
+  const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
   const submission = await writeClient.fetch<{ name: string; email: string; subject?: string; message: string } | null>(

@@ -37,11 +37,6 @@ function parkInfo(field: string | undefined): ParkInfo {
     : { abbrev: "", short: field || "TBD", location: field || "TBD", geo: "", appleLocation: "" };
 }
 
-/** "ML" / "CN" style abbreviation for compact game-card display. */
-export function getParkAbbrev(field: string | undefined): string {
-  return parkInfo(field).abbrev || (field ? field.slice(0, 2).toUpperCase() : "");
-}
-
 export function slugifyTeamName(name: string): string {
   return name.toLowerCase().replace(/[^a-z0-9]/g, "");
 }

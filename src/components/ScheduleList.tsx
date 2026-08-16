@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Settings2, CalendarDays, X, ChevronDown, Info } from "lucide-react";
+import { Settings2, X, ChevronDown, Info } from "lucide-react";
 import clsx from "clsx";
 import type { Game, TournamentResult } from "@/lib/types";
-import { getParkAbbrev, buildDownloadUrl, slugifyTeamName } from "@/lib/scheduleExport";
+import { buildDownloadUrl, slugifyTeamName } from "@/lib/scheduleExport";
 import { getTodayEastern } from "@/utils/timezone";
 import TournamentCards, { TournamentSheetCards } from "./TournamentCards";
 
@@ -36,26 +36,41 @@ function compactPillClass(active: boolean) {
 }
 const compactPillStyle = { padding: "6px 13px", fontSize: 12.5 };
 
+// Only two statuses get any on-card indicator at all: a final result gets a
+// solid black "FINAL" pill (forfeit/live share this — they're all "the game
+// has a decided result" from a reader's point of view), and a cancelled
+// game gets plain red text next to its score. Everything else (scheduled,
+// postponed) shows nothing — no badge, no label.
 function StatusBadge({ status }: { status: Game["status"] }) {
-  if (status === "cancelled" || status === "postponed") {
-    return (
-      <span className="rounded-full bg-brand/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand">
-        {status === "postponed" ? "Postponed" : "Cancelled"}
-      </span>
-    );
-  }
   if (status === "final" || status === "forfeit" || status === "live") {
     return (
-      <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-600">
-        {status === "live" ? "Live" : "Final"}
+      <span
+        className="rounded-full bg-[#111111] px-2 py-0.5 font-bold uppercase tracking-wide text-white"
+        style={{ fontSize: 10, borderRadius: 100 }}
+      >
+        Final
       </span>
     );
   }
-  return (
-    <span className="rounded-full border border-gray-300 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gray-500">
-      Upcoming
-    </span>
-  );
+  return null;
+}
+
+// "Centennial Park" / "Mintleaf Park" (as stored in Sanity) shown as the
+// short, readable labels requested for game cards.
+function parkDisplayName(field?: string): string {
+  if (field === "Centennial Park") return "C. North";
+  if (field === "Mintleaf Park") return "Mintleaf";
+  return field || "";
+}
+
+// Sort key for "6:30 PM" style time strings — used to order games within a
+// date group by park first, then by kickoff time.
+function timeMinutes(time: string): number {
+  const match = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(time.trim());
+  if (!match) return 0;
+  let hour = Number(match[1]) % 12;
+  if (match[3].toUpperCase() === "PM") hour += 12;
+  return hour * 60 + Number(match[2]);
 }
 
 // Forfeits are shown as a synthesized 1-0 result (forfeiting team = 0)
@@ -76,7 +91,9 @@ function ScheduleGameCard({ game }: { game: Game }) {
   const isTie = showScores && homeScore === awayScore;
   const homeWon = showScores && !isTie && homeScore! > awayScore!;
   const awayWon = showScores && !isTie && awayScore! > homeScore!;
-  const park = getParkAbbrev(game.field);
+  const park = parkDisplayName(game.field);
+  const isScheduled = game.status === "scheduled";
+  const isCancelled = game.status === "cancelled";
 
   function nameClass(won: boolean, lost: boolean) {
     if (won) return "font-bold text-[#111111]";
@@ -93,7 +110,11 @@ function ScheduleGameCard({ game }: { game: Game }) {
     <div className="flex items-stretch gap-3 rounded-xl bg-white px-4 py-3 shadow transition-shadow hover:shadow-md">
       <div className="flex w-14 shrink-0 flex-col items-center justify-center text-center">
         <span className="text-xs font-semibold text-gray-700">{game.time}</span>
-        {park && <span className="font-mono-brand mt-0.5 text-[10px] text-gray-400">{park}</span>}
+        {park && (
+          <span className="mt-0.5 text-brand" style={{ fontSize: 11, fontWeight: 600 }}>
+            {park}
+          </span>
+        )}
       </div>
 
       <div className="min-w-0 flex-1">
@@ -104,11 +125,15 @@ function ScheduleGameCard({ game }: { game: Game }) {
             </span>
             <span className={clsx("truncate text-sm", nameClass(awayWon, homeWon))}>{game.awayTeam.name}</span>
           </span>
-          {showScores && (
+          {showScores ? (
             <span className={clsx("font-mono-brand shrink-0 text-base", scoreClass(awayWon, homeWon))}>
               {awayScore}
             </span>
-          )}
+          ) : isScheduled ? (
+            <span className="font-mono-brand shrink-0 text-base text-gray-300">&ndash;</span>
+          ) : isCancelled ? (
+            <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide text-brand">Cancelled</span>
+          ) : null}
         </div>
         <div className="border-t border-gray-100" />
         <div className="flex items-center justify-between gap-2 py-1">
@@ -118,11 +143,15 @@ function ScheduleGameCard({ game }: { game: Game }) {
             </span>
             <span className={clsx("truncate text-sm", nameClass(homeWon, awayWon))}>{game.homeTeam.name}</span>
           </span>
-          {showScores && (
+          {showScores ? (
             <span className={clsx("font-mono-brand shrink-0 text-base", scoreClass(homeWon, awayWon))}>
               {homeScore}
             </span>
-          )}
+          ) : isScheduled ? (
+            <span className="font-mono-brand shrink-0 text-base text-gray-300">&ndash;</span>
+          ) : isCancelled ? (
+            <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide text-brand">Cancelled</span>
+          ) : null}
         </div>
       </div>
 
@@ -209,11 +238,15 @@ export default function ScheduleList({
   charityResult: TournamentResult | null;
   mcgregorResult: TournamentResult | null;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [team, setTeam] = useState("all");
   const [park, setPark] = useState("all");
   const [month, setMonth] = useState("all");
   const [sheetOpen, setSheetOpen] = useState(false);
   const [tournamentSheetOpen, setTournamentSheetOpen] = useState(false);
+  const [infoSheetOpen, setInfoSheetOpen] = useState(false);
 
   const teamOptions = useMemo(() => {
     const map = new Map<string, string>();
@@ -230,8 +263,32 @@ export default function ScheduleList({
   // (if the season is in progress), and restore whichever team the visitor
   // picked last time, so returning players land back on their own schedule.
   useEffect(() => {
-    const currentMonth = getTodayEastern().slice(5, 7);
-    if (MONTHS.some((m) => m.value === currentMonth)) setMonth(currentMonth);
+    const todayStr = getTodayEastern();
+    const currentYear = Number(todayStr.slice(0, 4));
+    const currentMonth = todayStr.slice(5, 7);
+
+    if (selectedYear === currentYear) {
+      if (MONTHS.some((m) => m.value === currentMonth)) {
+        // May–Sep: mid-season, land on the current month.
+        setMonth(currentMonth);
+      } else if (currentMonth === "10" || currentMonth === "11" || currentMonth === "12") {
+        // Oct–Dec: season's over, land on its last month of results.
+        setMonth("09");
+      } else if (games.length > 0) {
+        // Jan–Apr, and this year's schedule is already loaded: show everything upcoming.
+        setMonth("all");
+      } else {
+        // Jan–Apr, next season not loaded yet: fall back to last year's
+        // closing month instead of showing an empty current-year list.
+        setMonth("09");
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("season", String(currentYear - 1));
+        router.push(`${pathname}?${params.toString()}`);
+      }
+    } else {
+      // Historical season: show the whole thing.
+      setMonth("all");
+    }
 
     const remembered = localStorage.getItem(TEAM_STORAGE_KEY);
     if (remembered && teamOptions.some((t) => t._id === remembered)) setTeam(remembered);
@@ -270,7 +327,13 @@ export default function ScheduleList({
     const groups = Array.from(byDate.entries()).map(([date, gamesOnDate]) => ({
       date,
       isUpcoming: gamesOnDate.some((g) => g.status === "scheduled" || g.status === "live" || g.status === "postponed"),
-      games: gamesOnDate,
+      // Centennial games first (by time), then Mintleaf (by time) — within
+      // this one date, never across dates.
+      games: [...gamesOnDate].sort((a, b) => {
+        const parkRank = (g: Game) => (g.field === "Centennial Park" ? 0 : 1);
+        const rankDiff = parkRank(a) - parkRank(b);
+        return rankDiff !== 0 ? rankDiff : timeMinutes(a.time) - timeMinutes(b.time);
+      }),
     }));
     const upcoming = groups.filter((g) => g.isUpcoming);
     const past = groups.filter((g) => !g.isUpcoming).reverse();
@@ -408,15 +471,15 @@ export default function ScheduleList({
         >
           <span aria-hidden="true">🏆</span>
         </button>
-        {icsUrl && (
-          <a
-            href={icsUrl}
-            aria-label="Download calendar"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border-2 border-brand text-brand"
-          >
-            <CalendarDays size={16} aria-hidden="true" />
-          </a>
-        )}
+        <button
+          type="button"
+          onClick={() => setInfoSheetOpen(true)}
+          aria-label="How to use this page"
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-white text-[#555555]"
+          style={{ border: "1px solid #999999" }}
+        >
+          <Info size={16} aria-hidden="true" />
+        </button>
       </div>
 
       <div className="mt-4">
@@ -439,29 +502,50 @@ export default function ScheduleList({
           <p className="py-8 text-center text-sm text-black/60">No games match these filters.</p>
         ) : (
           <div className="space-y-5">
-            {dateGroups.map((group) => (
-              <div key={group.date}>
-                <div className="mb-2 flex items-center gap-2">
-                  <p className="text-sm font-bold text-black">
-                    {new Date(`${group.date}T00:00:00`).toLocaleDateString("en-CA", {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </p>
-                  {group.isUpcoming && (
-                    <span className="rounded-full bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-                      Upcoming
-                    </span>
+            {dateGroups.map((group, i) => {
+              const isFirstUpcoming = i === 0 && group.isUpcoming;
+              const isFirstPast = !group.isUpcoming && (i === 0 || dateGroups[i - 1].isUpcoming);
+              return (
+                <div key={group.date}>
+                  {isFirstUpcoming && (
+                    <div className="mb-3 flex items-center gap-2">
+                      <span
+                        className="shrink-0 rounded-full px-3 py-1 font-bold uppercase tracking-wide text-white"
+                        style={{ backgroundColor: "#AA1111", borderRadius: 100, fontSize: 11, fontWeight: 700 }}
+                      >
+                        Upcoming
+                      </span>
+                      <div className="h-px flex-1 bg-gray-200" />
+                    </div>
                   )}
+                  {isFirstPast && (
+                    <div className="mb-3 flex items-center gap-2">
+                      <span
+                        className="shrink-0 rounded-full px-3 py-1 font-bold uppercase tracking-wide text-white"
+                        style={{ backgroundColor: "#888888", borderRadius: 100, fontSize: 11, fontWeight: 700 }}
+                      >
+                        Past Results
+                      </span>
+                      <div className="h-px flex-1 bg-gray-200" />
+                    </div>
+                  )}
+                  <div className="mb-2 flex items-center gap-2">
+                    <p className="text-sm font-bold text-black">
+                      {new Date(`${group.date}T00:00:00`).toLocaleDateString("en-CA", {
+                        weekday: "long",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    {group.games.map((game) => (
+                      <ScheduleGameCard key={game._id} game={game} />
+                    ))}
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  {group.games.map((game) => (
-                    <ScheduleGameCard key={game._id} game={game} />
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -625,6 +709,100 @@ export default function ScheduleList({
           style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
         >
           <TournamentSheetCards year={selectedYear} charity={charityResult} mcgregor={mcgregorResult} />
+        </div>
+      </div>
+
+      {/* Mobile info bottom sheet */}
+      <div
+        className={clsx(
+          "fixed inset-0 z-50 bg-black/60 transition-opacity duration-300 md:hidden",
+          infoSheetOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        )}
+        onClick={() => setInfoSheetOpen(false)}
+        aria-hidden="true"
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="How to use this page"
+        className={clsx(
+          "fixed inset-x-0 bottom-0 z-50 flex max-h-[88vh] flex-col rounded-t-2xl bg-white text-black shadow-xl transition-transform duration-300 ease-out md:hidden",
+          infoSheetOpen ? "translate-y-0" : "translate-y-full"
+        )}
+        style={{ visibility: infoSheetOpen ? "visible" : "hidden" }}
+      >
+        <div className="flex shrink-0 justify-center pt-3">
+          <div className="h-1.5 w-10 rounded-full bg-gray-300" />
+        </div>
+        <div className="flex shrink-0 items-center justify-between px-5 pb-2 pt-2">
+          <p className="font-heading text-lg uppercase tracking-[0.01em] text-black">How to use this page</p>
+          <button
+            type="button"
+            onClick={() => setInfoSheetOpen(false)}
+            aria-label="Close"
+            className="rounded-full p-1.5 text-gray-500 transition-colors hover:bg-gray-100"
+          >
+            <X size={20} aria-hidden="true" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto" style={{ padding: "16px 14px 32px" }}>
+          <InfoRow icon="🏆" title="Tournament Schedules & Results">
+            Tap the 🏆 button to view Charity and McGregor tournament schedules and results.
+          </InfoRow>
+          <InfoRow icon="⚙️" title="Filter & Download Your Schedule">
+            Tap ⚙ Filter to:
+            <ul className="mt-1 list-disc space-y-0.5 pl-4">
+              <li>Select your team</li>
+              <li>Filter by park or month</li>
+              <li>Download as CSV or Calendar (.ics) to import into your phone</li>
+            </ul>
+          </InfoRow>
+          <InfoRow icon="📍" title="Field Locations">
+            <ul className="space-y-0.5">
+              <li className="flex items-start gap-1.5">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true" />
+                <span>C. North = Centennial Park North, Markham</span>
+              </li>
+              <li className="flex items-start gap-1.5">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" aria-hidden="true" />
+                <span>Mintleaf = Mintleaf Park, Markham</span>
+              </li>
+            </ul>
+          </InfoRow>
+          <InfoRow icon="📅" title="Reading Scores" last>
+            Red score = winning team &middot; Gray score = losing team &middot; &ndash; = game not yet played
+          </InfoRow>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InfoRow({
+  icon,
+  title,
+  last,
+  children,
+}: {
+  icon: string;
+  title: string;
+  last?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className="flex items-start gap-2.5"
+      style={{ padding: "10px 0", borderBottom: last ? "none" : "1px solid #f0f0f0" }}
+    >
+      <span className="flex shrink-0 items-center justify-center" style={{ width: 32, fontSize: 22 }} aria-hidden="true">
+        {icon}
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="font-bold text-black" style={{ fontSize: 12 }}>
+          {title}
+        </p>
+        <div className="mt-0.5 text-gray-500" style={{ fontSize: 11 }}>
+          {children}
         </div>
       </div>
     </div>

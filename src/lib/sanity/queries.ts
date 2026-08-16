@@ -299,13 +299,13 @@ export const publicGalleryPhotosQuery = groq`*[_type == "galleryPhoto"] | order(
 // --- Tournament results ---
 
 export const allTournamentResultsQuery = groq`*[_type == "tournamentResult"] | order(year desc){
-  _id, year, type, champion, finalist, hasDetailedResults, cancelled, notes
+  _id, year, type, champion, finalist, plannedStart, plannedEnd, hasDetailedResults, cancelled, notes
 }`;
 
 export const latestTournamentYearQuery = groq`*[_type == "tournamentResult" && type == $type] | order(year desc)[0].year`;
 
 export const tournamentResultQuery = groq`*[_type == "tournamentResult" && year == $year && type == $type][0]{
-  _id, year, type, champion, finalist, mvp, mvpTrophy,
+  _id, year, type, champion, finalist, plannedStart, plannedEnd, mvp, mvpTrophy,
   championPhoto, finalistPhoto, mvpPhoto, hasDetailedResults, cancelled, notes
 }`;
 

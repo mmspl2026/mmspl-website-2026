@@ -261,6 +261,8 @@ export interface TournamentResult {
   type: TournamentType;
   champion?: string;
   finalist?: string;
+  plannedStart?: string;
+  plannedEnd?: string;
   mvp?: string;
   mvpTrophy?: string;
   championPhoto?: SanityImageWithAlt;

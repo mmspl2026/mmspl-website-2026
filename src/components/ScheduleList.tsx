@@ -1,13 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { Settings2, CalendarDays, X, ChevronDown } from "lucide-react";
+import { Settings2, CalendarDays, X, ChevronDown, Info } from "lucide-react";
 import clsx from "clsx";
 import type { Game, TournamentResult } from "@/lib/types";
 import { getParkAbbrev, buildDownloadUrl, slugifyTeamName } from "@/lib/scheduleExport";
-import TournamentCards from "./TournamentCards";
+import { getTodayEastern } from "@/utils/timezone";
+import TournamentCards, { TournamentSheetCards } from "./TournamentCards";
 
+const TEAM_STORAGE_KEY = "mmspl-schedule-team";
 const PARKS = ["Centennial Park", "Mintleaf Park"] as const;
 const MONTHS = [
   { value: "05", label: "May" },
@@ -23,6 +25,16 @@ function pillClass(active: boolean) {
     active ? "border-brand bg-brand text-white" : "border-gray-300 bg-white text-gray-600 hover:border-brand/60"
   );
 }
+
+// Desktop filter bar only — compact enough to keep every filter on one row
+// without wrapping. Mobile keeps using pillClass() above, untouched.
+function compactPillClass(active: boolean) {
+  return clsx(
+    "shrink-0 rounded-full border-2 font-semibold transition-all",
+    active ? "border-brand bg-brand text-white" : "border-gray-300 bg-white text-gray-600 hover:border-brand/60"
+  );
+}
+const compactPillStyle = { padding: "6px 13px", fontSize: 12.5 };
 
 function StatusBadge({ status }: { status: Game["status"] }) {
   if (status === "cancelled" || status === "postponed") {
@@ -201,6 +213,7 @@ export default function ScheduleList({
   const [park, setPark] = useState("all");
   const [month, setMonth] = useState("all");
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [tournamentSheetOpen, setTournamentSheetOpen] = useState(false);
 
   const teamOptions = useMemo(() => {
     const map = new Map<string, string>();
@@ -213,6 +226,24 @@ export default function ScheduleList({
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [games]);
 
+  // On first load: default the month filter to the current real-world month
+  // (if the season is in progress), and restore whichever team the visitor
+  // picked last time, so returning players land back on their own schedule.
+  useEffect(() => {
+    const currentMonth = getTodayEastern().slice(5, 7);
+    if (MONTHS.some((m) => m.value === currentMonth)) setMonth(currentMonth);
+
+    const remembered = localStorage.getItem(TEAM_STORAGE_KEY);
+    if (remembered && teamOptions.some((t) => t._id === remembered)) setTeam(remembered);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleTeamChange(newTeam: string) {
+    setTeam(newTeam);
+    if (newTeam === "all") localStorage.removeItem(TEAM_STORAGE_KEY);
+    else localStorage.setItem(TEAM_STORAGE_KEY, newTeam);
+  }
+
   const filtered = useMemo(() => {
     return games.filter((g) => {
       if (team !== "all" && g.homeTeam._id !== team && g.awayTeam._id !== team) return false;
@@ -222,8 +253,32 @@ export default function ScheduleList({
     });
   }, [games, team, park, month]);
 
+  // Upcoming dates first (nearest first), then past results below in
+  // reverse-chronological order (most recent first) — the two runs sit in
+  // one continuous list, not separate sections. `filtered` is already
+  // date-ascending (inherited from the season query's order(date asc, time
+  // asc)), so grouping preserves ascending order within each date, and only
+  // the ORDER OF DATE GROUPS needs reversing for the past run — never the
+  // games within a date, so time-of-day stays chronological either way.
+  const dateGroups = useMemo(() => {
+    const byDate = new Map<string, Game[]>();
+    for (const g of filtered) {
+      const existing = byDate.get(g.date);
+      if (existing) existing.push(g);
+      else byDate.set(g.date, [g]);
+    }
+    const groups = Array.from(byDate.entries()).map(([date, gamesOnDate]) => ({
+      date,
+      isUpcoming: gamesOnDate.some((g) => g.status === "scheduled" || g.status === "live" || g.status === "postponed"),
+      games: gamesOnDate,
+    }));
+    const upcoming = groups.filter((g) => g.isUpcoming);
+    const past = groups.filter((g) => !g.isUpcoming).reverse();
+    return [...upcoming, ...past];
+  }, [filtered]);
+
   function clearFilters() {
-    setTeam("all");
+    handleTeamChange("all");
     setPark("all");
     setMonth("all");
   }
@@ -238,16 +293,16 @@ export default function ScheduleList({
 
   return (
     <div>
-      {/* Desktop filter bar */}
+      {/* Desktop filter bar — always a single row, never wraps, never scrolls */}
       <div className="sticky top-[64px] z-30 hidden rounded-xl border bg-white p-3 text-black shadow md:block">
-        <div className="flex flex-wrap items-center gap-3">
-          <SeasonDropdown seasons={seasons} selected={selectedYear} className="w-40 shrink-0" />
+        <div className="flex flex-nowrap items-center gap-2" style={{ overflow: "visible" }}>
+          <SeasonDropdown seasons={seasons} selected={selectedYear} className="w-[150px] shrink-0" />
 
           <select
             aria-label="Team"
             value={team}
-            onChange={(e) => setTeam(e.target.value)}
-            className="h-9 w-56 shrink-0 rounded-md border-2 border-gray-300 bg-transparent px-3 text-sm font-semibold focus:border-brand focus:outline-none"
+            onChange={(e) => handleTeamChange(e.target.value)}
+            className="h-9 w-[150px] shrink-0 rounded-md border-2 border-gray-300 bg-transparent px-2.5 text-xs font-semibold focus:border-brand focus:outline-none"
           >
             <option value="all">All Teams</option>
             {teamOptions.map((t) => (
@@ -257,34 +312,57 @@ export default function ScheduleList({
             ))}
           </select>
 
-          <div className="flex shrink-0 gap-1.5">
-            <button type="button" onClick={() => setPark("all")} className={pillClass(park === "all")}>
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setPark("all")}
+              style={compactPillStyle}
+              className={compactPillClass(park === "all")}
+            >
               All
             </button>
             {PARKS.map((p) => (
-              <button key={p} type="button" onClick={() => setPark(p)} className={pillClass(park === p)}>
+              <button
+                key={p}
+                type="button"
+                onClick={() => setPark(p)}
+                style={compactPillStyle}
+                className={compactPillClass(park === p)}
+              >
                 {p.replace(" Park", "")}
               </button>
             ))}
           </div>
 
-          <div className="flex shrink-0 gap-1.5">
-            <button type="button" onClick={() => setMonth("all")} className={pillClass(month === "all")}>
+          <div className="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setMonth("all")}
+              style={compactPillStyle}
+              className={compactPillClass(month === "all")}
+            >
               All
             </button>
             {MONTHS.map((m) => (
-              <button key={m.value} type="button" onClick={() => setMonth(m.value)} className={pillClass(month === m.value)}>
+              <button
+                key={m.value}
+                type="button"
+                onClick={() => setMonth(m.value)}
+                style={compactPillStyle}
+                className={compactPillClass(month === m.value)}
+              >
                 {m.label}
               </button>
             ))}
           </div>
 
-          <div className="ml-auto flex shrink-0 items-center gap-2">
-            <span className="whitespace-nowrap text-xs font-semibold text-gray-500">{downloadLabel}</span>
+          <div className="ml-auto flex shrink-0 items-center gap-1.5">
+            <span className="whitespace-nowrap text-[11px] font-medium text-gray-400">Download:</span>
             {csvUrl && (
               <a
                 href={csvUrl}
-                className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-md border-2 border-gray-300 px-3 text-sm font-semibold text-gray-700 transition-colors hover:border-brand hover:text-brand"
+                style={{ padding: "5px 10px", fontSize: 12 }}
+                className="inline-flex items-center gap-1 whitespace-nowrap rounded-md border-2 border-gray-300 font-semibold text-gray-700 transition-colors hover:border-brand hover:text-brand"
               >
                 📊 CSV
               </a>
@@ -292,11 +370,21 @@ export default function ScheduleList({
             {icsUrl && (
               <a
                 href={icsUrl}
-                className="inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-md bg-brand px-3 text-sm font-semibold text-white transition-colors hover:bg-brand-700"
+                style={{ padding: "5px 10px", fontSize: 12 }}
+                className="inline-flex items-center gap-1 whitespace-nowrap rounded-md bg-brand font-semibold text-white transition-colors hover:bg-brand-700"
               >
-                📅 Calendar (.ics)
+                📅 Calendar
               </a>
             )}
+            <span className="group relative inline-flex shrink-0 items-center">
+              <Info size={13} className="cursor-help text-gray-400" aria-hidden="true" />
+              <span
+                role="tooltip"
+                className="pointer-events-none absolute bottom-full right-0 z-10 mb-2 w-60 rounded-md bg-[#111111] px-2.5 py-1.5 text-[12px] font-normal normal-case leading-snug text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100"
+              >
+                Select a team from the dropdown above to download their schedule only. Default downloads the full master schedule.
+              </span>
+            </span>
           </div>
         </div>
       </div>
@@ -311,6 +399,14 @@ export default function ScheduleList({
         >
           <Settings2 size={15} aria-hidden="true" />
           Filter
+        </button>
+        <button
+          type="button"
+          onClick={() => setTournamentSheetOpen(true)}
+          aria-label="Tournaments"
+          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#1a1a1a] text-white"
+        >
+          <span aria-hidden="true">🏆</span>
         </button>
         {icsUrl && (
           <a
@@ -339,12 +435,32 @@ export default function ScheduleList({
       </div>
 
       <div className="mt-4">
-        {filtered.length === 0 ? (
+        {dateGroups.length === 0 ? (
           <p className="py-8 text-center text-sm text-black/60">No games match these filters.</p>
         ) : (
-          <div className="space-y-2">
-            {filtered.map((game) => (
-              <ScheduleGameCard key={game._id} game={game} />
+          <div className="space-y-5">
+            {dateGroups.map((group) => (
+              <div key={group.date}>
+                <div className="mb-2 flex items-center gap-2">
+                  <p className="text-sm font-bold text-black">
+                    {new Date(`${group.date}T00:00:00`).toLocaleDateString("en-CA", {
+                      weekday: "long",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </p>
+                  {group.isUpcoming && (
+                    <span className="rounded-full bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                      Upcoming
+                    </span>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  {group.games.map((game) => (
+                    <ScheduleGameCard key={game._id} game={game} />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -391,7 +507,7 @@ export default function ScheduleList({
           <label className="mb-1 block text-xs font-semibold text-gray-600">Team</label>
           <select
             value={team}
-            onChange={(e) => setTeam(e.target.value)}
+            onChange={(e) => handleTeamChange(e.target.value)}
             className="h-11 w-full rounded-md border-2 border-gray-300 bg-transparent px-3 text-sm font-semibold focus:border-brand focus:outline-none"
           >
             <option value="all">All Teams</option>
@@ -468,6 +584,47 @@ export default function ScheduleList({
           >
             Clear All Filters
           </button>
+        </div>
+      </div>
+
+      {/* Mobile tournaments bottom sheet */}
+      <div
+        className={clsx(
+          "fixed inset-0 z-50 bg-black/60 transition-opacity duration-300 md:hidden",
+          tournamentSheetOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+        )}
+        onClick={() => setTournamentSheetOpen(false)}
+        aria-hidden="true"
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Tournaments"
+        className={clsx(
+          "fixed inset-x-0 bottom-0 z-50 flex max-h-[88vh] flex-col rounded-t-2xl bg-white text-black shadow-xl transition-transform duration-300 ease-out md:hidden",
+          tournamentSheetOpen ? "translate-y-0" : "translate-y-full"
+        )}
+        style={{ visibility: tournamentSheetOpen ? "visible" : "hidden" }}
+      >
+        <div className="flex shrink-0 justify-center pt-3">
+          <div className="h-1.5 w-10 rounded-full bg-gray-300" />
+        </div>
+        <div className="flex shrink-0 items-center justify-between px-5 pb-3 pt-2">
+          <p className="font-heading text-lg uppercase tracking-[0.01em] text-black">{selectedYear} Tournaments</p>
+          <button
+            type="button"
+            onClick={() => setTournamentSheetOpen(false)}
+            aria-label="Close"
+            className="rounded-full p-1.5 text-gray-500 transition-colors hover:bg-gray-100"
+          >
+            <X size={20} aria-hidden="true" />
+          </button>
+        </div>
+        <div
+          className="flex-1 overflow-y-auto px-5"
+          style={{ paddingBottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
+        >
+          <TournamentSheetCards year={selectedYear} charity={charityResult} mcgregor={mcgregorResult} />
         </div>
       </div>
     </div>

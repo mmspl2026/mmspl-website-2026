@@ -20,6 +20,18 @@ export default defineType({
     }),
     defineField({ name: "champion", title: "Champion", type: "string" }),
     defineField({ name: "finalist", title: "Finalist", type: "string" }),
+    defineField({
+      name: "plannedStart",
+      title: "Planned Start Date",
+      type: "date",
+      description: "Expected tournament date, shown on the schedule page while it's still pending (no champion yet).",
+    }),
+    defineField({
+      name: "plannedEnd",
+      title: "Planned End Date",
+      type: "date",
+      description: "Leave blank for a single-day tournament.",
+    }),
     defineField({ name: "mvp", title: "MVP", type: "string" }),
     defineField({
       name: "mvpTrophy",

@@ -48,7 +48,7 @@ function StatusBadge({ status }: { status: Game["status"] }) {
         className="rounded-full bg-[#111111] px-2 py-0.5 font-bold uppercase tracking-wide text-white"
         style={{ fontSize: 10, borderRadius: 100 }}
       >
-        Final
+        {status === "forfeit" ? "Forfeit" : "Final"}
       </span>
     );
   }

@@ -26,6 +26,7 @@ export const gamesBySeasonQuery = groq`*[_type == "game" && season->year == $yea
   status,
   homeScore,
   awayScore,
+  forfeitingTeam,
   homeTeam->{_id, name, shortName, logo, division, color},
   awayTeam->{_id, name, shortName, logo, division, color}
 }`;

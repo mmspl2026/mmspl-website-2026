@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { LEAGUE_STATS } from "@/lib/seed-content";
 import type { PublicGalleryPhoto } from "@/lib/types";
 import AboutGalleryPanel from "@/components/AboutGalleryPanel";
+import StatsSection from "@/components/StatsSection";
 
 const HISTORY_MILESTONES = [
   {
@@ -282,6 +283,13 @@ export default function AboutTabs({
         {tab === "anniversary" && <AnniversaryPanel logo50={logo50} />}
         {tab === "gallery" && <AboutGalleryPanel photos={galleryPhotos} categories={galleryCategories} />}
       </div>
+
+      {/* League stats — shown only as a footer under "Our League", not the other tabs. */}
+      {tab === "league" && (
+        <div className="mt-12">
+          <StatsSection />
+        </div>
+      )}
     </div>
   );
 }

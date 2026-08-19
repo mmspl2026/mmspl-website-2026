@@ -14,6 +14,7 @@ import { urlFor } from "@/lib/sanity/image";
 import StandingsTable from "@/components/StandingsTable";
 import SeasonSelector from "@/components/SeasonSelector";
 import TournamentCards from "@/components/TournamentCards";
+import StandingsMobileBar from "@/components/StandingsMobileBar";
 
 export const metadata: Metadata = { title: "Standings" };
 
@@ -40,6 +41,7 @@ export default async function StandingsPage({
     sanityFetch<TournamentResult[]>(allTournamentResultsQuery, {}, []),
   ]);
   const years = seasons.length > 0 ? seasons.map((s) => s.year) : [CURRENT_YEAR];
+  const seasonOptions = seasons.length > 0 ? seasons.map((s) => ({ year: s.year, isActive: s.isActive })) : [{ year: CURRENT_YEAR, isActive: true }];
 
   const heroImage = settings?.standingsHeroImage || settings?.heroImage;
   const heroImageUrl = heroImage ? urlFor(heroImage).width(1920).height(1080).fit("crop").url() : "/hero.jpg";
@@ -86,7 +88,7 @@ export default async function StandingsPage({
       </div>
 
       <div className="container-page py-10">
-        <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="hidden items-start justify-between gap-4 md:flex">
           <div>
             <h2 className="font-sans text-2xl font-bold normal-case tracking-normal text-black">Select Season</h2>
             <Link href="/schedule" className="mt-1 inline-block text-sm font-semibold text-brand hover:underline">
@@ -97,12 +99,19 @@ export default async function StandingsPage({
         </div>
 
         {!selectedSeason?.cancelled && (
-          <div className="mt-6">
+          <div className="mt-6 hidden md:block">
             <TournamentCards year={selectedYear} charity={charityResult} mcgregor={mcgregorResult} />
           </div>
         )}
 
-        <p className="mt-6 flex items-center gap-1.5 text-sm font-semibold text-gray-600">
+        <StandingsMobileBar
+          seasons={seasonOptions}
+          selectedYear={selectedYear}
+          charityResult={charityResult}
+          mcgregorResult={mcgregorResult}
+        />
+
+        <p className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-gray-600 md:mt-6">
           <Trophy size={22} className="shrink-0 text-brand" aria-hidden="true" /> Regular Season Champion
         </p>
 

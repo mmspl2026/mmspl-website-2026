@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Trophy, CalendarOff } from "lucide-react";
+import { CalendarOff, Trophy } from "lucide-react";
 import { sanityFetch } from "@/lib/sanity/client";
-import { allSeasonsQuery, standingsBySeasonQuery, adminSettingsQuery } from "@/lib/sanity/queries";
-import type { AdminSettings, Season, Standing } from "@/lib/types";
+import {
+  allSeasonsQuery,
+  standingsBySeasonQuery,
+  adminSettingsQuery,
+  allTournamentResultsQuery,
+} from "@/lib/sanity/queries";
+import type { AdminSettings, Season, Standing, TournamentResult } from "@/lib/types";
 import { SEED_STANDINGS } from "@/lib/seed-data";
 import { urlFor } from "@/lib/sanity/image";
 import StandingsTable from "@/components/StandingsTable";
 import SeasonSelector from "@/components/SeasonSelector";
+import TournamentCards from "@/components/TournamentCards";
 
 export const metadata: Metadata = { title: "Standings" };
 
@@ -28,9 +34,10 @@ export default async function StandingsPage({
 }: {
   searchParams: { season?: string };
 }) {
-  const [seasons, settings] = await Promise.all([
+  const [seasons, settings, tournamentResults] = await Promise.all([
     sanityFetch<Season[]>(allSeasonsQuery, {}, []),
     sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
+    sanityFetch<TournamentResult[]>(allTournamentResultsQuery, {}, []),
   ]);
   const years = seasons.length > 0 ? seasons.map((s) => s.year) : [CURRENT_YEAR];
 
@@ -39,6 +46,8 @@ export default async function StandingsPage({
 
   const selectedYear = searchParams.season ? Number(searchParams.season) : years[0];
   const selectedSeason = seasons.find((s) => s.year === selectedYear);
+  const charityResult = tournamentResults.find((r) => r.year === selectedYear && r.type === "charity") || null;
+  const mcgregorResult = tournamentResults.find((r) => r.year === selectedYear && r.type === "mcgregor") || null;
 
   const standings = await sanityFetch<Standing[]>(
     standingsBySeasonQuery,
@@ -77,20 +86,27 @@ export default async function StandingsPage({
       </div>
 
       <div className="container-page py-10">
-        <h2 className="font-sans text-2xl font-bold normal-case tracking-normal text-black">Select Season</h2>
-        <Link href="/schedule" className="mt-1 inline-block text-sm font-semibold text-brand hover:underline">
-          View Schedule &amp; Scores &rarr;
-        </Link>
-
-        <div className="mt-4 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Trophy size={16} className="shrink-0 text-yellow-500" aria-hidden="true" />
-            <span>Regular Season Champion</span>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h2 className="font-sans text-2xl font-bold normal-case tracking-normal text-black">Select Season</h2>
+            <Link href="/schedule" className="mt-1 inline-block text-sm font-semibold text-brand hover:underline">
+              View Schedule &amp; Scores &rarr;
+            </Link>
           </div>
           <SeasonSelector years={years} selected={selectedYear} />
         </div>
 
-        <div className="mt-6">
+        {!selectedSeason?.cancelled && (
+          <div className="mt-6">
+            <TournamentCards year={selectedYear} charity={charityResult} mcgregor={mcgregorResult} />
+          </div>
+        )}
+
+        <p className="mt-6 flex items-center gap-1.5 text-sm font-semibold text-gray-600">
+          <Trophy size={22} className="shrink-0 text-brand" aria-hidden="true" /> Regular Season Champion
+        </p>
+
+        <div className="mt-2">
           {selectedSeason?.cancelled ? (
             <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-gray-300 bg-white px-5 py-16 text-center">
               <CalendarOff size={28} className="text-gray-400" aria-hidden="true" />

@@ -1,4 +1,5 @@
 import { Trophy } from "lucide-react";
+import clsx from "clsx";
 import type { Standing } from "@/lib/types";
 
 export default function StandingsTable({
@@ -70,13 +71,18 @@ export default function StandingsTable({
                       <span className="font-bold text-black">{rank}</span>
                       {seasonComplete && rank === 1 && (
                         <>
-                          <Trophy size={14} className="shrink-0 text-yellow-500" aria-hidden="true" />
+                          <Trophy size={22} className="shrink-0 text-brand" aria-hidden="true" />
                           <span className="sr-only">President&apos;s Trophy &mdash; Regular Season Champion</span>
                         </>
                       )}
                     </div>
                   </td>
-                  <td className="whitespace-nowrap px-1.5 py-2.5 font-mono-brand text-sm font-bold text-black md:px-3 md:py-4">
+                  <td
+                    className={clsx(
+                      "whitespace-nowrap px-1.5 py-2.5 font-mono-brand text-sm font-bold md:px-3 md:py-4",
+                      seasonComplete && rank === 1 ? "text-brand" : "text-black"
+                    )}
+                  >
                     {alwaysFullName ? (
                       row.team.name
                     ) : (

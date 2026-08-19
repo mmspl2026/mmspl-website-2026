@@ -7,18 +7,18 @@ import { TOURNAMENT_LABELS, formatDateRange } from "@/lib/tournamentDisplay";
 // never explicitly marked cancelled in Sanity (that season only played an
 // unofficial, shortened schedule) — force both COVID years to the same
 // "Not held" treatment regardless of what's actually stored.
-function isCovidYear(year: number) {
+export function isCovidYear(year: number) {
   return year === 2020 || year === 2021;
 }
 
-interface CardState {
+export interface CardState {
   notHeld: boolean;
   hasChampion: boolean;
   championText?: string;
   pendingLong?: string;
 }
 
-function getCardState(year: number, result: TournamentResult | null): CardState {
+export function getCardState(year: number, result: TournamentResult | null): CardState {
   if (isCovidYear(year) || result?.cancelled) {
     return { notHeld: true, hasChampion: false };
   }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CalendarOff, Trophy } from "lucide-react";
+import { CalendarOff, Info, Trophy } from "lucide-react";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
   allSeasonsQuery,
@@ -12,7 +12,7 @@ import type { AdminSettings, Season, Standing, TournamentResult } from "@/lib/ty
 import { SEED_STANDINGS } from "@/lib/seed-data";
 import { urlFor } from "@/lib/sanity/image";
 import StandingsTable from "@/components/StandingsTable";
-import SeasonSelector from "@/components/SeasonSelector";
+import SeasonDropdown from "@/components/SeasonDropdown";
 import TournamentCards from "@/components/TournamentCards";
 import StandingsMobileBar from "@/components/StandingsMobileBar";
 
@@ -88,14 +88,28 @@ export default async function StandingsPage({
       </div>
 
       <div className="container-page py-10">
-        <div className="hidden items-start justify-between gap-4 md:flex">
-          <div>
-            <h2 className="font-sans text-2xl font-bold normal-case tracking-normal text-black">Select Season</h2>
-            <Link href="/schedule" className="mt-1 inline-block text-sm font-semibold text-brand hover:underline">
-              View Schedule &amp; Scores &rarr;
-            </Link>
+        <div className="sticky top-[64px] z-30 hidden rounded-xl border bg-white p-3 text-black shadow md:block">
+          <div className="flex flex-nowrap items-center gap-2" style={{ overflow: "visible" }}>
+            <SeasonDropdown seasons={seasonOptions} selected={selectedYear} className="w-[150px] shrink-0" />
+
+            <div className="ml-auto flex shrink-0 items-center gap-2.5">
+              <Link
+                href="/schedule"
+                className="inline-flex items-center gap-1 rounded-md bg-[#1a1a1a] px-3 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-black"
+              >
+                Results &rarr;
+              </Link>
+              <span className="group relative inline-flex shrink-0 items-center">
+                <Info size={13} className="cursor-help text-gray-400" aria-hidden="true" />
+                <span
+                  role="tooltip"
+                  className="pointer-events-none absolute bottom-full right-0 z-10 mb-2 w-64 rounded-md bg-[#111111] px-2.5 py-1.5 text-[12px] font-normal normal-case leading-snug text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100"
+                >
+                  Select a season from the dropdown to view its final standings. Tap Results to see the full game schedule for that season.
+                </span>
+              </span>
+            </div>
           </div>
-          <SeasonSelector years={years} selected={selectedYear} />
         </div>
 
         {!selectedSeason?.cancelled && (

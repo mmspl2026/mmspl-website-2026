@@ -57,7 +57,7 @@ export default async function SchedulePage({
         </div>
         <div className="absolute bottom-0 left-0 px-5 pb-7">
           <h1 className="font-heading uppercase leading-none tracking-[0.01em] text-white text-[clamp(2rem,5vw,3.2rem)]">
-            Game Schedule
+            Game Schedule &amp; Results
           </h1>
           <p className="mt-1.5 text-base text-white/70">2026 Season &mdash; May to September</p>
         </div>

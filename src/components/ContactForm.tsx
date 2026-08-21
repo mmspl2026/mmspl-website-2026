@@ -21,7 +21,7 @@ const SUBJECT_LABELS: Record<string, string> = {
   Other: "Other",
 };
 
-const INITIAL_STATE = { name: "", email: "", subject: "General Inquiry", message: "" };
+const INITIAL_STATE = { name: "", email: "", subject: "General Inquiry", message: "", website: "" };
 
 const CONTROL_CLASS =
   "flex h-9 w-full rounded-md border border-[#e5e5e5] bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-[#737373] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black disabled:cursor-not-allowed disabled:opacity-50 md:text-sm mt-1";
@@ -32,6 +32,9 @@ export default function ContactForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const successRef = useRef<HTMLDivElement>(null);
   const formCardRef = useRef<HTMLDivElement>(null);
+  // Spam guard: when this form was rendered, so the API can reject
+  // submissions that arrive suspiciously fast (bots fill instantly).
+  const loadedAtRef = useRef(Date.now());
 
   // On mobile the form can extend well below the fold — without this, the
   // success message renders in place but the page stays scrolled wherever
@@ -63,7 +66,7 @@ export default function ContactForm() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, loadedAt: loadedAtRef.current }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -93,6 +96,21 @@ export default function ContactForm() {
       ) : (
         <div className="px-6 pb-6 pt-6">
           <form onSubmit={handleSubmit} noValidate className="space-y-4" data-testid="contact-form">
+            {/* Honeypot — invisible to real visitors, irresistible to bots that
+                auto-fill every field they find. Kept off-screen rather than
+                display:none, since some bots skip fields hidden that way. */}
+            <div style={{ position: "absolute", left: "-9999px", top: "-9999px", height: 0, width: 0, overflow: "hidden" }} aria-hidden="true">
+              <label htmlFor="website">Leave this field blank</label>
+              <input
+                id="website"
+                name="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.website}
+                onChange={(e) => update("website", e.target.value)}
+              />
+            </div>
             <div>
               <label htmlFor="name" className="text-sm font-medium leading-none">
                 Your Name *

@@ -1,7 +1,27 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import Script from "next/script";
 import { ChevronDown, Send } from "lucide-react";
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string;
+          callback: (token: string) => void;
+          "error-callback"?: () => void;
+          "expired-callback"?: () => void;
+        }
+      ) => string;
+      reset: (widgetId?: string) => void;
+    };
+  }
+}
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 const SUBJECT_OPTIONS = [
   "General Inquiry",
@@ -35,6 +55,19 @@ export default function ContactForm() {
   // Spam guard: when this form was rendered, so the API can reject
   // submissions that arrive suspiciously fast (bots fill instantly).
   const loadedAtRef = useRef(Date.now());
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetIdRef = useRef<string | undefined>(undefined);
+  const [turnstileToken, setTurnstileToken] = useState("");
+
+  function renderTurnstile() {
+    if (!TURNSTILE_SITE_KEY || !turnstileContainerRef.current || !window.turnstile) return;
+    turnstileWidgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
+      sitekey: TURNSTILE_SITE_KEY,
+      callback: (token) => setTurnstileToken(token),
+      "error-callback": () => setTurnstileToken(""),
+      "expired-callback": () => setTurnstileToken(""),
+    });
+  }
 
   // On mobile the form can extend well below the fold — without this, the
   // success message renders in place but the page stays scrolled wherever
@@ -60,13 +93,17 @@ export default function ContactForm() {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setErrorMessage("Please wait a moment for verification to finish, then try again.");
+      return;
+    }
     setStatus("submitting");
     setErrorMessage("");
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, loadedAt: loadedAtRef.current }),
+        body: JSON.stringify({ ...form, loadedAt: loadedAtRef.current, turnstileToken }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -75,6 +112,9 @@ export default function ContactForm() {
       setStatus("sent");
       setForm(INITIAL_STATE);
     } catch (err) {
+      // The token is single-use — get a fresh one before the visitor retries.
+      window.turnstile?.reset(turnstileWidgetIdRef.current);
+      setTurnstileToken("");
       setStatus("idle");
       setErrorMessage(
         err instanceof Error ? err.message : "Failed to send message. Please try again or email us directly."
@@ -84,6 +124,9 @@ export default function ContactForm() {
 
   return (
     <div ref={formCardRef} className="h-full overflow-hidden rounded-xl border bg-white text-black shadow">
+      {TURNSTILE_SITE_KEY && (
+        <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" strategy="afterInteractive" onLoad={renderTurnstile} />
+      )}
       <div className="bg-gradient-to-r from-black to-gray-900 px-6 py-6 text-white">
         <h2 className="text-2xl font-semibold">Send Us a Message</h2>
         <p className="text-sm text-gray-300">Your message will be sent directly to the league executive</p>
@@ -179,6 +222,8 @@ export default function ContactForm() {
                 className="mt-1 flex min-h-[60px] w-full rounded-md border border-[#e5e5e5] bg-transparent px-3 py-2 text-base shadow-sm transition-colors placeholder:text-[#737373] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-black md:text-sm"
               />
             </div>
+
+            {TURNSTILE_SITE_KEY && <div ref={turnstileContainerRef} className="flex justify-center" />}
 
             {errorMessage && (
               <p role="alert" className="text-sm text-brand">

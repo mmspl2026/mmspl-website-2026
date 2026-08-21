@@ -23,6 +23,33 @@ function isSameOrigin(req: NextRequest): boolean {
   }
 }
 
+// Tier 2: Cloudflare Turnstile. This catches the bots that clear the Tier 1
+// checks above by actually running a real (often headless) browser — that
+// gets them a matching Origin and human-like timing, but Turnstile verifies
+// the browser session itself, which is much harder for automation to fake.
+async function verifyTurnstile(token: string, remoteIp: string | null): Promise<boolean> {
+  const secret = process.env.TURNSTILE_SECRET_KEY;
+  if (!secret) {
+    console.warn("TURNSTILE_SECRET_KEY not set — skipping Turnstile verification.");
+    return true;
+  }
+  if (!token) return false;
+
+  const params = new URLSearchParams({ secret, response: token });
+  if (remoteIp) params.set("remoteip", remoteIp);
+
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: params,
+    });
+    const data = await res.json();
+    return Boolean(data.success);
+  } catch {
+    return false;
+  }
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
   const name = typeof body?.name === "string" ? body.name.trim() : "";
@@ -31,6 +58,7 @@ export async function POST(req: NextRequest) {
   const message = typeof body?.message === "string" ? body.message.trim() : "";
   const honeypot = typeof body?.website === "string" ? body.website.trim() : "";
   const loadedAt = typeof body?.loadedAt === "number" ? body.loadedAt : null;
+  const turnstileToken = typeof body?.turnstileToken === "string" ? body.turnstileToken : "";
 
   // Spam bait fields tripped — pretend it worked so the bot doesn't adapt,
   // but skip sending any email or writing anything to Sanity.
@@ -40,6 +68,14 @@ export async function POST(req: NextRequest) {
       reason: honeypot ? "honeypot" : submittedTooFast ? "too-fast" : "cross-origin",
     });
     return NextResponse.json({ ok: true });
+  }
+
+  const remoteIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip");
+  if (!(await verifyTurnstile(turnstileToken, remoteIp))) {
+    return NextResponse.json(
+      { error: "We couldn't verify your submission. Please refresh the page and try again." },
+      { status: 400 }
+    );
   }
 
   if (!name || !message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {

@@ -9,7 +9,6 @@ import {
   allTournamentResultsQuery,
 } from "@/lib/sanity/queries";
 import type { AdminSettings, Season, Standing, TournamentResult } from "@/lib/types";
-import { SEED_STANDINGS } from "@/lib/seed-data";
 import { urlFor } from "@/lib/sanity/image";
 import StandingsTable from "@/components/StandingsTable";
 import SeasonDropdown from "@/components/SeasonDropdown";
@@ -56,7 +55,7 @@ export default async function StandingsPage({
     { year: selectedYear },
     []
   );
-  const displayStandings = selectedSeason?.cancelled ? [] : standings.length > 0 ? standings : SEED_STANDINGS;
+  const displayStandings = selectedSeason?.cancelled ? [] : standings;
 
   return (
     <div className="min-h-screen bg-gray-50">

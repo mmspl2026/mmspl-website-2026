@@ -32,7 +32,10 @@ export function getCardState(year: number, result: TournamentResult | null): Car
       pendingLong: formatDateRange(result.plannedEnd ? [result.plannedStart, result.plannedEnd] : [result.plannedStart], year),
     };
   }
-  return { notHeld: false, hasChampion: false, pendingLong: "Pending" };
+  // A past season with no result on file is a data gap, not something still
+  // to come — "Pending" would wrongly imply the tournament hasn't happened yet.
+  const isPastSeason = year < new Date().getFullYear();
+  return { notHeld: false, hasChampion: false, pendingLong: isPastSeason ? "Record not available" : "Pending" };
 }
 
 function DesktopCard({ year, type, result }: { year: number; type: TournamentType; result: TournamentResult | null }) {

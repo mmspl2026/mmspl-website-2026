@@ -442,7 +442,11 @@ export default function ScheduleList({
 
       <div className="mt-4">
         {dateGroups.length === 0 ? (
-          <p className="py-8 text-center text-sm text-black/60">No games match these filters.</p>
+          <p className="py-8 text-center text-sm text-black/60">
+            {games.length === 0
+              ? "No game-by-game schedule was tracked for this season — see the season standings instead."
+              : "No games match these filters."}
+          </p>
         ) : (
           <div className="space-y-5">
             {dateGroups.map((group, i) => {

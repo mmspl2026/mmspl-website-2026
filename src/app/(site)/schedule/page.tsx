@@ -4,7 +4,6 @@ import { CalendarOff } from "lucide-react";
 import { sanityFetch } from "@/lib/sanity/client";
 import { allSeasonsQuery, gamesBySeasonQuery, adminSettingsQuery, allTournamentResultsQuery } from "@/lib/sanity/queries";
 import type { AdminSettings, Game, Season, TournamentResult } from "@/lib/types";
-import { SEED_GAMES } from "@/lib/seed-data";
 import { urlFor } from "@/lib/sanity/image";
 import ScheduleList from "@/components/ScheduleList";
 
@@ -31,7 +30,7 @@ export default async function SchedulePage({
   const mcgregorResult = tournamentResults.find((r) => r.year === selectedYear && r.type === "mcgregor") || null;
 
   const games = await sanityFetch<Game[]>(gamesBySeasonQuery, { year: selectedYear }, []);
-  const displayGames = selectedSeason?.cancelled ? [] : games.length > 0 ? games : SEED_GAMES;
+  const displayGames = selectedSeason?.cancelled ? [] : games;
 
   const heroImage = settings?.scheduleHeroImage || settings?.heroImage;
   const heroImageUrl = heroImage ? urlFor(heroImage).width(1920).height(1080).fit("crop").url() : "/hero.jpg";

@@ -11,7 +11,7 @@ import {
   tournamentResultQuery,
 } from "@/lib/sanity/queries";
 import type { AdminSettings, Game, ImportantDate, NewsItem, Season, Standing, TournamentResult } from "@/lib/types";
-import { SEED_GAMES, SEED_NEWS, SEED_STANDINGS } from "@/lib/seed-data";
+import { SEED_NEWS } from "@/lib/seed-data";
 import { IMPORTANT_DATES_2026 } from "@/lib/seed-content";
 import HomeHero from "@/components/HomeHero";
 import NewsCard from "@/components/NewsCard";
@@ -46,17 +46,16 @@ export default async function HomePage() {
     sanityFetch<TournamentResult | null>(tournamentResultQuery, { year: standingsYear, type: "mcgregor" }, null),
   ]);
 
-  const displayGames = games.length > 0 ? games : SEED_GAMES;
   const displayNews = (news.length > 0 ? news : SEED_NEWS).slice(0, 3);
   const displayDates = dates.length > 0 ? dates : SEED_DATES;
-  const displayStandings = (standings.length > 0 ? standings : SEED_STANDINGS).slice(0, 5);
+  const displayStandings = standings.slice(0, 5);
 
   const seasonComplete = Boolean(activeSeason?.regularSeasonEnd && today > activeSeason.regularSeasonEnd);
   const regularSeasonChampion = seasonComplete && standings.length > 0 ? standings[0].team.name : null;
 
   return (
     <>
-      <HomeHero heroImage={settings?.heroImage} games={displayGames} today={today} />
+      <HomeHero heroImage={settings?.heroImage} games={games} today={today} />
 
       <section aria-labelledby="news-heading" className="bg-white py-8 md:py-10">
         <div className="container-page">

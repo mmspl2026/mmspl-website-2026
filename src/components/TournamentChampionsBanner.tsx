@@ -8,30 +8,32 @@ function BannerCard({
   label,
   name,
   subtitle,
-  photo,
+  imageSrc,
+  imageFit = "cover",
   variant,
 }: {
   icon: React.ReactNode;
   label: string;
   name: string;
   subtitle?: string;
-  photo?: TournamentResult["championPhoto"];
+  imageSrc?: string;
+  imageFit?: "cover" | "contain";
   variant: "red" | "dark";
 }) {
   return (
     <div
       className={
-        "w-full max-w-[220px] shrink-0 overflow-hidden rounded-xl border text-white shadow " +
+        "w-full max-w-[300px] shrink-0 overflow-hidden rounded-xl border text-white shadow " +
         (variant === "red" ? "border-brand/40 bg-brand" : "border-white/10 bg-[#0d0d0e]")
       }
     >
-      {photo && (
+      {imageSrc && (
         <div className="relative h-56 w-full">
           <Image
-            src={urlFor(photo).width(440).fit("max").url()}
+            src={imageSrc}
             alt={name}
             fill
-            className="object-cover object-top"
+            className={imageFit === "contain" ? "object-contain p-3" : "object-cover object-top"}
           />
         </div>
       )}
@@ -50,15 +52,62 @@ function BannerCard({
 export default function TournamentChampionsBanner({ result }: { result: TournamentResult }) {
   if (!result.champion && !result.hasDetailedResults) return null;
 
+  // Historical two-flight tournaments (e.g. 2010 McGregor) crowned separate
+  // "A" and "B" champions — shown only here, never on Standings/Schedule,
+  // which keep using champion/finalist alone (the "A" result) as usual.
+  const hasSecondFlight = Boolean(result.secondaryChampion);
+
+  // No individual MVP photo on file for most years — fall back to a photo of
+  // the actual Richard Kirkby Memorial Trophy (McGregor tournament MVP award
+  // since 1998) rather than showing an empty slot. Charity's MVP award is a
+  // different trophy (McClarty), so this fallback is McGregor-only.
+  const usingTrophyFallback = !result.mvpPhoto && result.type === "mcgregor";
+  const mvpImageSrc = result.mvpPhoto
+    ? urlFor(result.mvpPhoto).width(440).fit("max").url()
+    : usingTrophyFallback
+      ? "/richard-kirkby-trophy.jpg"
+      : undefined;
+
   return (
     <div className="flex flex-wrap justify-center gap-4">
       {result.champion && (
         <BannerCard
           icon={<Trophy size={14} aria-hidden="true" />}
-          label="Champions"
+          label={hasSecondFlight ? "A Champions" : "Champions"}
           name={result.champion}
-          photo={result.championPhoto}
+          imageSrc={result.championPhoto ? urlFor(result.championPhoto).width(440).fit("max").url() : undefined}
           variant="red"
+        />
+      )}
+      {result.finalist && (
+        <BannerCard
+          icon={<Medal size={14} aria-hidden="true" />}
+          label={hasSecondFlight ? "A Finalists" : "Finalists"}
+          name={result.finalist}
+          imageSrc={result.finalistPhoto ? urlFor(result.finalistPhoto).width(440).fit("max").url() : undefined}
+          variant="dark"
+        />
+      )}
+      {result.secondaryChampion && (
+        <BannerCard
+          icon={<Trophy size={14} aria-hidden="true" />}
+          label="B Champions"
+          name={result.secondaryChampion}
+          imageSrc={
+            result.secondaryChampionPhoto ? urlFor(result.secondaryChampionPhoto).width(440).fit("max").url() : undefined
+          }
+          variant="red"
+        />
+      )}
+      {result.secondaryFinalist && (
+        <BannerCard
+          icon={<Medal size={14} aria-hidden="true" />}
+          label="B Finalists"
+          name={result.secondaryFinalist}
+          imageSrc={
+            result.secondaryFinalistPhoto ? urlFor(result.secondaryFinalistPhoto).width(440).fit("max").url() : undefined
+          }
+          variant="dark"
         />
       )}
       {result.mvp && (
@@ -67,17 +116,9 @@ export default function TournamentChampionsBanner({ result }: { result: Tourname
           label="MVP"
           name={result.mvp}
           subtitle={result.mvpTrophy}
-          photo={result.mvpPhoto}
-          variant="dark"
-        />
-      )}
-      {result.finalist && (
-        <BannerCard
-          icon={<Medal size={14} aria-hidden="true" />}
-          label="Finalists"
-          name={result.finalist}
-          photo={result.finalistPhoto}
-          variant="dark"
+          imageSrc={mvpImageSrc}
+          imageFit={usingTrophyFallback ? "contain" : "cover"}
+          variant="red"
         />
       )}
     </div>

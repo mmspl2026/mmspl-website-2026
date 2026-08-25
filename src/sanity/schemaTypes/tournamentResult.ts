@@ -58,6 +58,26 @@ export default defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: "secondaryChampion",
+      title: "Secondary Champion (\"B\" Flight)",
+      type: "string",
+      description:
+        'For historical tournaments that crowned two divisional champions (e.g. 2010 McGregor "A"/"B" flights). Champion/Finalist above are shown as "A" on the tournament page when this is set. Leave blank otherwise — shown only on the tournament detail page, never on Standings/Schedule.',
+    }),
+    defineField({ name: "secondaryFinalist", title: "Secondary Finalist (\"B\" Flight)", type: "string" }),
+    defineField({
+      name: "secondaryChampionPhoto",
+      title: "Secondary Champion Photo",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "secondaryFinalistPhoto",
+      title: "Secondary Finalist Photo",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "hasDetailedResults",
       title: "Has Detailed Results",
       type: "boolean",

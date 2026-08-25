@@ -268,6 +268,10 @@ export interface TournamentResult {
   championPhoto?: SanityImageWithAlt;
   finalistPhoto?: SanityImageWithAlt;
   mvpPhoto?: SanityImageWithAlt;
+  secondaryChampion?: string;
+  secondaryFinalist?: string;
+  secondaryChampionPhoto?: SanityImageWithAlt;
+  secondaryFinalistPhoto?: SanityImageWithAlt;
   hasDetailedResults: boolean;
   cancelled?: boolean;
   notes?: string;

@@ -307,7 +307,9 @@ export const latestTournamentYearQuery = groq`*[_type == "tournamentResult" && t
 
 export const tournamentResultQuery = groq`*[_type == "tournamentResult" && year == $year && type == $type][0]{
   _id, year, type, champion, finalist, plannedStart, plannedEnd, mvp, mvpTrophy,
-  championPhoto, finalistPhoto, mvpPhoto, hasDetailedResults, cancelled, notes
+  championPhoto, finalistPhoto, mvpPhoto,
+  secondaryChampion, secondaryFinalist, secondaryChampionPhoto, secondaryFinalistPhoto,
+  hasDetailedResults, cancelled, notes
 }`;
 
 export const tournamentPoolsQuery = groq`*[_type == "tournamentPool" && year == $year && type == $type] | order(poolLetter asc){

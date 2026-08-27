@@ -1,7 +1,27 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
+import Script from "next/script";
 import { ChevronDown, CheckCircle2 } from "lucide-react";
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: HTMLElement,
+        options: {
+          sitekey: string;
+          callback: (token: string) => void;
+          "error-callback"?: () => void;
+          "expired-callback"?: () => void;
+        }
+      ) => string;
+      reset: (widgetId?: string) => void;
+    };
+  }
+}
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 interface FormState {
   firstName: string;
@@ -24,6 +44,7 @@ interface FormState {
   canPitch: string;
   yearsPitched: string;
   pitchingComments: string;
+  website: string;
 }
 
 const INITIAL_STATE: FormState = {
@@ -47,6 +68,7 @@ const INITIAL_STATE: FormState = {
   canPitch: "",
   yearsPitched: "",
   pitchingComments: "",
+  website: "",
 };
 
 const CONTROL_CLASS =
@@ -115,6 +137,22 @@ export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  // Spam guard: when this form was rendered, so the API can reject
+  // submissions that arrive suspiciously fast (bots fill instantly).
+  const loadedAtRef = useRef(Date.now());
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const turnstileWidgetIdRef = useRef<string | undefined>(undefined);
+  const [turnstileToken, setTurnstileToken] = useState("");
+
+  function renderTurnstile() {
+    if (!TURNSTILE_SITE_KEY || !turnstileContainerRef.current || !window.turnstile) return;
+    turnstileWidgetIdRef.current = window.turnstile.render(turnstileContainerRef.current, {
+      sitekey: TURNSTILE_SITE_KEY,
+      callback: (token) => setTurnstileToken(token),
+      "error-callback": () => setTurnstileToken(""),
+      "expired-callback": () => setTurnstileToken(""),
+    });
+  }
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -122,13 +160,17 @@ export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setErrorMessage("Please wait a moment for verification to finish, then try again.");
+      return;
+    }
     setStatus("submitting");
     setErrorMessage("");
     try {
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, loadedAt: loadedAtRef.current, turnstileToken }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -138,6 +180,9 @@ export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
       setForm(INITIAL_STATE);
       onSuccess();
     } catch (err) {
+      // The token is single-use — get a fresh one before the visitor retries.
+      window.turnstile?.reset(turnstileWidgetIdRef.current);
+      setTurnstileToken("");
       setStatus("error");
       setErrorMessage(err instanceof Error ? err.message : "Something went wrong.");
     }
@@ -145,11 +190,29 @@ export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <div className="rounded-xl border bg-white text-black shadow">
+      {TURNSTILE_SITE_KEY && (
+        <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" strategy="afterInteractive" onLoad={renderTurnstile} />
+      )}
       <div className="rounded-t-xl bg-gradient-to-r from-black to-gray-900 px-6 py-6 text-white">
         <h2 className="text-2xl font-semibold">Registration Form</h2>
         <p className="text-gray-300">Please fill out all required fields</p>
       </div>
       <form onSubmit={handleSubmit} noValidate className="space-y-6 px-6 pb-6 pt-6">
+        {/* Honeypot — invisible to real visitors, irresistible to bots that
+            auto-fill every field they find. Kept off-screen rather than
+            display:none, since some bots skip fields hidden that way. */}
+        <div style={{ position: "absolute", left: "-9999px", top: "-9999px", height: 0, width: 0, overflow: "hidden" }} aria-hidden="true">
+          <label htmlFor="website">Leave this field blank</label>
+          <input
+            id="website"
+            name="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={form.website}
+            onChange={(e) => update("website", e.target.value)}
+          />
+        </div>
         <div>
           <h3 className="mb-4 text-xl font-bold text-black">Personal Information</h3>
           <div className="grid gap-4 md:grid-cols-2">
@@ -340,6 +403,8 @@ export default function RegisterForm({ onSuccess }: { onSuccess: () => void }) {
             <TextareaField id="pitchingComments" rows={3} value={form.pitchingComments} onChange={(e) => update("pitchingComments", e.target.value)} />
           </div>
         </div>
+
+        {TURNSTILE_SITE_KEY && <div ref={turnstileContainerRef} className="flex justify-center" />}
 
         {errorMessage && (
           <p role="alert" className="text-sm text-red-600">

@@ -16,6 +16,27 @@ const AFTER_STEPS = [
   { n: "5", title: "Draft", desc: "You will be drafted to a team based on your evaluation." },
 ];
 
+function AfterStepsSection() {
+  return (
+    <div className="overflow-hidden rounded-xl border bg-gradient-to-r from-black to-gray-900 text-white shadow">
+      <div className="px-6 pb-6 pt-6">
+        <h3 className="mb-6 text-2xl font-bold">What Happens After Registration?</h3>
+        <div className="grid gap-6 md:grid-cols-5">
+          {AFTER_STEPS.map((step) => (
+            <div key={step.n}>
+              <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white">
+                {step.n}
+              </div>
+              <h4 className="mb-1 font-semibold text-white">{step.title}</h4>
+              <p className="text-sm text-gray-400">{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function RegisterPageClient({ registrationFee, seasonYear }: { registrationFee: number; seasonYear: number }) {
   const formTopRef = useRef<HTMLDivElement>(null);
   const [success, setSuccess] = useState(false);
@@ -31,23 +52,32 @@ export default function RegisterPageClient({ registrationFee, seasonYear }: { re
 
   if (success) {
     return (
-      <div ref={formTopRef} className="mx-auto max-w-2xl px-5 py-24 text-center">
-        <CheckCircle2 className="mx-auto mb-6 h-16 w-16 text-green-500" aria-hidden="true" />
-        <h2 className="mb-4 text-3xl font-bold text-black">Registration Received!</h2>
-        <p className="mb-2 text-lg text-gray-600">Thank you for registering for the {seasonYear} MMSPL season.</p>
-        <p className="text-gray-500">An executive will contact you shortly to walk you through the next steps.</p>
-        <button
-          type="button"
-          onClick={() => {
-            setSuccess(false);
-            requestAnimationFrame(() => {
-              formTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-            });
-          }}
-          className="mt-8 inline-flex h-9 items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-red-700"
-        >
-          Register Another Player
-        </button>
+      <div ref={formTopRef} className="mx-auto max-w-4xl px-5 py-24">
+        <div className="text-center">
+          <CheckCircle2 className="mx-auto mb-6 h-16 w-16 text-green-500" aria-hidden="true" />
+          <h2 className="mb-4 text-3xl font-bold text-black">Registration Received!</h2>
+          <p className="mb-2 text-lg text-gray-600">Thank you for registering for the {seasonYear} MMSPL season.</p>
+          <p className="text-gray-500">An executive will contact you shortly to walk you through the next steps.</p>
+        </div>
+
+        <div className="mt-12">
+          <AfterStepsSection />
+        </div>
+
+        <div className="text-center">
+          <button
+            type="button"
+            onClick={() => {
+              setSuccess(false);
+              requestAnimationFrame(() => {
+                formTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+              });
+            }}
+            className="mt-8 inline-flex h-9 items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-red-700"
+          >
+            Register Another Player
+          </button>
+        </div>
       </div>
     );
   }
@@ -112,21 +142,8 @@ export default function RegisterPageClient({ registrationFee, seasonYear }: { re
         </div>
       </div>
 
-      <div className="mt-8 overflow-hidden rounded-xl border bg-gradient-to-r from-black to-gray-900 text-white shadow">
-        <div className="px-6 pb-6 pt-6">
-          <h3 className="mb-6 text-2xl font-bold">What Happens After Registration?</h3>
-          <div className="grid gap-6 md:grid-cols-5">
-            {AFTER_STEPS.map((step) => (
-              <div key={step.n}>
-                <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white">
-                  {step.n}
-                </div>
-                <h4 className="mb-1 font-semibold text-white">{step.title}</h4>
-                <p className="text-sm text-gray-400">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="mt-8">
+        <AfterStepsSection />
       </div>
     </div>
   );

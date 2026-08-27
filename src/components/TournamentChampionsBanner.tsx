@@ -28,11 +28,12 @@ function BannerCard({
       }
     >
       {imageSrc && (
-        <div className="relative h-56 w-full">
+        <div className={imageFit === "contain" ? "relative h-56 w-full" : "relative w-full aspect-[310/185]"}>
           <Image
             src={imageSrc}
             alt={name}
             fill
+            sizes="(min-width: 400px) 300px, 90vw"
             className={imageFit === "contain" ? "object-contain p-3" : "object-cover object-top"}
           />
         </div>

@@ -439,6 +439,7 @@ export default function ScheduleList({
           </button>
         )}
       </div>
+      <p className="mt-1 text-xs text-gray-400 md:hidden">Top: Visitor &middot; Bottom: Home</p>
 
       <div className="mt-4">
         {dateGroups.length === 0 ? (

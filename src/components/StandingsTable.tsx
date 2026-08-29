@@ -20,6 +20,10 @@ export default function StandingsTable({
   }
 
   const gamesPlayed = Math.max(...standings.map((s) => s.wins + s.losses + s.ties));
+  // Run differential was only ever tracked for the live/active season via
+  // the admin score-entry flow — historical seasons were bulk-imported
+  // without it, so showing DIFF there would just be a column of "null".
+  const showDiff = year === new Date().getFullYear();
 
   return (
     <div className="mb-8 rounded-xl border bg-white text-black shadow">
@@ -57,6 +61,14 @@ export default function StandingsTable({
               <th scope="col" className="px-1.5 py-2.5 text-center text-sm font-bold text-gray-700 md:px-3 md:py-4">
                 D
               </th>
+              <th scope="col" className="px-1.5 py-2.5 text-center text-sm font-bold text-gray-700 md:px-3 md:py-4">
+                GB
+              </th>
+              {showDiff && (
+                <th scope="col" className="px-1.5 py-2.5 text-center text-sm font-bold text-gray-700 md:px-3 md:py-4">
+                  DIFF
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -64,6 +76,13 @@ export default function StandingsTable({
               const rank = i + 1;
               const gp = row.wins + row.losses + row.ties;
               const points = row.wins * 2 + row.ties;
+              // Games Behind, relative to the league leader (row 0) — the
+              // standard "half the combined win/loss gap" formula, computed
+              // from the wins/losses we already store, no new data needed.
+              const gb = ((standings[0].wins - row.wins) + (row.losses - standings[0].losses)) / 2;
+              const gbLabel = gb <= 0 ? "-" : gb % 1 === 0 ? String(gb) : gb.toFixed(1);
+              const diffLabel =
+                typeof row.runDifferential !== "number" ? "-" : row.runDifferential > 0 ? `+${row.runDifferential}` : String(row.runDifferential);
               return (
                 <tr key={row._id} className="border-b transition-colors hover:bg-gray-50">
                   <td className="px-1.5 py-2.5 font-mono-brand md:px-3 md:py-4">
@@ -110,6 +129,19 @@ export default function StandingsTable({
                   <td className="px-1.5 py-2.5 text-center font-mono-brand font-bold text-orange-600 md:px-3 md:py-4">
                     {row.defaults ?? 0}
                   </td>
+                  <td className="px-1.5 py-2.5 text-center font-mono-brand font-semibold text-gray-700 md:px-3 md:py-4">
+                    {gbLabel}
+                  </td>
+                  {showDiff && (
+                    <td
+                      className={clsx(
+                        "px-1.5 py-2.5 text-center font-mono-brand font-bold md:px-3 md:py-4",
+                        row.runDifferential > 0 ? "text-green-600" : row.runDifferential < 0 ? "text-red-600" : "text-gray-600"
+                      )}
+                    >
+                      {diffLabel}
+                    </td>
+                  )}
                 </tr>
               );
             })}

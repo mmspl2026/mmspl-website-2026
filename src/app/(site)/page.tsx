@@ -89,7 +89,7 @@ export default async function HomePage() {
           </div>
           <p className="mt-1 text-sm italic text-black/50">The quest for the President&apos;s trophy</p>
           <div className="mt-8">
-            <StandingsTable standings={displayStandings} year={standingsYear} alwaysFullName />
+            <StandingsTable standings={displayStandings} year={standingsYear} />
           </div>
         </div>
       </section>

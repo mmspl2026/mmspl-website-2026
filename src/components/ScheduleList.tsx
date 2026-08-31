@@ -212,8 +212,20 @@ export default function ScheduleList({
 
     if (selectedYear === currentYear) {
       if (MONTHS.some((m) => m.value === currentMonth)) {
-        // May–Sep: mid-season, land on the current month.
-        setMonth(currentMonth);
+        // May–Sep: mid-season, land on the current month — but only if it
+        // actually still has an upcoming game. Right at a month boundary
+        // (e.g. the last game of August already played, next one isn't
+        // until September) the current month is a dead end, so roll
+        // forward to the next month that has one instead.
+        const hasUpcoming = (m: string) =>
+          games.some((g) => g.date.slice(5, 7) === m && (g.status === "scheduled" || g.status === "live" || g.status === "postponed"));
+        if (hasUpcoming(currentMonth)) {
+          setMonth(currentMonth);
+        } else {
+          const currentIndex = MONTHS.findIndex((m) => m.value === currentMonth);
+          const nextWithGames = MONTHS.slice(currentIndex + 1).find((m) => hasUpcoming(m.value));
+          setMonth(nextWithGames ? nextWithGames.value : "all");
+        }
       } else if (currentMonth === "10" || currentMonth === "11" || currentMonth === "12") {
         // Oct–Dec: season's over, land on its last month of results.
         setMonth("09");

@@ -1,5 +1,5 @@
 import type { ProjectedBox } from "./tournamentSeeding";
-import type { TournamentGame, TournamentType } from "./types";
+import type { TournamentGame, TournamentRound, TournamentType } from "./types";
 
 interface SlotTemplateEntry {
   date: "thu" | "fri" | "sat";
@@ -11,6 +11,14 @@ interface SlotTemplateEntry {
    * "friendly" games (Box A and B have 3 teams each, so they fill out to a
    * 3-game round robin per team with a cross-box matchup, same as 2010/2011). */
   pool?: string;
+}
+
+interface SundaySlotEntry {
+  time: string;
+  field: string;
+  home: string;
+  away: string;
+  round: TournamentRound;
 }
 
 // Thu-Sat round-robin schedule, transcribed from the league's tournament
@@ -45,6 +53,26 @@ const SLOT_TEMPLATE: SlotTemplateEntry[] = [
   { date: "sat", time: "4:00 PM", field: "Centennial South", home: "C1", away: "C4", pool: "C" },
 ];
 
+// Sunday's bracket, transcribed from the same template spreadsheet. Unlike
+// Thu-Sat, these slots can't be filled with real team names from standings —
+// Wild Card seeding (1-8) and Division Winner seeding (1-4) both depend on
+// the actual round-robin results, not the regular season. So this is a
+// structural preview only: who plays whom is fixed by the bracket, but which
+// real teams land in each slot isn't knowable until Saturday's games finish.
+const SUNDAY_TEMPLATE: SundaySlotEntry[] = [
+  { time: "8:30 AM", field: "Centennial North", home: "Wild Card #1", away: "Wild Card #8", round: "wildCard" },
+  { time: "8:30 AM", field: "Centennial South", home: "Wild Card #2", away: "Wild Card #7", round: "wildCard" },
+  { time: "10:00 AM", field: "Centennial North", home: "Wild Card #4", away: "Wild Card #5", round: "wildCard" },
+  { time: "10:00 AM", field: "Centennial South", home: "Wild Card #3", away: "Wild Card #6", round: "wildCard" },
+  { time: "11:30 AM", field: "Centennial North", home: "Division Winner #1", away: "Wild Card #1 Winner", round: "quarterFinal" },
+  { time: "11:30 AM", field: "Centennial South", home: "Division Winner #2", away: "Wild Card #2 Winner", round: "quarterFinal" },
+  { time: "1:00 PM", field: "Centennial North", home: "Division Winner #3", away: "Wild Card #3 Winner", round: "quarterFinal" },
+  { time: "1:00 PM", field: "Centennial South", home: "Division Winner #4", away: "Wild Card #4 Winner", round: "quarterFinal" },
+  { time: "2:30 PM", field: "Centennial North", home: "Quarter Final #1 Winner", away: "Quarter Final #2 Winner", round: "semiFinal" },
+  { time: "2:30 PM", field: "Centennial South", home: "Quarter Final #3 Winner", away: "Quarter Final #4 Winner", round: "semiFinal" },
+  { time: "4:00 PM", field: "Centennial North", home: "Semi Final #1 Winner", away: "Semi Final #2 Winner", round: "final" },
+];
+
 function addDays(isoDate: string, days: number): string {
   const d = new Date(`${isoDate}T00:00:00Z`);
   d.setUTCDate(d.getUTCDate() + days);
@@ -64,7 +92,12 @@ export function computeProjectedSchedule(
   type: TournamentType,
   plannedStart: string
 ): TournamentGame[] | null {
-  const dates = { thu: plannedStart, fri: addDays(plannedStart, 1), sat: addDays(plannedStart, 2) };
+  const dates = {
+    thu: plannedStart,
+    fri: addDays(plannedStart, 1),
+    sat: addDays(plannedStart, 2),
+    sun: addDays(plannedStart, 3),
+  };
   const seedLookup = new Map<string, string>();
   for (const box of boxes) {
     box.teams.forEach((team, i) => seedLookup.set(`${box.poolLetter}${i + 1}`, team));
@@ -94,6 +127,23 @@ export function computeProjectedSchedule(
     });
   }
 
+  // Sunday's bracket, appended as a structural preview — see SUNDAY_TEMPLATE
+  // for why these can't be resolved to real team names the way Thu-Sat can.
+  SUNDAY_TEMPLATE.forEach((slot, i) => {
+    games.push({
+      _id: `projected-sun-${i}`,
+      year,
+      type,
+      date: dates.sun,
+      time: slot.time,
+      field: slot.field,
+      homeTeam: slot.home,
+      awayTeam: slot.away,
+      round: slot.round,
+      sortOrder: SLOT_TEMPLATE.length + i,
+    });
+  });
+
   // Setup/teardown crews aren't decided this far out — flag that plainly on
   // the first and last game of each day rather than leaving the section
   // blank, so the page still shows the same structure the real schedule
@@ -104,6 +154,13 @@ export function computeProjectedSchedule(
     if (dayGames.length === 0) continue;
     dayGames[0].setupNote = placeholder;
     dayGames[dayGames.length - 1].teardownNote = placeholder;
+  }
+
+  const sundayGames = games.filter((g) => g.date === dates.sun);
+  if (sundayGames.length > 0) {
+    sundayGames[0].setupNote =
+      "Format preview only — these are bracket positions, not projected teams. Wild Card and Division Winner seeding depends on Thursday-Saturday results and won't be known until Saturday's games are complete.";
+    sundayGames[sundayGames.length - 1].teardownNote = placeholder;
   }
 
   return games;

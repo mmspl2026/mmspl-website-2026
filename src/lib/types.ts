@@ -322,6 +322,7 @@ export interface WildCardRanking {
   points?: number;
   wins?: number;
   losses?: number;
+  ties?: number;
   runDifferential?: number;
   advanced: boolean;
 }

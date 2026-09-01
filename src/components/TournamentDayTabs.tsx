@@ -9,9 +9,12 @@ import TournamentGameCard from "./TournamentGameCard";
 
 const RANKINGS_TAB_ID = "__rankings__";
 
-function WildCardRankingsTable({ rankings }: { rankings: WildCardRanking[] }) {
+export function WildCardRankingsTable({ rankings }: { rankings: WildCardRanking[] }) {
   const advancing = rankings.filter((r) => r.advanced);
   const eliminated = rankings.filter((r) => !r.advanced);
+
+  const diffText = (r: WildCardRanking) =>
+    typeof r.runDifferential === "number" ? (r.runDifferential > 0 ? `+${r.runDifferential}` : String(r.runDifferential)) : "–";
 
   const row = (r: WildCardRanking) => (
     <tr key={r._id} className={r.advanced ? "bg-white" : "bg-gray-50"}>
@@ -21,9 +24,8 @@ function WildCardRankingsTable({ rankings }: { rankings: WildCardRanking[] }) {
       <td className="px-4 py-2.5 text-right font-mono-brand text-sm text-gray-700">{r.points ?? "–"}</td>
       <td className="px-4 py-2.5 text-right font-mono-brand text-sm text-gray-700">{r.wins ?? "–"}</td>
       <td className="px-4 py-2.5 text-right font-mono-brand text-sm text-gray-700">{r.losses ?? "–"}</td>
-      <td className="px-4 py-2.5 text-right font-mono-brand text-sm text-gray-700">
-        {typeof r.runDifferential === "number" ? (r.runDifferential > 0 ? `+${r.runDifferential}` : r.runDifferential) : "–"}
-      </td>
+      <td className="px-4 py-2.5 text-right font-mono-brand text-sm text-gray-700">{r.ties ?? "–"}</td>
+      <td className="px-4 py-2.5 text-right font-mono-brand text-sm text-gray-700">{diffText(r)}</td>
       <td className="px-4 py-2.5 text-right">
         {r.advanced ? (
           <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-green-700">
@@ -36,9 +38,66 @@ function WildCardRankingsTable({ rankings }: { rankings: WildCardRanking[] }) {
     </tr>
   );
 
+  // Real grid columns (not a concatenated string) so digits actually line
+  // up row to row, with solid high-contrast text throughout — advance vs.
+  // eliminated reads from row tint + an explicit ADV/OUT tag, not from
+  // fading the text, which was unreadable in bright outdoor light.
+  const GRID_COLS = "grid-cols-[22px_minmax(0,1fr)_20px_26px_50px_32px_34px]";
+
+  const compactRow = (r: WildCardRanking) => (
+    <div
+      key={r._id}
+      className={clsx(
+        "grid items-center gap-x-1.5 px-2.5 py-2",
+        GRID_COLS,
+        r.advanced ? "bg-white" : "bg-red-50"
+      )}
+    >
+      <span className="text-center font-mono-brand text-sm font-bold text-black">{r.rank}</span>
+      <span className="min-w-0 truncate text-sm font-semibold text-black">{r.teamName}</span>
+      <span className="text-center text-xs font-semibold text-gray-600">{r.pool || "–"}</span>
+      <span className="text-right font-mono-brand text-xs font-semibold tabular-nums text-gray-800">{r.points ?? "–"}</span>
+      <span className="text-right font-mono-brand text-xs font-semibold tabular-nums text-gray-800">
+        {r.wins ?? "–"}-{r.losses ?? "–"}-{r.ties ?? 0}
+      </span>
+      <span className="text-right font-mono-brand text-xs font-semibold tabular-nums text-gray-800">{diffText(r)}</span>
+      <span
+        className={clsx(
+          "rounded px-1 py-0.5 text-center text-[9px] font-bold uppercase tracking-wide",
+          r.advanced ? "bg-green-600 text-white" : "bg-red-600 text-white"
+        )}
+      >
+        {r.advanced ? "Adv" : "Out"}
+      </span>
+    </div>
+  );
+
+  const eliminatedDivider = (
+    <div className="border-y border-dashed border-brand/40 bg-brand/5 px-3 py-1.5 text-center text-[10px] font-bold uppercase tracking-wide text-brand">
+      Eliminated
+    </div>
+  );
+
   return (
     <div className="overflow-hidden rounded-xl border shadow-sm">
-      <table className="w-full border-collapse">
+      <div className="md:hidden">
+        <div className={clsx("grid items-center gap-x-1.5 bg-[#0d0d0e] px-2.5 py-2 text-white", GRID_COLS)}>
+          <span className="text-center text-[9px] font-semibold uppercase tracking-wide">#</span>
+          <span className="text-[9px] font-semibold uppercase tracking-wide">Team</span>
+          <span className="text-center text-[9px] font-semibold uppercase tracking-wide">Pl</span>
+          <span className="text-right text-[9px] font-semibold uppercase tracking-wide">Pts</span>
+          <span className="text-right text-[9px] font-semibold uppercase tracking-wide">W-L-T</span>
+          <span className="text-right text-[9px] font-semibold uppercase tracking-wide">Diff</span>
+          <span></span>
+        </div>
+        <div className="divide-y">
+          {advancing.map(compactRow)}
+          {eliminated.length > 0 && eliminatedDivider}
+          {eliminated.map(compactRow)}
+        </div>
+      </div>
+
+      <table className="hidden w-full border-collapse md:table">
         <thead>
           <tr className="bg-[#0d0d0e] text-white">
             <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.1em]">Rank</th>
@@ -47,6 +106,7 @@ function WildCardRankingsTable({ rankings }: { rankings: WildCardRanking[] }) {
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-[0.1em]">Pts</th>
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-[0.1em]">W</th>
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-[0.1em]">L</th>
+            <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-[0.1em]">T</th>
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-[0.1em]">Diff</th>
             <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-[0.1em]"></th>
           </tr>
@@ -55,7 +115,7 @@ function WildCardRankingsTable({ rankings }: { rankings: WildCardRanking[] }) {
           {advancing.map(row)}
           {eliminated.length > 0 && (
             <tr>
-              <td colSpan={8} className="border-y border-dashed border-brand/40 bg-brand/5 px-4 py-1.5 text-center text-[10px] font-bold uppercase tracking-wide text-brand">
+              <td colSpan={9} className="border-y border-dashed border-brand/40 bg-brand/5 px-4 py-1.5 text-center text-[10px] font-bold uppercase tracking-wide text-brand">
                 Eliminated
               </td>
             </tr>

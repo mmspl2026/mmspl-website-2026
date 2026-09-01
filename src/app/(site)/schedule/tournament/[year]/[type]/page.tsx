@@ -28,10 +28,31 @@ import { computeProjectedBoxes } from "@/lib/tournamentSeeding";
 import { computeProjectedSchedule } from "@/lib/projectedSchedule";
 import TournamentChampionsBanner from "@/components/TournamentChampionsBanner";
 import TournamentBracketView from "@/components/TournamentBracketView";
+import { WildCardRankingsTable } from "@/components/TournamentDayTabs";
 
 function isTournamentType(value: string): value is TournamentType {
   return value === "charity" || value === "mcgregor";
 }
+
+// Illustrative only — shows the shape of the real Wild Card Rankings table
+// before any round-robin games exist to rank. The 10 rows mirror McGregor's
+// actual field: each box's #1 seed becomes its Division Winner and skips
+// this table entirely, leaving 2 from Box A, 2 from B, 3 from C, 3 from D to
+// compete for the 8 Wild Card spots. A few rows include ties (2 pts win, 1
+// pt tie, round robin games Thu-Sat can end level) to show how the points
+// column — not just win count — ends up doing the ranking.
+const WC_RANK_EXAMPLE: WildCardRanking[] = [
+  { _id: "ex-1", year: 0, type: "mcgregor", rank: 1, teamName: "Team B2", pool: "B", points: 8, wins: 4, losses: 0, ties: 0, runDifferential: 19, advanced: true },
+  { _id: "ex-2", year: 0, type: "mcgregor", rank: 2, teamName: "Team C2", pool: "C", points: 7, wins: 3, losses: 0, ties: 1, runDifferential: 15, advanced: true },
+  { _id: "ex-3", year: 0, type: "mcgregor", rank: 3, teamName: "Team A2", pool: "A", points: 6, wins: 3, losses: 1, ties: 0, runDifferential: 12, advanced: true },
+  { _id: "ex-4", year: 0, type: "mcgregor", rank: 4, teamName: "Team D2", pool: "D", points: 5, wins: 2, losses: 1, ties: 1, runDifferential: 9, advanced: true },
+  { _id: "ex-5", year: 0, type: "mcgregor", rank: 5, teamName: "Team C3", pool: "C", points: 4, wins: 2, losses: 2, ties: 0, runDifferential: 6, advanced: true },
+  { _id: "ex-6", year: 0, type: "mcgregor", rank: 6, teamName: "Team D3", pool: "D", points: 4, wins: 1, losses: 1, ties: 2, runDifferential: 2, advanced: true },
+  { _id: "ex-7", year: 0, type: "mcgregor", rank: 7, teamName: "Team A3", pool: "A", points: 4, wins: 2, losses: 2, ties: 0, runDifferential: -3, advanced: true },
+  { _id: "ex-8", year: 0, type: "mcgregor", rank: 8, teamName: "Team B3", pool: "B", points: 3, wins: 1, losses: 2, ties: 1, runDifferential: -7, advanced: true },
+  { _id: "ex-9", year: 0, type: "mcgregor", rank: 9, teamName: "Team C4", pool: "C", points: 2, wins: 1, losses: 3, ties: 0, runDifferential: -14, advanced: false },
+  { _id: "ex-10", year: 0, type: "mcgregor", rank: 10, teamName: "Team D4", pool: "D", points: 1, wins: 0, losses: 3, ties: 1, runDifferential: -19, advanced: false },
+];
 
 export async function generateMetadata({ params }: { params: { year: string; type: string } }): Promise<Metadata> {
   if (!isTournamentType(params.type)) return { title: "Tournament" };
@@ -140,14 +161,22 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             interactive
             rankingsPlaceholder={
               projectedGames && (
-                <div className="rounded-lg border border-gray-200 bg-gray-50 px-5 py-6 text-sm text-gray-700">
-                  <p className="font-semibold text-black">Wild Card rankings aren&apos;t available yet.</p>
-                  <p className="mt-2">
-                    Once Thursday through Saturday&apos;s round-robin games are complete, the 4 division (box) winners
-                    advance straight to the Quarter Finals. The other 10 teams are ranked by round-robin record, then
-                    run differential &mdash; only the <strong>top 8</strong> of those advance to Sunday&apos;s Wild
-                    Card round, seeded 1&ndash;8. This tab will show that ranking as real scores come in.
-                  </p>
+                <div className="space-y-4">
+                  <div className="rounded-lg border border-gray-200 bg-gray-50 px-5 py-6 text-sm text-gray-700">
+                    <p className="font-semibold text-black">Wild Card rankings aren&apos;t available yet.</p>
+                    <p className="mt-2">
+                      Once Thursday through Saturday&apos;s round-robin games are complete, the 4 division (box) winners
+                      advance straight to the Quarter Finals. The other 10 teams are ranked by round-robin record, then
+                      run differential &mdash; only the <strong>top 8</strong> of those advance to Sunday&apos;s Wild
+                      Card round, seeded 1&ndash;8. This tab will show that ranking as real scores come in.
+                    </p>
+                  </div>
+                  <div>
+                    <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                      Example &mdash; illustrative teams only
+                    </p>
+                    <WildCardRankingsTable rankings={WC_RANK_EXAMPLE} />
+                  </div>
                 </div>
               )
             }

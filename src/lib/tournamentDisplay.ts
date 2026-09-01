@@ -55,3 +55,20 @@ export function formatDateRange(dates: string[], year: number) {
   }
   return `${fmt(min)} – ${fmt(max)}, ${year}`;
 }
+
+const SHORT_MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec",
+];
+
+// Compact form for tight spaces (e.g. the homepage hero banner) — "Sept
+// 17-20" instead of formatDateRange's "September 17–20, 2026".
+export function formatShortDateRange(dates: string[]) {
+  if (dates.length === 0) return "";
+  const sorted = [...dates].sort();
+  const min = new Date(`${sorted[0]}T00:00:00`);
+  const max = new Date(`${sorted[sorted.length - 1]}T00:00:00`);
+  const fmt = (d: Date) => `${SHORT_MONTHS[d.getMonth()]} ${d.getDate()}`;
+  if (sorted[0] === sorted[sorted.length - 1]) return fmt(min);
+  if (min.getMonth() === max.getMonth()) return `${SHORT_MONTHS[min.getMonth()]} ${min.getDate()}-${max.getDate()}`;
+  return `${fmt(min)} - ${fmt(max)}`;
+}

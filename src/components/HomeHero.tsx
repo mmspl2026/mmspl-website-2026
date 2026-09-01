@@ -1,17 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Trophy, ArrowRight } from "lucide-react";
 import type { Game, SanityImageWithAlt } from "@/lib/types";
 import { urlFor } from "@/lib/sanity/image";
 import GameRail from "./GameRail";
+
+interface TournamentBanner {
+  label: string;
+  dateRange: string;
+  href: string;
+}
 
 export default function HomeHero({
   heroImage,
   games,
   today,
+  tournamentBanner,
 }: {
   heroImage?: SanityImageWithAlt;
   games: Game[];
   today: string;
+  tournamentBanner?: TournamentBanner | null;
 }) {
   const imageUrl = heroImage
     ? urlFor(heroImage).width(2400).height(1350).fit("crop").url()
@@ -72,6 +81,20 @@ export default function HomeHero({
           </h2>
           <GameRail games={games} today={today} />
         </div>
+
+        {tournamentBanner && (
+          <Link
+            href={tournamentBanner.href}
+            className="mx-auto mt-4 flex w-full max-w-md items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-2.5 text-white transition-colors hover:border-brand/60 sm:gap-2.5"
+            style={{ background: "rgba(255,255,255,0.09)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+          >
+            <Trophy size={15} className="shrink-0 text-brand" aria-hidden="true" />
+            <span className="truncate text-xs font-semibold sm:text-sm">
+              {tournamentBanner.label} &middot; {tournamentBanner.dateRange}
+            </span>
+            <ArrowRight size={14} className="shrink-0 text-brand" aria-hidden="true" />
+          </Link>
+        )}
       </div>
     </section>
   );

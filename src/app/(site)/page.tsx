@@ -10,9 +10,10 @@ import {
   standingsBySeasonQuery,
   tournamentResultQuery,
 } from "@/lib/sanity/queries";
-import type { AdminSettings, Game, ImportantDate, NewsItem, Season, Standing, TournamentResult } from "@/lib/types";
+import type { AdminSettings, Game, ImportantDate, NewsItem, Season, Standing, TournamentResult, TournamentType } from "@/lib/types";
 import { SEED_NEWS } from "@/lib/seed-data";
 import { IMPORTANT_DATES_2026 } from "@/lib/seed-content";
+import { TOURNAMENT_LABELS, formatShortDateRange } from "@/lib/tournamentDisplay";
 import HomeHero from "@/components/HomeHero";
 import NewsCard from "@/components/NewsCard";
 import UpcomingDates from "@/components/UpcomingDates";
@@ -53,9 +54,32 @@ export default async function HomePage() {
   const seasonComplete = Boolean(activeSeason?.regularSeasonEnd && today > activeSeason.regularSeasonEnd);
   const regularSeasonChampion = seasonComplete && standings.length > 0 ? standings[0].team.name : null;
 
+  // Whichever tournament hasn't finished yet (upcoming or currently in
+  // progress) gets a banner in the hero — automatically appears/disappears
+  // around its planned dates with no manual toggling needed each year.
+  function isUpcomingOrLive(result: TournamentResult | null): result is TournamentResult {
+    if (!result || result.cancelled || !result.plannedStart) return false;
+    return today <= (result.plannedEnd || result.plannedStart);
+  }
+  const activeTournament: { type: TournamentType; result: TournamentResult } | null = isUpcomingOrLive(mcgregorResult)
+    ? { type: "mcgregor", result: mcgregorResult }
+    : isUpcomingOrLive(charityResult)
+      ? { type: "charity", result: charityResult }
+      : null;
+  const tournamentBanner = activeTournament
+    ? {
+        label: TOURNAMENT_LABELS[activeTournament.type].full,
+        dateRange: formatShortDateRange([
+          activeTournament.result.plannedStart!,
+          activeTournament.result.plannedEnd || activeTournament.result.plannedStart!,
+        ]),
+        href: `/schedule/tournament/${standingsYear}/${activeTournament.type}`,
+      }
+    : null;
+
   return (
     <>
-      <HomeHero heroImage={settings?.heroImage} games={games} today={today} />
+      <HomeHero heroImage={settings?.heroImage} games={games} today={today} tournamentBanner={tournamentBanner} />
 
       <section aria-labelledby="news-heading" className="bg-white py-8 md:py-10">
         <div className="container-page">

@@ -13,6 +13,13 @@ export const TOURNAMENT_LABELS: Record<TournamentType, { short: string; full: st
   },
 };
 
+// Matches the `category` field on awardTrophyPhoto documents exactly (the
+// short name, not the "The ___" display form used in TOURNAMENT_LABELS above).
+export const TOURNAMENT_TROPHY_AWARD_CATEGORY: Record<TournamentType, string> = {
+  charity: "Kevan MacDonald Cup",
+  mcgregor: "Jim McGregor Trophy",
+};
+
 export const ROUND_LABELS: Record<TournamentRound, string> = {
   roundRobin: "Round Robin",
   wildCard: "Wild Card",

@@ -10,6 +10,7 @@ import { getTodayEastern } from "@/utils/timezone";
 import DateNav from "./DateNav";
 import GameEntryCard, { type EditableGame } from "./GameEntryCard";
 import AdminStandingsPanel from "./AdminStandingsPanel";
+import AdminTournamentPanel from "./AdminTournamentPanel";
 import ConfirmDialog from "./ConfirmDialog";
 import ToastStack from "./ToastStack";
 import { useToasts } from "./useToasts";
@@ -60,6 +61,7 @@ interface ConfirmState {
 
 export default function AdminDashboard({ displayName }: { displayName: string }) {
   const todayISO = useMemo(() => getTodayEastern(), []);
+  const [mode, setMode] = useState<"season" | "tournament">("season");
   const [selectedDate, setSelectedDate] = useState(todayISO);
   const [datesWithGames, setDatesWithGames] = useState<string[]>([]);
   const [games, setGames] = useState<EditableGame[]>([]);
@@ -396,64 +398,93 @@ export default function AdminDashboard({ displayName }: { displayName: string })
       </div>
 
       <main className="mx-auto max-w-lg px-4 py-4 pb-24">
-        <DateNav
-          date={selectedDate}
-          onChange={setSelectedDate}
-          onPrev={() => {
-            const d = findPrevDate(selectedDate, datesWithGames);
-            if (d) setSelectedDate(d);
-          }}
-          onNext={() => {
-            const d = findNextDate(selectedDate, datesWithGames);
-            if (d) setSelectedDate(d);
-          }}
-          canPrev={canPrev}
-          canNext={canNext}
-          isToday={selectedDate === todayISO}
-        />
-        {loadingInitial || loadingGames ? (
-          <p className="py-16 text-center text-gray-500">Loading games…</p>
-        ) : errorMessage ? (
-          <p className="py-16 text-center text-red-400">{errorMessage}</p>
-        ) : games.length === 0 ? (
-          <div className="py-16 text-center">
-            <p className="mb-2 text-lg text-gray-600">No games scheduled</p>
-            <p className="text-sm text-gray-700">Use the arrows to navigate to a game day</p>
-          </div>
+        <div className="mb-4 flex gap-2">
+          <button
+            type="button"
+            onClick={() => setMode("season")}
+            className={clsx(
+              "flex-1 rounded-lg border-2 py-2 text-xs font-bold uppercase tracking-wide transition-all",
+              mode === "season" ? "border-brand bg-brand text-white" : "border-gray-800 bg-gray-900 text-gray-400"
+            )}
+          >
+            Season
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("tournament")}
+            className={clsx(
+              "flex-1 rounded-lg border-2 py-2 text-xs font-bold uppercase tracking-wide transition-all",
+              mode === "tournament" ? "border-brand bg-brand text-white" : "border-gray-800 bg-gray-900 text-gray-400"
+            )}
+          >
+            Tournament
+          </button>
+        </div>
+
+        {mode === "tournament" ? (
+          <AdminTournamentPanel />
         ) : (
           <>
-            <p className="mb-4 text-center text-xs text-gray-500">
-              {games.length} game{games.length === 1 ? "" : "s"} &mdash; tap +/&minus; to update scores, then Save
-            </p>
+            <DateNav
+              date={selectedDate}
+              onChange={setSelectedDate}
+              onPrev={() => {
+                const d = findPrevDate(selectedDate, datesWithGames);
+                if (d) setSelectedDate(d);
+              }}
+              onNext={() => {
+                const d = findNextDate(selectedDate, datesWithGames);
+                if (d) setSelectedDate(d);
+              }}
+              canPrev={canPrev}
+              canNext={canNext}
+              isToday={selectedDate === todayISO}
+            />
+            {loadingInitial || loadingGames ? (
+              <p className="py-16 text-center text-gray-500">Loading games…</p>
+            ) : errorMessage ? (
+              <p className="py-16 text-center text-red-400">{errorMessage}</p>
+            ) : games.length === 0 ? (
+              <div className="py-16 text-center">
+                <p className="mb-2 text-lg text-gray-600">No games scheduled</p>
+                <p className="text-sm text-gray-700">Use the arrows to navigate to a game day</p>
+              </div>
+            ) : (
+              <>
+                <p className="mb-4 text-center text-xs text-gray-500">
+                  {games.length} game{games.length === 1 ? "" : "s"} &mdash; tap +/&minus; to update scores, then Save
+                </p>
 
-            <div className="mb-4 flex justify-end">
-              <button
-                type="button"
-                onClick={() => openCancelConfirm(remainingGameIds)}
-                disabled={remainingGameIds.length === 0}
-                className="rounded-lg border border-amber-900 px-2 py-1 text-xs font-bold text-amber-400 transition-all hover:bg-amber-900/40 disabled:opacity-30"
-              >
-                Mark All Remaining as Cancelled
-              </button>
+                <div className="mb-4 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => openCancelConfirm(remainingGameIds)}
+                    disabled={remainingGameIds.length === 0}
+                    className="rounded-lg border border-amber-900 px-2 py-1 text-xs font-bold text-amber-400 transition-all hover:bg-amber-900/40 disabled:opacity-30"
+                  >
+                    Mark All Remaining as Cancelled
+                  </button>
+                </div>
+
+                {games.map((game) => (
+                  <GameEntryCard
+                    key={game._id}
+                    game={game}
+                    onScoreChange={(team, value) => handleScoreChange(game._id, team, value)}
+                    onStatusChange={(status) => handleStatusChange(game._id, status)}
+                    onForfeitingTeamChange={(team) => handleForfeitingTeamChange(game._id, team)}
+                    onSave={() => handleSave(game._id)}
+                    onRequestCancel={() => openCancelConfirm([game._id])}
+                  />
+                ))}
+              </>
+            )}
+
+            <div className="mt-8">
+              <AdminStandingsPanel standings={standings} />
             </div>
-
-            {games.map((game) => (
-              <GameEntryCard
-                key={game._id}
-                game={game}
-                onScoreChange={(team, value) => handleScoreChange(game._id, team, value)}
-                onStatusChange={(status) => handleStatusChange(game._id, status)}
-                onForfeitingTeamChange={(team) => handleForfeitingTeamChange(game._id, team)}
-                onSave={() => handleSave(game._id)}
-                onRequestCancel={() => openCancelConfirm([game._id])}
-              />
-            ))}
           </>
         )}
-
-        <div className="mt-8">
-          <AdminStandingsPanel standings={standings} />
-        </div>
       </main>
 
       <ConfirmDialog

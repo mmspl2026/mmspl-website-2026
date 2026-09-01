@@ -298,6 +298,10 @@ export interface TournamentGame {
   field?: string;
   homeTeam?: string;
   awayTeam?: string;
+  /** Seed-slot code within the pool, e.g. "A1" — only ever set on the live
+   * seeding projection, since real Sanity game records don't track this. */
+  homeSeed?: string;
+  awaySeed?: string;
   homeScore?: number;
   awayScore?: number;
   round: TournamentRound;

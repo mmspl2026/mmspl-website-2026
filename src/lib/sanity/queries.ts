@@ -78,6 +78,10 @@ export const allAwardTrophyPhotosQuery = groq`*[_type == "awardTrophyPhoto"]{
   _id, category, photo, description, namedAfter
 }`;
 
+export const awardTrophyPhotoByCategoryQuery = groq`*[_type == "awardTrophyPhoto" && category == $category][0]{
+  _id, category, photo, description, namedAfter
+}`;
+
 export const upcomingImportantDatesQuery = groq`*[_type == "importantDate" && date >= $today] | order(date asc){
   _id, label, date, endDate, description, category
 }`;

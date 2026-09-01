@@ -71,7 +71,7 @@ function gamesForDay(games: TournamentGame[], day: string) {
   return games.filter((g) => g.date === day).sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 
-function DayGamesList({ dayGames }: { dayGames: TournamentGame[] }) {
+function DayGamesList({ dayGames, selectedTeam }: { dayGames: TournamentGame[]; selectedTeam: string | null }) {
   const setupNote = dayGames.find((g) => g.setupNote)?.setupNote;
   const teardownNote = [...dayGames].reverse().find((g) => g.teardownNote)?.teardownNote;
 
@@ -83,7 +83,7 @@ function DayGamesList({ dayGames }: { dayGames: TournamentGame[] }) {
         </p>
       )}
       {dayGames.map((game) => (
-        <TournamentGameCard key={game._id} game={game} />
+        <TournamentGameCard key={game._id} game={game} selectedTeam={selectedTeam} />
       ))}
       {teardownNote && (
         <p className="rounded-md bg-gray-100 px-3 py-2 text-xs text-gray-500">
@@ -105,14 +105,26 @@ export default function TournamentDayTabs({
   games,
   wcRankings,
   interactive,
+  selectedTeam = null,
+  rankingsPlaceholder,
 }: {
   games: TournamentGame[];
   wcRankings: WildCardRanking[];
   interactive: boolean;
+  /** Owned by the parent bracket view and shared with the pool/box seeding
+   * above it — clicking a team there highlights all of their games here,
+   * regardless of which day tab is active. */
+  selectedTeam?: string | null;
+  /** Shown in the Rankings tab in place of the real table when there are no
+   * wcRankings yet (e.g. the projected schedule, before any round-robin
+   * games have been played) — keeps the tab present instead of hiding it. */
+  rankingsPlaceholder?: React.ReactNode;
 }) {
   const days = useMemo(() => Array.from(new Set(games.map((g) => g.date))).sort(), [games]);
   const [activeDay, setActiveDay] = useState<string>(days[0] ?? RANKINGS_TAB_ID);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const showRankingsTab = wcRankings.length > 0 || Boolean(rankingsPlaceholder);
+  const rankingsContent = wcRankings.length > 0 ? <WildCardRankingsTable rankings={wcRankings} /> : rankingsPlaceholder;
 
   function scrollTabs(direction: -1 | 1) {
     scrollerRef.current?.scrollBy({ left: direction * 240, behavior: "smooth" });
@@ -128,15 +140,15 @@ export default function TournamentDayTabs({
             <h3 className="mb-4 rounded-md bg-[#0d0d0e] px-4 py-2 font-heading text-sm uppercase tracking-[0.08em] text-white">
               {formatDayTabLabel(day)}
             </h3>
-            <DayGamesList dayGames={gamesForDay(games, day)} />
+            <DayGamesList dayGames={gamesForDay(games, day)} selectedTeam={selectedTeam} />
           </div>
         ))}
-        {wcRankings.length > 0 && (
+        {showRankingsTab && (
           <div>
             <h3 className="mb-4 rounded-md bg-[#0d0d0e] px-4 py-2 font-heading text-sm uppercase tracking-[0.08em] text-white">
               Wild Card Rankings
             </h3>
-            <WildCardRankingsTable rankings={wcRankings} />
+            {rankingsContent}
           </div>
         )}
       </div>
@@ -176,7 +188,7 @@ export default function TournamentDayTabs({
               {formatDayTabLabel(day)}
             </button>
           ))}
-          {wcRankings.length > 0 && (
+          {showRankingsTab && (
             <button
               type="button"
               role="tab"
@@ -187,7 +199,7 @@ export default function TournamentDayTabs({
                 activeDay === RANKINGS_TAB_ID ? "bg-brand text-white" : "border border-gray-300 bg-white text-black hover:border-gray-400"
               )}
             >
-              Rankings
+              WC Rank
             </button>
           )}
         </div>
@@ -203,7 +215,7 @@ export default function TournamentDayTabs({
       </div>
 
       <div className="mt-6">
-        {activeDay === RANKINGS_TAB_ID ? <WildCardRankingsTable rankings={wcRankings} /> : <DayGamesList dayGames={dayGames} />}
+        {activeDay === RANKINGS_TAB_ID ? rankingsContent : <DayGamesList dayGames={dayGames} selectedTeam={selectedTeam} />}
       </div>
     </div>
   );

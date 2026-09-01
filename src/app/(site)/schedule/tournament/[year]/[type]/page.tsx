@@ -9,13 +9,25 @@ import {
   tournamentPoolsQuery,
   tournamentGamesQuery,
   wildCardRankingsQuery,
+  standingsBySeasonQuery,
+  awardTrophyPhotoByCategoryQuery,
 } from "@/lib/sanity/queries";
-import type { AdminSettings, TournamentResult, TournamentPool, TournamentGame, WildCardRanking, TournamentType } from "@/lib/types";
+import type {
+  AdminSettings,
+  TournamentResult,
+  TournamentPool,
+  TournamentGame,
+  WildCardRanking,
+  TournamentType,
+  Standing,
+  AwardTrophyPhoto,
+} from "@/lib/types";
 import { urlFor } from "@/lib/sanity/image";
-import { TOURNAMENT_LABELS, formatDateRange } from "@/lib/tournamentDisplay";
+import { TOURNAMENT_LABELS, TOURNAMENT_TROPHY_AWARD_CATEGORY, formatDateRange } from "@/lib/tournamentDisplay";
+import { computeProjectedBoxes } from "@/lib/tournamentSeeding";
+import { computeProjectedSchedule } from "@/lib/projectedSchedule";
 import TournamentChampionsBanner from "@/components/TournamentChampionsBanner";
-import TournamentPoolSeeding from "@/components/TournamentPoolSeeding";
-import TournamentDayTabs from "@/components/TournamentDayTabs";
+import TournamentBracketView from "@/components/TournamentBracketView";
 
 function isTournamentType(value: string): value is TournamentType {
   return value === "charity" || value === "mcgregor";
@@ -33,12 +45,18 @@ export default async function TournamentDetailPage({ params }: { params: { year:
   const year = Number(params.year);
   if (!Number.isInteger(year)) notFound();
 
-  const [result, pools, games, wcRankings, settings] = await Promise.all([
+  const [result, pools, games, wcRankings, settings, standings, trophyPhoto] = await Promise.all([
     sanityFetch<TournamentResult | null>(tournamentResultQuery, { year, type }, null),
     sanityFetch<TournamentPool[]>(tournamentPoolsQuery, { year, type }, []),
     sanityFetch<TournamentGame[]>(tournamentGamesQuery, { year, type }, []),
     sanityFetch<WildCardRanking[]>(wildCardRankingsQuery, { year, type }, []),
     sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
+    sanityFetch<Standing[]>(standingsBySeasonQuery, { year }, []),
+    sanityFetch<AwardTrophyPhoto | null>(
+      awardTrophyPhotoByCategoryQuery,
+      { category: TOURNAMENT_TROPHY_AWARD_CATEGORY[type] },
+      null
+    ),
   ]);
 
   if (!result) notFound();
@@ -46,8 +64,26 @@ export default async function TournamentDetailPage({ params }: { params: { year:
   const label = TOURNAMENT_LABELS[type];
   const heroImage = settings?.scheduleHeroImage || settings?.heroImage;
   const heroImageUrl = heroImage ? urlFor(heroImage).width(1920).height(1080).fit("crop").url() : "/hero.jpg";
-  const dateRange = formatDateRange(games.map((g) => g.date), year);
+  // Before any real games are entered, fall back to the tournament's planned
+  // dates so the hero doesn't just show the bare year.
+  const dateRange =
+    games.length > 0
+      ? formatDateRange(games.map((g) => g.date), year)
+      : formatDateRange(result.plannedStart ? [result.plannedStart, result.plannedEnd || result.plannedStart] : [], year);
   const isCurrentSeason = year === new Date().getFullYear();
+  // Before the real boxes are set (no pools entered yet) for the tournament
+  // that's about to happen this season, show a live "if the season ended
+  // today" projection instead of a plain "not available" message.
+  const projectedBoxes =
+    !result.hasDetailedResults && isCurrentSeason && pools.length === 0 ? computeProjectedBoxes(standings) : null;
+  // The Thu-Sat slot template is specific to the McGregor tournament's
+  // format (Charity uses a different pool layout entirely), and needs a
+  // planned start date to anchor the three real calendar dates to.
+  const trophyPhotoUrl = trophyPhoto ? urlFor(trophyPhoto.photo).width(300).fit("max").url() : undefined;
+  const projectedGames =
+    projectedBoxes && type === "mcgregor" && result.plannedStart
+      ? computeProjectedSchedule(projectedBoxes, year, type, result.plannedStart)
+      : null;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -92,10 +128,30 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             </p>
           </div>
         ) : result.hasDetailedResults ? (
-          <>
-            <TournamentPoolSeeding pools={pools} />
-            <TournamentDayTabs games={games} wcRankings={wcRankings} interactive={isCurrentSeason} />
-          </>
+          <TournamentBracketView pools={pools} games={games} wcRankings={wcRankings} interactive={isCurrentSeason} />
+        ) : projectedBoxes ? (
+          <TournamentBracketView
+            projectedBoxes={projectedBoxes}
+            includesProjectedSchedule={Boolean(projectedGames)}
+            trophyPhotoUrl={trophyPhotoUrl}
+            trophyAlt={trophyPhoto?.photo.alt}
+            games={projectedGames ?? []}
+            wcRankings={[]}
+            interactive
+            rankingsPlaceholder={
+              projectedGames && (
+                <div className="rounded-lg border border-gray-200 bg-gray-50 px-5 py-6 text-sm text-gray-700">
+                  <p className="font-semibold text-black">Wild Card rankings aren&apos;t available yet.</p>
+                  <p className="mt-2">
+                    Once Thursday through Saturday&apos;s round-robin games are complete, the 4 division (box) winners
+                    advance straight to the Quarter Finals. The other 10 teams are ranked by round-robin record, then
+                    run differential &mdash; only the <strong>top 8</strong> of those advance to Sunday&apos;s Wild
+                    Card round, seeded 1&ndash;8. This tab will show that ranking as real scores come in.
+                  </p>
+                </div>
+              )
+            }
+          />
         ) : (
           <div className="rounded-lg border border-gray-200 bg-gray-100 px-5 py-4 text-center text-sm text-gray-500">
             Detailed game results not available for this year.

@@ -1,6 +1,20 @@
+"use client";
+
+import clsx from "clsx";
 import type { TournamentPool } from "@/lib/types";
 
-export default function TournamentPoolSeeding({ pools }: { pools: TournamentPool[] }) {
+export default function TournamentPoolSeeding({
+  pools,
+  selectedTeam = null,
+  onTeamClick,
+}: {
+  pools: TournamentPool[];
+  /** Clicking a team here highlights all of their games in the schedule
+   * below — the click originates from the pool listing, matching the old
+   * site's behaviour (not from inside individual game cards). */
+  selectedTeam?: string | null;
+  onTeamClick?: (name: string) => void;
+}) {
   if (pools.length === 0) return null;
 
   return (
@@ -11,12 +25,33 @@ export default function TournamentPoolSeeding({ pools }: { pools: TournamentPool
             <p className="font-heading text-sm uppercase tracking-[0.08em] text-white">Pool {pool.poolLetter}</p>
           </div>
           <ol className="divide-y bg-white">
-            {pool.teams.map((team, i) => (
-              <li key={team} className="flex items-center gap-3 px-4 py-2">
-                <span className="font-mono-brand text-xs text-gray-400">{i + 1}</span>
-                <span className="text-sm text-black">{team}</span>
-              </li>
-            ))}
+            {pool.teams.map((team, i) => {
+              const isSelected = team === selectedTeam;
+              return (
+                <li
+                  key={team}
+                  className={clsx("flex items-center gap-3 px-4 py-2", isSelected && "bg-brand")}
+                >
+                  <span className={clsx("font-mono-brand text-xs", isSelected ? "text-white/70" : "text-gray-400")}>
+                    {i + 1}
+                  </span>
+                  {onTeamClick ? (
+                    <button
+                      type="button"
+                      onClick={() => onTeamClick(team)}
+                      className={clsx(
+                        "truncate text-left text-sm hover:underline",
+                        isSelected ? "font-bold text-white" : "text-black"
+                      )}
+                    >
+                      {team}
+                    </button>
+                  ) : (
+                    <span className="text-sm text-black">{team}</span>
+                  )}
+                </li>
+              );
+            })}
           </ol>
         </div>
       ))}

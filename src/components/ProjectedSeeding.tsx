@@ -76,7 +76,14 @@ export default function ProjectedSeeding({
     </div>
   );
 
-  const [leftBoxes, rightBoxes] = [boxes.slice(0, 2), boxes.slice(2)];
+  // Pair A (3 teams) with C (4 teams) on the left, B (3 teams) with D (4
+  // teams) on the right — each side gets one 3-team and one 4-team box, so
+  // the two columns come out the same height instead of A+B (6 rows) vs.
+  // C+D (8 rows) looking lopsided next to the trophy.
+  const [leftBoxes, rightBoxes] = [
+    [boxes[0], boxes[2]],
+    [boxes[1], boxes[3]],
+  ];
 
   return (
     <div>
@@ -91,7 +98,7 @@ export default function ProjectedSeeding({
         </div>
       </div>
 
-      {/* md and up: Pool A/B flank the trophy on the left, C/D on the
+      {/* md and up: Pool A+C flank the trophy on the left, B+D on the
           right, closing the dead space that used to sit beside the trophy
           when it was centered alone in the full-width row. */}
       <div className="hidden md:block">

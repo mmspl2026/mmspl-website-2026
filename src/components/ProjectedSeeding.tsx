@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Info } from "lucide-react";
+import Link from "next/link";
+import { Info, Dices } from "lucide-react";
 import clsx from "clsx";
 import type { ProjectedBox } from "@/lib/tournamentSeeding";
 
@@ -31,6 +32,16 @@ export default function ProjectedSeeding({
         would look like if the season ended right now, and will change as more games are played.
       </p>
     </div>
+  );
+
+  const simulateLink = (
+    <Link
+      href="/schedule/tournament/simulate"
+      className="flex items-center justify-center gap-1.5 text-xs font-semibold text-brand hover:underline"
+    >
+      <Dices size={14} aria-hidden="true" />
+      Curious how it plays out? Simulate the whole tournament &rarr;
+    </Link>
   );
 
   const trophy = trophyPhotoUrl && (
@@ -96,6 +107,7 @@ export default function ProjectedSeeding({
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {boxes.map(renderBox)}
         </div>
+        <div className="mt-4">{simulateLink}</div>
       </div>
 
       {/* md and up: Pool A+C flank the trophy on the left, B+D on the
@@ -108,6 +120,7 @@ export default function ProjectedSeeding({
           {trophy}
           <div className="flex flex-col gap-4">{rightBoxes.map(renderBox)}</div>
         </div>
+        <div className="mt-4">{simulateLink}</div>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import type { ProjectedBox } from "./tournamentSeeding";
 import type { TournamentGame, TournamentRound, TournamentType } from "./types";
 
-interface SlotTemplateEntry {
+export interface SlotTemplateEntry {
   date: "thu" | "fri" | "sat";
   time: string;
   field: string;
@@ -26,7 +26,7 @@ interface SundaySlotEntry {
 // get filled in from live-projected box seeding). Sunday's Wild Card/QF/SF/
 // Final bracket depends on actual Thu-Sat results, so it isn't projectable
 // the same way and is intentionally left out.
-const SLOT_TEMPLATE: SlotTemplateEntry[] = [
+export const SLOT_TEMPLATE: SlotTemplateEntry[] = [
   // Thursday (weekday — evening, always PM)
   { date: "thu", time: "6:30 PM", field: "Centennial North", home: "A1", away: "A3", pool: "A" },
   { date: "thu", time: "6:30 PM", field: "Mintleaf", home: "D3", away: "D4", pool: "D" },

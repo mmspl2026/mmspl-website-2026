@@ -165,10 +165,15 @@ export default async function TournamentDetailPage({ params }: { params: { year:
                   <div className="rounded-lg border border-gray-200 bg-gray-50 px-5 py-6 text-sm text-gray-700">
                     <p className="font-semibold text-black">Wild Card rankings aren&apos;t available yet.</p>
                     <p className="mt-2">
-                      Once Thursday through Saturday&apos;s round-robin games are complete, the 4 division (box) winners
-                      advance straight to the Quarter Finals. The other 10 teams are ranked by round-robin record, then
-                      run differential &mdash; only the <strong>top 8</strong> of those advance to Sunday&apos;s Wild
-                      Card round, seeded 1&ndash;8. This tab will show that ranking as real scores come in.
+                      Once Thursday through Saturday&apos;s round-robin games are complete, the 4 Division Winners
+                      (best record within their own box) get a bye straight to the Quarter Finals &mdash; their
+                      opponent is set by a draw once Phase 2 finishes. The other 10 teams are ranked 1&ndash;8 by
+                      their overall Phase 1 record; only the <strong>top 8</strong> advance to Sunday&apos;s Wild
+                      Card round, matched 1v8, 2v7, 3v6, 4v5.
+                    </p>
+                    <p className="mt-2">
+                      Ties are broken in this order: W-L record, run differential, runs scored, regular season
+                      points, then a coin flip. This tab will show that ranking as real scores come in.
                     </p>
                   </div>
                   <div>

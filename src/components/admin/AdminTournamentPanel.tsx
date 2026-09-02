@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { Plus, Trash2, Loader2, X } from "lucide-react";
 import type { TournamentGame, TournamentResult, TournamentRound, TournamentType } from "@/lib/types";
 import ScoreStepper from "./ScoreStepper";
+import AdminWildCardPanel from "./AdminWildCardPanel";
 import { useToasts } from "./useToasts";
 import ToastStack from "./ToastStack";
 
@@ -163,6 +164,7 @@ function AddGameForm({
 export default function AdminTournamentPanel() {
   const currentYear = useMemo(() => new Date().getFullYear(), []);
   const [type, setType] = useState<TournamentType>("mcgregor");
+  const [subView, setSubView] = useState<"games" | "wildcard">("games");
   const [result, setResult] = useState<TournamentResult | null>(null);
   const [games, setGames] = useState<EditableTournamentGame[]>([]);
   const [loading, setLoading] = useState(true);
@@ -335,7 +337,27 @@ export default function AdminTournamentPanel() {
         ))}
       </div>
 
-      {loading ? (
+      {type === "mcgregor" && (
+        <div className="mb-4 flex gap-2">
+          {(["games", "wildcard"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setSubView(v)}
+              className={clsx(
+                "flex-1 rounded-lg border-2 py-1.5 text-xs font-semibold uppercase tracking-wide transition-all",
+                subView === v ? "border-white bg-white text-gray-900" : "border-gray-800 bg-gray-900 text-gray-500"
+              )}
+            >
+              {v === "games" ? "Games" : "Wild Card Seeding"}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {type === "mcgregor" && subView === "wildcard" ? (
+        <AdminWildCardPanel year={currentYear} type={type} />
+      ) : loading ? (
         <p className="py-16 text-center text-gray-500">Loading…</p>
       ) : !result ? (
         <p className="py-16 text-center text-gray-500">No tournament record found for {currentYear}.</p>

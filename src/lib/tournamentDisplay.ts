@@ -1,14 +1,16 @@
 import type { TournamentType, TournamentRound } from "./types";
 
-export const TOURNAMENT_LABELS: Record<TournamentType, { short: string; full: string; trophy: string }> = {
+export const TOURNAMENT_LABELS: Record<TournamentType, { short: string; full: string; compact: string; trophy: string }> = {
   charity: {
     short: "Charity Tournament",
     full: "Kevan MacDonald Charity Tournament",
+    compact: "MacDonald Charity Tourney",
     trophy: "The Kevan MacDonald Cup",
   },
   mcgregor: {
     short: "Year-End Tournament",
     full: "Jim McGregor Year-End Tournament",
+    compact: "McGregor Year-End Tourney",
     trophy: "The Jim McGregor Trophy",
   },
 };

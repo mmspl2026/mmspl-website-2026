@@ -35,41 +35,30 @@ interface TeamPower {
   rating: number;
 }
 
-// Hand-tuned "vibes" nudges for the 2026 season specifically — a team's
-// regular season record doesn't always capture a roster that's noticeably
-// stronger or weaker than in past years. Purely subjective, purely for fun;
-// rewrite or delete this next season rather than trying to keep it accurate.
-const VIBES_2026: Record<string, number> = {
-  "Markham Goodyear Rangers": 0.85,
-  "Ace Pools Moose": 1.18,
-  "McCalmont Financial Beavers": 1.15,
-  "Northtown Sox": 1.12,
-  "OK Braves": 1.12,
-  "Opal Electric Shamrocks": 1.15,
-};
+// Rank-tiered on purpose, not stat-magnitude-based: the league's own read
+// is that regular season record alone overstates the gap at the top of the
+// field — the top 7 teams by current standings are all live tournament
+// threats regardless of exact regular season order, and the gap only really
+// opens up further down the table. So every team ranked 1-7 gets the same
+// baseline rating, then it steps down gradually below that. (A prior version
+// of this hand-penalized one specific team based on a subjective read of
+// their roster — that was a mistake; this rank-based approach doesn't single
+// out any team, so there's nothing to re-litigate season to season.)
+const TOP_TIER_SIZE = 7;
+const RATING_STEP_BELOW_TOP_TIER = 6;
 
-function buildTeamPower(standings: Standing[], seasonGames: Game[]): Map<string, TeamPower> {
-  const runsScored = new Map<string, number>();
-  const gamesPlayed = new Map<string, number>();
-  for (const g of seasonGames) {
-    if (typeof g.homeScore !== "number" || typeof g.awayScore !== "number") continue;
-    runsScored.set(g.homeTeam.name, (runsScored.get(g.homeTeam.name) ?? 0) + g.homeScore);
-    runsScored.set(g.awayTeam.name, (runsScored.get(g.awayTeam.name) ?? 0) + g.awayScore);
-    gamesPlayed.set(g.homeTeam.name, (gamesPlayed.get(g.homeTeam.name) ?? 0) + 1);
-    gamesPlayed.set(g.awayTeam.name, (gamesPlayed.get(g.awayTeam.name) ?? 0) + 1);
-  }
+function rankBaseline(rank: number): number {
+  if (rank <= TOP_TIER_SIZE) return 100;
+  return 100 - (rank - TOP_TIER_SIZE) * RATING_STEP_BELOW_TOP_TIER;
+}
 
+function buildTeamPower(standings: Standing[]): Map<string, TeamPower> {
   const power = new Map<string, TeamPower>();
-  for (const s of standings) {
-    const played = s.wins + s.losses + s.ties || 1;
-    const winPct = (s.wins * 2 + s.ties) / (2 * played);
-    const runDiffPerGame = s.runDifferential / played;
-    const rsPerGame = (runsScored.get(s.team.name) ?? 0) / (gamesPlayed.get(s.team.name) || played);
-
-    let rating = winPct * 100 + runDiffPerGame * 3 + rsPerGame * 1.5;
-    rating *= VIBES_2026[s.team.name] ?? 1;
-    power.set(s.team.name, { teamName: s.team.name, rating });
-  }
+  // standingsBySeasonQuery is already ordered by (wins*2+ties) desc, then
+  // run differential desc — so array position directly is the real rank.
+  standings.forEach((s, i) => {
+    power.set(s.team.name, { teamName: s.team.name, rating: rankBaseline(i + 1) });
+  });
   return power;
 }
 
@@ -163,19 +152,20 @@ const DAY_LABEL: Record<"thu" | "fri" | "sat", string> = { thu: "Thursday", fri:
 /**
  * Runs one full randomized playthrough of the McGregor bracket: boxes come
  * from the same live seeding used elsewhere (computeProjectedBoxes), Thu-Sat
- * results are randomly rolled per team "power" (regular season record + run
- * differential + runs scored, with a small head-to-head nudge and a hand-set
- * 2026 "vibes" adjustment), Division Winners/Wild Card ranking reuse the
- * real house-rules logic (computeWildCardStandings), Wild Card round is
- * seeded 1v8/2v7/3v6/4v5, and Quarter Final pairings are randomly drawn
- * (matching the real "assigned by draw" rule) rather than fixed by seed.
+ * results are randomly rolled per team "power" (the top 7 teams by current
+ * standings are treated as equally live, with a gradual step down below
+ * that, plus a small head-to-head nudge from any real regular-season
+ * meeting), Division Winners/Wild Card ranking reuse the real house-rules
+ * logic (computeWildCardStandings), Wild Card round is seeded 1v8/2v7/3v6/
+ * 4v5, and Quarter Final pairings are randomly drawn (matching the real
+ * "assigned by draw" rule) rather than fixed by seed.
  * Every call is freshly random — never memoize or cache this.
  */
 export function simulateTournament(standings: Standing[], seasonGames: Game[]): TournamentSimulationResult | null {
   const boxes = computeProjectedBoxes(standings);
   if (!boxes) return null;
 
-  const power = buildTeamPower(standings, seasonGames);
+  const power = buildTeamPower(standings);
   const seedLookup = new Map<string, string>();
   for (const box of boxes) {
     box.teams.forEach((team, i) => seedLookup.set(`${box.poolLetter}${i + 1}`, team));

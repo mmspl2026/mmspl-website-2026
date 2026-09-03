@@ -143,6 +143,10 @@ export default function TournamentSimulator({ standings, seasonGames }: { standi
                   <div key={dw.pool} className="rounded-xl border border-white/10 bg-[#0d0d0e] p-3 text-center">
                     <p className="text-[10px] uppercase tracking-wide text-white/40">Pool {dw.pool}</p>
                     <p className="mt-1 truncate text-sm font-bold text-white">{dw.teamName}</p>
+                    <p className="mt-1 font-mono-brand text-[11px] text-white/40">
+                      {dw.wins}-{dw.losses}-{dw.ties} &middot;{" "}
+                      {dw.runDifferential > 0 ? `+${dw.runDifferential}` : dw.runDifferential}
+                    </p>
                   </div>
                 ))}
               </div>

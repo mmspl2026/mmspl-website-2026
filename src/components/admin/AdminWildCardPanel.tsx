@@ -116,6 +116,10 @@ export default function AdminWildCardPanel({ year, type }: { year: number; type:
                 >
                   <span className="font-mono-brand text-xs text-gray-500">Pool {dw.pool}</span>
                   <span className="font-semibold text-white">{dw.teamName}</span>
+                  <span className="font-mono-brand text-xs text-gray-500">
+                    {dw.wins}-{dw.losses}-{dw.ties} &middot;{" "}
+                    {dw.runDifferential > 0 ? `+${dw.runDifferential}` : dw.runDifferential}
+                  </span>
                 </div>
               ))}
             </div>

@@ -3,6 +3,14 @@ import type { Standing, TournamentGame } from "./types";
 export interface DivisionWinner {
   pool: string;
   teamName: string;
+  /** Overall Phase 1 record (all 3 games, same basis as the Wild Card
+   * table below) — not the in-box-only record that decided the bye, so a
+   * tie from a cross-box friendly game doesn't vanish from view just
+   * because this team is excluded from the Wild Card table. */
+  wins: number;
+  losses: number;
+  ties: number;
+  runDifferential: number;
 }
 
 export interface ComputedWildCardEntry {
@@ -140,7 +148,21 @@ export function computeWildCardStandings(
   for (const [pool, list] of [...byPool.entries()].sort(([a], [b]) => a.localeCompare(b))) {
     const sorted = [...list].sort(tieBreakCompare);
     if (sorted.length === 0) continue;
-    divisionWinners.push({ pool, teamName: sorted[0].teamName });
+    const winner = sorted[0];
+    // Who wins the box is decided on in-box (pool games only) record, but
+    // the record shown here is the OVERALL Phase 1 record (all 3 games,
+    // including the cross A/B "friendly") — using the in-box-only record
+    // here would silently drop any tie that happened specifically in a
+    // cross-box friendly game, since those never touch inBox stats.
+    const overallStats = overall.get(winner.teamName) ?? winner;
+    divisionWinners.push({
+      pool,
+      teamName: winner.teamName,
+      wins: overallStats.wins,
+      losses: overallStats.losses,
+      ties: overallStats.ties,
+      runDifferential: runDiff(overallStats),
+    });
     divisionWinnerNames.add(sorted[0].teamName);
   }
 

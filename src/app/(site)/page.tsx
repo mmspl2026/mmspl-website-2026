@@ -69,6 +69,7 @@ export default async function HomePage() {
   const tournamentBanner = activeTournament
     ? {
         label: TOURNAMENT_LABELS[activeTournament.type].full,
+        compactLabel: TOURNAMENT_LABELS[activeTournament.type].compact,
         dateRange: formatShortDateRange([
           activeTournament.result.plannedStart!,
           activeTournament.result.plannedEnd || activeTournament.result.plannedStart!,

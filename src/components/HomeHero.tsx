@@ -7,6 +7,7 @@ import GameRail from "./GameRail";
 
 interface TournamentBanner {
   label: string;
+  compactLabel: string;
   dateRange: string;
   href: string;
 }
@@ -89,7 +90,10 @@ export default function HomeHero({
             style={{ background: "rgba(255,255,255,0.09)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
           >
             <Trophy size={15} className="shrink-0 text-brand" aria-hidden="true" />
-            <span className="truncate text-xs font-semibold sm:text-sm">
+            <span className="truncate text-xs font-semibold sm:hidden">
+              {tournamentBanner.compactLabel} {tournamentBanner.dateRange}
+            </span>
+            <span className="hidden truncate text-sm font-semibold sm:inline">
               {tournamentBanner.label} &middot; {tournamentBanner.dateRange}
             </span>
             <ArrowRight size={14} className="shrink-0 text-brand" aria-hidden="true" />

@@ -34,12 +34,18 @@ export default function ProjectedSeeding({
     </div>
   );
 
-  const simulateLink = (
-    <Link
-      href="/schedule/tournament/simulate"
-      className="flex items-center justify-center gap-1.5 text-xs font-semibold text-brand hover:underline"
-    >
-      <Dices size={14} aria-hidden="true" />
+  const simulateLinkClass = "flex items-center justify-center gap-1.5 text-xs font-semibold text-brand hover:underline";
+  // Mobile gets the short form — the full question-plus-sentence version
+  // was overflowing/wrapping messily at narrow widths.
+  const simulateLinkMobile = (
+    <Link href="/schedule/tournament/simulate" className={simulateLinkClass}>
+      <Dices size={14} className="shrink-0" aria-hidden="true" />
+      Simulate the Tournament &rarr;
+    </Link>
+  );
+  const simulateLinkDesktop = (
+    <Link href="/schedule/tournament/simulate" className={simulateLinkClass}>
+      <Dices size={14} className="shrink-0" aria-hidden="true" />
       Curious how it plays out? Simulate the whole tournament &rarr;
     </Link>
   );
@@ -107,7 +113,7 @@ export default function ProjectedSeeding({
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {boxes.map(renderBox)}
         </div>
-        <div className="mt-4">{simulateLink}</div>
+        <div className="mt-4">{simulateLinkMobile}</div>
       </div>
 
       {/* md and up: Pool A+C flank the trophy on the left, B+D on the
@@ -120,7 +126,7 @@ export default function ProjectedSeeding({
           {trophy}
           <div className="flex flex-col gap-4">{rightBoxes.map(renderBox)}</div>
         </div>
-        <div className="mt-4">{simulateLink}</div>
+        <div className="mt-4">{simulateLinkDesktop}</div>
       </div>
     </div>
   );

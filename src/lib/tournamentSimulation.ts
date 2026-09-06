@@ -97,15 +97,35 @@ function shuffle<T>(arr: T[]): T[] {
   return copy;
 }
 
+// Sum of 3 uniforms (Irwin-Hall) approximates a bell curve without needing
+// a real gaussian — good enough for a for-fun score generator.
+function randomNormalish(mean: number, stdev: number): number {
+  const u = Math.random() + Math.random() + Math.random(); // mean 1.5, stdev 0.5
+  return mean + ((u - 1.5) / 0.5) * stdev;
+}
+
+// Tuned from real scores, not guessed — 759 actual historical McGregor/
+// Charity tournament games (620 round robin, 139 elimination), pulled
+// straight from Sanity: round robin loser avg ~9 runs, winner avg ~17, and
+// games only tie about 3-4% of the time. Slo-pitch runs high and games like
+// 5-3 or 4-3 are essentially never what actually happens.
+//
+// Winner and loser scores are drawn independently (not winner = loser +
+// margin) on purpose: the real data has real examples of a shut-out loser
+// (0 or 1 runs) — but in every single one of those, the winner still put up
+// a normal-to-big score (7-0, 12-0, 15-0...). Deriving the winner from the
+// loser's score produced impossible games like 1-0 whenever both a low
+// loser score and a small margin happened to land together.
 function generateScore(outcome: "home" | "away" | "tie"): { home: number; away: number } {
   if (outcome === "tie") {
-    const runs = 3 + Math.floor(Math.random() * 7);
+    const runs = Math.round(clamp(randomNormalish(11, 5), 0, 22));
     return { home: runs, away: runs };
   }
-  const loserRuns = 3 + Math.floor(Math.random() * 7);
-  let margin = 1 + Math.floor(Math.random() * 5);
-  if (Math.random() < 0.12) margin += 2 + Math.floor(Math.random() * 6); // occasional blowout
-  const winnerRuns = loserRuns + margin;
+  // Floor of 4, not 1 — not one of the 738 real non-tie tournament games on
+  // record had a winning score below 4 (the lowest was 4-2).
+  const winnerRuns = Math.round(clamp(randomNormalish(17, 6), 4, 38));
+  let loserRuns = Math.round(clamp(randomNormalish(9, 4.7), 0, 25));
+  if (loserRuns >= winnerRuns) loserRuns = Math.max(0, winnerRuns - 1 - Math.floor(Math.random() * 3));
   return outcome === "home" ? { home: winnerRuns, away: loserRuns } : { home: loserRuns, away: winnerRuns };
 }
 
@@ -124,7 +144,9 @@ function simulateGame(
   pHome = clamp(pHome, 0.18, 0.82);
 
   let outcome: "home" | "away" | "tie";
-  if (allowTie && Math.random() < 0.1) {
+  // Real McGregor/Charity round robin games end in a tie about 3-4% of the
+  // time (21 of 620 in the historical record) — not the 10% guessed before.
+  if (allowTie && Math.random() < 0.04) {
     outcome = "tie";
   } else {
     outcome = Math.random() < pHome ? "home" : "away";

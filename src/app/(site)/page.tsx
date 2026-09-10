@@ -8,12 +8,14 @@ import {
   seasonImportantDatesQuery,
   activeSeasonQuery,
   standingsBySeasonQuery,
+  gamesBySeasonQuery,
   tournamentResultQuery,
 } from "@/lib/sanity/queries";
 import type { AdminSettings, Game, ImportantDate, NewsItem, Season, Standing, TournamentResult, TournamentType } from "@/lib/types";
 import { SEED_NEWS } from "@/lib/seed-data";
 import { IMPORTANT_DATES_2026 } from "@/lib/seed-content";
 import { TOURNAMENT_LABELS, formatShortDateRange } from "@/lib/tournamentDisplay";
+import { computeSeasonRanking } from "@/lib/seasonRanking";
 import HomeHero from "@/components/HomeHero";
 import NewsCard from "@/components/NewsCard";
 import UpcomingDates from "@/components/UpcomingDates";
@@ -40,19 +42,27 @@ export default async function HomePage() {
 
   const standingsYear = activeSeason?.year ?? currentYear;
   const seasonStart = `${standingsYear}-05-01`;
-  const [standings, dates, charityResult, mcgregorResult] = await Promise.all([
+  // Real game-log tiebreaks only apply 2026+ — see the matching comment on
+  // the /standings page for why older seasons keep the simple order.
+  const useRealTiebreaks = standingsYear >= 2026;
+  const [standings, seasonGames, dates, charityResult, mcgregorResult] = await Promise.all([
     sanityFetch<Standing[]>(standingsBySeasonQuery, { year: standingsYear }, []),
+    useRealTiebreaks ? sanityFetch<Game[]>(gamesBySeasonQuery, { year: standingsYear }, []) : Promise.resolve([]),
     sanityFetch<ImportantDate[]>(seasonImportantDatesQuery, { seasonStart }, []),
     sanityFetch<TournamentResult | null>(tournamentResultQuery, { year: standingsYear, type: "charity" }, null),
     sanityFetch<TournamentResult | null>(tournamentResultQuery, { year: standingsYear, type: "mcgregor" }, null),
   ]);
 
+  // Same tie-break procedure as the full /standings page, so "1st place"
+  // never disagrees between the two pages.
+  const rankedStandings = useRealTiebreaks ? computeSeasonRanking(standings, seasonGames).map((r) => r.standing) : standings;
+
   const displayNews = (news.length > 0 ? news : SEED_NEWS).slice(0, 3);
   const displayDates = dates.length > 0 ? dates : SEED_DATES;
-  const displayStandings = standings.slice(0, 5);
+  const displayStandings = rankedStandings.slice(0, 5);
 
   const seasonComplete = Boolean(activeSeason?.regularSeasonEnd && today > activeSeason.regularSeasonEnd);
-  const regularSeasonChampion = seasonComplete && standings.length > 0 ? standings[0].team.name : null;
+  const regularSeasonChampion = seasonComplete && rankedStandings.length > 0 ? rankedStandings[0].team.name : null;
 
   // Whichever tournament hasn't finished yet (upcoming or currently in
   // progress) gets a banner in the hero — automatically appears/disappears

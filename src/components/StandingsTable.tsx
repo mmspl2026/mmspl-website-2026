@@ -1,12 +1,23 @@
 import { Trophy } from "lucide-react";
 import clsx from "clsx";
 import type { Standing } from "@/lib/types";
+import type { TiebreakLevel } from "@/lib/seasonRanking";
+
+const TIEBREAK_MARKER_LABEL: Record<Exclude<TiebreakLevel, "points">, string> = {
+  headToHeadRecord: "Tiebreaker applied: head-to-head win/loss record",
+  totalWins: "Tiebreaker applied: most total wins",
+  headToHeadDiff: "Tiebreaker applied: best +/− in head-to-head games",
+  headToHeadRunsFor: "Tiebreaker applied: most runs for in head-to-head games",
+  seasonDiff: "Tiebreaker applied: best +/− in regular season games",
+  coinToss: "Tied after every tiebreaker — a coin toss is required (see note below)",
+};
 
 export default function StandingsTable({
   standings,
   year,
   alwaysFullName = false,
   seasonComplete = false,
+  tiebreakInfo,
 }: {
   standings: Standing[];
   year: number;
@@ -14,6 +25,11 @@ export default function StandingsTable({
   alwaysFullName?: boolean;
   /** Shows the President's Trophy icon next to the first-place team once the season has finished. */
   seasonComplete?: boolean;
+  /** Per-team tiebreak outcome, keyed by Standing._id — when provided, rows
+   * whose placement required more than plain points comparison get a small
+   * marker so a reader can see a tiebreaker was actually used. Omit to skip
+   * (e.g. the homepage's condensed preview doesn't show this). */
+  tiebreakInfo?: Record<string, { decidedBy: TiebreakLevel; coinTossNeeded: boolean }>;
 }) {
   if (standings.length === 0) {
     return <p className="text-black/60">No standings posted for this season yet.</p>;
@@ -83,11 +99,24 @@ export default function StandingsTable({
               const gbLabel = gb <= 0 ? "-" : gb % 1 === 0 ? String(gb) : gb.toFixed(1);
               const diffLabel =
                 typeof row.runDifferential !== "number" ? "-" : row.runDifferential > 0 ? `+${row.runDifferential}` : String(row.runDifferential);
+              const tiebreak = tiebreakInfo?.[row._id];
+              const tiebreakUsed = tiebreak && tiebreak.decidedBy !== "points";
               return (
                 <tr key={row._id} className="border-b transition-colors hover:bg-gray-50">
                   <td className="px-1.5 py-2.5 font-mono-brand md:px-3 md:py-4">
                     <div className="flex items-center gap-1.5">
                       <span className="font-bold text-black">{rank}</span>
+                      {tiebreakUsed && (
+                        <span
+                          title={TIEBREAK_MARKER_LABEL[tiebreak.decidedBy as Exclude<TiebreakLevel, "points">]}
+                          className={clsx(
+                            "cursor-help font-mono-brand text-xs font-bold",
+                            tiebreak.coinTossNeeded ? "text-amber-600" : "text-brand"
+                          )}
+                        >
+                          {tiebreak.coinTossNeeded ? "⚠" : "†"}
+                        </span>
+                      )}
                       {seasonComplete && rank === 1 && (
                         <>
                           <Trophy size={22} className="shrink-0 text-brand" aria-hidden="true" />

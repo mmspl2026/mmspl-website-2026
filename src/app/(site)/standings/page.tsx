@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CalendarOff, Info, Trophy } from "lucide-react";
+import { CalendarOff, Info, Trophy, AlertTriangle } from "lucide-react";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
   allSeasonsQuery,
   standingsBySeasonQuery,
+  gamesBySeasonQuery,
   adminSettingsQuery,
   allTournamentResultsQuery,
 } from "@/lib/sanity/queries";
-import type { AdminSettings, Season, Standing, TournamentResult } from "@/lib/types";
+import type { AdminSettings, Season, Standing, Game, TournamentResult } from "@/lib/types";
 import { urlFor } from "@/lib/sanity/image";
+import { computeSeasonRanking, TIE_BREAK_RULES } from "@/lib/seasonRanking";
 import StandingsTable from "@/components/StandingsTable";
 import SeasonDropdown from "@/components/SeasonDropdown";
 import TournamentCards from "@/components/TournamentCards";
@@ -18,16 +20,6 @@ import StandingsMobileBar from "@/components/StandingsMobileBar";
 export const metadata: Metadata = { title: "Standings" };
 
 const CURRENT_YEAR = new Date().getFullYear();
-
-const TIE_BREAKING_RULES = [
-  "Accumulated points during the regular season",
-  "Head to head win/loss record",
-  "Most total wins",
-  "Best +/− in head-to-head games",
-  "Most runs for in head-to-head games",
-  "Best +/− in regular season games",
-  "Coin toss",
-];
 
 export default async function StandingsPage({
   searchParams,
@@ -50,12 +42,27 @@ export default async function StandingsPage({
   const charityResult = tournamentResults.find((r) => r.year === selectedYear && r.type === "charity") || null;
   const mcgregorResult = tournamentResults.find((r) => r.year === selectedYear && r.type === "mcgregor") || null;
 
-  const standings = await sanityFetch<Standing[]>(
-    standingsBySeasonQuery,
-    { year: selectedYear },
-    []
-  );
-  const displayStandings = selectedSeason?.cancelled ? [] : standings;
+  // The full computed tie-break procedure (head-to-head, +/-, etc.) needs a
+  // real season game log to work from — only reliably tracked from 2026
+  // onward. Older seasons were bulk-imported without that data, so they
+  // keep the previous simple points-then-run-differential order rather than
+  // risk a misleading tiebreaker marker or a false "coin toss needed" flag
+  // that's really just a data gap.
+  const useRealTiebreaks = selectedYear >= 2026;
+
+  const [standings, seasonGames] = await Promise.all([
+    sanityFetch<Standing[]>(standingsBySeasonQuery, { year: selectedYear }, []),
+    useRealTiebreaks ? sanityFetch<Game[]>(gamesBySeasonQuery, { year: selectedYear }, []) : Promise.resolve([]),
+  ]);
+
+  const ranked = useRealTiebreaks
+    ? computeSeasonRanking(standings, seasonGames)
+    : standings.map((standing, i) => ({ standing, rank: i + 1, decidedBy: "points" as const, coinTossNeeded: false }));
+  const displayStandings = selectedSeason?.cancelled ? [] : ranked.map((r) => r.standing);
+  const tiebreakInfo = useRealTiebreaks
+    ? Object.fromEntries(ranked.map((r) => [r.standing._id, { decidedBy: r.decidedBy, coinTossNeeded: r.coinTossNeeded }]))
+    : undefined;
+  const coinTossTeams = ranked.filter((r) => r.coinTossNeeded).map((r) => r.standing.team.name);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -142,9 +149,21 @@ export default async function StandingsPage({
               standings={displayStandings}
               year={selectedYear}
               seasonComplete={!selectedSeason?.isActive}
+              tiebreakInfo={tiebreakInfo}
             />
           )}
         </div>
+
+        {!selectedSeason?.cancelled && coinTossTeams.length > 0 && (
+          <div className="mb-6 flex items-start gap-2.5 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            <AlertTriangle size={18} className="mt-0.5 shrink-0" aria-hidden="true" />
+            <p>
+              <strong>Coin toss required:</strong> {coinTossTeams.join(", ")} remain tied after every tiebreaker
+              below and can&apos;t be separated automatically — final placement among them needs an actual coin
+              toss.
+            </p>
+          </div>
+        )}
 
         <div className="rounded-xl border bg-white text-black shadow">
           <div className="flex flex-col space-y-1.5 p-6">
@@ -152,13 +171,18 @@ export default async function StandingsPage({
           </div>
           <div className="p-6 pt-0">
             <p className="mb-3 text-sm text-gray-700">
-              In the event of a tie, final rankings are determined by:
+              In the event of a tie, final rankings are determined by, in order:
             </p>
             <ol className="list-inside list-decimal space-y-1 text-sm text-gray-700">
-              {TIE_BREAKING_RULES.map((rule) => (
-                <li key={rule}>{rule}</li>
+              {TIE_BREAK_RULES.map((rule) => (
+                <li key={rule.level}>{rule.label}</li>
               ))}
             </ol>
+            <p className="mt-3 text-xs text-gray-400">
+              Applied automatically from each team&apos;s final and forfeit games — a{" "}
+              <span className="font-bold text-brand">†</span> next to a rank above means a tiebreaker beyond points
+              was needed to place that team.
+            </p>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2, ArrowUp, ArrowDown, AlertTriangle, RefreshCw } from "lucide-react";
 import clsx from "clsx";
 import type { WildCardStandingsResult, ComputedWildCardEntry } from "@/lib/wildCardStandings";
@@ -19,10 +19,38 @@ import ToastStack from "./ToastStack";
 export default function AdminWildCardPanel({ year, type }: { year: number; type: TournamentType }) {
   const [preview, setPreview] = useState<WildCardStandingsResult | null>(null);
   const [order, setOrder] = useState<ComputedWildCardEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const [computing, setComputing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const { toasts, push, dismiss } = useToasts();
+
+  // On mount (and whenever the type toggle changes), load whatever was
+  // already saved for this tournament instead of showing a blank
+  // "Compute" prompt every time this tab is revisited — previously this
+  // component had no memory of anything saved before it unmounted.
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setPreview(null);
+    setOrder([]);
+    setSavedAt(null);
+    (async () => {
+      try {
+        const res = await fetch(`/api/admin/tournament/wildcard/compute?year=${year}&type=${type}`);
+        const data = await res.json().catch(() => ({}));
+        if (cancelled || !res.ok || !data.result) return;
+        setPreview(data.result);
+        setOrder(data.result.wildCard);
+        if (data.saved?.length > 0) setSavedAt(Date.now());
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [year, type]);
 
   async function handleCompute() {
     setComputing(true);
@@ -65,7 +93,14 @@ export default function AdminWildCardPanel({ year, type }: { year: number; type:
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to save.");
       setSavedAt(Date.now());
-      push({ tone: "success", message: "Wild Card rankings saved." });
+      const updated = data.wildCardGamesUpdated ?? 0;
+      push({
+        tone: "success",
+        message:
+          updated > 0
+            ? `Saved — and filled in real teams on ${updated} Wild Card round game(s).`
+            : "Wild Card rankings saved.",
+      });
     } catch (err) {
       push({ tone: "error", message: err instanceof Error ? err.message : "Failed to save." });
     } finally {
@@ -75,8 +110,23 @@ export default function AdminWildCardPanel({ year, type }: { year: number; type:
 
   const anyCoinFlip = order.some((e) => e.tiedForCoinFlip);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center gap-2 py-16 text-gray-500">
+        <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+        Loading…
+      </div>
+    );
+  }
+
   return (
     <div>
+      {savedAt && (
+        <div className="mb-4 rounded-lg border-2 border-green-800 bg-green-950/30 px-3 py-2 text-xs font-semibold text-green-400">
+          Wild Card rankings are saved and live on the public WC Rank tab.
+        </div>
+      )}
+
       <div className="mb-4 rounded-xl border-2 border-gray-800 bg-gray-900 p-4">
         <p className="mb-3 text-sm text-gray-400">
           Computes Phase 2 seeding from Thu-Sat round robin scores: the 4 Division Winners (best record within their
@@ -196,9 +246,8 @@ export default function AdminWildCardPanel({ year, type }: { year: number; type:
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-600 py-3 text-sm font-bold text-white transition-all hover:bg-red-500 disabled:opacity-50"
           >
             {saving && <Loader2 size={16} className="animate-spin" aria-hidden="true" />}
-            {saving ? "Saving…" : "Save Wild Card Rankings"}
+            {saving ? "Saving…" : savedAt ? "Update Saved Rankings" : "Save Wild Card Rankings"}
           </button>
-          {savedAt && <p className="mt-2 text-center text-xs text-green-500">Saved — live on the WC Rank tab.</p>}
         </>
       )}
 

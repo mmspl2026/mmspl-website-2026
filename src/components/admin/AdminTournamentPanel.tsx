@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
-import { Plus, Trash2, Loader2, X } from "lucide-react";
+import { Plus, Trash2, Loader2, X, Pencil } from "lucide-react";
 import type { TournamentGame, TournamentResult, TournamentRound, TournamentType } from "@/lib/types";
 import ScoreStepper from "./ScoreStepper";
 import AdminWildCardPanel from "./AdminWildCardPanel";
@@ -34,6 +34,8 @@ interface EditableTournamentGame extends TournamentGame {
   draftHomeScore: number;
   draftAwayScore: number;
   draftFinal: boolean;
+  draftHomeTeam: string;
+  draftAwayTeam: string;
   saving: boolean;
 }
 
@@ -43,6 +45,8 @@ function toEditable(g: TournamentGame): EditableTournamentGame {
     draftHomeScore: g.homeScore ?? 0,
     draftAwayScore: g.awayScore ?? 0,
     draftFinal: typeof g.homeScore === "number" && typeof g.awayScore === "number",
+    draftHomeTeam: g.homeTeam ?? "",
+    draftAwayTeam: g.awayTeam ?? "",
     saving: false,
   };
 }
@@ -172,6 +176,10 @@ export default function AdminTournamentPanel() {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [editingTeamsFor, setEditingTeamsFor] = useState<string | null>(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetConfirmText, setResetConfirmText] = useState("");
+  const [resetting, setResetting] = useState(false);
   const { toasts, push, dismiss } = useToasts();
 
   const load = useCallback(async () => {
@@ -193,6 +201,11 @@ export default function AdminTournamentPanel() {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    setShowResetConfirm(false);
+    setResetConfirmText("");
+  }, [type]);
 
   const days = useMemo(() => {
     if (!result?.plannedStart) return [];
@@ -244,6 +257,38 @@ export default function AdminTournamentPanel() {
     }
   }
 
+  // Best-effort UI-side mirror of the server's real safety check (see
+  // /api/admin/tournament/reset) — just to hide the option once it'd be
+  // refused anyway. The server re-verifies independently and is the actual
+  // authority, since a stale tab or a direct API call could bypass this.
+  const todayLocal = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const tournamentStarted = Boolean(result?.plannedStart && todayLocal >= result.plannedStart);
+  const anyScoresRecorded = games.some((g) => typeof g.homeScore === "number" || typeof g.awayScore === "number");
+  const canReset = games.length > 0 && !tournamentStarted && !anyScoresRecorded;
+  const resetConfirmPhrase = `DELETE ${currentYear} ${type.toUpperCase()}`;
+
+  async function handleReset() {
+    setResetting(true);
+    try {
+      const res = await fetch("/api/admin/tournament/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ year: currentYear, type, confirm: resetConfirmText }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to reset.");
+      setGames([]);
+      setResult((r) => (r ? { ...r, hasDetailedResults: false } : r));
+      setShowResetConfirm(false);
+      setResetConfirmText("");
+      push({ tone: "success", message: `Reset complete — deleted ${data.deleted?.games ?? 0} games.` });
+    } catch (err) {
+      push({ tone: "error", message: err instanceof Error ? err.message : "Failed to reset." });
+    } finally {
+      setResetting(false);
+    }
+  }
+
   async function handleSave(game: EditableTournamentGame) {
     updateGame(game._id, { saving: true });
     try {
@@ -255,6 +300,8 @@ export default function AdminTournamentPanel() {
           homeScore: game.draftHomeScore,
           awayScore: game.draftAwayScore,
           final: game.draftFinal,
+          homeTeam: game.draftHomeTeam !== game.homeTeam ? game.draftHomeTeam : undefined,
+          awayTeam: game.draftAwayTeam !== game.awayTeam ? game.draftAwayTeam : undefined,
           year: currentYear,
           type,
         }),
@@ -262,6 +309,7 @@ export default function AdminTournamentPanel() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to save.");
       setGames((data.games as TournamentGame[]).map(toEditable));
+      setEditingTeamsFor(null);
       push({ tone: "success", message: `Saved: ${game.homeTeam} vs ${game.awayTeam}` });
     } catch (err) {
       updateGame(game._id, { saving: false });
@@ -427,22 +475,63 @@ export default function AdminTournamentPanel() {
               const dirty =
                 game.draftHomeScore !== (game.homeScore ?? 0) ||
                 game.draftAwayScore !== (game.awayScore ?? 0) ||
-                game.draftFinal !== (typeof game.homeScore === "number");
+                game.draftFinal !== (typeof game.homeScore === "number") ||
+                game.draftHomeTeam !== (game.homeTeam ?? "") ||
+                game.draftAwayTeam !== (game.awayTeam ?? "");
+              const editingTeams = editingTeamsFor === game._id;
               return (
                 <article key={game._id} className="mb-3 rounded-2xl border-2 border-gray-800 bg-gray-900 p-4">
                   <div className="mb-3 flex items-center justify-between text-xs text-gray-400">
                     <span>
                       {game.time} &middot; {game.field}
                     </span>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(game)}
-                      disabled={game.saving}
-                      aria-label="Delete game"
-                    >
-                      <Trash2 size={14} className="text-gray-600 hover:text-red-500" aria-hidden="true" />
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setEditingTeamsFor(editingTeams ? null : game._id)}
+                        disabled={game.saving}
+                        aria-label="Edit team names"
+                      >
+                        <Pencil
+                          size={14}
+                          className={clsx(editingTeams ? "text-brand" : "text-gray-600 hover:text-white")}
+                          aria-hidden="true"
+                        />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(game)}
+                        disabled={game.saving}
+                        aria-label="Delete game"
+                      >
+                        <Trash2 size={14} className="text-gray-600 hover:text-red-500" aria-hidden="true" />
+                      </button>
+                    </div>
                   </div>
+
+                  {editingTeams && (
+                    <div className="mb-3 space-y-2 rounded-xl border-2 border-brand/50 bg-gray-950 p-3">
+                      <p className="text-[10px] uppercase tracking-wide text-gray-500">
+                        Replace a placeholder (e.g. &quot;Wild Card #1 Winner&quot;) with the real team once it&apos;s
+                        known
+                      </p>
+                      <input
+                        type="text"
+                        value={game.draftHomeTeam}
+                        onChange={(e) => updateGame(game._id, { draftHomeTeam: e.target.value })}
+                        placeholder="Home team"
+                        className="h-9 w-full rounded-lg border-2 border-gray-700 bg-gray-900 px-2 text-sm text-white placeholder:text-gray-600 focus:border-brand focus:outline-none"
+                      />
+                      <input
+                        type="text"
+                        value={game.draftAwayTeam}
+                        onChange={(e) => updateGame(game._id, { draftAwayTeam: e.target.value })}
+                        placeholder="Away team"
+                        className="h-9 w-full rounded-lg border-2 border-gray-700 bg-gray-900 px-2 text-sm text-white placeholder:text-gray-600 focus:border-brand focus:outline-none"
+                      />
+                    </div>
+                  )}
+
                   <div className="mb-3 flex items-center gap-2">
                     <div className="flex-1 text-center">
                       <p className="mb-2 truncate text-xs font-semibold text-white">
@@ -509,6 +598,64 @@ export default function AdminTournamentPanel() {
             >
               <Plus size={16} aria-hidden="true" /> Add Game
             </button>
+          )}
+
+          {canReset && (
+            <div className="mt-8 border-t border-gray-800 pt-4">
+              {!showResetConfirm ? (
+                <button
+                  type="button"
+                  onClick={() => setShowResetConfirm(true)}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-gray-800 py-2.5 text-xs font-semibold text-gray-500 transition-all hover:border-red-900 hover:text-red-400"
+                >
+                  <Trash2 size={13} aria-hidden="true" /> Reset Tournament (delete all games)
+                </button>
+              ) : (
+                <div className="rounded-xl border-2 border-red-900 bg-red-950/20 p-4">
+                  <p className="mb-2 text-sm font-bold text-red-300">
+                    This deletes all {games.length} game(s), pools, and Wild Card rankings for {currentYear}{" "}
+                    {type}. Only for clearing out test data — this can&apos;t be undone.
+                  </p>
+                  <p className="mb-2 text-xs text-gray-400">
+                    Type <span className="font-mono-brand text-red-300">{resetConfirmPhrase}</span> to confirm:
+                  </p>
+                  <input
+                    type="text"
+                    value={resetConfirmText}
+                    onChange={(e) => setResetConfirmText(e.target.value)}
+                    placeholder={resetConfirmPhrase}
+                    className="mb-3 h-10 w-full rounded-lg border-2 border-gray-700 bg-gray-950 px-3 font-mono-brand text-sm text-white placeholder:text-gray-700 focus:border-red-700 focus:outline-none"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowResetConfirm(false);
+                        setResetConfirmText("");
+                      }}
+                      disabled={resetting}
+                      className="flex-1 rounded-lg border-2 border-gray-700 py-2.5 text-sm font-semibold text-gray-300 hover:border-gray-500"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleReset}
+                      disabled={resetting || resetConfirmText !== resetConfirmPhrase}
+                      className={clsx(
+                        "flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-bold transition-all",
+                        resetConfirmText === resetConfirmPhrase && !resetting
+                          ? "bg-red-700 text-white hover:bg-red-600"
+                          : "cursor-not-allowed bg-gray-800 text-gray-600"
+                      )}
+                    >
+                      {resetting && <Loader2 size={14} className="animate-spin" aria-hidden="true" />}
+                      {resetting ? "Deleting…" : "Delete Everything"}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </>
       )}

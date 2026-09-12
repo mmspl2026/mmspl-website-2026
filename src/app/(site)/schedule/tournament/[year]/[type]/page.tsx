@@ -102,7 +102,11 @@ export default async function TournamentDetailPage({ params }: { params: { year:
   // The Thu-Sat slot template is specific to the McGregor tournament's
   // format (Charity uses a different pool layout entirely), and needs a
   // planned start date to anchor the three real calendar dates to.
-  const trophyPhotoUrl = trophyPhoto ? urlFor(trophyPhoto.photo).width(300).fit("max").url() : undefined;
+  // Shown throughout the whole active tournament — projection, round robin,
+  // and playdowns — and only stops once the tournament actually concludes
+  // (a champion is set), at which point TournamentChampionsBanner takes
+  // over with real winner/finalist/MVP photos instead.
+  const trophyPhotoUrl = trophyPhoto && !result.champion ? urlFor(trophyPhoto.photo).width(300).fit("max").url() : undefined;
   const projectedGames =
     projectedBoxes && type === "mcgregor" && result.plannedStart
       ? computeProjectedSchedule(projectedBoxes, year, type, result.plannedStart)
@@ -156,6 +160,8 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             games={games}
             wcRankings={wcRankings}
             interactive={isCurrentSeason}
+            trophyPhotoUrl={trophyPhotoUrl}
+            trophyAlt={trophyPhoto?.photo.alt}
             today={today}
           />
         ) : projectedBoxes ? (

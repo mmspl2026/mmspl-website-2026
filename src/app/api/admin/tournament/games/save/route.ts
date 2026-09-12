@@ -15,6 +15,11 @@ export async function POST(req: NextRequest) {
   const awayScore = Number(body?.awayScore);
   const year = Number(body?.year);
   const type = typeof body?.type === "string" ? body.type : "";
+  // Optional — lets the admin swap a placeholder name (e.g. "Wild Card #1
+  // Winner") for the real team once it's known, without deleting/recreating
+  // the game. Omit to leave the team names untouched.
+  const homeTeam = typeof body?.homeTeam === "string" ? body.homeTeam.trim() : undefined;
+  const awayTeam = typeof body?.awayTeam === "string" ? body.awayTeam.trim() : undefined;
 
   if (!gameId || !Number.isInteger(year) || !type) {
     return NextResponse.json({ error: "Missing gameId or year/type." }, { status: 400 });
@@ -29,6 +34,10 @@ export async function POST(req: NextRequest) {
   } else {
     patch.unset(["homeScore", "awayScore"]);
   }
+  const teamPatch: Record<string, string> = {};
+  if (homeTeam) teamPatch.homeTeam = homeTeam;
+  if (awayTeam) teamPatch.awayTeam = awayTeam;
+  if (Object.keys(teamPatch).length > 0) patch.set(teamPatch);
   await patch.commit();
 
   const games = await writeClient.fetch<TournamentGame[]>(tournamentGamesQuery, { year, type });

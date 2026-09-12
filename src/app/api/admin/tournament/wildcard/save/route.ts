@@ -33,10 +33,31 @@ function isValidEntry(e: unknown): e is IncomingEntry {
   );
 }
 
+// The 4 real Wild Card round games are created (with placeholder team names
+// like "Wild Card #1") by Load Projected Schedule, at these fixed
+// sortOrder values — see SUNDAY_TEMPLATE in projectedSchedule.ts, whose
+// first 4 entries are exactly this seed pairing in this exact order.
+// sortOrder is used to identify them (not the placeholder text) so this
+// still works correctly on a re-save after the names have already been
+// filled in once.
+const WILD_CARD_ROUND_SORT_ORDER: Record<number, [number, number]> = {
+  21: [1, 8],
+  22: [2, 7],
+  23: [4, 5],
+  24: [3, 6],
+};
+
 // Commits a reviewed Wild Card ranking (from /wildcard/compute, possibly
 // hand-reordered by the admin to resolve a coin-flip tie) as real
 // wildCardRanking documents — replaces whatever was saved before for this
 // year/type, since this can be re-run as Thu-Sat scores get corrected.
+// Also fills in the real team names on the 4 actual Wild Card round games
+// (Sunday 8:30/10:00 AM), which otherwise keep showing the "Wild Card #1"
+// style placeholder from Load Projected Schedule forever. Quarter Final and
+// beyond aren't touched here — which Division Winner faces which Wild Card
+// game's winner is set by a real physical draw, not something to guess at,
+// so those stay as placeholders until the admin fills them in by hand (see
+// the per-game "Edit team names" pencil icon).
 export async function POST(req: NextRequest) {
   const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
@@ -77,6 +98,25 @@ export async function POST(req: NextRequest) {
   }
   await tx.commit();
 
+  const byRank = new Map((entries as IncomingEntry[]).map((e) => [e.rank, e.teamName]));
+  const wcGames = await writeClient.fetch<{ _id: string; sortOrder?: number }[]>(
+    `*[_type == "tournamentGame" && year == $year && type == $type && round == "wildCard"]{_id, sortOrder}`,
+    { year, type }
+  );
+  const gameTx = writeClient.transaction();
+  let gamesUpdated = 0;
+  for (const g of wcGames) {
+    const pair = typeof g.sortOrder === "number" ? WILD_CARD_ROUND_SORT_ORDER[g.sortOrder] : undefined;
+    if (!pair) continue;
+    const [homeRank, awayRank] = pair;
+    const homeTeam = byRank.get(homeRank);
+    const awayTeam = byRank.get(awayRank);
+    if (!homeTeam || !awayTeam) continue;
+    gameTx.patch(g._id, (p) => p.set({ homeTeam, awayTeam }));
+    gamesUpdated += 1;
+  }
+  if (gamesUpdated > 0) await gameTx.commit();
+
   const saved = await writeClient.fetch<WildCardRanking[]>(wildCardRankingsQuery, { year, type });
-  return NextResponse.json({ wildCardRankings: saved });
+  return NextResponse.json({ wildCardRankings: saved, wildCardGamesUpdated: gamesUpdated });
 }

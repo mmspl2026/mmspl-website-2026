@@ -46,7 +46,15 @@ export default function TournamentBracketView({
 
   return (
     <>
-      {pools && <TournamentPoolSeeding pools={pools} selectedTeam={selectedTeam} onTeamClick={handleTeamClick} />}
+      {pools && (
+        <TournamentPoolSeeding
+          pools={pools}
+          selectedTeam={selectedTeam}
+          onTeamClick={handleTeamClick}
+          trophyPhotoUrl={trophyPhotoUrl}
+          trophyAlt={trophyAlt}
+        />
+      )}
       {projectedBoxes && (
         <ProjectedSeeding
           boxes={projectedBoxes}

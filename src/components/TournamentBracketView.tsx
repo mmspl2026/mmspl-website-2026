@@ -24,6 +24,7 @@ export default function TournamentBracketView({
   wcRankings,
   interactive,
   rankingsPlaceholder,
+  today,
 }: {
   pools?: TournamentPool[];
   projectedBoxes?: ProjectedBox[] | null;
@@ -34,6 +35,8 @@ export default function TournamentBracketView({
   wcRankings: WildCardRanking[];
   interactive: boolean;
   rankingsPlaceholder?: React.ReactNode;
+  /** Today's date (Eastern) — picks which day tab is active by default. */
+  today?: string;
 }) {
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
@@ -61,6 +64,7 @@ export default function TournamentBracketView({
           interactive={interactive}
           selectedTeam={selectedTeam}
           rankingsPlaceholder={rankingsPlaceholder}
+          today={today}
         />
       )}
     </>

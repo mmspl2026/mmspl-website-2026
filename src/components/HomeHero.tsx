@@ -4,6 +4,7 @@ import { Trophy, ArrowRight } from "lucide-react";
 import type { Game, SanityImageWithAlt } from "@/lib/types";
 import { urlFor } from "@/lib/sanity/image";
 import GameRail from "./GameRail";
+import type { SpecialRailCardData } from "./TournamentRailCard";
 
 interface TournamentBanner {
   label: string;
@@ -17,11 +18,13 @@ export default function HomeHero({
   games,
   today,
   tournamentBanner,
+  specialCards = [],
 }: {
   heroImage?: SanityImageWithAlt;
   games: Game[];
   today: string;
   tournamentBanner?: TournamentBanner | null;
+  specialCards?: SpecialRailCardData[];
 }) {
   const imageUrl = heroImage
     ? urlFor(heroImage).width(2400).height(1350).fit("crop").url()
@@ -80,7 +83,7 @@ export default function HomeHero({
           <h2 className="mb-2 text-center font-sans text-xs font-semibold uppercase tracking-widest text-white/60">
             Upcoming Games &amp; Scores
           </h2>
-          <GameRail games={games} today={today} />
+          <GameRail games={games} today={today} specialCards={specialCards} />
         </div>
 
         {tournamentBanner && (

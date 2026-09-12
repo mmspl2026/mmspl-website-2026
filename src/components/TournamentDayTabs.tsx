@@ -167,6 +167,7 @@ export default function TournamentDayTabs({
   interactive,
   selectedTeam = null,
   rankingsPlaceholder,
+  today,
 }: {
   games: TournamentGame[];
   wcRankings: WildCardRanking[];
@@ -179,9 +180,19 @@ export default function TournamentDayTabs({
    * wcRankings yet (e.g. the projected schedule, before any round-robin
    * games have been played) — keeps the tab present instead of hiding it. */
   rankingsPlaceholder?: React.ReactNode;
+  /** Today's date (Eastern, "YYYY-MM-DD") — the default active tab is
+   * whichever tournament day is current: the first day before it starts,
+   * that day while it's on, and the last day once it's over (clamped, never
+   * blank). Omit to just default to the first day. */
+  today?: string;
 }) {
   const days = useMemo(() => Array.from(new Set(games.map((g) => g.date))).sort(), [games]);
-  const [activeDay, setActiveDay] = useState<string>(days[0] ?? RANKINGS_TAB_ID);
+  const [activeDay, setActiveDay] = useState<string>(() => {
+    if (days.length === 0) return RANKINGS_TAB_ID;
+    if (!today) return days[0];
+    const upToToday = days.filter((d) => d <= today);
+    return upToToday.length > 0 ? upToToday[upToToday.length - 1] : days[0];
+  });
   const scrollerRef = useRef<HTMLDivElement>(null);
   const showRankingsTab = wcRankings.length > 0 || Boolean(rankingsPlaceholder);
   const rankingsContent = wcRankings.length > 0 ? <WildCardRankingsTable rankings={wcRankings} /> : rankingsPlaceholder;

@@ -4,8 +4,20 @@ import { useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Game } from "@/lib/types";
 import GameCard from "./GameCard";
+import TournamentRailCard, { type SpecialRailCardData } from "./TournamentRailCard";
 
-export default function GameRail({ games, today }: { games: Game[]; today?: string }) {
+export default function GameRail({
+  games,
+  today,
+  specialCards = [],
+}: {
+  games: Game[];
+  today?: string;
+  /** Non-game cards appended after the real games — e.g. tournament days,
+   * a season-end marker. Same data-game-date mechanism as real cards, so
+   * the scroll-to-today behaviour and sort position work the same way. */
+  specialCards?: SpecialRailCardData[];
+}) {
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   // The rail includes the past week's games alongside upcoming ones (so
@@ -22,9 +34,9 @@ export default function GameRail({ games, today }: { games: Game[]; today?: stri
       scroller.scrollLeft = target.offsetLeft - scroller.offsetLeft;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [games, today]);
+  }, [games, specialCards, today]);
 
-  if (games.length === 0) {
+  if (games.length === 0 && specialCards.length === 0) {
     return <p className="text-white/60">No games scheduled yet — check back soon.</p>;
   }
 
@@ -55,6 +67,9 @@ export default function GameRail({ games, today }: { games: Game[]; today?: stri
       >
         {games.map((game) => (
           <GameCard key={game._id} game={game} today={today} />
+        ))}
+        {specialCards.map((card) => (
+          <TournamentRailCard key={card.date + card.label} data={card} today={today} />
         ))}
       </div>
 

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CalendarOff } from "lucide-react";
+import { getTodayEastern } from "@/utils/timezone";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
   adminSettingsQuery,
@@ -62,6 +63,7 @@ export async function generateMetadata({ params }: { params: { year: string; typ
 export default async function TournamentDetailPage({ params }: { params: { year: string; type: string } }) {
   if (!isTournamentType(params.type)) notFound();
   const type = params.type;
+  const today = getTodayEastern();
 
   const year = Number(params.year);
   if (!Number.isInteger(year)) notFound();
@@ -149,7 +151,13 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             </p>
           </div>
         ) : result.hasDetailedResults ? (
-          <TournamentBracketView pools={pools} games={games} wcRankings={wcRankings} interactive={isCurrentSeason} />
+          <TournamentBracketView
+            pools={pools}
+            games={games}
+            wcRankings={wcRankings}
+            interactive={isCurrentSeason}
+            today={today}
+          />
         ) : projectedBoxes ? (
           <TournamentBracketView
             projectedBoxes={projectedBoxes}
@@ -159,6 +167,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             games={projectedGames ?? []}
             wcRankings={[]}
             interactive
+            today={today}
             rankingsPlaceholder={
               projectedGames && (
                 <div className="space-y-4">

@@ -73,7 +73,7 @@ const SUNDAY_TEMPLATE: SundaySlotEntry[] = [
   { time: "4:00 PM", field: "Centennial North", home: "Semi Final #1 Winner", away: "Semi Final #2 Winner", round: "final" },
 ];
 
-function addDays(isoDate: string, days: number): string {
+export function addDays(isoDate: string, days: number): string {
   const d = new Date(`${isoDate}T00:00:00Z`);
   d.setUTCDate(d.getUTCDate() + days);
   return d.toISOString().slice(0, 10);

@@ -16,6 +16,8 @@ import { SEED_NEWS } from "@/lib/seed-data";
 import { IMPORTANT_DATES_2026 } from "@/lib/seed-content";
 import { TOURNAMENT_LABELS, formatShortDateRange } from "@/lib/tournamentDisplay";
 import { computeSeasonRanking } from "@/lib/seasonRanking";
+import { addDays } from "@/lib/projectedSchedule";
+import type { SpecialRailCardData } from "@/components/TournamentRailCard";
 import HomeHero from "@/components/HomeHero";
 import NewsCard from "@/components/NewsCard";
 import UpcomingDates from "@/components/UpcomingDates";
@@ -88,9 +90,40 @@ export default async function HomePage() {
       }
     : null;
 
+  // Thu-Sat round robin + Championship Sunday + a season-closer card,
+  // appended to the game rail while the McGregor tournament is upcoming or
+  // in progress — derived from its planned dates, so this needs no manual
+  // upkeep and disappears on its own once the tournament's done.
+  const mcgregorRailCards: SpecialRailCardData[] =
+    isUpcomingOrLive(mcgregorResult) && mcgregorResult.plannedStart
+      ? (() => {
+          const [thu, fri, sat, sun] = [0, 1, 2, 3].map((n) => addDays(mcgregorResult.plannedStart as string, n));
+          const href = `/schedule/tournament/${standingsYear}/mcgregor`;
+          return [
+            { date: thu, label: "Round Robin", sublabel: "Tournament", href, icon: "trophy" as const },
+            { date: fri, label: "Round Robin", sublabel: "Tournament", href, icon: "trophy" as const },
+            { date: sat, label: "Round Robin", sublabel: "Tournament", href, icon: "trophy" as const },
+            { date: sun, label: "Championship Sunday", sublabel: "Tournament", href, icon: "trophy" as const },
+            {
+              date: addDays(sun, 1),
+              label: `End of ${standingsYear} Season`,
+              href: "/standings",
+              icon: "flag" as const,
+              hideDate: true,
+            },
+          ];
+        })()
+      : [];
+
   return (
     <>
-      <HomeHero heroImage={settings?.heroImage} games={games} today={today} tournamentBanner={tournamentBanner} />
+      <HomeHero
+        heroImage={settings?.heroImage}
+        games={games}
+        today={today}
+        tournamentBanner={tournamentBanner}
+        specialCards={mcgregorRailCards}
+      />
 
       <section aria-labelledby="news-heading" className="bg-white py-8 md:py-10">
         <div className="container-page">

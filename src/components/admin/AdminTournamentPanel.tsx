@@ -51,6 +51,25 @@ function toEditable(g: TournamentGame): EditableTournamentGame {
   };
 }
 
+// The API always returns the *full* refreshed game list for the tournament,
+// not just the one game that changed. Blindly replacing state with that
+// list would silently wipe out unsaved draft scores on every other game
+// card the admin hasn't hit Save on yet — exactly the bug where entering
+// several scores and saving just one made the others "disappear". Only the
+// game(s) that actually changed get their draft state reset from the
+// server; everything else keeps whatever the admin currently has typed in.
+function mergeFreshGames(
+  prev: EditableTournamentGame[],
+  fresh: TournamentGame[],
+  changedIds: Set<string>
+): EditableTournamentGame[] {
+  const prevById = new Map(prev.map((g) => [g._id, g]));
+  return fresh.map((g) => {
+    if (changedIds.has(g._id)) return toEditable(g);
+    return prevById.get(g._id) ?? toEditable(g);
+  });
+}
+
 function AddGameForm({
   defaultDate,
   onCancel,
@@ -261,10 +280,11 @@ export default function AdminTournamentPanel() {
   // /api/admin/tournament/reset) — just to hide the option once it'd be
   // refused anyway. The server re-verifies independently and is the actual
   // authority, since a stale tab or a direct API call could bypass this.
+  // Gated on the planned start date only — test scores entered while
+  // trying things out shouldn't block resetting before the real event.
   const todayLocal = useMemo(() => new Date().toISOString().slice(0, 10), []);
   const tournamentStarted = Boolean(result?.plannedStart && todayLocal >= result.plannedStart);
-  const anyScoresRecorded = games.some((g) => typeof g.homeScore === "number" || typeof g.awayScore === "number");
-  const canReset = games.length > 0 && !tournamentStarted && !anyScoresRecorded;
+  const canReset = games.length > 0 && !tournamentStarted;
   const resetConfirmPhrase = `DELETE ${currentYear} ${type.toUpperCase()}`;
 
   async function handleReset() {
@@ -308,7 +328,7 @@ export default function AdminTournamentPanel() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to save.");
-      setGames((data.games as TournamentGame[]).map(toEditable));
+      setGames((prev) => mergeFreshGames(prev, data.games as TournamentGame[], new Set([game._id])));
       setEditingTeamsFor(null);
       push({ tone: "success", message: `Saved: ${game.homeTeam} vs ${game.awayTeam}` });
     } catch (err) {
@@ -328,7 +348,7 @@ export default function AdminTournamentPanel() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to delete.");
-      setGames((data.games as TournamentGame[]).map(toEditable));
+      setGames((prev) => mergeFreshGames(prev, data.games as TournamentGame[], new Set([game._id])));
       push({ tone: "success", message: "Game deleted." });
     } catch (err) {
       updateGame(game._id, { saving: false });
@@ -354,7 +374,7 @@ export default function AdminTournamentPanel() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to add game.");
-      setGames((data.games as TournamentGame[]).map(toEditable));
+      setGames((prev) => mergeFreshGames(prev, data.games as TournamentGame[], new Set()));
       setShowAddForm(false);
       setSelectedDay(values.date);
       push({ tone: "success", message: `Added: ${values.homeTeam} vs ${values.awayTeam}` });
@@ -391,7 +411,15 @@ export default function AdminTournamentPanel() {
             <button
               key={v}
               type="button"
-              onClick={() => setSubView(v)}
+              onClick={() => {
+                // Coming back from Wild Card Seeding may have just filled in
+                // real team names on Sunday's games server-side — reload so
+                // that shows up without a manual page refresh. Not triggered
+                // by clicking "Games" while already there, since that would
+                // blow away any in-progress unsaved score entry.
+                if (subView !== "games" && v === "games") load();
+                setSubView(v);
+              }}
               className={clsx(
                 "flex-1 rounded-lg border-2 py-1.5 text-xs font-semibold uppercase tracking-wide transition-all",
                 subView === v ? "border-white bg-white text-gray-900" : "border-gray-800 bg-gray-900 text-gray-500"

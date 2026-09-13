@@ -99,25 +99,13 @@ function decodeSessionToken(token: string | undefined | null): SessionPayload | 
 }
 
 /**
- * Lightweight, synchronous "does this look like a valid session" check —
- * signature + expiry only, no Sanity read. Only for the login page's
- * "already signed in, skip the form" redirect; every real access-control
- * decision goes through verifySession() below instead.
- */
-export function readSessionToken(token: string | undefined | null): AdminSession | null {
-  const decoded = decodeSessionToken(token);
-  if (!decoded) return null;
-  return { uid: decoded.uid, role: decoded.role, mustChangePassword: false };
-}
-
-/**
  * The real authority check: confirms the token is well-formed AND still the
  * account's current session (a newer sign-in elsewhere invalidates old
  * tokens) AND the account is still active — both require a live Sanity
  * read, so deactivating someone now takes effect immediately instead of on
  * their next sign-in.
  */
-async function verifySession(token: string | undefined | null): Promise<AdminSession | null> {
+export async function verifySession(token: string | undefined | null): Promise<AdminSession | null> {
   const decoded = decodeSessionToken(token);
   if (!decoded) return null;
 

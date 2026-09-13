@@ -15,10 +15,10 @@ function isTournamentType(value: unknown): value is TournamentType {
 //
 // Deliberately re-checks safety server-side rather than trusting the client
 // — this deletes real data and a stale tab, a second admin, or a direct API
-// call could otherwise bypass a client-only guard. Refuses once *either*:
-//   - today is on or after the tournament's planned start date, or
-//   - any existing game already has a recorded score
-// since at that point this would be destroying real results, not test data.
+// call could otherwise bypass a client-only guard. Refuses once today is on
+// or after the tournament's planned start date. Gated on the date only, not
+// on whether scores exist — test scores entered while trying out the score
+// entry flow shouldn't block resetting before the real event.
 export async function POST(req: NextRequest) {
   const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
@@ -45,16 +45,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const games = await writeClient.fetch<{ _id: string; homeScore?: number; awayScore?: number }[]>(
-    `*[_type == "tournamentGame" && year == $year && type == $type]{_id, homeScore, awayScore}`,
+  const games = await writeClient.fetch<{ _id: string }[]>(
+    `*[_type == "tournamentGame" && year == $year && type == $type]{_id}`,
     { year, type }
   );
-  if (games.some((g) => typeof g.homeScore === "number" || typeof g.awayScore === "number")) {
-    return NextResponse.json(
-      { error: "Some games already have scores recorded — reset is disabled to prevent destroying real results." },
-      { status: 409 }
-    );
-  }
 
   const [pools, wcRankings] = await Promise.all([
     writeClient.fetch<{ _id: string }[]>(`*[_type == "tournamentPool" && year == $year && type == $type]{_id}`, {

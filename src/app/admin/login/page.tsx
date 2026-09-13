@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { ADMIN_SESSION_COOKIE, readSessionToken } from "@/lib/admin-auth";
+import { ADMIN_SESSION_COOKIE, verifySession } from "@/lib/admin-auth";
 import LoginForm from "@/components/admin/LoginForm";
 
 export const metadata: Metadata = { title: "Admin Login" };
@@ -13,10 +13,15 @@ function safeNext(next: string | undefined): string {
   return "/admin";
 }
 
-export default function AdminLoginPage({ searchParams }: { searchParams: { next?: string } }) {
+export default async function AdminLoginPage({ searchParams }: { searchParams: { next?: string } }) {
   const token = cookies().get(ADMIN_SESSION_COOKIE)?.value;
   const next = safeNext(searchParams.next);
-  if (readSessionToken(token)) redirect(next);
+  // Must use the same real (Sanity-verified) check /admin itself uses, not
+  // just "is this cookie well-formed" — otherwise a cookie that looks valid
+  // but no longer matches the account's current session (e.g. logged out,
+  // signed in elsewhere) sends the admin back to /admin, which immediately
+  // bounces them right back here: an infinite redirect loop.
+  if (await verifySession(token)) redirect(next);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#111111] px-4 py-16">

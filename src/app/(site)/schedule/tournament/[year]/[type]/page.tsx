@@ -116,6 +116,37 @@ export default async function TournamentDetailPage({ params }: { params: { year:
       ? computeProjectedSchedule(projectedBoxes, year, type, result.plannedStart)
       : null;
 
+  // Explains the Wild Card ranking rules + a generic example table, shown
+  // in place of the real Div & WC Rank tab whenever there's nothing real to
+  // show yet — both before any games exist (the projected view) AND after
+  // real Thu-Sat games are loaded but before real scores/rankings exist.
+  // Without this, the whole tab silently disappears the moment "Load
+  // Projected Schedule" is used, since wcRankings stays empty until Thu-Sat
+  // is actually played.
+  const wcRankingsPlaceholder = type === "mcgregor" && (
+    <div className="space-y-4">
+      <div className="rounded-lg border border-gray-200 bg-gray-50 px-5 py-6 text-sm text-gray-700">
+        <p className="font-semibold text-black">Wild Card rankings aren&apos;t available yet.</p>
+        <p className="mt-2">
+          Once Thursday through Saturday&apos;s round-robin games are complete, the 4 Division Winners (best record
+          within their own box) get a bye straight to the Quarter Finals &mdash; their opponent is set by a draw
+          once Phase 2 finishes. The other 10 teams are ranked 1&ndash;8 by their overall Phase 1 record; only the{" "}
+          <strong>top 8</strong> advance to Sunday&apos;s Wild Card round, matched 1v8, 2v7, 3v6, 4v5.
+        </p>
+        <p className="mt-2">
+          Ties are broken in this order: W-L record, run differential, runs scored, regular season points, then a
+          coin flip. This tab will show that ranking as real scores come in.
+        </p>
+      </div>
+      <div>
+        <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+          Example &mdash; illustrative teams only
+        </p>
+        <WildCardRankingsTable rankings={WC_RANK_EXAMPLE} />
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div
@@ -168,6 +199,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             trophyAlt={trophyPhoto?.photo.alt}
             today={today}
             teamShortNames={teamShortNames}
+            rankingsPlaceholder={wcRankingsPlaceholder}
           />
         ) : projectedBoxes ? (
           <TournamentBracketView
@@ -179,32 +211,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             wcRankings={[]}
             interactive
             today={today}
-            rankingsPlaceholder={
-              projectedGames && (
-                <div className="space-y-4">
-                  <div className="rounded-lg border border-gray-200 bg-gray-50 px-5 py-6 text-sm text-gray-700">
-                    <p className="font-semibold text-black">Wild Card rankings aren&apos;t available yet.</p>
-                    <p className="mt-2">
-                      Once Thursday through Saturday&apos;s round-robin games are complete, the 4 Division Winners
-                      (best record within their own box) get a bye straight to the Quarter Finals &mdash; their
-                      opponent is set by a draw once Phase 2 finishes. The other 10 teams are ranked 1&ndash;8 by
-                      their overall Phase 1 record; only the <strong>top 8</strong> advance to Sunday&apos;s Wild
-                      Card round, matched 1v8, 2v7, 3v6, 4v5.
-                    </p>
-                    <p className="mt-2">
-                      Ties are broken in this order: W-L record, run differential, runs scored, regular season
-                      points, then a coin flip. This tab will show that ranking as real scores come in.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
-                      Example &mdash; illustrative teams only
-                    </p>
-                    <WildCardRankingsTable rankings={WC_RANK_EXAMPLE} />
-                  </div>
-                </div>
-              )
-            }
+            rankingsPlaceholder={wcRankingsPlaceholder}
           />
         ) : (
           <div className="rounded-lg border border-gray-200 bg-gray-100 px-5 py-4 text-center text-sm text-gray-500">

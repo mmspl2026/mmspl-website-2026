@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { Dices } from "lucide-react";
 import clsx from "clsx";
 import type { TournamentPool } from "@/lib/types";
 
@@ -32,6 +34,22 @@ export default function TournamentPoolSeeding({
       </div>
       <p className="mt-1.5 text-xs text-gray-400">{trophyAlt || "Tournament Trophy"}</p>
     </div>
+  );
+
+  // Same for-fun simulator link as the pre-results projected view — this
+  // shouldn't disappear just because real Thu-Sat games have been loaded.
+  const simulateLinkClass = "flex items-center justify-center gap-1.5 text-xs font-semibold text-brand hover:underline";
+  const simulateLinkMobile = (
+    <Link href="/schedule/tournament/simulate" className={simulateLinkClass}>
+      <Dices size={14} className="shrink-0" aria-hidden="true" />
+      Simulate the Tournament &rarr;
+    </Link>
+  );
+  const simulateLinkDesktop = (
+    <Link href="/schedule/tournament/simulate" className={simulateLinkClass}>
+      <Dices size={14} className="shrink-0" aria-hidden="true" />
+      Curious how it plays out? Simulate the whole tournament &rarr;
+    </Link>
   );
 
   const renderPool = (pool: TournamentPool) => (
@@ -78,6 +96,7 @@ export default function TournamentPoolSeeding({
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {pools.map(renderPool)}
         </div>
+        <div className="mt-4">{simulateLinkMobile}</div>
       </div>
     );
   }
@@ -94,12 +113,16 @@ export default function TournamentPoolSeeding({
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {pools.map(renderPool)}
         </div>
+        <div className="mt-4">{simulateLinkMobile}</div>
       </div>
 
-      <div className="hidden md:flex md:items-center md:justify-center md:gap-6">
-        <div className="flex flex-col gap-4">{leftPools.map(renderPool)}</div>
-        {trophy}
-        <div className="flex flex-col gap-4">{rightPools.map(renderPool)}</div>
+      <div className="hidden md:block">
+        <div className="flex items-center justify-center gap-6">
+          <div className="flex flex-col gap-4">{leftPools.map(renderPool)}</div>
+          {trophy}
+          <div className="flex flex-col gap-4">{rightPools.map(renderPool)}</div>
+        </div>
+        <div className="mt-4">{simulateLinkDesktop}</div>
       </div>
     </div>
   );

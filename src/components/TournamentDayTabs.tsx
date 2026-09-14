@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import clsx from "clsx";
 import type { TournamentGame, WildCardRanking } from "@/lib/types";
 import { formatDayTabLabel } from "@/lib/tournamentDisplay";
@@ -9,7 +9,25 @@ import TournamentGameCard from "./TournamentGameCard";
 
 const RANKINGS_TAB_ID = "__rankings__";
 
-export function WildCardRankingsTable({ rankings }: { rankings: WildCardRanking[] }) {
+export interface DivisionWinnerEntry {
+  pool: string;
+  teamName: string;
+}
+
+export function WildCardRankingsTable({
+  rankings,
+  divisionWinners,
+  teamShortNames,
+}: {
+  rankings: WildCardRanking[];
+  /** The 4 box winners — shown as their own distinct list above the 1-10
+   * ranking, since they already have their bye and were never part of that
+   * ranking to begin with. */
+  divisionWinners?: DivisionWinnerEntry[];
+  /** Team name -> curated short name, used only on mobile where the full
+   * name doesn't fit a 2-up grid (e.g. "The Condo Kings Army" -> "TCK"). */
+  teamShortNames?: Record<string, string>;
+}) {
   const advancing = rankings.filter((r) => r.advanced);
   const eliminated = rankings.filter((r) => !r.advanced);
 
@@ -78,9 +96,37 @@ export function WildCardRankingsTable({ rankings }: { rankings: WildCardRanking[
     </div>
   );
 
+  const divisionWinnersBlock = divisionWinners && divisionWinners.length > 0 && (
+    <div className="mb-4 overflow-hidden rounded-xl border shadow-sm">
+      <div className="bg-brand px-4 py-2 text-center">
+        <p className="font-heading text-sm uppercase tracking-[0.08em] text-white">Division Winners</p>
+      </div>
+      {/* 2-up on mobile (short name — "The Condo Kings Army" -> "TCK" —
+          so it fits cleanly without truncating), 4-up with full names once
+          there's room. */}
+      <div className="grid grid-cols-2 divide-x divide-y bg-white sm:grid-cols-4 sm:divide-y-0">
+        {divisionWinners.map((dw) => (
+          <div key={dw.pool} className="px-3 py-2.5 text-center">
+            <p className="font-mono-brand text-[10px] text-gray-400">Pool {dw.pool}</p>
+            <p className="truncate text-sm font-bold text-black">
+              <span className="sm:hidden">{teamShortNames?.[dw.teamName] || dw.teamName}</span>
+              <span className="hidden sm:inline">{dw.teamName}</span>
+            </p>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-start gap-1.5 border-t bg-gray-50 px-3 py-2 text-xs text-gray-500">
+        <Info size={13} className="mt-0.5 shrink-0" aria-hidden="true" />
+        <p>Advance directly to the Quarter Finals — their QF game times are set by a draw.</p>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="overflow-hidden rounded-xl border shadow-sm">
-      <div className="md:hidden">
+    <div>
+      {divisionWinnersBlock}
+      <div className="overflow-hidden rounded-xl border shadow-sm">
+        <div className="md:hidden">
         <div className={clsx("grid items-center gap-x-1.5 bg-[#0d0d0e] px-2.5 py-2 text-white", GRID_COLS)}>
           <span className="text-center text-[9px] font-semibold uppercase tracking-wide">#</span>
           <span className="text-[9px] font-semibold uppercase tracking-wide">Team</span>
@@ -123,6 +169,7 @@ export function WildCardRankingsTable({ rankings }: { rankings: WildCardRanking[
           {eliminated.map(row)}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
@@ -164,13 +211,18 @@ function DayGamesList({ dayGames, selectedTeam }: { dayGames: TournamentGame[]; 
 export default function TournamentDayTabs({
   games,
   wcRankings,
+  divisionWinners,
   interactive,
   selectedTeam = null,
   rankingsPlaceholder,
   today,
+  teamShortNames,
 }: {
   games: TournamentGame[];
   wcRankings: WildCardRanking[];
+  /** The 4 box winners, shown above the Wild Card 1-10 list on the same
+   * Div & WC Rank tab — omit while they're not known yet. */
+  divisionWinners?: DivisionWinnerEntry[];
   interactive: boolean;
   /** Owned by the parent bracket view and shared with the pool/box seeding
    * above it — clicking a team there highlights all of their games here,
@@ -185,6 +237,9 @@ export default function TournamentDayTabs({
    * that day while it's on, and the last day once it's over (clamped, never
    * blank). Omit to just default to the first day. */
   today?: string;
+  /** Team name -> curated short name, passed through to the Division
+   * Winners grid for its mobile-only abbreviated labels. */
+  teamShortNames?: Record<string, string>;
 }) {
   const days = useMemo(() => Array.from(new Set(games.map((g) => g.date))).sort(), [games]);
   const [activeDay, setActiveDay] = useState<string>(() => {
@@ -195,7 +250,12 @@ export default function TournamentDayTabs({
   });
   const scrollerRef = useRef<HTMLDivElement>(null);
   const showRankingsTab = wcRankings.length > 0 || Boolean(rankingsPlaceholder);
-  const rankingsContent = wcRankings.length > 0 ? <WildCardRankingsTable rankings={wcRankings} /> : rankingsPlaceholder;
+  const rankingsContent =
+    wcRankings.length > 0 ? (
+      <WildCardRankingsTable rankings={wcRankings} divisionWinners={divisionWinners} teamShortNames={teamShortNames} />
+    ) : (
+      rankingsPlaceholder
+    );
 
   function scrollTabs(direction: -1 | 1) {
     scrollerRef.current?.scrollBy({ left: direction * 240, behavior: "smooth" });
@@ -217,7 +277,7 @@ export default function TournamentDayTabs({
         {showRankingsTab && (
           <div>
             <h3 className="mb-4 rounded-md bg-[#0d0d0e] px-4 py-2 font-heading text-sm uppercase tracking-[0.08em] text-white">
-              Wild Card Rankings
+              Division &amp; Wild Card Rankings
             </h3>
             {rankingsContent}
           </div>
@@ -270,7 +330,7 @@ export default function TournamentDayTabs({
                 activeDay === RANKINGS_TAB_ID ? "bg-brand text-white" : "border border-gray-300 bg-white text-black hover:border-gray-400"
               )}
             >
-              WC Rank
+              Div &amp; WC Rank
             </button>
           )}
         </div>

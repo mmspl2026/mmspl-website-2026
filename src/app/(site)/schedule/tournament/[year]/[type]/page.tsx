@@ -12,6 +12,7 @@ import {
   wildCardRankingsQuery,
   standingsBySeasonQuery,
   awardTrophyPhotoByCategoryQuery,
+  allTeamShortNamesQuery,
 } from "@/lib/sanity/queries";
 import type {
   AdminSettings,
@@ -68,7 +69,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
   const year = Number(params.year);
   if (!Number.isInteger(year)) notFound();
 
-  const [result, pools, games, wcRankings, settings, standings, trophyPhoto] = await Promise.all([
+  const [result, pools, games, wcRankings, settings, standings, trophyPhoto, teamShortNamesRaw] = await Promise.all([
     sanityFetch<TournamentResult | null>(tournamentResultQuery, { year, type }, null),
     sanityFetch<TournamentPool[]>(tournamentPoolsQuery, { year, type }, []),
     sanityFetch<TournamentGame[]>(tournamentGamesQuery, { year, type }, []),
@@ -80,9 +81,12 @@ export default async function TournamentDetailPage({ params }: { params: { year:
       { category: TOURNAMENT_TROPHY_AWARD_CATEGORY[type] },
       null
     ),
+    sanityFetch<{ name: string; shortName: string }[]>(allTeamShortNamesQuery, {}, []),
   ]);
 
   if (!result) notFound();
+
+  const teamShortNames = Object.fromEntries(teamShortNamesRaw.map((t) => [t.name, t.shortName]));
 
   const label = TOURNAMENT_LABELS[type];
   const heroImage = settings?.scheduleHeroImage || settings?.heroImage;
@@ -163,6 +167,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             trophyPhotoUrl={trophyPhotoUrl}
             trophyAlt={trophyPhoto?.photo.alt}
             today={today}
+            teamShortNames={teamShortNames}
           />
         ) : projectedBoxes ? (
           <TournamentBracketView

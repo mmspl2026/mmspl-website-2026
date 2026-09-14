@@ -25,6 +25,7 @@ export default function TournamentBracketView({
   interactive,
   rankingsPlaceholder,
   today,
+  teamShortNames,
 }: {
   pools?: TournamentPool[];
   projectedBoxes?: ProjectedBox[] | null;
@@ -37,12 +38,22 @@ export default function TournamentBracketView({
   rankingsPlaceholder?: React.ReactNode;
   /** Today's date (Eastern) — picks which day tab is active by default. */
   today?: string;
+  /** Team name -> curated short name (e.g. "The Condo Kings Army" -> "TCK"),
+   * used for the mobile Division Winners grid where full names don't fit. */
+  teamShortNames?: Record<string, string>;
 }) {
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
 
   function handleTeamClick(name: string) {
     setSelectedTeam((current) => (current === name ? null : name));
   }
+
+  // Derived straight from the real pools rather than threaded as a
+  // separate prop — pools already carries `winner` once Wild Card
+  // rankings have been saved.
+  const divisionWinners = pools
+    ?.filter((p) => p.winner)
+    .map((p) => ({ pool: p.poolLetter, teamName: p.winner as string }));
 
   return (
     <>
@@ -69,10 +80,12 @@ export default function TournamentBracketView({
         <TournamentDayTabs
           games={games}
           wcRankings={wcRankings}
+          divisionWinners={divisionWinners}
           interactive={interactive}
           selectedTeam={selectedTeam}
           rankingsPlaceholder={rankingsPlaceholder}
           today={today}
+          teamShortNames={teamShortNames}
         />
       )}
     </>

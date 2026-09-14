@@ -147,6 +147,9 @@ export default function TournamentSimulator({ standings, seasonGames }: { standi
                       {dw.wins}-{dw.losses}-{dw.ties} &middot;{" "}
                       {dw.runDifferential > 0 ? `+${dw.runDifferential}` : dw.runDifferential}
                     </p>
+                    {dw.coinTossNeeded && (
+                      <p className="mt-1 text-[9px] font-bold uppercase tracking-wide text-amber-400">Coin toss</p>
+                    )}
                   </div>
                 ))}
               </div>

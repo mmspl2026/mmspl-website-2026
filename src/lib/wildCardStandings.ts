@@ -11,6 +11,10 @@ export interface DivisionWinner {
   losses: number;
   ties: number;
   runDifferential: number;
+  /** Tied on points, in-box head-to-head, in-box run diff, AND in-box runs
+   * scored — a real coin toss is required to decide this box, same as the
+   * Wild Card table's tiedForCoinFlip. */
+  coinTossNeeded: boolean;
 }
 
 export interface ComputedWildCardEntry {
@@ -66,22 +70,79 @@ function runDiff(s: TeamPhase1Stats) {
   return s.runsScored - s.runsAllowed;
 }
 
+// Division Winner tie-break is deliberately its own, shorter chain — NOT
+// the same as the Wild Card ranking's chain below. Per house rules: winner
+// of the specific head-to-head game between the tied teams (not overall
+// record — with only one in-box meeting per pair, "who won that game" and
+// "head-to-head record" are the same thing anyway); if that game was itself
+// a tie, best in-box run differential; then most in-box runs scored; then a
+// real coin toss. No regular-season-points level here, unlike Wild Card.
+const DIVISION_WINNER_LEVELS = ["headToHeadWins", "runDiff", "runsScored"] as const;
+
+function headToHeadWins(teamName: string, opponentNames: Set<string>, poolGames: TournamentGame[]): number {
+  let wins = 0;
+  for (const g of poolGames) {
+    if (!g.homeTeam || !g.awayTeam) continue;
+    const isHome = g.homeTeam === teamName;
+    const isAway = g.awayTeam === teamName;
+    if (!isHome && !isAway) continue;
+    const opponent = isHome ? g.awayTeam : g.homeTeam;
+    if (!opponentNames.has(opponent)) continue;
+    const own = (isHome ? g.homeScore : g.awayScore) as number;
+    const opp = (isHome ? g.awayScore : g.homeScore) as number;
+    if (own > opp) wins += 1;
+  }
+  return wins;
+}
+
+/** Narrows a group of teams tied on in-box points down through the
+ * Division Winner tie-break levels, stopping as soon as one team is alone
+ * in the lead. Whoever (or whichever group, if it never narrows to one) is
+ * left after all levels are exhausted is the result — flagged if it's
+ * still more than one team. */
+function resolveDivisionWinner(
+  tiedOnPoints: TeamPhase1Stats[],
+  poolGames: TournamentGame[]
+): { winner: TeamPhase1Stats; coinTossNeeded: boolean } {
+  let group = tiedOnPoints;
+  for (const level of DIVISION_WINNER_LEVELS) {
+    if (group.length <= 1) break;
+    const names = new Set(group.map((s) => s.teamName));
+    const scored = group.map((s) => {
+      const score =
+        level === "headToHeadWins"
+          ? headToHeadWins(s.teamName, names, poolGames)
+          : level === "runDiff"
+            ? runDiff(s)
+            : s.runsScored;
+      return { s, score };
+    });
+    const maxScore = Math.max(...scored.map((x) => x.score));
+    group = scored.filter((x) => x.score === maxScore).map((x) => x.s);
+  }
+  return { winner: group[0], coinTossNeeded: group.length > 1 };
+}
+
 /**
  * Computes Phase 2 (Wild Card) seeding from actual Thu-Sat round robin
- * results, per the league's house rules:
+ * results, per the league's house rules — two DIFFERENT tie-break chains:
  *  - The 4 Division Winners are the best record *within their own box*
  *    (pool games only) — they get the Phase 3 bye, opponent assigned by a
  *    physical draw once Phase 2 finishes (not something to compute here).
+ *    Tied on in-box points? Break it by: winner of their head-to-head game
+ *    (with one in-box meeting per pair, that's the same as head-to-head
+ *    record), then best in-box run differential, then most in-box runs
+ *    scored, then a coin toss. No regular-season-points level here.
  *  - The other 10 teams are ranked 1-8 (advance to Wild Card round,
  *    matched 1v8/2v7/3v6/4v5) / 9-10 (eliminated) by their OVERALL Thu-Sat
  *    record — all 3 games each, including the cross A/B "friendly" games.
  *    Those friendlies exist specifically so every team plays exactly 3
  *    Thu-Sat games regardless of box size, making this comparison fair
- *    across boxes of different sizes.
- *  - Tie-break order, in this exact sequence: W-L record, run differential,
- *    runs scored, regular season points, coin flip. The first four are
- *    computed; a coin flip is a real physical tie-break a human has to
- *    perform, so ties that survive all four just get flagged.
+ *    across boxes of different sizes. Tied on points? Break it by: overall
+ *    head-to-head record, most total wins, head-to-head run differential,
+ *    head-to-head runs scored, regular season points, then a coin toss.
+ * A coin toss is a real physical tie-break a human has to perform, so ties
+ * that survive every computable level just get flagged, not guessed at.
  *
  * Only round robin games with both scores entered are counted, so this can
  * be run mid-tournament for a live look — `gamesConsidered` vs.
@@ -103,6 +164,7 @@ export function computeWildCardStandings(
   const overall = new Map<string, TeamPhase1Stats>();
   const inBox = new Map<string, TeamPhase1Stats>();
   const boxOfTeam = new Map<string, string>();
+  const poolGamesByLetter = new Map<string, TournamentGame[]>();
 
   for (const g of scored) {
     if (!g.homeTeam || !g.awayTeam) continue;
@@ -125,9 +187,16 @@ export function computeWildCardStandings(
       applyGame(awayIn, awayScore, homeScore);
       inBox.set(g.homeTeam, homeIn);
       inBox.set(g.awayTeam, awayIn);
+
+      const poolGames = poolGamesByLetter.get(g.pool) ?? [];
+      poolGames.push(g);
+      poolGamesByLetter.set(g.pool, poolGames);
     }
   }
 
+  // Wild Card ranking's tie-break chain (levels 2-6 of the house rules) —
+  // Division Winner selection has its own, separate chain (see
+  // resolveDivisionWinner above), not this one.
   const tieBreakCompare = (a: TeamPhase1Stats, b: TeamPhase1Stats) =>
     recordPoints(b) - recordPoints(a) ||
     runDiff(b) - runDiff(a) ||
@@ -146,9 +215,12 @@ export function computeWildCardStandings(
   const divisionWinners: DivisionWinner[] = [];
   const divisionWinnerNames = new Set<string>();
   for (const [pool, list] of [...byPool.entries()].sort(([a], [b]) => a.localeCompare(b))) {
-    const sorted = [...list].sort(tieBreakCompare);
-    if (sorted.length === 0) continue;
-    const winner = sorted[0];
+    if (list.length === 0) continue;
+    // "Tied for first place" is on in-box points — only that top group
+    // goes through the Division Winner tie-break chain.
+    const maxPoints = Math.max(...list.map(recordPoints));
+    const tiedOnPoints = list.filter((s) => recordPoints(s) === maxPoints);
+    const { winner, coinTossNeeded } = resolveDivisionWinner(tiedOnPoints, poolGamesByLetter.get(pool) ?? []);
     // Who wins the box is decided on in-box (pool games only) record, but
     // the record shown here is the OVERALL Phase 1 record (all 3 games,
     // including the cross A/B "friendly") — using the in-box-only record
@@ -162,8 +234,9 @@ export function computeWildCardStandings(
       losses: overallStats.losses,
       ties: overallStats.ties,
       runDifferential: runDiff(overallStats),
+      coinTossNeeded,
     });
-    divisionWinnerNames.add(sorted[0].teamName);
+    divisionWinnerNames.add(winner.teamName);
   }
 
   const wildCardCandidates = [...overall.values()].filter((s) => !divisionWinnerNames.has(s.teamName));

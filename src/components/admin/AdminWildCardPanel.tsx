@@ -160,16 +160,20 @@ export default function AdminWildCardPanel({ year, type }: { year: number; type:
             <p className="mb-2 text-xs font-bold uppercase tracking-wide text-gray-400">Division Winners (bye)</p>
             <div className="space-y-1.5">
               {preview.divisionWinners.map((dw) => (
-                <div
-                  key={dw.pool}
-                  className="flex items-center justify-between rounded-lg bg-gray-950 px-3 py-2 text-sm"
-                >
-                  <span className="font-mono-brand text-xs text-gray-500">Pool {dw.pool}</span>
-                  <span className="font-semibold text-white">{dw.teamName}</span>
-                  <span className="font-mono-brand text-xs text-gray-500">
-                    {dw.wins}-{dw.losses}-{dw.ties} &middot;{" "}
-                    {dw.runDifferential > 0 ? `+${dw.runDifferential}` : dw.runDifferential}
-                  </span>
+                <div key={dw.pool} className="rounded-lg bg-gray-950 px-3 py-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-mono-brand text-xs text-gray-500">Pool {dw.pool}</span>
+                    <span className="font-semibold text-white">{dw.teamName}</span>
+                    <span className="font-mono-brand text-xs text-gray-500">
+                      {dw.wins}-{dw.losses}-{dw.ties} &middot;{" "}
+                      {dw.runDifferential > 0 ? `+${dw.runDifferential}` : dw.runDifferential}
+                    </span>
+                  </div>
+                  {dw.coinTossNeeded && (
+                    <p className="mt-1 text-right text-[10px] font-bold uppercase tracking-wide text-amber-400">
+                      Tied through every tie-break — coin toss needed
+                    </p>
+                  )}
                 </div>
               ))}
             </div>

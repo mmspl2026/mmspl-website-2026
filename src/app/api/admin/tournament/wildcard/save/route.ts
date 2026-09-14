@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
-import { wildCardRankingsQuery } from "@/lib/sanity/queries";
-import type { TournamentType, WildCardRanking } from "@/lib/types";
+import { wildCardRankingsQuery, tournamentGamesQuery, standingsBySeasonQuery } from "@/lib/sanity/queries";
+import { computeWildCardStandings } from "@/lib/wildCardStandings";
+import type { Standing, TournamentGame, TournamentType, WildCardRanking } from "@/lib/types";
 
 function isTournamentType(value: unknown): value is TournamentType {
   return value === "charity" || value === "mcgregor";
@@ -116,6 +117,30 @@ export async function POST(req: NextRequest) {
     gamesUpdated += 1;
   }
   if (gamesUpdated > 0) await gameTx.commit();
+
+  // Division Winners aren't hand-reordered anywhere in the UI (unlike the
+  // Wild Card 1-10 list), so it's safe to recompute them fresh here rather
+  // than trust anything the client sent — and stamp them onto the real
+  // tournamentPool documents so the public Div & WC Rank tab can show them
+  // without recomputing anything itself.
+  const [allGames, standings] = await Promise.all([
+    writeClient.fetch<TournamentGame[]>(tournamentGamesQuery, { year, type }),
+    writeClient.fetch<Standing[]>(standingsBySeasonQuery, { year }),
+  ]);
+  const wcResult = computeWildCardStandings(allGames, standings);
+  if (wcResult) {
+    const pools = await writeClient.fetch<{ _id: string; poolLetter: string }[]>(
+      `*[_type == "tournamentPool" && year == $year && type == $type]{_id, poolLetter}`,
+      { year, type }
+    );
+    const winnerByPool = new Map(wcResult.divisionWinners.map((d) => [d.pool, d.teamName]));
+    const poolTx = writeClient.transaction();
+    for (const p of pools) {
+      const winner = winnerByPool.get(p.poolLetter);
+      if (winner) poolTx.patch(p._id, (patch) => patch.set({ winner }));
+    }
+    await poolTx.commit();
+  }
 
   const saved = await writeClient.fetch<WildCardRanking[]>(wildCardRankingsQuery, { year, type });
   return NextResponse.json({ wildCardRankings: saved, wildCardGamesUpdated: gamesUpdated });

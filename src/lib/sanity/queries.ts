@@ -8,6 +8,12 @@ export const allSeasonsQuery = groq`*[_type == "season"] | order(year desc){
   _id, year, isActive, cancelled, cancelledReason, regularSeasonStart, regularSeasonEnd, playoffCutoff
 }`;
 
+// Tournament data stores team names as plain strings, not references — this
+// is for looking up each team's curated shortName (e.g. "The Condo Kings
+// Army" -> "TCK") by that name, for display contexts too tight for the
+// full name (like the mobile Division Winners grid).
+export const allTeamShortNamesQuery = groq`*[_type == "team" && defined(shortName)]{name, shortName}`;
+
 export const standingsBySeasonQuery = groq`*[_type == "standing" && season->year == $year] | order((wins * 2 + ties) desc, runDifferential desc){
   _id,
   wins,
@@ -317,7 +323,7 @@ export const tournamentResultQuery = groq`*[_type == "tournamentResult" && year 
 }`;
 
 export const tournamentPoolsQuery = groq`*[_type == "tournamentPool" && year == $year && type == $type] | order(poolLetter asc){
-  _id, poolLetter, teams
+  _id, poolLetter, teams, winner
 }`;
 
 export const tournamentGamesQuery = groq`*[_type == "tournamentGame" && year == $year && type == $type] | order(date asc, sortOrder asc){

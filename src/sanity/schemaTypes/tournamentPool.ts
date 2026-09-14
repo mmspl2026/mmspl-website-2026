@@ -32,6 +32,12 @@ export default defineType({
       of: [{ type: "string" }],
       description: "Team names in seed order (1st listed = top seed).",
     }),
+    defineField({
+      name: "winner",
+      title: "Division Winner",
+      type: "string",
+      description: "Set once Thu-Sat round robin is complete — the team that gets the bye to Quarter Finals.",
+    }),
   ],
   orderings: [
     { title: "Year, newest first", name: "yearDesc", by: [{ field: "year", direction: "desc" }, { field: "poolLetter", direction: "asc" }] },

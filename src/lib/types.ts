@@ -283,6 +283,9 @@ export interface TournamentPool {
   type: TournamentType;
   poolLetter: string;
   teams: string[];
+  /** Set once Thu-Sat round robin is complete — the team that gets the bye
+   * to Quarter Finals. */
+  winner?: string;
 }
 
 export type TournamentRound = "roundRobin" | "wildCard" | "quarterFinal" | "semiFinal" | "final";

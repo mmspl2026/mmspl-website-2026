@@ -179,8 +179,10 @@ const DAY_LABEL: Record<"thu" | "fri" | "sat", string> = { thu: "Thursday", fri:
  * that, plus a small head-to-head nudge from any real regular-season
  * meeting), Division Winners/Wild Card ranking reuse the real house-rules
  * logic (computeWildCardStandings), Wild Card round is seeded 1v8/2v7/3v6/
- * 4v5, and Quarter Final pairings are randomly drawn (matching the real
- * "assigned by draw" rule) rather than fixed by seed.
+ * 4v5, and Division Winners are randomly assigned to a Quarter Final slot
+ * (matching the real "drawn at the end of Phase 1" rule — the draw is only
+ * ever about which QF slot a Division Winner lands in, not who they'll
+ * face) rather than fixed by seed.
  * Every call is freshly random — never memoize or cache this.
  */
 export function simulateTournament(standings: Standing[], seasonGames: Game[]): TournamentSimulationResult | null {
@@ -241,8 +243,11 @@ export function simulateTournament(standings: Standing[], seasonGames: Game[]): 
     return simulateBracketGame(`Wild Card ${idx + 1}`, "Wild Card", home, away, power, seasonGames);
   });
 
-  // Division Winners' Quarter Final opponent is set by a draw once Phase 2
-  // finishes — so this pairing is random, not seeded 1-1 with the WC games.
+  // Each Division Winner's QF slot is drawn at the end of Phase 1 — a
+  // draw about which slot they land in, not who they'll face — so this
+  // pairing is random rather than seeded 1-1 with the WC games. Shuffling
+  // both sides independently produces the same random-pairing distribution
+  // as "shuffle only the Division Winners across 4 fixed slots" would.
   const byeTeams = shuffle(wc.divisionWinners.map((d) => d.teamName));
   const wcWinners = shuffle(wildCardRoundGames.map((g) => g.winner as string));
   const quarterFinals: SimulatedGame[] = byeTeams.map((home, idx) =>

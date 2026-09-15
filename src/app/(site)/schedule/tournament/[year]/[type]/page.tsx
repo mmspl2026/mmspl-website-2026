@@ -129,9 +129,11 @@ export default async function TournamentDetailPage({ params }: { params: { year:
         <p className="font-semibold text-black">Wild Card rankings aren&apos;t available yet.</p>
         <p className="mt-2">
           Once Thursday through Saturday&apos;s round-robin games are complete, the 4 Division Winners (best record
-          within their own box) get a bye straight to the Quarter Finals &mdash; their opponent is set by a draw
-          once Phase 2 finishes. The other 10 teams are ranked 1&ndash;8 by their overall Phase 1 record; only the{" "}
-          <strong>top 8</strong> advance to Sunday&apos;s Wild Card round, matched 1v8, 2v7, 3v6, 4v5.
+          within their own box) get a bye straight to the Quarter Finals. Which QF slot each one lands in (QF1
+          &ndash; QF4) is set by a draw right at the end of Phase 1 &mdash; that draw is independent of who they&apos;ll
+          actually face; their opponent is simply whoever wins the matching Wild Card game once Phase 2 is played.
+          The other 10 teams are ranked 1&ndash;8 by their overall Phase 1 record; only the <strong>top 8</strong>{" "}
+          advance to Sunday&apos;s Wild Card round, matched 1v8, 2v7, 3v6, 4v5.
         </p>
         <p className="mt-2">
           Ties are broken in this order: W-L record, run differential, runs scored, regular season points, then a

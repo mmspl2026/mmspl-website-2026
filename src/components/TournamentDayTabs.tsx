@@ -117,7 +117,10 @@ export function WildCardRankingsTable({
       </div>
       <div className="flex items-start gap-1.5 border-t bg-gray-50 px-3 py-2 text-xs text-gray-500">
         <Info size={13} className="mt-0.5 shrink-0" aria-hidden="true" />
-        <p>Advance directly to the Quarter Finals — their QF game times are set by a draw.</p>
+        <p>
+          Advance directly to the Quarter Finals — which QF slot each one lands in is set by a draw at the end of
+          Phase 1, independent of who they&apos;ll actually face.
+        </p>
       </div>
     </div>
   );

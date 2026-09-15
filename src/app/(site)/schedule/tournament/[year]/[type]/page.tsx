@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarOff } from "lucide-react";
+import { CalendarOff, Flame } from "lucide-react";
 import { getTodayEastern } from "@/utils/timezone";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
@@ -13,6 +13,7 @@ import {
   standingsBySeasonQuery,
   awardTrophyPhotoByCategoryQuery,
   allTeamShortNamesQuery,
+  tournamentPredictionQuery,
 } from "@/lib/sanity/queries";
 import type {
   AdminSettings,
@@ -23,6 +24,7 @@ import type {
   TournamentType,
   Standing,
   AwardTrophyPhoto,
+  TournamentPrediction,
 } from "@/lib/types";
 import { urlFor } from "@/lib/sanity/image";
 import { TOURNAMENT_LABELS, TOURNAMENT_TROPHY_AWARD_CATEGORY, formatDateRange } from "@/lib/tournamentDisplay";
@@ -69,20 +71,22 @@ export default async function TournamentDetailPage({ params }: { params: { year:
   const year = Number(params.year);
   if (!Number.isInteger(year)) notFound();
 
-  const [result, pools, games, wcRankings, settings, standings, trophyPhoto, teamShortNamesRaw] = await Promise.all([
-    sanityFetch<TournamentResult | null>(tournamentResultQuery, { year, type }, null),
-    sanityFetch<TournamentPool[]>(tournamentPoolsQuery, { year, type }, []),
-    sanityFetch<TournamentGame[]>(tournamentGamesQuery, { year, type }, []),
-    sanityFetch<WildCardRanking[]>(wildCardRankingsQuery, { year, type }, []),
-    sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
-    sanityFetch<Standing[]>(standingsBySeasonQuery, { year }, []),
-    sanityFetch<AwardTrophyPhoto | null>(
-      awardTrophyPhotoByCategoryQuery,
-      { category: TOURNAMENT_TROPHY_AWARD_CATEGORY[type] },
-      null
-    ),
-    sanityFetch<{ name: string; shortName: string }[]>(allTeamShortNamesQuery, {}, []),
-  ]);
+  const [result, pools, games, wcRankings, settings, standings, trophyPhoto, teamShortNamesRaw, prediction] =
+    await Promise.all([
+      sanityFetch<TournamentResult | null>(tournamentResultQuery, { year, type }, null),
+      sanityFetch<TournamentPool[]>(tournamentPoolsQuery, { year, type }, []),
+      sanityFetch<TournamentGame[]>(tournamentGamesQuery, { year, type }, []),
+      sanityFetch<WildCardRanking[]>(wildCardRankingsQuery, { year, type }, []),
+      sanityFetch<AdminSettings | null>(adminSettingsQuery, {}, null),
+      sanityFetch<Standing[]>(standingsBySeasonQuery, { year }, []),
+      sanityFetch<AwardTrophyPhoto | null>(
+        awardTrophyPhotoByCategoryQuery,
+        { category: TOURNAMENT_TROPHY_AWARD_CATEGORY[type] },
+        null
+      ),
+      sanityFetch<{ name: string; shortName: string }[]>(allTeamShortNamesQuery, {}, []),
+      sanityFetch<TournamentPrediction | null>(tournamentPredictionQuery, { year, type }, null),
+    ]);
 
   if (!result) notFound();
 
@@ -149,6 +153,52 @@ export default async function TournamentDetailPage({ params }: { params: { year:
     </div>
   );
 
+  // Suspense teaser for the "Claude's Prediction" feature — only shown for
+  // the live McGregor tournament, and only until the real prediction drops
+  // (once `prediction` exists, the plain links in TournamentPoolSeeding /
+  // ProjectedSeeding already point to the live page, so this banner would
+  // just be stale "coming soon" copy sitting next to the real thing).
+  let predictionTeaser: React.ReactNode = null;
+  if (type === "mcgregor" && isCurrentSeason && !result.cancelled && !result.champion && !prediction && result.plannedStart) {
+    const revealDate = new Date(`${result.plannedStart}T00:00:00`);
+    revealDate.setDate(revealDate.getDate() + 2); // Thu start -> Saturday reveal
+    const revealDateStr = revealDate.toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+    const msPerDay = 24 * 60 * 60 * 1000;
+    const daysLeft = Math.round(
+      (new Date(`${revealDateStr}T00:00:00`).getTime() - new Date(`${today}T00:00:00`).getTime()) / msPerDay
+    );
+    const countdownLabel =
+      daysLeft > 1 ? `${daysLeft} days to go` : daysLeft === 1 ? "1 day to go" : daysLeft === 0 ? "dropping tonight" : "coming any minute now";
+
+    predictionTeaser = (
+      <Link
+        href="/schedule/tournament/predict"
+        className="group flex flex-col gap-3 overflow-hidden rounded-xl border border-white/10 bg-[#0d0d0e] px-5 py-4 shadow-sm transition hover:border-brand/50 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+      >
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand/20">
+            <Flame size={18} className="text-brand" aria-hidden="true" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand/40" aria-hidden="true" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand">Something&apos;s coming</p>
+            <p className="mt-0.5 text-sm text-white/80 sm:hidden">
+              Good luck out there this week! Claude&apos;s cold, stats-only championship prediction drops Sept 19th.
+            </p>
+            <p className="mt-0.5 hidden text-sm text-white/80 sm:block">
+              Good luck to every team out there this week &mdash; and once Phase 1 wraps, Claude&apos;s cold,
+              stats-only championship prediction drops the night of Sept 19th. No bias, no player names, just
+              numbers. Think the machine&apos;s got it wrong?
+            </p>
+          </div>
+        </div>
+        <span className="ml-12 w-fit shrink-0 whitespace-nowrap rounded-full border border-white/15 px-3 py-1.5 font-mono-brand text-[11px] font-bold uppercase tracking-wide text-white/70 group-hover:border-brand/50 group-hover:text-brand sm:ml-0">
+          {countdownLabel}
+        </span>
+      </Link>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div
@@ -182,6 +232,8 @@ export default async function TournamentDetailPage({ params }: { params: { year:
 
       <div className="container-page space-y-8 py-10">
         <TournamentChampionsBanner result={result} />
+
+        {predictionTeaser}
 
         {result.cancelled ? (
           <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-gray-300 bg-gray-50 px-5 py-10 text-center">

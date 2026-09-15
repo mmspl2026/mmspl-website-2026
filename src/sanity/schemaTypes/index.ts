@@ -22,6 +22,7 @@ import tournamentResult from "./tournamentResult";
 import tournamentPool from "./tournamentPool";
 import tournamentGame from "./tournamentGame";
 import wildCardRanking from "./wildCardRanking";
+import tournamentPrediction from "./tournamentPrediction";
 
 export const schemaTypes = [
   season,
@@ -48,4 +49,5 @@ export const schemaTypes = [
   tournamentPool,
   tournamentGame,
   wildCardRanking,
+  tournamentPrediction,
 ];

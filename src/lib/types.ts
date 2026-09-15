@@ -329,3 +329,26 @@ export interface WildCardRanking {
   runDifferential?: number;
   advanced: boolean;
 }
+
+export interface TournamentPredictionPick {
+  label?: string;
+  team?: string;
+  reasoning?: string;
+}
+
+/** A one-time bracket prediction written after Phase 1 wraps up, before
+ * Sunday's playdowns — compared against real results as they come in. */
+export interface TournamentPrediction {
+  _id: string;
+  year: number;
+  type: TournamentType;
+  generatedAt: string;
+  intro: string;
+  wildCardAdvancers?: string[];
+  quarterFinalWinners?: string[];
+  semiFinalWinners?: string[];
+  finalistPick?: string;
+  championPick: string;
+  championReasoning: string;
+  picks?: TournamentPredictionPick[];
+}

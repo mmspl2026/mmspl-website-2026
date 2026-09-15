@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Dices } from "lucide-react";
+import { Dices, Flame } from "lucide-react";
 import clsx from "clsx";
 import type { TournamentPool } from "@/lib/types";
 
@@ -52,6 +52,15 @@ export default function TournamentPoolSeeding({
     </Link>
   );
 
+  // Claude's real (non-random) bracket call, written cold off the stats
+  // once Phase 1 wraps up — separate from the for-fun randomized simulator.
+  const predictionLink = (
+    <Link href="/schedule/tournament/predict" className={simulateLinkClass}>
+      <Flame size={14} className="shrink-0" aria-hidden="true" />
+      Claude&apos;s Prediction &rarr;
+    </Link>
+  );
+
   const renderPool = (pool: TournamentPool) => (
     <div key={pool._id} className="w-56 shrink-0 overflow-hidden rounded-xl border shadow-sm">
       <div className="bg-brand px-4 py-2 text-center">
@@ -96,7 +105,10 @@ export default function TournamentPoolSeeding({
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {pools.map(renderPool)}
         </div>
-        <div className="mt-4">{simulateLinkMobile}</div>
+        <div className="mt-4 flex flex-col items-center gap-2">
+          {simulateLinkMobile}
+          {predictionLink}
+        </div>
       </div>
     );
   }
@@ -113,7 +125,10 @@ export default function TournamentPoolSeeding({
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {pools.map(renderPool)}
         </div>
-        <div className="mt-4">{simulateLinkMobile}</div>
+        <div className="mt-4 flex flex-col items-center gap-2">
+          {simulateLinkMobile}
+          {predictionLink}
+        </div>
       </div>
 
       <div className="hidden md:block">
@@ -122,7 +137,10 @@ export default function TournamentPoolSeeding({
           {trophy}
           <div className="flex flex-col gap-4">{rightPools.map(renderPool)}</div>
         </div>
-        <div className="mt-4">{simulateLinkDesktop}</div>
+        <div className="mt-4 flex items-center justify-center gap-6">
+          {simulateLinkDesktop}
+          {predictionLink}
+        </div>
       </div>
     </div>
   );

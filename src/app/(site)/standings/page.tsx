@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CalendarOff, Info, Trophy, AlertTriangle } from "lucide-react";
+import { getTodayEastern } from "@/utils/timezone";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
   allSeasonsQuery,
@@ -63,6 +64,16 @@ export default async function StandingsPage({
     ? Object.fromEntries(ranked.map((r) => [r.standing._id, { decidedBy: r.decidedBy, coinTossNeeded: r.coinTossNeeded }]))
     : undefined;
   const coinTossTeams = ranked.filter((r) => r.coinTossNeeded).map((r) => r.standing.team.name);
+
+  // A season stops being the "active" one only once next year's season is
+  // created — so for the current active season, `isActive` alone can't tell
+  // us the regular season itself has wrapped (it's true from May through the
+  // tournament). Fall back to the same date check the homepage uses.
+  const seasonComplete = Boolean(
+    selectedSeason &&
+      (!selectedSeason.isActive ||
+        (selectedSeason.regularSeasonEnd && getTodayEastern() > selectedSeason.regularSeasonEnd))
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -148,7 +159,7 @@ export default async function StandingsPage({
             <StandingsTable
               standings={displayStandings}
               year={selectedYear}
-              seasonComplete={!selectedSeason?.isActive}
+              seasonComplete={seasonComplete}
               tiebreakInfo={tiebreakInfo}
             />
           )}

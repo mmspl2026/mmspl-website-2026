@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { MousePointerClick } from "lucide-react";
 import type { TournamentGame, TournamentPool, WildCardRanking } from "@/lib/types";
 import type { ProjectedBox } from "@/lib/tournamentSeeding";
 import TournamentPoolSeeding from "./TournamentPoolSeeding";
@@ -77,16 +78,22 @@ export default function TournamentBracketView({
         />
       )}
       {games.length > 0 && (
-        <TournamentDayTabs
-          games={games}
-          wcRankings={wcRankings}
-          divisionWinners={divisionWinners}
-          interactive={interactive}
-          selectedTeam={selectedTeam}
-          rankingsPlaceholder={rankingsPlaceholder}
-          today={today}
-          teamShortNames={teamShortNames}
-        />
+        <div>
+          <p className="mb-3 flex items-center justify-center gap-1.5 text-center text-xs text-gray-400">
+            <MousePointerClick size={12} className="shrink-0" aria-hidden="true" />
+            Tap a team above to highlight their games below
+          </p>
+          <TournamentDayTabs
+            games={games}
+            wcRankings={wcRankings}
+            divisionWinners={divisionWinners}
+            interactive={interactive}
+            selectedTeam={selectedTeam}
+            rankingsPlaceholder={rankingsPlaceholder}
+            today={today}
+            teamShortNames={teamShortNames}
+          />
+        </div>
       )}
     </>
   );

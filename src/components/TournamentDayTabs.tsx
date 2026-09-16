@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Info } from "lucide-react";
+import { ChevronLeft, ChevronRight, Info, Wrench, Boxes } from "lucide-react";
 import clsx from "clsx";
 import type { TournamentGame, WildCardRanking } from "@/lib/types";
 import { formatDayTabLabel } from "@/lib/tournamentDisplay";
@@ -181,24 +181,61 @@ function gamesForDay(games: TournamentGame[], day: string) {
   return games.filter((g) => g.date === day).sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 
+const FIELD_ABBREV: Record<string, string> = {
+  "Centennial North": "CN",
+  "Centennial South": "CS",
+  Mintleaf: "ML",
+};
+function fieldAbbrev(field: string): string {
+  return FIELD_ABBREV[field] ?? field.slice(0, 2).toUpperCase();
+}
+
+// Setup/teardown crews are assigned per park (each field's own first and
+// last game of the day) — so with more than one diamond in play, a single
+// day-level note would only ever surface one park's crew and silently drop
+// the rest. Instead, collect one setup note per field (from that field's
+// first game with one set) and one teardown note per field (from that
+// field's last game with one set), so both diamonds show up in the same
+// top/bottom banner style as before.
 function DayGamesList({ dayGames, selectedTeam }: { dayGames: TournamentGame[]; selectedTeam: string | null }) {
-  const setupNote = dayGames.find((g) => g.setupNote)?.setupNote;
-  const teardownNote = [...dayGames].reverse().find((g) => g.teardownNote)?.teardownNote;
+  const fields = [...new Set(dayGames.map((g) => g.field).filter((f): f is string => Boolean(f)))];
+  const setupNotes = fields
+    .map((field) => dayGames.find((g) => g.field === field && g.setupNote))
+    .filter((g): g is TournamentGame => Boolean(g));
+  const teardownNotes = fields
+    .map((field) => [...dayGames].reverse().find((g) => g.field === field && g.teardownNote))
+    .filter((g): g is TournamentGame => Boolean(g));
 
   return (
     <div className="space-y-3">
-      {setupNote && (
-        <p className="rounded-md bg-gray-100 px-3 py-2 text-xs text-gray-500">
-          <span className="font-semibold uppercase tracking-wide">Setup:</span> {setupNote}
-        </p>
+      {setupNotes.length > 0 && (
+        <div className="flex items-start gap-2 rounded-lg border border-brand/25 bg-brand-50 px-3.5 py-2.5">
+          <Wrench size={15} className="mt-0.5 shrink-0 text-brand" aria-hidden="true" />
+          <div className="space-y-0.5">
+            {setupNotes.map((g) => (
+              <p key={g._id} className="text-xs leading-snug">
+                <span className="font-bold text-brand">SETUP ({fieldAbbrev(g.field as string)}):</span>{" "}
+                <span className="font-bold text-black">{g.setupNote}</span>
+              </p>
+            ))}
+          </div>
+        </div>
       )}
       {dayGames.map((game) => (
         <TournamentGameCard key={game._id} game={game} selectedTeam={selectedTeam} />
       ))}
-      {teardownNote && (
-        <p className="rounded-md bg-gray-100 px-3 py-2 text-xs text-gray-500">
-          <span className="font-semibold uppercase tracking-wide">Teardown:</span> {teardownNote}
-        </p>
+      {teardownNotes.length > 0 && (
+        <div className="flex items-start gap-2 rounded-lg border border-brand/25 bg-brand-50 px-3.5 py-2.5">
+          <Boxes size={15} className="mt-0.5 shrink-0 text-brand" aria-hidden="true" />
+          <div className="space-y-0.5">
+            {teardownNotes.map((g) => (
+              <p key={g._id} className="text-xs leading-snug">
+                <span className="font-bold text-brand">TEARDOWN ({fieldAbbrev(g.field as string)}):</span>{" "}
+                <span className="font-bold text-black">{g.teardownNote}</span>
+              </p>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

@@ -61,7 +61,7 @@ export default function ProjectedSeeding({
 
   const trophy = trophyPhotoUrl && (
     <div className="flex flex-col items-center">
-      <div className="relative h-64 w-52">
+      <div className="relative h-40 w-32 md:h-64 md:w-52">
         <Image src={trophyPhotoUrl} alt={trophyAlt || "Tournament trophy"} fill className="object-contain" />
       </div>
       <p className="mt-1.5 text-xs text-gray-400">{trophyAlt || "Tournament Trophy"}</p>

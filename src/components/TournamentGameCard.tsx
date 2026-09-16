@@ -27,7 +27,7 @@ function TeamRow({
   return (
     <div
       className={clsx(
-        "flex items-center justify-between gap-3 rounded-md px-3 py-2",
+        "flex items-center justify-between gap-3 rounded-md px-2.5 py-1.5 sm:px-3 sm:py-2",
         isWinner && "border-l-2 border-brand",
         isSelected ? "bg-brand" : isWinner && "bg-white/[0.06]"
       )}
@@ -76,15 +76,15 @@ export default function TournamentGameCard({
   return (
     <div
       className={clsx(
-        "rounded-xl border p-4 text-white shadow transition-opacity",
+        "rounded-xl border p-2.5 text-white shadow transition-opacity sm:p-4",
         involvesSelected ? "border-brand bg-[#0d0d0e]" : "border-white/10 bg-[#0d0d0e]",
         selectedTeam && !involvesSelected && "opacity-40"
       )}
     >
-      <div className="mb-2 flex items-center justify-between">
+      <div className="mb-1.5 flex items-center justify-between sm:mb-2">
         <div>
-          <p className="text-sm font-bold text-white">{game.time || "TBD"}</p>
-          {game.field && <p className="text-xs text-white/50">{game.field}</p>}
+          <p className="text-sm font-bold leading-tight text-white">{game.time || "TBD"}</p>
+          {game.field && <p className="text-xs leading-tight text-white/50">{game.field}</p>}
         </div>
         {badge && (
           <span className="rounded-full bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
@@ -92,7 +92,7 @@ export default function TournamentGameCard({
           </span>
         )}
       </div>
-      <div className="space-y-1">
+      <div className="space-y-0.5 sm:space-y-1">
         <TeamRow
           name={game.homeTeam}
           seed={game.homeSeed}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MousePointerClick } from "lucide-react";
+import { MousePointerClick, LayoutGrid, CalendarDays, ListOrdered } from "lucide-react";
 import type { TournamentGame, TournamentPool, WildCardRanking } from "@/lib/types";
 import type { ProjectedBox } from "@/lib/tournamentSeeding";
 import TournamentPoolSeeding from "./TournamentPoolSeeding";
@@ -44,6 +44,8 @@ export default function TournamentBracketView({
   teamShortNames?: Record<string, string>;
 }) {
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+  const [rankingsJumpSignal, setRankingsJumpSignal] = useState(0);
+  const [scheduleJumpSignal, setScheduleJumpSignal] = useState(0);
 
   function handleTeamClick(name: string) {
     setSelectedTeam((current) => (current === name ? null : name));
@@ -56,29 +58,63 @@ export default function TournamentBracketView({
     ?.filter((p) => p.winner)
     .map((p) => ({ pool: p.poolLetter, teamName: p.winner as string }));
 
+  const showRankings = wcRankings.length > 0 || Boolean(rankingsPlaceholder);
+  const jumpLinkClass =
+    "flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-black transition-colors hover:border-brand hover:text-brand";
+
   return (
     <>
+      {(pools || projectedBoxes) && games.length > 0 && (
+        <nav aria-label="Jump to section" className="flex flex-wrap justify-center gap-2">
+          <a href="#tournament-boxes" className={jumpLinkClass}>
+            <LayoutGrid size={13} className="shrink-0" aria-hidden="true" />
+            Boxes
+          </a>
+          <a
+            href="#tournament-schedule"
+            className={jumpLinkClass}
+            onClick={() => setScheduleJumpSignal((n) => n + 1)}
+          >
+            <CalendarDays size={13} className="shrink-0" aria-hidden="true" />
+            Schedule
+          </a>
+          {showRankings && (
+            <a
+              href="#tournament-schedule"
+              className={jumpLinkClass}
+              onClick={() => setRankingsJumpSignal((n) => n + 1)}
+            >
+              <ListOrdered size={13} className="shrink-0" aria-hidden="true" />
+              Rankings
+            </a>
+          )}
+        </nav>
+      )}
       {pools && (
-        <TournamentPoolSeeding
-          pools={pools}
-          selectedTeam={selectedTeam}
-          onTeamClick={handleTeamClick}
-          trophyPhotoUrl={trophyPhotoUrl}
-          trophyAlt={trophyAlt}
-        />
+        <div id="tournament-boxes" className="scroll-mt-[76px]">
+          <TournamentPoolSeeding
+            pools={pools}
+            selectedTeam={selectedTeam}
+            onTeamClick={handleTeamClick}
+            trophyPhotoUrl={trophyPhotoUrl}
+            trophyAlt={trophyAlt}
+          />
+        </div>
       )}
       {projectedBoxes && (
-        <ProjectedSeeding
-          boxes={projectedBoxes}
-          includesSchedule={includesProjectedSchedule}
-          selectedTeam={selectedTeam}
-          onTeamClick={handleTeamClick}
-          trophyPhotoUrl={trophyPhotoUrl}
-          trophyAlt={trophyAlt}
-        />
+        <div id="tournament-boxes" className="scroll-mt-[76px]">
+          <ProjectedSeeding
+            boxes={projectedBoxes}
+            includesSchedule={includesProjectedSchedule}
+            selectedTeam={selectedTeam}
+            onTeamClick={handleTeamClick}
+            trophyPhotoUrl={trophyPhotoUrl}
+            trophyAlt={trophyAlt}
+          />
+        </div>
       )}
       {games.length > 0 && (
-        <div>
+        <div id="tournament-schedule" className="scroll-mt-[76px]">
           <p className="mb-3 flex items-center justify-center gap-1.5 text-center text-xs text-gray-400">
             <MousePointerClick size={12} className="shrink-0" aria-hidden="true" />
             Tap a team above to highlight their games below
@@ -92,6 +128,8 @@ export default function TournamentBracketView({
             rankingsPlaceholder={rankingsPlaceholder}
             today={today}
             teamShortNames={teamShortNames}
+            jumpToRankingsSignal={rankingsJumpSignal}
+            jumpToScheduleSignal={scheduleJumpSignal}
           />
         </div>
       )}

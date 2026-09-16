@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Info, Wrench, Boxes } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, ChevronDown, Info, Wrench, Boxes } from "lucide-react";
 import clsx from "clsx";
 import type { TournamentGame, WildCardRanking } from "@/lib/types";
 import { formatDayTabLabel } from "@/lib/tournamentDisplay";
@@ -18,6 +18,7 @@ export function WildCardRankingsTable({
   rankings,
   divisionWinners,
   teamShortNames,
+  showExplainer = false,
 }: {
   rankings: WildCardRanking[];
   /** The 4 box winners — shown as their own distinct list above the 1-10
@@ -27,6 +28,11 @@ export function WildCardRankingsTable({
   /** Team name -> curated short name, used only on mobile where the full
    * name doesn't fit a 2-up grid (e.g. "The Condo Kings Army" -> "TCK"). */
   teamShortNames?: Record<string, string>;
+  /** Adds a collapsed-by-default "How this works" writeup above the table —
+   * only meaningful once real rankings exist (the pre-rankings placeholder
+   * already shows this explanation inline, uncollapsed, since there's
+   * nothing real to look at yet). */
+  showExplainer?: boolean;
 }) {
   const advancing = rankings.filter((r) => r.advanced);
   const eliminated = rankings.filter((r) => !r.advanced);
@@ -115,8 +121,8 @@ export function WildCardRankingsTable({
           </div>
         ))}
       </div>
-      <div className="flex items-start gap-1.5 border-t bg-gray-50 px-3 py-2 text-xs text-gray-500">
-        <Info size={13} className="mt-0.5 shrink-0" aria-hidden="true" />
+      <div className="flex items-start gap-1.5 border-t bg-gray-50 px-3 py-2 text-xs text-gray-500 md:items-center md:justify-center md:text-center">
+        <Info size={13} className="mt-0.5 shrink-0 md:mt-0" aria-hidden="true" />
         <p>
           Advance directly to the Quarter Finals — which QF slot each one lands in is set by a draw at the end of
           Phase 1, independent of who they&apos;ll actually face.
@@ -125,8 +131,39 @@ export function WildCardRankingsTable({
     </div>
   );
 
+  const explainer = showExplainer && (
+    <details className="group mb-4 rounded-lg border border-gray-200 bg-gray-50">
+      <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-semibold text-black">
+        How the rankings work
+        <ChevronDown size={16} className="shrink-0 text-gray-400 transition-transform group-open:rotate-180" aria-hidden="true" />
+      </summary>
+      <div className="border-t border-gray-200 px-4 py-3 text-sm text-gray-700">
+        {/* Mobile gets a tight, scannable bullet list — the full sentences
+            below read fine on a wide screen but felt heavy on a phone. */}
+        <ul className="list-disc space-y-1.5 pl-4 sm:hidden">
+          <li>Best record in each box gets a bye to the QFs — slot set by a draw.</li>
+          <li>Next 8 of the other 10 teams advance to Sunday&apos;s Wild Card round (1v8, 2v7, 3v6, 4v5).</li>
+          <li>Ties: record &rarr; run diff &rarr; runs scored &rarr; season points &rarr; coin flip.</li>
+        </ul>
+        <div className="hidden space-y-2 sm:block">
+          <p>
+            Division Winners &mdash; the best record in each of the 4 boxes &mdash; get a bye straight to the Quarter
+            Finals. Which QF slot each one lands in (QF1&ndash;QF4) is set by a draw at the end of Phase 1, independent
+            of who they&apos;ll actually face; their opponent is whoever wins the matching Wild Card game.
+          </p>
+          <p>
+            The other 10 teams are ranked 1&ndash;8 by their overall Phase 1 record; only the <strong>top 8</strong>{" "}
+            advance to Sunday&apos;s Wild Card round, matched 1v8, 2v7, 3v6, 4v5.
+          </p>
+          <p>Ties are broken in this order: W-L record, run differential, runs scored, regular season points, then a coin flip.</p>
+        </div>
+      </div>
+    </details>
+  );
+
   return (
     <div>
+      {explainer}
       {divisionWinnersBlock}
       <div className="overflow-hidden rounded-xl border shadow-sm">
         <div className="md:hidden">
@@ -181,6 +218,17 @@ function gamesForDay(games: TournamentGame[], day: string) {
   return games.filter((g) => g.date === day).sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 }
 
+// Whichever tournament day is current: the first day before it starts, that
+// day while it's on, and the last day once it's over (clamped, never
+// blank) — used both for the initial tab and to jump back to it from the
+// Rankings tab via the "Schedule" quick-jump link.
+function computeDefaultDay(days: string[], today?: string): string {
+  if (days.length === 0) return RANKINGS_TAB_ID;
+  if (!today) return days[0];
+  const upToToday = days.filter((d) => d <= today);
+  return upToToday.length > 0 ? upToToday[upToToday.length - 1] : days[0];
+}
+
 const FIELD_ABBREV: Record<string, string> = {
   "Centennial North": "CN",
   "Centennial South": "CS",
@@ -207,7 +255,7 @@ function DayGamesList({ dayGames, selectedTeam }: { dayGames: TournamentGame[]; 
     .filter((g): g is TournamentGame => Boolean(g));
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2 sm:space-y-3">
       {setupNotes.length > 0 && (
         <div className="flex items-start gap-2 rounded-lg border border-brand/25 bg-brand-50 px-3.5 py-2.5">
           <Wrench size={15} className="mt-0.5 shrink-0 text-brand" aria-hidden="true" />
@@ -257,6 +305,8 @@ export default function TournamentDayTabs({
   rankingsPlaceholder,
   today,
   teamShortNames,
+  jumpToRankingsSignal,
+  jumpToScheduleSignal,
 }: {
   games: TournamentGame[];
   wcRankings: WildCardRanking[];
@@ -280,19 +330,52 @@ export default function TournamentDayTabs({
   /** Team name -> curated short name, passed through to the Division
    * Winners grid for its mobile-only abbreviated labels. */
   teamShortNames?: Record<string, string>;
+  /** Bumped by the parent's "Rankings" quick-jump link — any change (not
+   * the initial value) switches straight to the Div & WC Rank tab, so that
+   * jump doesn't just scroll to the schedule and leave the visitor to find
+   * the tab themselves. */
+  jumpToRankingsSignal?: number;
+  /** Bumped by the parent's "Schedule" quick-jump link — switches back to
+   * the current-day tab, so it doesn't just leave the Div & WC Rank tab
+   * showing if that's where a previous "Rankings" jump left it. */
+  jumpToScheduleSignal?: number;
 }) {
   const days = useMemo(() => Array.from(new Set(games.map((g) => g.date))).sort(), [games]);
-  const [activeDay, setActiveDay] = useState<string>(() => {
-    if (days.length === 0) return RANKINGS_TAB_ID;
-    if (!today) return days[0];
-    const upToToday = days.filter((d) => d <= today);
-    return upToToday.length > 0 ? upToToday[upToToday.length - 1] : days[0];
-  });
+  const [activeDay, setActiveDay] = useState<string>(() => computeDefaultDay(days, today));
+  const defaultDayRef = useRef(computeDefaultDay(days, today));
+  defaultDayRef.current = computeDefaultDay(days, today);
+
+  const isFirstRankingsJump = useRef(true);
+  useEffect(() => {
+    if (isFirstRankingsJump.current) {
+      isFirstRankingsJump.current = false;
+      return;
+    }
+    if (jumpToRankingsSignal !== undefined) {
+      setActiveDay(RANKINGS_TAB_ID);
+    }
+  }, [jumpToRankingsSignal]);
+
+  const isFirstScheduleJump = useRef(true);
+  useEffect(() => {
+    if (isFirstScheduleJump.current) {
+      isFirstScheduleJump.current = false;
+      return;
+    }
+    if (jumpToScheduleSignal !== undefined) {
+      setActiveDay(defaultDayRef.current);
+    }
+  }, [jumpToScheduleSignal]);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const showRankingsTab = wcRankings.length > 0 || Boolean(rankingsPlaceholder);
   const rankingsContent =
     wcRankings.length > 0 ? (
-      <WildCardRankingsTable rankings={wcRankings} divisionWinners={divisionWinners} teamShortNames={teamShortNames} />
+      <WildCardRankingsTable
+        rankings={wcRankings}
+        divisionWinners={divisionWinners}
+        teamShortNames={teamShortNames}
+        showExplainer
+      />
     ) : (
       rankingsPlaceholder
     );
@@ -328,61 +411,63 @@ export default function TournamentDayTabs({
 
   return (
     <div>
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => scrollTabs(-1)}
-          aria-label="Scroll days left"
-          className="hidden shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white p-2 text-black transition-colors hover:border-gray-400 hover:bg-gray-50 sm:flex"
-        >
-          <ChevronLeft size={18} aria-hidden="true" />
-        </button>
+      <div className="sticky top-[64px] z-30 border-b border-gray-200 bg-gray-50 py-2">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => scrollTabs(-1)}
+            aria-label="Scroll days left"
+            className="hidden shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white p-2 text-black transition-colors hover:border-gray-400 hover:bg-gray-50 sm:flex"
+          >
+            <ChevronLeft size={18} aria-hidden="true" />
+          </button>
 
-        <div
-          ref={scrollerRef}
-          role="tablist"
-          aria-label="Tournament days"
-          className="no-scrollbar -mx-5 flex flex-1 gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0"
-        >
-          {days.map((day) => (
-            <button
-              key={day}
-              type="button"
-              role="tab"
-              aria-selected={activeDay === day}
-              onClick={() => setActiveDay(day)}
-              className={clsx(
-                "shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-                activeDay === day ? "bg-brand text-white" : "border border-gray-300 bg-white text-black hover:border-gray-400"
-              )}
-            >
-              {formatDayTabLabel(day)}
-            </button>
-          ))}
-          {showRankingsTab && (
-            <button
-              type="button"
-              role="tab"
-              aria-selected={activeDay === RANKINGS_TAB_ID}
-              onClick={() => setActiveDay(RANKINGS_TAB_ID)}
-              className={clsx(
-                "shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-                activeDay === RANKINGS_TAB_ID ? "bg-brand text-white" : "border border-gray-300 bg-white text-black hover:border-gray-400"
-              )}
-            >
-              Div &amp; WC Rank
-            </button>
-          )}
+          <div
+            ref={scrollerRef}
+            role="tablist"
+            aria-label="Tournament days"
+            className="no-scrollbar -mx-5 flex flex-1 gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0"
+          >
+            {days.map((day) => (
+              <button
+                key={day}
+                type="button"
+                role="tab"
+                aria-selected={activeDay === day}
+                onClick={() => setActiveDay(day)}
+                className={clsx(
+                  "shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                  activeDay === day ? "bg-brand text-white" : "border border-gray-300 bg-white text-black hover:border-gray-400"
+                )}
+              >
+                {formatDayTabLabel(day)}
+              </button>
+            ))}
+            {showRankingsTab && (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeDay === RANKINGS_TAB_ID}
+                onClick={() => setActiveDay(RANKINGS_TAB_ID)}
+                className={clsx(
+                  "shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                  activeDay === RANKINGS_TAB_ID ? "bg-brand text-white" : "border border-gray-300 bg-white text-black hover:border-gray-400"
+                )}
+              >
+                Div &amp; WC Rank
+              </button>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => scrollTabs(1)}
+            aria-label="Scroll days right"
+            className="hidden shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white p-2 text-black transition-colors hover:border-gray-400 hover:bg-gray-50 sm:flex"
+          >
+            <ChevronRight size={18} aria-hidden="true" />
+          </button>
         </div>
-
-        <button
-          type="button"
-          onClick={() => scrollTabs(1)}
-          aria-label="Scroll days right"
-          className="hidden shrink-0 items-center justify-center rounded-full border border-gray-300 bg-white p-2 text-black transition-colors hover:border-gray-400 hover:bg-gray-50 sm:flex"
-        >
-          <ChevronRight size={18} aria-hidden="true" />
-        </button>
       </div>
 
       <div className="mt-6">

@@ -14,6 +14,18 @@ export const allSeasonsQuery = groq`*[_type == "season"] | order(year desc){
 // full name (like the mobile Division Winners grid).
 export const allTeamShortNamesQuery = groq`*[_type == "team" && defined(shortName)]{name, shortName}`;
 
+// For admin tools that need to reference real teams by _id (e.g. the
+// season schedule generator's draw-order picker) rather than the
+// name-keyed lookups above. Includes every team ever in the league across
+// all years — prefer teamsBySeasonQuery below when the tool should only
+// offer teams that actually played a specific season.
+export const allTeamsWithIdQuery = groq`*[_type == "team"] | order(name asc){_id, name, shortName}`;
+
+// The teams that actually fielded a standing in a given season — used by
+// the schedule generator so next year's draw only offers this year's real
+// 14 teams, not every team the league has ever had.
+export const teamsBySeasonQuery = groq`*[_type == "standing" && season->year == $year].team->{_id, name, shortName} | order(name asc)`;
+
 export const standingsBySeasonQuery = groq`*[_type == "standing" && season->year == $year] | order((wins * 2 + ties) desc, runDifferential desc){
   _id,
   wins,

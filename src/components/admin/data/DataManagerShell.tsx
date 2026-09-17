@@ -12,6 +12,7 @@ import {
   Mail,
   MailOpen,
   CalendarDays,
+  CalendarRange,
   Trophy,
   Newspaper,
   Image as ImageIcon,
@@ -23,6 +24,7 @@ import type { AdminRole, AdminUser } from "@/lib/types";
 import { LEAGUE_FOUNDING_YEAR } from "@/lib/seed-content";
 import StandingsTab from "./tabs/StandingsTab";
 import ScoresTab from "./tabs/ScoresTab";
+import ScheduleGeneratorTab from "./tabs/ScheduleGeneratorTab";
 import RegistrationsTab from "./tabs/RegistrationsTab";
 import ContactsTab from "./tabs/ContactsTab";
 import EmailTab from "./tabs/EmailTab";
@@ -37,6 +39,7 @@ import UsersTab from "./tabs/UsersTab";
 const TABS = [
   { id: "standings", label: "Standings", icon: BarChart3 },
   { id: "scores", label: "Scores", icon: CalendarClock },
+  { id: "schedule", label: "Schedule Generator", icon: CalendarRange },
   { id: "registrations", label: "Registrations", icon: ClipboardList },
   { id: "contacts", label: "Contacts", icon: Mail },
   { id: "email", label: "Email", icon: MailOpen },
@@ -123,6 +126,7 @@ export default function DataManagerShell({ user, role }: { user: AdminUser | nul
       <main className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6">
         {tab === "standings" && <StandingsTab />}
         {tab === "scores" && <ScoresTab />}
+        {tab === "schedule" && <ScheduleGeneratorTab />}
         {tab === "registrations" && <RegistrationsTab />}
         {tab === "contacts" && <ContactsTab />}
         {tab === "email" && <EmailTab />}

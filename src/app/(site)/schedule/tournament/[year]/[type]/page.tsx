@@ -160,12 +160,21 @@ export default async function TournamentDetailPage({ params }: { params: { year:
   // just be stale "coming soon" copy sitting next to the real thing).
   let predictionTeaser: React.ReactNode = null;
   if (type === "mcgregor" && isCurrentSeason && !result.cancelled && !result.champion && !prediction && result.plannedStart) {
-    const revealDate = new Date(`${result.plannedStart}T00:00:00`);
-    revealDate.setDate(revealDate.getDate() + 2); // Thu start -> Saturday reveal
-    const revealDateStr = revealDate.toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+    // Pure calendar-date arithmetic, anchored to UTC throughout — both
+    // plannedStart and today are plain "YYYY-MM-DD" Eastern calendar dates,
+    // not real timestamps. Parsing them without an explicit "Z" gets
+    // interpreted as the SERVER's local time (UTC on Vercel), and then
+    // converting that instant to America/Toronto via toLocaleDateString
+    // rolls it back a calendar day (midnight UTC is still the previous
+    // evening in Eastern) — that's what was undercounting "days to go" by
+    // one. Staying in UTC the whole way avoids ever asking "what date is
+    // this instant in Toronto" in the first place.
+    const revealDate = new Date(`${result.plannedStart}T00:00:00Z`);
+    revealDate.setUTCDate(revealDate.getUTCDate() + 2); // Thu start -> Saturday reveal
+    const revealDateStr = revealDate.toISOString().slice(0, 10);
     const msPerDay = 24 * 60 * 60 * 1000;
     const daysLeft = Math.round(
-      (new Date(`${revealDateStr}T00:00:00`).getTime() - new Date(`${today}T00:00:00`).getTime()) / msPerDay
+      (new Date(`${revealDateStr}T00:00:00Z`).getTime() - new Date(`${today}T00:00:00Z`).getTime()) / msPerDay
     );
     const countdownLabel =
       daysLeft > 1 ? `${daysLeft} days to go` : daysLeft === 1 ? "1 day to go" : daysLeft === 0 ? "dropping tonight" : "coming any minute now";

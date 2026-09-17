@@ -61,6 +61,31 @@ export default function TournamentPoolSeeding({
     </Link>
   );
 
+  // Mobile-only: flanking the trophy uses space that would otherwise sit
+  // empty beside a ~128px-wide photo on a ~390px screen, and puts these
+  // for-fun links above the fold instead of buried below the box row.
+  const mobileFlankLinkClass =
+    "flex w-16 shrink-0 flex-col items-center gap-1 text-center text-[11px] font-semibold leading-tight text-brand hover:underline";
+  const predictionLinkMobileFlank = (
+    <Link href="/schedule/tournament/predict" className={mobileFlankLinkClass}>
+      <Flame size={16} className="shrink-0" aria-hidden="true" />
+      Claude&apos;s Prediction
+    </Link>
+  );
+  const simulateLinkMobileFlank = (
+    <Link href="/schedule/tournament/simulate" className={mobileFlankLinkClass}>
+      <Dices size={16} className="shrink-0" aria-hidden="true" />
+      Simulate
+    </Link>
+  );
+  const trophyWithMobileFlanks = trophy && (
+    <div className="flex items-center justify-center gap-3">
+      {predictionLinkMobileFlank}
+      {trophy}
+      {simulateLinkMobileFlank}
+    </div>
+  );
+
   const renderPool = (pool: TournamentPool) => (
     <div key={pool._id} className="w-56 shrink-0 overflow-hidden rounded-xl border shadow-sm">
       <div className="bg-brand px-4 py-2 text-center">
@@ -101,14 +126,16 @@ export default function TournamentPoolSeeding({
   if (!trophy || pools.length !== 4) {
     return (
       <div>
-        {trophy && <div className="mb-4 flex justify-center">{trophy}</div>}
+        {trophyWithMobileFlanks && <div className="mb-4">{trophyWithMobileFlanks}</div>}
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {pools.map(renderPool)}
         </div>
-        <div className="mt-4 flex flex-col items-center gap-2">
-          {simulateLinkMobile}
-          {predictionLink}
-        </div>
+        {!trophy && (
+          <div className="mt-4 flex flex-col items-center gap-2">
+            {simulateLinkMobile}
+            {predictionLink}
+          </div>
+        )}
       </div>
     );
   }
@@ -121,13 +148,9 @@ export default function TournamentPoolSeeding({
   return (
     <div>
       <div className="md:hidden">
-        <div className="mb-4">{trophy}</div>
+        <div className="mb-4">{trophyWithMobileFlanks}</div>
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {pools.map(renderPool)}
-        </div>
-        <div className="mt-4 flex flex-col items-center gap-2">
-          {simulateLinkMobile}
-          {predictionLink}
         </div>
       </div>
 

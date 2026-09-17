@@ -183,7 +183,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
           <div className="min-w-0">
             <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand">Something&apos;s coming</p>
             <p className="mt-0.5 text-sm text-white/80 sm:hidden">
-              Good luck out there this week! Claude&apos;s cold, stats-only championship prediction drops Sept 19th.
+              Good luck this week! Just for fun &mdash; can AI actually predict the champion? Find out Sept 19th.
             </p>
             <p className="mt-0.5 hidden text-sm text-white/80 sm:block">
               Good luck to every team out there this week &mdash; and once Phase 1 wraps, Claude&apos;s cold,

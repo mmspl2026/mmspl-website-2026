@@ -3,6 +3,7 @@ import Link from "next/link";
 import { sanityFetch } from "@/lib/sanity/client";
 import { activeSeasonQuery, standingsBySeasonQuery, gamesBySeasonQuery } from "@/lib/sanity/queries";
 import { getTodayEastern } from "@/utils/timezone";
+import { TOURNAMENT_LABELS } from "@/lib/tournamentDisplay";
 import type { Season, Standing, Game } from "@/lib/types";
 import TournamentSimulator from "@/components/TournamentSimulator";
 
@@ -34,6 +35,10 @@ export default async function TournamentSimulatorPage() {
           /{" "}
           <Link href="/schedule/tournament" className="no-underline hover:underline">
             Tournaments
+          </Link>{" "}
+          /{" "}
+          <Link href={`/schedule/tournament/${year}/mcgregor`} className="no-underline hover:underline">
+            {year} {TOURNAMENT_LABELS.mcgregor.short}
           </Link>{" "}
           / Simulator
         </p>

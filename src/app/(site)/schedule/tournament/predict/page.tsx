@@ -10,6 +10,7 @@ import {
   tournamentResultQuery,
 } from "@/lib/sanity/queries";
 import { getTodayEastern } from "@/utils/timezone";
+import { TOURNAMENT_LABELS } from "@/lib/tournamentDisplay";
 import type { Season, TournamentGame, TournamentPrediction, TournamentResult } from "@/lib/types";
 
 export const metadata: Metadata = { title: "Claude's Prediction" };
@@ -150,6 +151,10 @@ export default async function TournamentPredictionPage() {
           /{" "}
           <Link href="/schedule/tournament" className="no-underline hover:underline">
             Tournaments
+          </Link>{" "}
+          /{" "}
+          <Link href={`/schedule/tournament/${year}/mcgregor`} className="no-underline hover:underline">
+            {year} {TOURNAMENT_LABELS.mcgregor.short}
           </Link>{" "}
           / Prediction
         </p>

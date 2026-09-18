@@ -102,6 +102,13 @@ export default async function TournamentDetailPage({ params }: { params: { year:
       ? formatDateRange(games.map((g) => g.date), year)
       : formatDateRange(result.plannedStart ? [result.plannedStart, result.plannedEnd || result.plannedStart] : [], year);
   const isCurrentSeason = year === new Date().getFullYear();
+  // The Simulate/Claude's Prediction "fun features" are a 2026-only
+  // experiment — explicitly pinned to that year rather than derived from
+  // isCurrentSeason, which would otherwise silently reintroduce them once a
+  // future year becomes "current" (and was already showing them on every
+  // past, already-concluded tournament, which was the actual bug this
+  // fixes). Whether they return for 2027+ is a separate future decision.
+  const showFunLinks = type === "mcgregor" && year === 2026;
   // Before the real boxes are set (no pools entered yet) for the tournament
   // that's about to happen this season, show a live "if the season ended
   // today" projection instead of a plain "not available" message.
@@ -159,7 +166,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
   // ProjectedSeeding already point to the live page, so this banner would
   // just be stale "coming soon" copy sitting next to the real thing).
   let predictionTeaser: React.ReactNode = null;
-  if (type === "mcgregor" && isCurrentSeason && !result.cancelled && !result.champion && !prediction && result.plannedStart) {
+  if (showFunLinks && !result.cancelled && !result.champion && !prediction && result.plannedStart) {
     // Pure calendar-date arithmetic, anchored to UTC throughout — both
     // plannedStart and today are plain "YYYY-MM-DD" Eastern calendar dates,
     // not real timestamps. Parsing them without an explicit "Z" gets
@@ -263,6 +270,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             today={today}
             teamShortNames={teamShortNames}
             rankingsPlaceholder={wcRankingsPlaceholder}
+            showFunLinks={showFunLinks}
           />
         ) : projectedBoxes ? (
           <TournamentBracketView
@@ -275,6 +283,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
             interactive
             today={today}
             rankingsPlaceholder={wcRankingsPlaceholder}
+            showFunLinks={showFunLinks}
           />
         ) : (
           <div className="rounded-lg border border-gray-200 bg-gray-100 px-5 py-4 text-center text-sm text-gray-500">

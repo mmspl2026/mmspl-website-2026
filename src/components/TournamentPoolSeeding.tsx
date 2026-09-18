@@ -12,6 +12,7 @@ export default function TournamentPoolSeeding({
   onTeamClick,
   trophyPhotoUrl,
   trophyAlt,
+  showFunLinks = false,
 }: {
   pools: TournamentPool[];
   /** Clicking a team here highlights all of their games in the schedule
@@ -24,6 +25,14 @@ export default function TournamentPoolSeeding({
    * photos instead) — not just during the pre-results projection. */
   trophyPhotoUrl?: string;
   trophyAlt?: string;
+  /** Simulate/Claude's Prediction links — explicitly opt-in per tournament
+   * rather than tied to "current season" (a plain isCurrentSeason check
+   * would silently reappear once a future year becomes current, and a
+   * naive "show unless there's a trophy" check showed them on every past,
+   * already-concluded tournament, which was the actual bug this prop
+   * fixes). The user says these are a 2026 experiment that may not return
+   * in future years, so the caller passes this explicitly per year/type. */
+  showFunLinks?: boolean;
 }) {
   if (pools.length === 0) return null;
 
@@ -38,14 +47,15 @@ export default function TournamentPoolSeeding({
 
   // Same for-fun simulator link as the pre-results projected view — this
   // shouldn't disappear just because real Thu-Sat games have been loaded.
+  // Gated by showFunLinks (see prop doc) — null, not just hidden, when off.
   const simulateLinkClass = "flex items-center justify-center gap-1.5 text-xs font-semibold text-brand hover:underline";
-  const simulateLinkMobile = (
+  const simulateLinkMobile = showFunLinks && (
     <Link href="/schedule/tournament/simulate" className={simulateLinkClass}>
       <Dices size={14} className="shrink-0" aria-hidden="true" />
       Simulate the Tournament &rarr;
     </Link>
   );
-  const simulateLinkDesktop = (
+  const simulateLinkDesktop = showFunLinks && (
     <Link href="/schedule/tournament/simulate" className={simulateLinkClass}>
       <Dices size={14} className="shrink-0" aria-hidden="true" />
       Curious how it plays out? Simulate the whole tournament &rarr;
@@ -54,7 +64,7 @@ export default function TournamentPoolSeeding({
 
   // Claude's real (non-random) bracket call, written cold off the stats
   // once Phase 1 wraps up — separate from the for-fun randomized simulator.
-  const predictionLink = (
+  const predictionLink = showFunLinks && (
     <Link href="/schedule/tournament/predict" className={simulateLinkClass}>
       <Flame size={14} className="shrink-0" aria-hidden="true" />
       Claude&apos;s Prediction &rarr;
@@ -66,24 +76,28 @@ export default function TournamentPoolSeeding({
   // for-fun links above the fold instead of buried below the box row.
   const mobileFlankLinkClass =
     "flex w-16 shrink-0 flex-col items-center gap-1 text-center text-[11px] font-semibold leading-tight text-brand hover:underline";
-  const predictionLinkMobileFlank = (
+  const predictionLinkMobileFlank = showFunLinks && (
     <Link href="/schedule/tournament/predict" className={mobileFlankLinkClass}>
       <Flame size={16} className="shrink-0" aria-hidden="true" />
       Claude&apos;s Prediction
     </Link>
   );
-  const simulateLinkMobileFlank = (
+  const simulateLinkMobileFlank = showFunLinks && (
     <Link href="/schedule/tournament/simulate" className={mobileFlankLinkClass}>
       <Dices size={16} className="shrink-0" aria-hidden="true" />
       Simulate
     </Link>
   );
   const trophyWithMobileFlanks = trophy && (
-    <div className="flex items-center justify-center gap-3">
-      {predictionLinkMobileFlank}
-      {trophy}
-      {simulateLinkMobileFlank}
-    </div>
+    showFunLinks ? (
+      <div className="flex items-center justify-center gap-3">
+        {predictionLinkMobileFlank}
+        {trophy}
+        {simulateLinkMobileFlank}
+      </div>
+    ) : (
+      trophy
+    )
   );
 
   const renderPool = (pool: TournamentPool) => (
@@ -130,7 +144,7 @@ export default function TournamentPoolSeeding({
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {pools.map(renderPool)}
         </div>
-        {!trophy && (
+        {!trophy && showFunLinks && (
           <div className="mt-4 flex flex-col items-center gap-2">
             {simulateLinkMobile}
             {predictionLink}

@@ -27,6 +27,7 @@ export default function TournamentBracketView({
   rankingsPlaceholder,
   today,
   teamShortNames,
+  showFunLinks = false,
 }: {
   pools?: TournamentPool[];
   projectedBoxes?: ProjectedBox[] | null;
@@ -42,6 +43,11 @@ export default function TournamentBracketView({
   /** Team name -> curated short name (e.g. "The Condo Kings Army" -> "TCK"),
    * used for the mobile Division Winners grid where full names don't fit. */
   teamShortNames?: Record<string, string>;
+  /** Simulate/Claude's Prediction links — the caller passes this explicitly
+   * per year/type (only true for 2026 mcgregor today), not derived from
+   * "current season," so it doesn't reappear on a future year once that
+   * becomes current, and doesn't show on already-concluded past years. */
+  showFunLinks?: boolean;
 }) {
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [rankingsJumpSignal, setRankingsJumpSignal] = useState(0);
@@ -98,6 +104,7 @@ export default function TournamentBracketView({
             onTeamClick={handleTeamClick}
             trophyPhotoUrl={trophyPhotoUrl}
             trophyAlt={trophyAlt}
+            showFunLinks={showFunLinks}
           />
         </div>
       )}
@@ -110,6 +117,7 @@ export default function TournamentBracketView({
             onTeamClick={handleTeamClick}
             trophyPhotoUrl={trophyPhotoUrl}
             trophyAlt={trophyAlt}
+            showFunLinks={showFunLinks}
           />
         </div>
       )}

@@ -15,6 +15,7 @@ export default function ProjectedSeeding({
   onTeamClick,
   trophyPhotoUrl,
   trophyAlt,
+  showFunLinks = false,
 }: {
   boxes: ProjectedBox[];
   includesSchedule?: boolean;
@@ -22,6 +23,10 @@ export default function ProjectedSeeding({
   onTeamClick?: (name: string) => void;
   trophyPhotoUrl?: string;
   trophyAlt?: string;
+  /** Simulate/Claude's Prediction links — explicitly opt-in per tournament,
+   * see the matching prop doc on TournamentPoolSeeding for why this isn't
+   * just tied to "current season." */
+  showFunLinks?: boolean;
 }) {
   const disclaimer = (
     <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
@@ -37,13 +42,13 @@ export default function ProjectedSeeding({
   const simulateLinkClass = "flex items-center justify-center gap-1.5 text-xs font-semibold text-brand hover:underline";
   // Mobile gets the short form — the full question-plus-sentence version
   // was overflowing/wrapping messily at narrow widths.
-  const simulateLinkMobile = (
+  const simulateLinkMobile = showFunLinks && (
     <Link href="/schedule/tournament/simulate" className={simulateLinkClass}>
       <Dices size={14} className="shrink-0" aria-hidden="true" />
       Simulate the Tournament &rarr;
     </Link>
   );
-  const simulateLinkDesktop = (
+  const simulateLinkDesktop = showFunLinks && (
     <Link href="/schedule/tournament/simulate" className={simulateLinkClass}>
       <Dices size={14} className="shrink-0" aria-hidden="true" />
       Curious how it plays out? Simulate the whole tournament &rarr;
@@ -52,7 +57,7 @@ export default function ProjectedSeeding({
 
   // Claude's real (non-random) bracket call, written cold off the stats
   // once Phase 1 wraps up — separate from the for-fun randomized simulator.
-  const predictionLink = (
+  const predictionLink = showFunLinks && (
     <Link href="/schedule/tournament/predict" className={simulateLinkClass}>
       <Flame size={14} className="shrink-0" aria-hidden="true" />
       Claude&apos;s Prediction &rarr;
@@ -73,24 +78,28 @@ export default function ProjectedSeeding({
   // for-fun links above the fold instead of buried below the box row.
   const mobileFlankLinkClass =
     "flex w-16 shrink-0 flex-col items-center gap-1 text-center text-[11px] font-semibold leading-tight text-brand hover:underline";
-  const predictionLinkMobileFlank = (
+  const predictionLinkMobileFlank = showFunLinks && (
     <Link href="/schedule/tournament/predict" className={mobileFlankLinkClass}>
       <Flame size={16} className="shrink-0" aria-hidden="true" />
       Claude&apos;s Prediction
     </Link>
   );
-  const simulateLinkMobileFlank = (
+  const simulateLinkMobileFlank = showFunLinks && (
     <Link href="/schedule/tournament/simulate" className={mobileFlankLinkClass}>
       <Dices size={16} className="shrink-0" aria-hidden="true" />
       Simulate
     </Link>
   );
   const trophyWithMobileFlanks = trophy && (
-    <div className="flex items-center justify-center gap-3">
-      {predictionLinkMobileFlank}
-      {trophy}
-      {simulateLinkMobileFlank}
-    </div>
+    showFunLinks ? (
+      <div className="flex items-center justify-center gap-3">
+        {predictionLinkMobileFlank}
+        {trophy}
+        {simulateLinkMobileFlank}
+      </div>
+    ) : (
+      trophy
+    )
   );
 
   const renderBox = (box: ProjectedBox) => (
@@ -147,7 +156,7 @@ export default function ProjectedSeeding({
         <div className="no-scrollbar -mx-5 flex gap-4 overflow-x-auto px-5 pb-1 sm:mx-0 sm:justify-center sm:px-0">
           {boxes.map(renderBox)}
         </div>
-        {!trophy && (
+        {!trophy && showFunLinks && (
           <div className="mt-4 flex flex-col items-center gap-2">
             {simulateLinkMobile}
             {predictionLink}

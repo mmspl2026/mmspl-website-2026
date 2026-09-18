@@ -13,6 +13,10 @@ needed for day-to-day updates.
 - **Resend** for transactional/announcement email
 - **Vercel** deploy target
 
+> **Losing data, breaking a deploy, or need to recover from scratch?** See
+> [`docs/BACKUP-AND-RECOVERY.md`](docs/BACKUP-AND-RECOVERY.md) — plain-language
+> backup and disaster recovery steps.
+
 ## 1. Local setup
 
 ```bash

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, ChevronDown, Info, Wrench, Boxes } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronDown, Info, Wrench, Boxes, Trophy } from "lucide-react";
 import clsx from "clsx";
 import type { TournamentGame, WildCardRanking } from "@/lib/types";
 import { formatDayTabLabel } from "@/lib/tournamentDisplay";
@@ -279,6 +279,9 @@ function DayGamesList({ dayGames, selectedTeam }: { dayGames: TournamentGame[]; 
             {teardownNotes.map((g) => (
               <p key={g._id} className="text-xs leading-snug">
                 <span className="font-bold text-brand">TEARDOWN ({fieldAbbrev(g.field as string)}):</span>{" "}
+                {g.teardownNote === "Champion" && (
+                  <Trophy size={12} className="inline-block shrink-0 -translate-y-px text-brand" aria-hidden="true" />
+                )}{" "}
                 <span className="font-bold text-black">{g.teardownNote}</span>
               </p>
             ))}

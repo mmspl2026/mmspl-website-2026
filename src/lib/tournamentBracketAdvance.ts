@@ -5,14 +5,18 @@ import { writeClient } from "@/lib/sanity/client";
 // e.g. sortOrder 21 is the real game behind every "Wild Card #1 Winner"
 // team slot. Matches the McGregor bracket's fixed sortOrder layout (see
 // WILD_CARD_ROUND_SORT_ORDER in wildcard/save/route.ts for the equivalent
-// rank->sortOrder mapping used to fill the Wild Card round itself) —
-// sortOrder 23/24 are intentionally swapped here because that's the real
-// game pairing (23 is the "Wild Card #4" game, 24 is "Wild Card #3").
+// rank->sortOrder mapping used to fill the Wild Card round itself). A prior
+// version of this map swapped sortOrder 23/24 based on a wrong guess about
+// the real game pairing — confirmed directly with the user (bracket sheet
+// in hand) that it's the plain sequential mapping: sortOrder 23 (Raiders vs
+// Century 21) is genuinely "Wild Card #3", feeding the Dawgs' QF slot, and
+// sortOrder 24 (Braves vs Rangers) is "Wild Card #4", feeding the Beavers'
+// QF slot. Do not reintroduce the swap without re-confirming with the user.
 const NEXT_ROUND_LABEL_BY_SORT_ORDER: Record<number, string> = {
   21: "Wild Card #1",
   22: "Wild Card #2",
-  23: "Wild Card #4",
-  24: "Wild Card #3",
+  23: "Wild Card #3",
+  24: "Wild Card #4",
   25: "Quarter Final #1",
   26: "Quarter Final #2",
   27: "Quarter Final #3",

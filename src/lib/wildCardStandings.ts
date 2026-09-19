@@ -41,6 +41,8 @@ export interface WildCardStandingsResult {
   totalRoundRobinGames: number;
 }
 
+const MAX_RUN_DIFF_PER_GAME = 7;
+
 interface TeamPhase1Stats {
   teamName: string;
   wins: number;
@@ -48,15 +50,24 @@ interface TeamPhase1Stats {
   ties: number;
   runsScored: number;
   runsAllowed: number;
+  /** Sum of each game's run differential, each individually capped at
+   * ±7 (the league's mercy-rule cap) before adding — NOT derived from
+   * runsScored - runsAllowed, since that would let a single blowout game
+   * (e.g. a 14-6 final, a real +8) contribute more than the capped +7 the
+   * league actually counts. runsScored/runsAllowed themselves stay
+   * uncapped — only the differential used for standings/tie-breaks is. */
+  runDiffCapped: number;
 }
 
 function emptyStats(teamName: string): TeamPhase1Stats {
-  return { teamName, wins: 0, losses: 0, ties: 0, runsScored: 0, runsAllowed: 0 };
+  return { teamName, wins: 0, losses: 0, ties: 0, runsScored: 0, runsAllowed: 0, runDiffCapped: 0 };
 }
 
 function applyGame(stats: TeamPhase1Stats, ownScore: number, oppScore: number) {
   stats.runsScored += ownScore;
   stats.runsAllowed += oppScore;
+  const rawDiff = ownScore - oppScore;
+  stats.runDiffCapped += Math.max(-MAX_RUN_DIFF_PER_GAME, Math.min(MAX_RUN_DIFF_PER_GAME, rawDiff));
   if (ownScore > oppScore) stats.wins += 1;
   else if (ownScore < oppScore) stats.losses += 1;
   else stats.ties += 1;
@@ -67,7 +78,7 @@ function recordPoints(s: TeamPhase1Stats) {
 }
 
 function runDiff(s: TeamPhase1Stats) {
-  return s.runsScored - s.runsAllowed;
+  return s.runDiffCapped;
 }
 
 // Division Winner tie-break is deliberately its own, shorter chain — NOT
@@ -75,8 +86,10 @@ function runDiff(s: TeamPhase1Stats) {
 // of the specific head-to-head game between the tied teams (not overall
 // record — with only one in-box meeting per pair, "who won that game" and
 // "head-to-head record" are the same thing anyway); if that game was itself
-// a tie, best in-box run differential; then most in-box runs scored; then a
-// real coin toss. No regular-season-points level here, unlike Wild Card.
+// a tie, best in-box run differential (each game capped at ±7 runs — the
+// league's mercy-rule cap, see MAX_RUN_DIFF_PER_GAME); then most in-box
+// runs scored (uncapped — actual runs, not differential); then a real coin
+// toss. No regular-season-points level here, unlike Wild Card.
 const DIVISION_WINNER_LEVELS = ["headToHeadWins", "runDiff", "runsScored"] as const;
 
 function headToHeadWins(teamName: string, opponentNames: Set<string>, poolGames: TournamentGame[]): number {
@@ -125,22 +138,28 @@ function resolveDivisionWinner(
 
 /**
  * Computes Phase 2 (Wild Card) seeding from actual Thu-Sat round robin
- * results, per the league's house rules — two DIFFERENT tie-break chains:
+ * results, per the league's house rules — two DIFFERENT tie-break chains.
+ * Every run differential used below (team totals AND any head-to-head
+ * figure) is the sum of each individual game's differential capped at
+ * ±7 runs — the league's mercy-rule cap — not the raw score gap, so a
+ * blowout game can't swing a tie-break further than the league actually
+ * counts it. Runs *scored* is never capped, only the differential.
  *  - The 4 Division Winners are the best record *within their own box*
  *    (pool games only) — they get the Phase 3 bye, opponent assigned by a
  *    physical draw once Phase 2 finishes (not something to compute here).
  *    Tied on in-box points? Break it by: winner of their head-to-head game
  *    (with one in-box meeting per pair, that's the same as head-to-head
- *    record), then best in-box run differential, then most in-box runs
- *    scored, then a coin toss. No regular-season-points level here.
+ *    record), then best in-box run differential (capped), then most
+ *    in-box runs scored, then a coin toss. No regular-season-points level
+ *    here.
  *  - The other 10 teams are ranked 1-8 (advance to Wild Card round,
  *    matched 1v8/2v7/3v6/4v5) / 9-10 (eliminated) by their OVERALL Thu-Sat
  *    record — all 3 games each, including the cross A/B "friendly" games.
  *    Those friendlies exist specifically so every team plays exactly 3
  *    Thu-Sat games regardless of box size, making this comparison fair
- *    across boxes of different sizes. Tied on points? Break it by: overall
- *    head-to-head record, most total wins, head-to-head run differential,
- *    head-to-head runs scored, regular season points, then a coin toss.
+ *    across boxes of different sizes. Tied on points? Break it by: best
+ *    overall Phase 1 run differential (capped), then most Phase 1 runs
+ *    scored, then regular season points, then a coin toss.
  * A coin toss is a real physical tie-break a human has to perform, so ties
  * that survive every computable level just get flagged, not guessed at.
  *
@@ -194,8 +213,10 @@ export function computeWildCardStandings(
     }
   }
 
-  // Wild Card ranking's tie-break chain (levels 2-6 of the house rules) —
-  // Division Winner selection has its own, separate chain (see
+  // Wild Card ranking's tie-break chain: points, then overall Phase 1 run
+  // differential (capped ±7/game), then Phase 1 runs scored, then regular
+  // season points, then a coin toss (flagged via tiedForCoinFlip below).
+  // Division Winner selection has its own, separate, shorter chain (see
   // resolveDivisionWinner above), not this one.
   const tieBreakCompare = (a: TeamPhase1Stats, b: TeamPhase1Stats) =>
     recordPoints(b) - recordPoints(a) ||

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CalendarOff, Flame } from "lucide-react";
+import { CalendarOff, Flame, Trophy } from "lucide-react";
 import { getTodayEastern } from "@/utils/timezone";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
@@ -215,6 +215,36 @@ export default async function TournamentDetailPage({ params }: { params: { year:
     );
   }
 
+  // Once the real prediction exists, swap the countdown teaser for a "it's
+  // live" banner pointing at the same page — disappears once the tournament
+  // itself has a champion, same as the teaser it replaces.
+  let predictionDropped: React.ReactNode = null;
+  if (showFunLinks && !result.cancelled && !result.champion && prediction) {
+    predictionDropped = (
+      <Link
+        href="/schedule/tournament/predict"
+        className="group flex flex-col gap-3 overflow-hidden rounded-xl border border-brand/40 bg-[#0d0d0e] px-5 py-4 shadow-sm transition hover:border-brand sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+      >
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand/20">
+            <Trophy size={18} className="text-brand" aria-hidden="true" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand/40" aria-hidden="true" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-xs font-bold uppercase tracking-[0.12em] text-brand">It&apos;s here</p>
+            <p className="mt-0.5 text-sm text-white/80">
+              Claude&apos;s Prediction has dropped &mdash; the champion pick, the whole bracket, no punches
+              pulled. Come see if the machine gets it right.
+            </p>
+          </div>
+        </div>
+        <span className="ml-12 w-fit shrink-0 whitespace-nowrap rounded-full border border-brand/50 bg-brand/10 px-3 py-1.5 font-mono-brand text-[11px] font-bold uppercase tracking-wide text-brand group-hover:bg-brand/20 sm:ml-0">
+          See the pick
+        </span>
+      </Link>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div
@@ -250,6 +280,7 @@ export default async function TournamentDetailPage({ params }: { params: { year:
         <TournamentChampionsBanner result={result} />
 
         {predictionTeaser}
+        {predictionDropped}
 
         {result.cancelled ? (
           <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-gray-300 bg-gray-50 px-5 py-10 text-center">

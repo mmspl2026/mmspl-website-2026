@@ -101,11 +101,9 @@ export default async function HomePage() {
       }
     : mcgregorConcluded
       ? {
-          label: mcgregorResult.champion
-            ? `${standingsYear} ${TOURNAMENT_LABELS.mcgregor.full} Champions`
-            : `${standingsYear} Season Complete`,
-          compactLabel: `${standingsYear} Champions:`,
-          dateRange: mcgregorResult.champion || "See full results",
+          label: `${standingsYear} ${TOURNAMENT_LABELS.mcgregor.full} Results`,
+          compactLabel: `${standingsYear} ${TOURNAMENT_LABELS.mcgregor.short} Results`,
+          dateRange: "",
           href: `/schedule/tournament/${standingsYear}/mcgregor`,
         }
       : null;

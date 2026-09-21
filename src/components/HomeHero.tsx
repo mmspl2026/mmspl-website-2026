@@ -94,10 +94,12 @@ export default function HomeHero({
           >
             <Trophy size={15} className="shrink-0 text-brand" aria-hidden="true" />
             <span className="truncate text-xs font-semibold sm:hidden">
-              {tournamentBanner.compactLabel} {tournamentBanner.dateRange}
+              {tournamentBanner.compactLabel}
+              {tournamentBanner.dateRange && ` ${tournamentBanner.dateRange}`}
             </span>
             <span className="hidden truncate text-sm font-semibold sm:inline">
-              {tournamentBanner.label} &middot; {tournamentBanner.dateRange}
+              {tournamentBanner.label}
+              {tournamentBanner.dateRange && ` · ${tournamentBanner.dateRange}`}
             </span>
             <ArrowRight size={14} className="shrink-0 text-brand" aria-hidden="true" />
           </Link>

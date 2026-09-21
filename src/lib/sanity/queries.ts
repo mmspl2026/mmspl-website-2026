@@ -348,5 +348,5 @@ export const wildCardRankingsQuery = groq`*[_type == "wildCardRanking" && year =
 
 export const tournamentPredictionQuery = groq`*[_type == "tournamentPrediction" && year == $year && type == $type] | order(generatedAt desc)[0]{
   _id, year, type, generatedAt, intro, wildCardAdvancers, quarterFinalWinners, semiFinalWinners, finalistPick,
-  championPick, championReasoning, picks
+  championPick, championReasoning, picks, finalVerdict
 }`;

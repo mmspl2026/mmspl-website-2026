@@ -334,6 +334,7 @@ export interface TournamentPredictionPick {
   label?: string;
   team?: string;
   reasoning?: string;
+  resultNote?: string;
 }
 
 /** A one-time bracket prediction written after Phase 1 wraps up, before
@@ -351,4 +352,5 @@ export interface TournamentPrediction {
   championPick: string;
   championReasoning: string;
   picks?: TournamentPredictionPick[];
+  finalVerdict?: string;
 }

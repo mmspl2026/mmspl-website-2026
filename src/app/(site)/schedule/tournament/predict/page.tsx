@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Trophy, Check, X, Clock, Quote } from "lucide-react";
+import { Trophy, Check, X, Clock, Quote, Megaphone } from "lucide-react";
 import clsx from "clsx";
 import { sanityFetch } from "@/lib/sanity/client";
 import {
@@ -40,6 +40,27 @@ function pickStatus(team: string, actual: string[], complete: boolean): Status {
   if (actual.includes(team)) return "correct";
   if (complete) return "wrong";
   return "pending";
+}
+
+function labelStatus(
+  label: string | undefined,
+  team: string | undefined,
+  rounds: {
+    wcActual: string[];
+    wcComplete: boolean;
+    qfActual: string[];
+    qfComplete: boolean;
+    sfActual: string[];
+    sfComplete: boolean;
+    championStatus: Status | null;
+  }
+): Status | null {
+  if (!label || !team) return null;
+  if (label.startsWith("Wild Card")) return pickStatus(team, rounds.wcActual, rounds.wcComplete);
+  if (label.startsWith("Quarter Final")) return pickStatus(team, rounds.qfActual, rounds.qfComplete);
+  if (label.startsWith("Semi Final")) return pickStatus(team, rounds.sfActual, rounds.sfComplete);
+  if (label === "Final") return rounds.championStatus;
+  return null;
 }
 
 function StatusIcon({ status }: { status: Status }) {
@@ -226,6 +247,18 @@ export default async function TournamentPredictionPage() {
               </div>
             </div>
 
+            {championDecided && prediction.finalVerdict && (
+              <div className="overflow-hidden rounded-xl border-2 border-[#0d0d0e] shadow-sm">
+                <div className="flex items-center gap-2 bg-[#0d0d0e] px-5 py-3">
+                  <Megaphone size={16} className="text-brand" aria-hidden="true" />
+                  <p className="font-heading text-sm uppercase tracking-[0.08em] text-white">Final Verdict</p>
+                </div>
+                <div className="whitespace-pre-line bg-white p-5 text-sm leading-relaxed text-gray-700">
+                  {prediction.finalVerdict}
+                </div>
+              </div>
+            )}
+
             <div className="grid gap-4 md:grid-cols-3">
               <RoundSection title="Wild Card" picks={prediction.wildCardAdvancers ?? []} actual={wcActual} complete={wcComplete} />
               <RoundSection
@@ -243,13 +276,39 @@ export default async function TournamentPredictionPage() {
                   <p className="font-heading text-sm uppercase tracking-[0.08em] text-white">Game-by-Game</p>
                 </div>
                 <div className="divide-y">
-                  {prediction.picks.map((p, i) => (
-                    <div key={i} className="px-4 py-3">
-                      <p className="text-xs font-bold uppercase tracking-wide text-gray-400">{p.label}</p>
-                      <p className="mt-0.5 text-sm font-bold text-black">{p.team}</p>
-                      {p.reasoning && <p className="mt-1 text-sm text-gray-600">{p.reasoning}</p>}
-                    </div>
-                  ))}
+                  {prediction.picks.map((p, i) => {
+                    const status = labelStatus(p.label, p.team, {
+                      wcActual,
+                      wcComplete,
+                      qfActual,
+                      qfComplete,
+                      sfActual,
+                      sfComplete,
+                      championStatus,
+                    });
+                    return (
+                      <div key={i} className="px-4 py-3">
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs font-bold uppercase tracking-wide text-gray-400">{p.label}</p>
+                          {status && <StatusIcon status={status} />}
+                        </div>
+                        <p className="mt-0.5 text-sm font-bold text-black">{p.team}</p>
+                        {p.reasoning && <p className="mt-1 text-sm text-gray-600">{p.reasoning}</p>}
+                        {p.resultNote && (
+                          <p
+                            className={clsx(
+                              "mt-2 rounded-lg px-3 py-2 text-sm font-medium",
+                              status === "correct" && "bg-green-50 text-green-700",
+                              status === "wrong" && "bg-red-50 text-red-600",
+                              status !== "correct" && status !== "wrong" && "bg-gray-50 text-gray-600"
+                            )}
+                          >
+                            {p.resultNote}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}

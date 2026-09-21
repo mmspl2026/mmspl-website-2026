@@ -73,11 +73,22 @@ export default async function HomePage() {
     if (!result || result.cancelled || !result.plannedStart) return false;
     return today <= (result.plannedEnd || result.plannedStart);
   }
+  // True once the McGregor tournament's real dates are behind us — this is
+  // the year-end event, so once it's done the season itself is done. Kept
+  // true for the rest of the year so the homepage can keep telling readers
+  // the season has ended, instead of the rail/banner just going blank the
+  // day after the tournament — this stays up until next year's season
+  // becomes active (mcgregorResult then resolves to null for that year).
+  function hasConcluded(result: TournamentResult | null): result is TournamentResult {
+    if (!result || result.cancelled || !result.plannedStart) return false;
+    return today > (result.plannedEnd || result.plannedStart);
+  }
   const activeTournament: { type: TournamentType; result: TournamentResult } | null = isUpcomingOrLive(mcgregorResult)
     ? { type: "mcgregor", result: mcgregorResult }
     : isUpcomingOrLive(charityResult)
       ? { type: "charity", result: charityResult }
       : null;
+  const mcgregorConcluded = hasConcluded(mcgregorResult);
   const tournamentBanner = activeTournament
     ? {
         label: TOURNAMENT_LABELS[activeTournament.type].full,
@@ -88,12 +99,24 @@ export default async function HomePage() {
         ]),
         href: `/schedule/tournament/${standingsYear}/${activeTournament.type}`,
       }
-    : null;
+    : mcgregorConcluded
+      ? {
+          label: mcgregorResult.champion
+            ? `${standingsYear} ${TOURNAMENT_LABELS.mcgregor.full} Champions`
+            : `${standingsYear} Season Complete`,
+          compactLabel: `${standingsYear} Champions:`,
+          dateRange: mcgregorResult.champion || "See full results",
+          href: `/schedule/tournament/${standingsYear}/mcgregor`,
+        }
+      : null;
 
-  // Thu-Sat round robin + Championship Sunday + a season-closer card,
-  // appended to the game rail while the McGregor tournament is upcoming or
-  // in progress — derived from its planned dates, so this needs no manual
-  // upkeep and disappears on its own once the tournament's done.
+  // Thu-Sat round robin + Championship Sunday, appended to the game rail
+  // while the McGregor tournament is upcoming or in progress — derived from
+  // its planned dates, so this needs no manual upkeep and disappears on its
+  // own once the tournament's done. Once it's over, those day-specific
+  // cards stop being useful, so they're replaced by a single persistent
+  // "season complete" card that stays in the rail through the rest of the
+  // year, until next season's tournament data replaces this one.
   const mcgregorRailCards: SpecialRailCardData[] =
     isUpcomingOrLive(mcgregorResult) && mcgregorResult.plannedStart
       ? (() => {
@@ -104,16 +127,20 @@ export default async function HomePage() {
             { date: fri, label: "Round Robin", sublabel: "Tournament", href, icon: "trophy" as const },
             { date: sat, label: "Round Robin", sublabel: "Tournament", href, icon: "trophy" as const },
             { date: sun, label: "Championship Sunday", sublabel: "Tournament", href, icon: "trophy" as const },
+          ];
+        })()
+      : mcgregorConcluded
+        ? [
             {
-              date: addDays(sun, 1),
+              date: today,
               label: `End of ${standingsYear} Season`,
-              href: "/standings",
+              sublabel: mcgregorResult.champion ? `Champions: ${mcgregorResult.champion}` : "Tournament complete",
+              href: `/schedule/tournament/${standingsYear}/mcgregor`,
               icon: "flag" as const,
               hideDate: true,
             },
-          ];
-        })()
-      : [];
+          ]
+        : [];
 
   return (
     <>

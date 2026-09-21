@@ -41,8 +41,8 @@ export default function TournamentRailCard({ data, today }: { data: SpecialRailC
           <span className="font-mono-brand text-[9px] font-bold tracking-wider text-red-400">{dateLabel}</span>
         ))}
       <Icon size={16} className="shrink-0 text-brand" aria-hidden="true" />
-      <p className="text-[10px] font-bold leading-tight text-white">{data.label}</p>
-      {data.sublabel && <p className="truncate text-[8px] text-white/50">{data.sublabel}</p>}
+      <p className="w-full text-[10px] font-bold leading-tight text-white">{data.label}</p>
+      {data.sublabel && <p className="w-full truncate text-[8px] text-white/50">{data.sublabel}</p>}
     </Link>
   );
 }

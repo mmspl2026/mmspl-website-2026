@@ -134,7 +134,7 @@ export default async function HomePage() {
             {
               date: today,
               label: `End of ${standingsYear} Season`,
-              sublabel: mcgregorResult.champion ? `Champions: ${mcgregorResult.champion}` : "Tournament complete",
+              sublabel: mcgregorResult.champion ? "See the champions" : "Tournament complete",
               href: `/schedule/tournament/${standingsYear}/mcgregor`,
               icon: "flag" as const,
               hideDate: true,

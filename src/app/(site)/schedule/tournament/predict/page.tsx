@@ -161,6 +161,7 @@ export default async function TournamentPredictionPage() {
       (championStatus === "correct" ? 1 : 0)
     : 0;
   const anyRealResultsYet = games.some((g) => typeof g.homeScore === "number");
+  const winPct = totalPicks > 0 ? Math.round((totalCorrect / totalPicks) * 100) : 0;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -203,9 +204,13 @@ export default async function TournamentPredictionPage() {
           <>
             {anyRealResultsYet && (
               <div className="flex items-center justify-between rounded-xl border-2 border-brand/30 bg-brand-50 px-4 py-3">
-                <p className="text-sm font-bold text-brand-700">Claude&apos;s Record</p>
+                <p className="text-sm font-bold text-brand-700">
+                  {championDecided ? "Wrapped Up" : "Claude's Record"}
+                </p>
                 <p className="font-mono-brand text-sm font-bold text-brand-700">
-                  {totalCorrect} / {totalPicks} correct so far
+                  {championDecided
+                    ? `${totalCorrect} / ${totalPicks} correct (${winPct}%)`
+                    : `${totalCorrect} / ${totalPicks} correct so far`}
                 </p>
               </div>
             )}

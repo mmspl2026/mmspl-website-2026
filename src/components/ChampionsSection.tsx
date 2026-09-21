@@ -51,7 +51,11 @@ export default function ChampionsSection({
   return (
     <section aria-labelledby="champions-heading" className="bg-white py-8 md:py-10">
       <div className="container-page">
-        <h2 id="champions-heading" className="text-3xl sm:text-4xl">
+        {/* scroll-mt clears the sticky header (h-14/h-16 logo + padding)
+            when jumped to directly via #champions-heading, e.g. from the
+            homepage rail's "End of Season" card -- otherwise the heading
+            lands right under the header and reads as cut off. */}
+        <h2 id="champions-heading" className="scroll-mt-24 text-3xl sm:text-4xl">
           {year} Champions
         </h2>
         <div className="mx-auto mt-8 grid max-w-2xl gap-4 sm:grid-cols-3">

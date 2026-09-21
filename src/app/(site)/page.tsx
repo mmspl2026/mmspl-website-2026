@@ -132,8 +132,12 @@ export default async function HomePage() {
             {
               date: today,
               label: `End of ${standingsYear} Season`,
+              // Links to the Champions section further down this same page
+              // rather than the tournament page -- the banner pill right
+              // below the rail already covers that link, so this one is
+              // more useful pointing at the champions recap instead.
               sublabel: mcgregorResult.champion ? "See the champions" : "Tournament complete",
-              href: `/schedule/tournament/${standingsYear}/mcgregor`,
+              href: "/#champions-heading",
               icon: "flag" as const,
               hideDate: true,
             },

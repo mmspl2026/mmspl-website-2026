@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Game } from "@/lib/types";
 import GameCard from "./GameCard";
@@ -19,6 +19,13 @@ export default function GameRail({
   specialCards?: SpecialRailCardData[];
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  // Left-aligned (the default) reads fine once there's enough cards to fill
+  // the row, but looks stranded off to one side when there's only a
+  // card or two (e.g. just the "End of Season" card in the off-season) —
+  // center the row instead whenever it isn't wide enough to need scrolling.
+  // Measured at runtime rather than from card count, since that threshold
+  // differs by viewport width.
+  const [centered, setCentered] = useState(false);
 
   // The rail includes the past week's games alongside upcoming ones (so
   // recent scores stay visible), which means today's games usually aren't
@@ -27,12 +34,22 @@ export default function GameRail({
   // never scrolls the page.
   useEffect(() => {
     const scroller = scrollerRef.current;
-    if (!scroller || !today) return;
-    const cards = Array.from(scroller.querySelectorAll<HTMLElement>("[data-game-date]"));
-    const target = cards.find((el) => (el.dataset.gameDate as string) >= today);
-    if (target) {
-      scroller.scrollLeft = target.offsetLeft - scroller.offsetLeft;
+    if (!scroller) return;
+
+    const updateCentered = () => setCentered(scroller.scrollWidth <= scroller.clientWidth + 1);
+    updateCentered();
+    const resizeObserver = new ResizeObserver(updateCentered);
+    resizeObserver.observe(scroller);
+
+    if (today) {
+      const cards = Array.from(scroller.querySelectorAll<HTMLElement>("[data-game-date]"));
+      const target = cards.find((el) => (el.dataset.gameDate as string) >= today);
+      if (target) {
+        scroller.scrollLeft = target.offsetLeft - scroller.offsetLeft;
+      }
     }
+
+    return () => resizeObserver.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [games, specialCards, today]);
 
@@ -59,7 +76,9 @@ export default function GameRail({
 
       <div
         ref={scrollerRef}
-        className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden"
+        className={`flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden ${
+          centered ? "justify-center" : "justify-start"
+        }`}
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         role="region"
         aria-label="Upcoming and recent games"

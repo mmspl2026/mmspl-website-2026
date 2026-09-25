@@ -28,6 +28,13 @@ async function getEmailConfig(): Promise<EmailConfig> {
   let contactRecipients: string | undefined;
   let registrationRecipients: string | undefined;
 
+  // Whether the Sanity fetch below actually succeeded — a failed fetch
+  // (network hiccup, cold-start timing, etc.) must NOT be cached the same
+  // way as a real "no key configured" result, or one transient failure
+  // silently disables every outgoing email for a full 60 seconds with no
+  // trace of why.
+  let settingsFetchOk = !isSanityConfigured;
+
   if (isSanityConfigured) {
     const settings = await writeClient
       .fetch<{
@@ -38,7 +45,14 @@ async function getEmailConfig(): Promise<EmailConfig> {
       } | null>(
         `*[_type == "adminSettings"][0]{ resendApiKey, fromAddress, contactRecipients, registrationRecipients }`
       )
-      .catch(() => null);
+      .then((result) => {
+        settingsFetchOk = true;
+        return result;
+      })
+      .catch((err) => {
+        console.error("getEmailConfig: failed to fetch adminSettings from Sanity, falling back to env vars:", err);
+        return null;
+      });
     resendApiKey = settings?.resendApiKey;
     fromAddress = settings?.fromAddress;
     contactRecipients = settings?.contactRecipients;
@@ -57,7 +71,11 @@ async function getEmailConfig(): Promise<EmailConfig> {
     contactRecipients: splitRecipients(contactRecipients),
     registrationRecipients: splitRecipients(registrationRecipients),
   };
-  cachedConfig = { value, expiresAt: Date.now() + 60_000 };
+  if (settingsFetchOk) {
+    cachedConfig = { value, expiresAt: Date.now() + 60_000 };
+  } else {
+    console.warn("getEmailConfig: not caching this result since the Sanity fetch failed — will retry next call.");
+  }
   return value;
 }
 
@@ -144,11 +162,11 @@ async function sendToSubscribers(
   subject: string,
   renderOptions: Omit<RenderEmailOptions, "unsubscribeUrl">
 ) {
-  if (recipients.length === 0) return { skipped: true as const };
+  if (recipients.length === 0) return { skipped: true as const, reason: "no-recipients" as const };
   const config = await getEmailConfig();
   if (!config.apiKey) {
     console.warn(`Resend API key not set — skipping email "${subject}" to ${recipients.length} subscribers`);
-    return { skipped: true as const };
+    return { skipped: true as const, reason: "not-configured" as const };
   }
   const resend = new Resend(config.apiKey);
   const batches = chunk(recipients, MAX_EMAILS_PER_BATCH);

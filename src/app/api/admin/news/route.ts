@@ -47,18 +47,19 @@ export async function POST(req: NextRequest) {
     tag: body.tag || undefined,
   });
 
-  let notified: { emailCount: number; pushCount: number } | undefined;
+  let notified: { emailCount: number; pushCount: number; emailSkippedReason?: string } | undefined;
   if (body.notifySubscribers) {
     const emails = await writeClient.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
     const emailResult = await sendNewsAnnouncement(emails, body.title, uniqueSlug);
     const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
+    const emailSkippedReason = "reason" in emailResult ? emailResult.reason : undefined;
     const pushResult = await sendPushToAll({
       title: "MMSPL News",
       body: body.title,
       url: `/news/${uniqueSlug}`,
     });
     const pushCount = "sent" in pushResult ? (pushResult.sent ?? 0) : 0;
-    notified = { emailCount, pushCount };
+    notified = { emailCount, pushCount, emailSkippedReason };
   }
 
   return NextResponse.json({ news: doc, notified });

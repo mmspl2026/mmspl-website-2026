@@ -124,13 +124,16 @@ export default function NewsTab() {
           });
       if (!res.ok) throw new Error("Save failed.");
       const data = await res.json().catch(() => null);
-      push({
-        tone: "success",
-        message:
-          editing.notifySubscribers && data?.notified
-            ? `Saved — notified ${data.notified.pushCount ?? 0} push subscriber(s) and ${data.notified.emailCount ?? 0} email subscriber(s).`
-            : "Saved.",
-      });
+      let message = "Saved.";
+      if (editing.notifySubscribers && data?.notified) {
+        const { pushCount, emailCount, emailSkippedReason } = data.notified;
+        const emailPart =
+          emailSkippedReason === "not-configured"
+            ? "email skipped (Resend isn't configured right now)"
+            : `${emailCount ?? 0} email subscriber(s)`;
+        message = `Saved — notified ${pushCount ?? 0} push subscriber(s) and ${emailPart}.`;
+      }
+      push({ tone: "success", message });
       setEditing(null);
       load();
     } catch (err) {

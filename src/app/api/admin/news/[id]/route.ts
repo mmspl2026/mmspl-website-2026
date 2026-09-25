@@ -27,18 +27,19 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
   await writeClient.patch(params.id).set(patch).commit();
 
-  let notified: { emailCount: number; pushCount: number } | undefined;
+  let notified: { emailCount: number; pushCount: number; emailSkippedReason?: string } | undefined;
   if (body.notifySubscribers && typeof body.slug === "string" && body.slug) {
     const emails = await writeClient.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
     const emailResult = await sendNewsAnnouncement(emails, body.title, body.slug);
     const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
+    const emailSkippedReason = "reason" in emailResult ? emailResult.reason : undefined;
     const pushResult = await sendPushToAll({
       title: "MMSPL News",
       body: body.title,
       url: `/news/${body.slug}`,
     });
     const pushCount = "sent" in pushResult ? (pushResult.sent ?? 0) : 0;
-    notified = { emailCount, pushCount };
+    notified = { emailCount, pushCount, emailSkippedReason };
   }
 
   return NextResponse.json({ ok: true, notified });

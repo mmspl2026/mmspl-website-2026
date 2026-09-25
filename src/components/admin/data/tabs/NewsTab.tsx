@@ -20,14 +20,22 @@ const TAG_OPTIONS = [
 
 type Draft = {
   _id?: string;
+  slug?: string;
   title: string;
   date: string;
   tag: string;
   body: string;
   photo?: NewsItem["photo"];
+  notifySubscribers: boolean;
 };
 
-const EMPTY_DRAFT: Draft = { title: "", date: new Date().toISOString().slice(0, 10), tag: "league", body: "" };
+const EMPTY_DRAFT: Draft = {
+  title: "",
+  date: new Date().toISOString().slice(0, 10),
+  tag: "league",
+  body: "",
+  notifySubscribers: false,
+};
 
 export default function NewsTab() {
   const [items, setItems] = useState<NewsItem[]>([]);
@@ -57,11 +65,13 @@ export default function NewsTab() {
   function startEdit(item: NewsItem) {
     setEditing({
       _id: item._id,
+      slug: item.slug?.current,
       title: item.title,
       date: item.date?.slice(0, 10) ?? "",
       tag: item.tag ?? "league",
       body: blocksToPlainText(item.body),
       photo: item.photo,
+      notifySubscribers: false,
     });
   }
 
@@ -98,6 +108,8 @@ export default function NewsTab() {
         tag: editing.tag,
         body: editing.body,
         photo: editing.photo,
+        notifySubscribers: editing.notifySubscribers,
+        slug: editing.slug,
       };
       const res = editing._id
         ? await fetch(`/api/admin/news/${editing._id}`, {
@@ -111,7 +123,14 @@ export default function NewsTab() {
             body: JSON.stringify(payload),
           });
       if (!res.ok) throw new Error("Save failed.");
-      push({ tone: "success", message: "Saved." });
+      const data = await res.json().catch(() => null);
+      push({
+        tone: "success",
+        message:
+          editing.notifySubscribers && data?.notified
+            ? `Saved — notified ${data.notified.pushCount ?? 0} push subscriber(s) and ${data.notified.emailCount ?? 0} email subscriber(s).`
+            : "Saved.",
+      });
       setEditing(null);
       load();
     } catch (err) {
@@ -191,6 +210,15 @@ export default function NewsTab() {
                 <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
               </div>
             </div>
+            <label className="flex items-center gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={editing.notifySubscribers}
+                onChange={(e) => setEditing({ ...editing, notifySubscribers: e.target.checked })}
+                className="h-4 w-4 rounded border-gray-300 text-brand focus:ring-brand"
+              />
+              Notify subscribers (email + push) when saved
+            </label>
             <div className="flex justify-end gap-2">
               <SecondaryButton onClick={() => setEditing(null)}>Cancel</SecondaryButton>
               <PrimaryButton onClick={handleSave} disabled={saving}>

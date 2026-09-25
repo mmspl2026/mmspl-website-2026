@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
 import { subscriberEmailsQuery } from "@/lib/sanity/queries";
-import { sendBroadcastEmail, wasEmailSent } from "@/lib/resend";
+import { sendBroadcastEmail } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
 
 export async function POST(req: NextRequest) {
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
   const emails = await writeClient.fetch<string[]>(subscriberEmailsQuery);
   const emailResult = await sendBroadcastEmail(emails, body.title, body.message);
-  const emailCount = wasEmailSent(emailResult) ? emails.length : 0;
+  const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
 
   const pushResult = await sendPushToAll({ title: body.title, body: body.message });
   const pushCount = "sent" in pushResult ? pushResult.sent : 0;

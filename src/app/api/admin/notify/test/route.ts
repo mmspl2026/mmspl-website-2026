@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
-import { sendBroadcastEmail, wasEmailSent } from "@/lib/resend";
+import { sendBroadcastEmail } from "@/lib/resend";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   }
 
   const result = await sendBroadcastEmail([body.to], body.title, body.message);
-  if (!wasEmailSent(result)) {
+  if (!("sent" in result) || result.sent === 0) {
     return NextResponse.json({ error: "Failed to send test email. Check your Resend configuration." }, { status: 502 });
   }
 

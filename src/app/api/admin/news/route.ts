@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
-import { allNewsAdminQuery } from "@/lib/sanity/queries";
+import { allNewsAdminQuery, subscriberEmailsQuery } from "@/lib/sanity/queries";
 import type { NewsItem } from "@/lib/types";
 import { plainTextToBlocks } from "@/lib/newsBody";
+import { sendNewsAnnouncement } from "@/lib/resend";
+import { sendPushToAll } from "@/lib/push";
 
 function slugify(title: string): string {
   return title
@@ -45,5 +47,19 @@ export async function POST(req: NextRequest) {
     tag: body.tag || undefined,
   });
 
-  return NextResponse.json({ news: doc });
+  let notified: { emailCount: number; pushCount: number } | undefined;
+  if (body.notifySubscribers) {
+    const emails = await writeClient.fetch<string[]>(subscriberEmailsQuery);
+    const emailResult = await sendNewsAnnouncement(emails, body.title, uniqueSlug);
+    const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
+    const pushResult = await sendPushToAll({
+      title: "MMSPL News",
+      body: body.title,
+      url: `/news/${uniqueSlug}`,
+    });
+    const pushCount = "sent" in pushResult ? (pushResult.sent ?? 0) : 0;
+    notified = { emailCount, pushCount };
+  }
+
+  return NextResponse.json({ news: doc, notified });
 }

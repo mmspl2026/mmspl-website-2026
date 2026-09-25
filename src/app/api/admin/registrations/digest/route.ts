@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
-import { sendCustomNotificationEmail, wasEmailSent } from "@/lib/resend";
+import { sendCustomNotificationEmail } from "@/lib/resend";
 import type { Registration } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     message
   );
 
-  if (!wasEmailSent(result)) {
+  if (!("sent" in result) || result.sent === 0) {
     return NextResponse.json({ error: "Digest email failed to send." }, { status: 502 });
   }
 

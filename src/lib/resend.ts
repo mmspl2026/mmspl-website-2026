@@ -83,6 +83,52 @@ export function wasEmailSent(result: Awaited<ReturnType<typeof send>>): boolean 
   return true;
 }
 
+const MAX_RECIPIENTS_PER_SEND = 45;
+
+function chunk<T>(items: T[], size: number): T[][] {
+  const batches: T[][] = [];
+  for (let i = 0; i < items.length; i += size) batches.push(items.slice(i, i + size));
+  return batches;
+}
+
+/**
+ * Sends one email to a large recipient list, BCC'd and batched to stay
+ * under Resend's per-request recipient cap (50 total across to/cc/bcc). A
+ * single call with all subscribers crammed into `to` doesn't queue
+ * anything — Resend rejects the whole request before it ever reaches the
+ * send log, which is why "notify subscribers" news emails were silently
+ * going nowhere once the subscriber list passed that cap (push notifications
+ * were unaffected since those send one at a time per subscription, not as
+ * one batched recipient list). BCC also keeps subscribers from seeing each
+ * other's addresses.
+ */
+async function sendBulk(to: string[], subject: string, html: string) {
+  if (to.length === 0) return { skipped: true as const };
+  const config = await getEmailConfig();
+  if (!config.apiKey) {
+    console.warn(`Resend API key not set — skipping email "${subject}" to ${to.length} recipients`);
+    return { skipped: true as const };
+  }
+  const resend = new Resend(config.apiKey);
+  const batches = chunk(to, MAX_RECIPIENTS_PER_SEND);
+  const results = await Promise.allSettled(
+    batches.map((batch) => resend.emails.send({ from: config.fromEmail, to: config.fromEmail, bcc: batch, subject, html }))
+  );
+
+  let sent = 0;
+  results.forEach((result, i) => {
+    if (result.status === "fulfilled" && !result.value.error) {
+      sent += batches[i].length;
+    } else {
+      console.error(
+        `Bulk email batch ${i + 1}/${batches.length} failed for "${subject}":`,
+        result.status === "fulfilled" ? result.value.error : result.reason
+      );
+    }
+  });
+  return { sent, total: to.length };
+}
+
 export async function sendRegistrationConfirmation(to: string, playerName: string) {
   const html = renderEmail({
     title: "You're Registered!",
@@ -145,7 +191,7 @@ export async function sendGameCancellationAlert(to: string[], games: CancelledGa
     bodyHtml: `<p>${single ? "The following game has been affected" : `${games.length} games have been affected`}:</p>${rowsHtml}`,
     cta: { label: "View Schedule", url: `${SITE_URL}/schedule` },
   });
-  return send(to, subject, html);
+  return sendBulk(to, subject, html);
 }
 
 export async function sendNewsAnnouncement(to: string[], title: string, slug: string) {
@@ -156,7 +202,7 @@ export async function sendNewsAnnouncement(to: string[], title: string, slug: st
     bodyHtml: `<p style="font-size:16px; font-weight:bold;">${title}</p>`,
     cta: { label: "Read Full Story", url },
   });
-  return send(to, `MMSPL News: ${title}`, html);
+  return sendBulk(to, `MMSPL News: ${title}`, html);
 }
 
 export async function sendSubscriptionWelcome(to: string) {
@@ -196,19 +242,13 @@ export async function sendContactConfirmation(to: string, name: string) {
 export async function sendCustomNotificationEmail(to: string[], subject: string, message: string) {
   if (to.length === 0) return { skipped: true as const };
   const html = renderEmail({ title: subject, bodyHtml: `<p>${message.replace(/\n/g, "<br/>")}</p>` });
-  return send(to, `MMSPL: ${subject}`, html);
+  return sendBulk(to, `MMSPL: ${subject}`, html);
 }
 
 export async function sendBroadcastEmail(to: string[], subject: string, message: string) {
   if (to.length === 0) return { skipped: true as const };
-  const config = await getEmailConfig();
-  if (!config.apiKey) {
-    console.warn(`Resend API key not set — skipping broadcast email "${subject}"`);
-    return { skipped: true as const };
-  }
   const html = renderEmail({ title: subject, bodyHtml: `<p>${message.replace(/\n/g, "<br/>")}</p>` });
-  const resend = new Resend(config.apiKey);
-  return resend.emails.send({ from: config.fromEmail, to: config.fromEmail, bcc: to, subject: `MMSPL: ${subject}`, html });
+  return sendBulk(to, `MMSPL: ${subject}`, html);
 }
 
 export async function sendAdminPasswordReset(to: string, name: string, tempPassword: string) {

@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
+import { subscriberEmailsQuery } from "@/lib/sanity/queries";
 import { plainTextToBlocks } from "@/lib/newsBody";
+import { sendNewsAnnouncement } from "@/lib/resend";
+import { sendPushToAll } from "@/lib/push";
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireAdminApiAuth(req);
@@ -22,7 +25,22 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   }
 
   await writeClient.patch(params.id).set(patch).commit();
-  return NextResponse.json({ ok: true });
+
+  let notified: { emailCount: number; pushCount: number } | undefined;
+  if (body.notifySubscribers && typeof body.slug === "string" && body.slug) {
+    const emails = await writeClient.fetch<string[]>(subscriberEmailsQuery);
+    const emailResult = await sendNewsAnnouncement(emails, body.title, body.slug);
+    const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
+    const pushResult = await sendPushToAll({
+      title: "MMSPL News",
+      body: body.title,
+      url: `/news/${body.slug}`,
+    });
+    const pushCount = "sent" in pushResult ? (pushResult.sent ?? 0) : 0;
+    notified = { emailCount, pushCount };
+  }
+
+  return NextResponse.json({ ok: true, notified });
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {

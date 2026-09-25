@@ -22,6 +22,13 @@ export default defineType({
       type: "datetime",
       initialValue: () => new Date().toISOString(),
     }),
+    defineField({
+      name: "unsubscribeToken",
+      title: "Unsubscribe Token",
+      type: "string",
+      description: "Random token used for one-click unsubscribe links in emails — not meant to be edited by hand.",
+      readOnly: true,
+    }),
   ],
   preview: {
     select: { title: "email", subtitle: "name" },

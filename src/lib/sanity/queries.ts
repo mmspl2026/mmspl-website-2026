@@ -151,6 +151,10 @@ export const adminSettingsFullQuery = groq`*[_type == "adminSettings"][0]{
 
 export const subscriberEmailsQuery = groq`*[_type == "subscriber"].email`;
 
+export const subscribersWithTokenQuery = groq`*[_type == "subscriber"]{email, unsubscribeToken}`;
+
+export const subscriberByUnsubscribeTokenQuery = groq`*[_type == "subscriber" && unsubscribeToken == $unsubscribeToken][0]{_id, email}`;
+
 export const allPushSubscriptionsQuery = groq`*[_type == "pushSubscription"]{
   _id, endpoint, p256dh, auth
 }`;

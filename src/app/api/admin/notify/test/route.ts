@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "A valid recipient, title, and message are required." }, { status: 400 });
   }
 
-  const result = await sendBroadcastEmail([body.to], body.title, body.message);
+  const result = await sendBroadcastEmail([{ email: body.to }], body.title, body.message);
   if (!("sent" in result) || result.sent === 0) {
     return NextResponse.json({ error: "Failed to send test email. Check your Resend configuration." }, { status: 502 });
   }

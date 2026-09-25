@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { client, writeClient } from "@/lib/sanity/client";
-import { gamesByIdsQuery, standingsBySeasonQuery, subscriberEmailsQuery } from "@/lib/sanity/queries";
+import { gamesByIdsQuery, standingsBySeasonQuery, subscribersWithTokenQuery } from "@/lib/sanity/queries";
 import { recalculateStandings } from "@/lib/standings";
 import { sendGameCancellationAlert } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
-import type { Standing } from "@/lib/types";
+import type { Standing, SubscriberRecipient } from "@/lib/types";
 
 interface GameForCancel {
   _id: string;
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
   const seasonIds = Array.from(new Set(games.map((g) => g.seasonId)));
   await Promise.all(seasonIds.map((id) => recalculateStandings(id)));
 
-  const emails = await client.fetch<string[]>(subscriberEmailsQuery);
+  const emails = await client.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
   const gameSummaries = games.map((g) => ({
     homeTeam: g.homeTeam.name,
     awayTeam: g.awayTeam.name,

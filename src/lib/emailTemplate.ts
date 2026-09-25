@@ -19,9 +19,13 @@ export interface RenderEmailOptions {
   /** Pre-built inner HTML for the body — the caller controls the copy. */
   bodyHtml: string;
   cta?: EmailCTA;
+  /** One-click unsubscribe link, personalized per recipient. Omit for
+   * transactional emails (registration confirmation, password reset, etc.)
+   * that aren't subscriber broadcasts. */
+  unsubscribeUrl?: string;
 }
 
-export function renderEmail({ title, bodyHtml, cta }: RenderEmailOptions): string {
+export function renderEmail({ title, bodyHtml, cta, unsubscribeUrl }: RenderEmailOptions): string {
   return `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -90,6 +94,11 @@ export function renderEmail({ title, bodyHtml, cta }: RenderEmailOptions): strin
                 </p>
                 <p style="margin:0; font-size:11px; color:#666666;">
                   <a href="${SITE_URL}/notifications" style="color:#999999;">Manage your notification preferences</a>
+                  ${
+                    unsubscribeUrl
+                      ? ` &middot; <a href="${unsubscribeUrl}" style="color:#999999;">Unsubscribe</a>`
+                      : ""
+                  }
                 </p>
               </td>
             </tr>

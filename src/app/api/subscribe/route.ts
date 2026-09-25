@@ -21,13 +21,15 @@ export async function POST(req: NextRequest) {
   });
 
   if (!existing) {
+    const unsubscribeToken = crypto.randomUUID();
     await writeClient.create({
       _type: "subscriber",
       email,
       name,
       subscribedAt: new Date().toISOString(),
+      unsubscribeToken,
     });
-    await sendSubscriptionWelcome(email);
+    await sendSubscriptionWelcome(email, unsubscribeToken);
   }
 
   return NextResponse.json({ ok: true });

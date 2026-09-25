@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { assertValidSignature } from "@sanity/webhook";
 import { client } from "@/lib/sanity/client";
-import { subscriberEmailsQuery } from "@/lib/sanity/queries";
+import { subscribersWithTokenQuery } from "@/lib/sanity/queries";
 import { sendGameCancellationAlert, sendNewsAnnouncement } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
+import type { SubscriberRecipient } from "@/lib/types";
 
 // Configure a Sanity webhook (Studio → API → Webhooks) pointing at
 // https://<your-domain>/api/webhooks/sanity for the `game` and `news`
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest) {
   }
 
   const payload = JSON.parse(body) as GameWebhookPayload | NewsWebhookPayload;
-  const emails = await client.fetch<string[]>(subscriberEmailsQuery);
+  const emails = await client.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
 
   if (payload._type === "game" && payload.notifyOnCancellation) {
     if (payload.status === "cancelled" || payload.status === "postponed") {

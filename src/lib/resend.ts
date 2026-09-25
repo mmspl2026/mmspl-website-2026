@@ -1,7 +1,8 @@
 import { Resend } from "resend";
 import { writeClient } from "./sanity/client";
 import { isSanityConfigured } from "./sanity/env";
-import { renderEmail, SITE_URL } from "./emailTemplate";
+import { renderEmail, SITE_URL, type RenderEmailOptions } from "./emailTemplate";
+import type { SubscriberRecipient } from "./types";
 
 export const ADMIN_EMAIL = process.env.MMSPL_ADMIN_EMAIL || "info@mmspl.ca";
 
@@ -129,6 +130,57 @@ async function sendBulk(to: string[], subject: string, html: string) {
   return { sent, total: to.length };
 }
 
+const MAX_EMAILS_PER_BATCH = 90;
+
+/**
+ * Sends a subscriber broadcast (news, cancellations, manual notify) as one
+ * individual email per recipient via Resend's batch API — unlike sendBulk's
+ * shared BCC'd copy, this lets each email carry that recipient's own
+ * one-click unsubscribe link. Still batched (not one API call per person)
+ * to stay well under Resend's per-request cap.
+ */
+async function sendToSubscribers(
+  recipients: SubscriberRecipient[],
+  subject: string,
+  renderOptions: Omit<RenderEmailOptions, "unsubscribeUrl">
+) {
+  if (recipients.length === 0) return { skipped: true as const };
+  const config = await getEmailConfig();
+  if (!config.apiKey) {
+    console.warn(`Resend API key not set — skipping email "${subject}" to ${recipients.length} subscribers`);
+    return { skipped: true as const };
+  }
+  const resend = new Resend(config.apiKey);
+  const batches = chunk(recipients, MAX_EMAILS_PER_BATCH);
+
+  let sent = 0;
+  for (let i = 0; i < batches.length; i++) {
+    const batch = batches[i];
+    const payload = batch.map((recipient) => ({
+      from: config.fromEmail,
+      to: recipient.email,
+      subject,
+      html: renderEmail({
+        ...renderOptions,
+        unsubscribeUrl: recipient.unsubscribeToken
+          ? `${SITE_URL}/api/unsubscribe?token=${recipient.unsubscribeToken}`
+          : undefined,
+      }),
+    }));
+    try {
+      const result = await resend.batch.send(payload);
+      if (result.error) {
+        console.error(`Subscriber email batch ${i + 1}/${batches.length} failed for "${subject}":`, result.error);
+      } else {
+        sent += batch.length;
+      }
+    } catch (err) {
+      console.error(`Subscriber email batch ${i + 1}/${batches.length} threw for "${subject}":`, err);
+    }
+  }
+  return { sent, total: recipients.length };
+}
+
 export async function sendRegistrationConfirmation(to: string, playerName: string) {
   const html = renderEmail({
     title: "You're Registered!",
@@ -162,7 +214,7 @@ interface CancelledGameSummary {
   status: string;
 }
 
-export async function sendGameCancellationAlert(to: string[], games: CancelledGameSummary[]) {
+export async function sendGameCancellationAlert(to: SubscriberRecipient[], games: CancelledGameSummary[]) {
   if (to.length === 0 || games.length === 0) return { skipped: true as const };
 
   const single = games.length === 1;
@@ -186,32 +238,31 @@ export async function sendGameCancellationAlert(to: string[], games: CancelledGa
     ? `MMSPL: Game ${games[0].status === "postponed" ? "Postponed" : "Cancelled"} — ${games[0].homeTeam} vs ${games[0].awayTeam}`
     : `MMSPL: ${games.length} Games Cancelled`;
 
-  const html = renderEmail({
+  return sendToSubscribers(to, subject, {
     title,
     bodyHtml: `<p>${single ? "The following game has been affected" : `${games.length} games have been affected`}:</p>${rowsHtml}`,
     cta: { label: "View Schedule", url: `${SITE_URL}/schedule` },
   });
-  return sendBulk(to, subject, html);
 }
 
-export async function sendNewsAnnouncement(to: string[], title: string, slug: string) {
+export async function sendNewsAnnouncement(to: SubscriberRecipient[], title: string, slug: string) {
   if (to.length === 0) return { skipped: true as const };
   const url = `${SITE_URL}/news/${slug}`;
-  const html = renderEmail({
+  return sendToSubscribers(to, `MMSPL News: ${title}`, {
     title: "New Announcement",
     bodyHtml: `<p style="font-size:16px; font-weight:bold;">${title}</p>`,
     cta: { label: "Read Full Story", url },
   });
-  return sendBulk(to, `MMSPL News: ${title}`, html);
 }
 
-export async function sendSubscriptionWelcome(to: string) {
+export async function sendSubscriptionWelcome(to: string, unsubscribeToken?: string) {
   const html = renderEmail({
     title: "You're Subscribed!",
     bodyHtml: `<p>Thanks for signing up for MMSPL email notifications.</p>
      <p>You'll hear from us when a game gets cancelled or postponed, and when we post league news and announcements — nothing more.</p>
-     <p>You can unsubscribe at any time by replying to one of these emails.</p>`,
+     <p>You can unsubscribe at any time using the link at the bottom of any of our emails.</p>`,
     cta: { label: "Visit Website", url: SITE_URL },
+    unsubscribeUrl: unsubscribeToken ? `${SITE_URL}/api/unsubscribe?token=${unsubscribeToken}` : undefined,
   });
   return send(to, "Welcome to MMSPL Notifications", html);
 }
@@ -245,10 +296,12 @@ export async function sendCustomNotificationEmail(to: string[], subject: string,
   return sendBulk(to, `MMSPL: ${subject}`, html);
 }
 
-export async function sendBroadcastEmail(to: string[], subject: string, message: string) {
+export async function sendBroadcastEmail(to: SubscriberRecipient[], subject: string, message: string) {
   if (to.length === 0) return { skipped: true as const };
-  const html = renderEmail({ title: subject, bodyHtml: `<p>${message.replace(/\n/g, "<br/>")}</p>` });
-  return sendBulk(to, `MMSPL: ${subject}`, html);
+  return sendToSubscribers(to, `MMSPL: ${subject}`, {
+    title: subject,
+    bodyHtml: `<p>${message.replace(/\n/g, "<br/>")}</p>`,
+  });
 }
 
 export async function sendAdminPasswordReset(to: string, name: string, tempPassword: string) {

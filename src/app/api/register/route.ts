@@ -139,6 +139,7 @@ export async function POST(req: NextRequest) {
         email: body.email,
         name: playerName,
         subscribedAt: new Date().toISOString(),
+        unsubscribeToken: crypto.randomUUID(),
       });
     }
   }

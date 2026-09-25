@@ -366,6 +366,7 @@ async function migrateSubscribers(db: Db, report: Report) {
         email,
         name: (pick(doc, "name") as string) || undefined,
         subscribedAt: toISODateTime(pick(doc, "subscribedAt", "subscribed_at", "createdAt")) || new Date().toISOString(),
+        unsubscribeToken: crypto.randomUUID(),
       });
       r.migrated++;
     } catch {

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
-import { allNewsAdminQuery, subscriberEmailsQuery } from "@/lib/sanity/queries";
-import type { NewsItem } from "@/lib/types";
+import { allNewsAdminQuery, subscribersWithTokenQuery } from "@/lib/sanity/queries";
+import type { NewsItem, SubscriberRecipient } from "@/lib/types";
 import { plainTextToBlocks } from "@/lib/newsBody";
 import { sendNewsAnnouncement } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
 
   let notified: { emailCount: number; pushCount: number } | undefined;
   if (body.notifySubscribers) {
-    const emails = await writeClient.fetch<string[]>(subscriberEmailsQuery);
+    const emails = await writeClient.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
     const emailResult = await sendNewsAnnouncement(emails, body.title, uniqueSlug);
     const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
     const pushResult = await sendPushToAll({

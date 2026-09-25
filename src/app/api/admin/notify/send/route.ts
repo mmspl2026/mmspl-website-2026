@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
-import { subscriberEmailsQuery } from "@/lib/sanity/queries";
+import { subscribersWithTokenQuery } from "@/lib/sanity/queries";
 import { sendBroadcastEmail } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
+import type { SubscriberRecipient } from "@/lib/types";
 
 export async function POST(req: NextRequest) {
   const auth = await requireAdminApiAuth(req);
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Title and message are required." }, { status: 400 });
   }
 
-  const emails = await writeClient.fetch<string[]>(subscriberEmailsQuery);
+  const emails = await writeClient.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
   const emailResult = await sendBroadcastEmail(emails, body.title, body.message);
   const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
 

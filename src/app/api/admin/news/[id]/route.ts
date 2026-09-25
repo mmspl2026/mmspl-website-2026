@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdminApiAuth } from "@/lib/admin-auth";
 import { writeClient } from "@/lib/sanity/client";
-import { subscriberEmailsQuery } from "@/lib/sanity/queries";
+import { subscribersWithTokenQuery } from "@/lib/sanity/queries";
 import { plainTextToBlocks } from "@/lib/newsBody";
 import { sendNewsAnnouncement } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
+import type { SubscriberRecipient } from "@/lib/types";
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const auth = await requireAdminApiAuth(req);
@@ -28,7 +29,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
   let notified: { emailCount: number; pushCount: number } | undefined;
   if (body.notifySubscribers && typeof body.slug === "string" && body.slug) {
-    const emails = await writeClient.fetch<string[]>(subscriberEmailsQuery);
+    const emails = await writeClient.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
     const emailResult = await sendNewsAnnouncement(emails, body.title, body.slug);
     const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
     const pushResult = await sendPushToAll({

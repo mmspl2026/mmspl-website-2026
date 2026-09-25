@@ -141,6 +141,11 @@ export interface PushSubscriptionRecord {
   auth: string;
 }
 
+export interface SubscriberRecipient {
+  email: string;
+  unsubscribeToken?: string;
+}
+
 export type AdminRole = "superadmin" | "exec";
 
 export interface AdminUser {

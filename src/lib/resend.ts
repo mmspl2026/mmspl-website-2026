@@ -158,7 +158,11 @@ async function sendToSubscribers(
     const batch = batches[i];
     const payload = batch.map((recipient) => ({
       from: config.fromEmail,
-      to: recipient.email,
+      // Resend's /emails/batch endpoint rejects a bare string here at
+      // runtime ("Invalid `to` field") even though the SDK's shared type
+      // (string | string[]) allows it for the single-send endpoint --
+      // must be an array for batch sends specifically.
+      to: [recipient.email],
       subject,
       html: renderEmail({
         ...renderOptions,

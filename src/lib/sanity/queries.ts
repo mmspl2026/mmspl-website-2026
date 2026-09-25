@@ -8,6 +8,14 @@ export const allSeasonsQuery = groq`*[_type == "season"] | order(year desc){
   _id, year, isActive, cancelled, cancelledReason, regularSeasonStart, regularSeasonEnd, playoffCutoff
 }`;
 
+export const seasonByIdQuery = groq`*[_type == "season" && _id == $id][0]{
+  _id, year, isActive, regularSeasonEnd
+}`;
+
+export const seasonByYearQuery = groq`*[_type == "season" && year == $year][0]{
+  _id, year, isActive, regularSeasonEnd
+}`;
+
 // Tournament data stores team names as plain strings, not references — this
 // is for looking up each team's curated shortName (e.g. "The Condo Kings
 // Army" -> "TCK") by that name, for display contexts too tight for the
@@ -217,6 +225,20 @@ export const adminUserByUsernameQuery = groq`*[_type == "adminUser" && username 
 export const adminUserByIdQuery = groq`*[_type == "adminUser" && _id == $id][0]{
   _id, name, username, email, role, active, currentSessionId, mustChangePassword
 }`;
+
+export const adminUserPasswordHashQuery = groq`*[_type == "adminUser" && _id == $id][0]{
+  _id, name, passwordHash, active
+}`;
+
+export const adminUserNameQuery = groq`*[_type == "adminUser" && _id == $id][0]{ _id, name }`;
+
+export const standingsAuditLogQuery = groq`*[_type == "adminAuditLog" && seasonYear == $year && action match "standings.*"] | order(createdAt desc)[0...20]{
+  _id, action, performedByName, summary, createdAt
+}`;
+
+export const recentFailedUnlockAttemptsQuery = groq`count(*[
+  _type == "adminAuditLog" && action == "standings.unlock" && success == false && ip == $ip && createdAt > $since
+])`;
 
 export const allAdminUsersQuery = groq`*[_type == "adminUser"] | order(name asc){
   _id, name, username, email, role, active, createdAt, lastLogin, mustChangePassword, lockedUntil

@@ -19,6 +19,10 @@ export interface AdminSession {
   uid: string;
   role: AdminRole;
   mustChangePassword: boolean;
+  /** Epoch ms of the last successful password re-verification, if any —
+   * see hasFreshStepUp(). Used to gate edits to locked (finished) season
+   * standings behind a deliberate re-auth, separate from normal login. */
+  stepUpAt?: number;
 }
 
 interface SessionPayload {
@@ -27,6 +31,17 @@ interface SessionPayload {
   sid: string;
   iat: number;
   lastActivityAt: number;
+  stepUpAt?: number;
+}
+
+/** How long a step-up re-auth stays valid before locked standings re-lock
+ * themselves and require re-verification again. */
+export const STEP_UP_WINDOW_MS = 10 * 60 * 1000;
+
+/** True if this session re-verified its password recently enough to edit
+ * locked (finished-season) standings right now. */
+export function hasFreshStepUp(session: AdminSession): boolean {
+  return Boolean(session.stepUpAt && Date.now() - session.stepUpAt < STEP_UP_WINDOW_MS);
 }
 
 // --- Password hashing ------------------------------------------------------
@@ -115,7 +130,12 @@ export async function verifySession(token: string | undefined | null): Promise<A
   );
   if (!user || !user.active || user.currentSessionId !== decoded.sid) return null;
 
-  return { uid: decoded.uid, role: decoded.role, mustChangePassword: Boolean(user.mustChangePassword) };
+  return {
+    uid: decoded.uid,
+    role: decoded.role,
+    mustChangePassword: Boolean(user.mustChangePassword),
+    stepUpAt: decoded.stepUpAt,
+  };
 }
 
 function cookieOptions() {
@@ -144,6 +164,20 @@ function refreshActivityCookie(token: string) {
   const decoded = decodeSessionToken(token);
   if (!decoded) return;
   const refreshed: SessionPayload = { ...decoded, lastActivityAt: Date.now() };
+  cookies().set(ADMIN_SESSION_COOKIE, encodeSessionToken(refreshed), cookieOptions());
+}
+
+/**
+ * Called after a successful password re-verification (POST
+ * /api/admin/standings/unlock): stamps the current session as freshly
+ * step-up-authenticated so locked standings become editable for
+ * STEP_UP_WINDOW_MS. Must be called from within a Route Handler (needs the
+ * request's own cookie value to re-sign), same as refreshActivityCookie.
+ */
+export function setStepUpVerified(token: string) {
+  const decoded = decodeSessionToken(token);
+  if (!decoded) return;
+  const refreshed: SessionPayload = { ...decoded, stepUpAt: Date.now(), lastActivityAt: Date.now() };
   cookies().set(ADMIN_SESSION_COOKIE, encodeSessionToken(refreshed), cookieOptions());
 }
 

@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 import { writeClient } from "./sanity/client";
 import { isSanityConfigured } from "./sanity/env";
-import { renderEmail, SITE_URL, type RenderEmailOptions } from "./emailTemplate";
+import { renderEmail, SITE_URL } from "./emailTemplate";
 import type { SubscriberRecipient } from "./types";
 
 export const ADMIN_EMAIL = process.env.MMSPL_ADMIN_EMAIL || "info@mmspl.ca";
@@ -122,11 +122,11 @@ function chunk<T>(items: T[], size: number): T[][] {
  * other's addresses.
  */
 async function sendBulk(to: string[], subject: string, html: string) {
-  if (to.length === 0) return { skipped: true as const };
+  if (to.length === 0) return { skipped: true as const, reason: "no-recipients" as const };
   const config = await getEmailConfig();
   if (!config.apiKey) {
     console.warn(`Resend API key not set — skipping email "${subject}" to ${to.length} recipients`);
-    return { skipped: true as const };
+    return { skipped: true as const, reason: "not-configured" as const };
   }
   const resend = new Resend(config.apiKey);
   const batches = chunk(to, MAX_RECIPIENTS_PER_SEND);
@@ -135,105 +135,25 @@ async function sendBulk(to: string[], subject: string, html: string) {
   );
 
   let sent = 0;
+  let firstError: string | undefined;
   results.forEach((result, i) => {
     if (result.status === "fulfilled" && !result.value.error) {
       sent += batches[i].length;
     } else {
+      const message =
+        result.status === "fulfilled"
+          ? result.value.error?.message
+          : result.reason instanceof Error
+            ? result.reason.message
+            : String(result.reason);
       console.error(
         `Bulk email batch ${i + 1}/${batches.length} failed for "${subject}":`,
         result.status === "fulfilled" ? result.value.error : result.reason
       );
-    }
-  });
-  return { sent, total: to.length };
-}
-
-// Kept small and run concurrently (not sequentially) so the whole send
-// finishes fast regardless of subscriber count — a single serial call
-// carrying 80+ personalized emails risks running past a serverless
-// function's time limit (tight on cheaper Vercel plans, effectively
-// unbounded on a local `next dev` process, which is why this could pass
-// locally and silently die in production without ever showing an error).
-const MAX_EMAILS_PER_BATCH = 25;
-
-/**
- * Sends a subscriber broadcast (news, cancellations, manual notify) as one
- * individual email per recipient via Resend's batch API — unlike sendBulk's
- * shared BCC'd copy, this lets each email carry that recipient's own
- * one-click unsubscribe link. Still batched (not one API call per person)
- * to stay well under Resend's per-request cap.
- */
-async function sendToSubscribers(
-  recipients: SubscriberRecipient[],
-  subject: string,
-  renderOptions: Omit<RenderEmailOptions, "unsubscribeUrl">
-) {
-  if (recipients.length === 0) return { skipped: true as const, reason: "no-recipients" as const };
-  const config = await getEmailConfig();
-  if (!config.apiKey) {
-    console.warn(`Resend API key not set — skipping email "${subject}" to ${recipients.length} subscribers`);
-    return { skipped: true as const, reason: "not-configured" as const };
-  }
-  let resend: Resend;
-  try {
-    resend = new Resend(config.apiKey);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.error(`Failed to construct Resend client for "${subject}":`, err);
-    return { sent: 0, total: recipients.length, error: message };
-  }
-  const batches = chunk(recipients, MAX_EMAILS_PER_BATCH);
-
-  const results = await Promise.allSettled(
-    batches.map(async (batch, i) => {
-      const payload = batch.map((recipient) => ({
-        from: config.fromEmail,
-        // Resend's /emails/batch endpoint rejects a bare string here at
-        // runtime ("Invalid `to` field") even though the SDK's shared type
-        // (string | string[]) allows it for the single-send endpoint --
-        // must be an array for batch sends specifically.
-        to: [recipient.email],
-        subject,
-        html: renderEmail({
-          ...renderOptions,
-          unsubscribeUrl: recipient.unsubscribeToken
-            ? `${SITE_URL}/api/unsubscribe?token=${recipient.unsubscribeToken}`
-            : undefined,
-        }),
-      }));
-      // Permissive validation means one bad address (a stray test entry, a
-      // typo, a blocked domain like example.com) only drops that one email
-      // instead of failing the whole batch — a single subscriber shouldn't
-      // ever be able to silently block delivery to everyone else.
-      const result = await resend.batch.send(payload, { batchValidation: "permissive" });
-      if (result.error) {
-        console.error(`Subscriber email batch ${i + 1}/${batches.length} failed entirely for "${subject}":`, result.error);
-        return { sentCount: 0, error: result.error.message };
-      }
-      if (result.data.errors.length > 0) {
-        console.error(
-          `Subscriber email batch ${i + 1}/${batches.length}: ${result.data.errors.length} of ${batch.length} rejected for "${subject}":`,
-          result.data.errors.map((e) => `[${batch[e.index]?.email}] ${e.message}`)
-        );
-      }
-      return { sentCount: result.data.data.length, error: undefined };
-    })
-  );
-
-  let sent = 0;
-  let firstError: string | undefined;
-  for (let i = 0; i < results.length; i++) {
-    const result = results[i];
-    if (result.status === "fulfilled") {
-      sent += result.value.sentCount;
-      firstError ??= result.value.error;
-    } else {
-      const message = result.reason instanceof Error ? result.reason.message : String(result.reason);
-      console.error(`Subscriber email batch ${i + 1}/${batches.length} threw for "${subject}":`, result.reason);
       firstError ??= message;
     }
-  }
-  return { sent, total: recipients.length, error: firstError };
+  });
+  return { sent, total: to.length, error: firstError };
 }
 
 export async function sendRegistrationConfirmation(to: string, playerName: string) {
@@ -293,21 +213,33 @@ export async function sendGameCancellationAlert(to: SubscriberRecipient[], games
     ? `MMSPL: Game ${games[0].status === "postponed" ? "Postponed" : "Cancelled"} — ${games[0].homeTeam} vs ${games[0].awayTeam}`
     : `MMSPL: ${games.length} Games Cancelled`;
 
-  return sendToSubscribers(to, subject, {
+  const html = renderEmail({
     title,
     bodyHtml: `<p>${single ? "The following game has been affected" : `${games.length} games have been affected`}:</p>${rowsHtml}`,
     cta: { label: "View Schedule", url: `${SITE_URL}/schedule` },
+    unsubscribeUrl: `${SITE_URL}/unsubscribe`,
   });
+  return sendBulk(
+    to.map((r) => r.email),
+    subject,
+    html
+  );
 }
 
 export async function sendNewsAnnouncement(to: SubscriberRecipient[], title: string, slug: string) {
   if (to.length === 0) return { skipped: true as const };
   const url = `${SITE_URL}/news/${slug}`;
-  return sendToSubscribers(to, `MMSPL News: ${title}`, {
+  const html = renderEmail({
     title: "News Update",
     bodyHtml: `<p style="font-size:16px; font-weight:bold;">${title}</p>`,
     cta: { label: "Read Full Story", url },
+    unsubscribeUrl: `${SITE_URL}/unsubscribe`,
   });
+  return sendBulk(
+    to.map((r) => r.email),
+    `MMSPL News: ${title}`,
+    html
+  );
 }
 
 export async function sendSubscriptionWelcome(to: string, unsubscribeToken?: string) {
@@ -353,10 +285,16 @@ export async function sendCustomNotificationEmail(to: string[], subject: string,
 
 export async function sendBroadcastEmail(to: SubscriberRecipient[], subject: string, message: string) {
   if (to.length === 0) return { skipped: true as const };
-  return sendToSubscribers(to, `MMSPL: ${subject}`, {
+  const html = renderEmail({
     title: subject,
     bodyHtml: `<p>${message.replace(/\n/g, "<br/>")}</p>`,
+    unsubscribeUrl: `${SITE_URL}/unsubscribe`,
   });
+  return sendBulk(
+    to.map((r) => r.email),
+    `MMSPL: ${subject}`,
+    html
+  );
 }
 
 export async function sendAdminPasswordReset(to: string, name: string, tempPassword: string) {

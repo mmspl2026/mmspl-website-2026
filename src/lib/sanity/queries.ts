@@ -155,6 +155,8 @@ export const subscribersWithTokenQuery = groq`*[_type == "subscriber"]{email, un
 
 export const subscriberByUnsubscribeTokenQuery = groq`*[_type == "subscriber" && unsubscribeToken == $unsubscribeToken][0]{_id, email}`;
 
+export const subscriberByEmailForUnsubscribeQuery = groq`*[_type == "subscriber" && email == $email][0]{_id, email}`;
+
 export const allPushSubscriptionsQuery = groq`*[_type == "pushSubscription"]{
   _id, endpoint, p256dh, auth
 }`;

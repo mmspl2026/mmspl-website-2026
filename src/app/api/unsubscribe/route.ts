@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { writeClient } from "@/lib/sanity/client";
-import { subscriberByUnsubscribeTokenQuery } from "@/lib/sanity/queries";
+import { subscriberByUnsubscribeTokenQuery, subscriberByEmailForUnsubscribeQuery } from "@/lib/sanity/queries";
 
 function page(title: string, message: string) {
   return `<!DOCTYPE html>
@@ -65,4 +65,29 @@ export async function GET(req: NextRequest) {
     "You're Unsubscribed",
     `${subscriber.email} won't receive any more email notifications from MMSPL. You can re-subscribe any time from the notifications page.`
   );
+}
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Used by the /unsubscribe page: bulk emails are sent as one shared BCC'd
+// copy (see sendBulk in src/lib/resend.ts), so there's no per-recipient
+// token to put in the link -- the visitor confirms their own email instead.
+export async function POST(req: NextRequest) {
+  const body = await req.json().catch(() => null);
+  const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
+
+  if (!email || !EMAIL_RE.test(email)) {
+    return NextResponse.json({ error: "A valid email is required." }, { status: 400 });
+  }
+
+  const subscriber = await writeClient.fetch<UnsubscribeSubscriber | null>(subscriberByEmailForUnsubscribeQuery, {
+    email,
+  });
+
+  if (!subscriber) {
+    return NextResponse.json({ ok: true, found: false });
+  }
+
+  await writeClient.delete(subscriber._id);
+  return NextResponse.json({ ok: true, found: true });
 }

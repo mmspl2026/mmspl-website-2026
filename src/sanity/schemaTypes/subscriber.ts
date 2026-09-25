@@ -29,6 +29,13 @@ export default defineType({
       description: "Random token used for one-click unsubscribe links in emails — not meant to be edited by hand.",
       readOnly: true,
     }),
+    defineField({
+      name: "ipAddress",
+      title: "Signup IP",
+      type: "string",
+      description: "Captured at signup for spam/rate-limit detection — not meant to be edited by hand.",
+      readOnly: true,
+    }),
   ],
   preview: {
     select: { title: "email", subtitle: "name" },

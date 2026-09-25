@@ -172,11 +172,21 @@ async function sendToSubscribers(
       }),
     }));
     try {
-      const result = await resend.batch.send(payload);
+      // Permissive validation means one bad address (a stray test entry, a
+      // typo, a blocked domain like example.com) only drops that one email
+      // instead of failing the whole batch — a single subscriber shouldn't
+      // ever be able to silently block delivery to everyone else.
+      const result = await resend.batch.send(payload, { batchValidation: "permissive" });
       if (result.error) {
-        console.error(`Subscriber email batch ${i + 1}/${batches.length} failed for "${subject}":`, result.error);
+        console.error(`Subscriber email batch ${i + 1}/${batches.length} failed entirely for "${subject}":`, result.error);
       } else {
-        sent += batch.length;
+        sent += result.data.data.length;
+        if (result.data.errors.length > 0) {
+          console.error(
+            `Subscriber email batch ${i + 1}/${batches.length}: ${result.data.errors.length} of ${batch.length} rejected for "${subject}":`,
+            result.data.errors.map((e) => `[${batch[e.index]?.email}] ${e.message}`)
+          );
+        }
       }
     } catch (err) {
       console.error(`Subscriber email batch ${i + 1}/${batches.length} threw for "${subject}":`, err);

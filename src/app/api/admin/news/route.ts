@@ -53,18 +53,26 @@ export async function POST(req: NextRequest) {
   });
 
   let notified:
-    | { emailCount: number; pushCount: number; emailSkippedReason?: string; emailError?: string }
+    | {
+        emailCount: number;
+        pushCount: number;
+        emailSkippedReason?: string;
+        emailError?: string;
+        emailSkippedInvalid?: number;
+      }
     | undefined;
   if (body.notifySubscribers) {
     let emailCount = 0;
     let emailSkippedReason: string | undefined;
     let emailError: string | undefined;
+    let emailSkippedInvalid: number | undefined;
     try {
       const emails = await writeClient.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
       const emailResult = await sendNewsAnnouncement(emails, body.title, uniqueSlug);
       emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
       emailSkippedReason = "reason" in emailResult ? emailResult.reason : undefined;
       emailError = "error" in emailResult ? emailResult.error : undefined;
+      emailSkippedInvalid = "skippedInvalid" in emailResult ? emailResult.skippedInvalid : undefined;
     } catch (err) {
       emailError = err instanceof Error ? err.message : String(err);
       console.error("News notify: failed to fetch subscribers or send email:", err);
@@ -75,7 +83,7 @@ export async function POST(req: NextRequest) {
       url: `/news/${uniqueSlug}`,
     });
     const pushCount = "sent" in pushResult ? (pushResult.sent ?? 0) : 0;
-    notified = { emailCount, pushCount, emailSkippedReason, emailError };
+    notified = { emailCount, pushCount, emailSkippedReason, emailError, emailSkippedInvalid };
   }
 
   return NextResponse.json({ news: doc, notified });

@@ -110,6 +110,21 @@ function chunk<T>(items: T[], size: number): T[][] {
   return batches;
 }
 
+// Loose enough to accept real-world addresses, strict enough to catch what
+// actually broke delivery here: subscriber records with consecutive dots in
+// the local part (e.g. "re.s.n.i.c.k...joan@gmail.com") pass a plain
+// email-shape regex but are rejected by Resend's stricter RFC validation --
+// and since a single BCC call has no per-recipient fault tolerance (unlike
+// the batch API's permissive mode), one bad address like that silently
+// blocked delivery to every other subscriber in the same chunk.
+function isValidBulkRecipient(email: string): boolean {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
+  if (email.includes("..")) return false;
+  const localPart = email.split("@")[0];
+  if (localPart.startsWith(".") || localPart.endsWith(".")) return false;
+  return true;
+}
+
 /**
  * Sends one email to a large recipient list, BCC'd and batched to stay
  * under Resend's per-request recipient cap (50 total across to/cc/bcc). A
@@ -121,8 +136,18 @@ function chunk<T>(items: T[], size: number): T[][] {
  * one batched recipient list). BCC also keeps subscribers from seeing each
  * other's addresses.
  */
-async function sendBulk(to: string[], subject: string, html: string) {
-  if (to.length === 0) return { skipped: true as const, reason: "no-recipients" as const };
+async function sendBulk(toRaw: string[], subject: string, html: string) {
+  const invalid = toRaw.filter((e) => !isValidBulkRecipient(e));
+  if (invalid.length > 0) {
+    console.warn(`sendBulk: skipping ${invalid.length} malformed recipient(s) for "${subject}":`, invalid);
+  }
+  const to = toRaw.filter(isValidBulkRecipient);
+
+  if (to.length === 0) {
+    const reason: "all-recipients-invalid" | "no-recipients" =
+      toRaw.length > 0 ? "all-recipients-invalid" : "no-recipients";
+    return { skipped: true as const, reason };
+  }
   const config = await getEmailConfig();
   if (!config.apiKey) {
     console.warn(`Resend API key not set — skipping email "${subject}" to ${to.length} recipients`);
@@ -153,7 +178,7 @@ async function sendBulk(to: string[], subject: string, html: string) {
       firstError ??= message;
     }
   });
-  return { sent, total: to.length, error: firstError };
+  return { sent, total: toRaw.length, error: firstError, skippedInvalid: invalid.length };
 }
 
 export async function sendRegistrationConfirmation(to: string, playerName: string) {

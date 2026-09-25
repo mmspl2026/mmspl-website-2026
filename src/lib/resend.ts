@@ -263,7 +263,7 @@ export async function sendNewsAnnouncement(to: SubscriberRecipient[], title: str
   if (to.length === 0) return { skipped: true as const };
   const url = `${SITE_URL}/news/${slug}`;
   return sendToSubscribers(to, `MMSPL News: ${title}`, {
-    title: "New Announcement",
+    title: "News Update",
     bodyHtml: `<p style="font-size:16px; font-weight:bold;">${title}</p>`,
     cta: { label: "Read Full Story", url },
   });

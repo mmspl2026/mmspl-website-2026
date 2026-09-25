@@ -7,6 +7,11 @@ import { sendGameCancellationAlert } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
 import type { Standing, SubscriberRecipient } from "@/lib/types";
 
+// Notifying subscribers can involve dozens of individual emails plus push
+// sends within the same request — give it more headroom than the default
+// serverless function timeout, which is easy to exceed silently otherwise.
+export const maxDuration = 60;
+
 interface GameForCancel {
   _id: string;
   date: string;

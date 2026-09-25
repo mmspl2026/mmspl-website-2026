@@ -6,6 +6,11 @@ import { sendGameCancellationAlert, sendNewsAnnouncement } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
 import type { SubscriberRecipient } from "@/lib/types";
 
+// Notifying subscribers can involve dozens of individual emails plus push
+// sends within the same request — give it more headroom than the default
+// serverless function timeout, which is easy to exceed silently otherwise.
+export const maxDuration = 60;
+
 // Configure a Sanity webhook (Studio → API → Webhooks) pointing at
 // https://<your-domain>/api/webhooks/sanity for the `game` and `news`
 // document types, triggered on create + update, with SANITY_WEBHOOK_SECRET

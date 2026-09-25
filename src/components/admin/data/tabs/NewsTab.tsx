@@ -126,11 +126,13 @@ export default function NewsTab() {
       const data = await res.json().catch(() => null);
       let message = "Saved.";
       if (editing.notifySubscribers && data?.notified) {
-        const { pushCount, emailCount, emailSkippedReason } = data.notified;
+        const { pushCount, emailCount, emailSkippedReason, emailError } = data.notified;
         const emailPart =
           emailSkippedReason === "not-configured"
             ? "email skipped (Resend isn't configured right now)"
-            : `${emailCount ?? 0} email subscriber(s)`;
+            : emailError
+              ? `email failed (${emailError})`
+              : `${emailCount ?? 0} email subscriber(s)`;
         message = `Saved — notified ${pushCount ?? 0} push subscriber(s) and ${emailPart}.`;
       }
       push({ tone: "success", message });

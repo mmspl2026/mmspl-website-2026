@@ -6,6 +6,11 @@ import { sendBroadcastEmail } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
 import type { SubscriberRecipient } from "@/lib/types";
 
+// Notifying subscribers can involve dozens of individual emails plus push
+// sends within the same request — give it more headroom than the default
+// serverless function timeout, which is easy to exceed silently otherwise.
+export const maxDuration = 60;
+
 export async function POST(req: NextRequest) {
   const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
@@ -18,6 +23,8 @@ export async function POST(req: NextRequest) {
   const emails = await writeClient.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
   const emailResult = await sendBroadcastEmail(emails, body.title, body.message);
   const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
+  const emailError = "error" in emailResult ? emailResult.error : undefined;
+  if (emailError) console.error("Notify send: email error:", emailError);
 
   const pushResult = await sendPushToAll({ title: body.title, body: body.message });
   const pushCount = "sent" in pushResult ? pushResult.sent : 0;

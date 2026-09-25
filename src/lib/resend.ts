@@ -148,7 +148,13 @@ async function sendBulk(to: string[], subject: string, html: string) {
   return { sent, total: to.length };
 }
 
-const MAX_EMAILS_PER_BATCH = 90;
+// Kept small and run concurrently (not sequentially) so the whole send
+// finishes fast regardless of subscriber count — a single serial call
+// carrying 80+ personalized emails risks running past a serverless
+// function's time limit (tight on cheaper Vercel plans, effectively
+// unbounded on a local `next dev` process, which is why this could pass
+// locally and silently die in production without ever showing an error).
+const MAX_EMAILS_PER_BATCH = 25;
 
 /**
  * Sends a subscriber broadcast (news, cancellations, manual notify) as one
@@ -168,28 +174,33 @@ async function sendToSubscribers(
     console.warn(`Resend API key not set — skipping email "${subject}" to ${recipients.length} subscribers`);
     return { skipped: true as const, reason: "not-configured" as const };
   }
-  const resend = new Resend(config.apiKey);
+  let resend: Resend;
+  try {
+    resend = new Resend(config.apiKey);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`Failed to construct Resend client for "${subject}":`, err);
+    return { sent: 0, total: recipients.length, error: message };
+  }
   const batches = chunk(recipients, MAX_EMAILS_PER_BATCH);
 
-  let sent = 0;
-  for (let i = 0; i < batches.length; i++) {
-    const batch = batches[i];
-    const payload = batch.map((recipient) => ({
-      from: config.fromEmail,
-      // Resend's /emails/batch endpoint rejects a bare string here at
-      // runtime ("Invalid `to` field") even though the SDK's shared type
-      // (string | string[]) allows it for the single-send endpoint --
-      // must be an array for batch sends specifically.
-      to: [recipient.email],
-      subject,
-      html: renderEmail({
-        ...renderOptions,
-        unsubscribeUrl: recipient.unsubscribeToken
-          ? `${SITE_URL}/api/unsubscribe?token=${recipient.unsubscribeToken}`
-          : undefined,
-      }),
-    }));
-    try {
+  const results = await Promise.allSettled(
+    batches.map(async (batch, i) => {
+      const payload = batch.map((recipient) => ({
+        from: config.fromEmail,
+        // Resend's /emails/batch endpoint rejects a bare string here at
+        // runtime ("Invalid `to` field") even though the SDK's shared type
+        // (string | string[]) allows it for the single-send endpoint --
+        // must be an array for batch sends specifically.
+        to: [recipient.email],
+        subject,
+        html: renderEmail({
+          ...renderOptions,
+          unsubscribeUrl: recipient.unsubscribeToken
+            ? `${SITE_URL}/api/unsubscribe?token=${recipient.unsubscribeToken}`
+            : undefined,
+        }),
+      }));
       // Permissive validation means one bad address (a stray test entry, a
       // typo, a blocked domain like example.com) only drops that one email
       // instead of failing the whole batch — a single subscriber shouldn't
@@ -197,20 +208,32 @@ async function sendToSubscribers(
       const result = await resend.batch.send(payload, { batchValidation: "permissive" });
       if (result.error) {
         console.error(`Subscriber email batch ${i + 1}/${batches.length} failed entirely for "${subject}":`, result.error);
-      } else {
-        sent += result.data.data.length;
-        if (result.data.errors.length > 0) {
-          console.error(
-            `Subscriber email batch ${i + 1}/${batches.length}: ${result.data.errors.length} of ${batch.length} rejected for "${subject}":`,
-            result.data.errors.map((e) => `[${batch[e.index]?.email}] ${e.message}`)
-          );
-        }
+        return { sentCount: 0, error: result.error.message };
       }
-    } catch (err) {
-      console.error(`Subscriber email batch ${i + 1}/${batches.length} threw for "${subject}":`, err);
+      if (result.data.errors.length > 0) {
+        console.error(
+          `Subscriber email batch ${i + 1}/${batches.length}: ${result.data.errors.length} of ${batch.length} rejected for "${subject}":`,
+          result.data.errors.map((e) => `[${batch[e.index]?.email}] ${e.message}`)
+        );
+      }
+      return { sentCount: result.data.data.length, error: undefined };
+    })
+  );
+
+  let sent = 0;
+  let firstError: string | undefined;
+  for (let i = 0; i < results.length; i++) {
+    const result = results[i];
+    if (result.status === "fulfilled") {
+      sent += result.value.sentCount;
+      firstError ??= result.value.error;
+    } else {
+      const message = result.reason instanceof Error ? result.reason.message : String(result.reason);
+      console.error(`Subscriber email batch ${i + 1}/${batches.length} threw for "${subject}":`, result.reason);
+      firstError ??= message;
     }
   }
-  return { sent, total: recipients.length };
+  return { sent, total: recipients.length, error: firstError };
 }
 
 export async function sendRegistrationConfirmation(to: string, playerName: string) {

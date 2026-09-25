@@ -7,6 +7,11 @@ import { plainTextToBlocks } from "@/lib/newsBody";
 import { sendNewsAnnouncement } from "@/lib/resend";
 import { sendPushToAll } from "@/lib/push";
 
+// Notifying subscribers can involve dozens of individual emails plus push
+// sends within the same request — give it more headroom than the default
+// serverless function timeout, which is easy to exceed silently otherwise.
+export const maxDuration = 60;
+
 function slugify(title: string): string {
   return title
     .toLowerCase()
@@ -47,19 +52,30 @@ export async function POST(req: NextRequest) {
     tag: body.tag || undefined,
   });
 
-  let notified: { emailCount: number; pushCount: number; emailSkippedReason?: string } | undefined;
+  let notified:
+    | { emailCount: number; pushCount: number; emailSkippedReason?: string; emailError?: string }
+    | undefined;
   if (body.notifySubscribers) {
-    const emails = await writeClient.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
-    const emailResult = await sendNewsAnnouncement(emails, body.title, uniqueSlug);
-    const emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
-    const emailSkippedReason = "reason" in emailResult ? emailResult.reason : undefined;
+    let emailCount = 0;
+    let emailSkippedReason: string | undefined;
+    let emailError: string | undefined;
+    try {
+      const emails = await writeClient.fetch<SubscriberRecipient[]>(subscribersWithTokenQuery);
+      const emailResult = await sendNewsAnnouncement(emails, body.title, uniqueSlug);
+      emailCount = "sent" in emailResult ? (emailResult.sent ?? 0) : 0;
+      emailSkippedReason = "reason" in emailResult ? emailResult.reason : undefined;
+      emailError = "error" in emailResult ? emailResult.error : undefined;
+    } catch (err) {
+      emailError = err instanceof Error ? err.message : String(err);
+      console.error("News notify: failed to fetch subscribers or send email:", err);
+    }
     const pushResult = await sendPushToAll({
       title: "MMSPL News",
       body: body.title,
       url: `/news/${uniqueSlug}`,
     });
     const pushCount = "sent" in pushResult ? (pushResult.sent ?? 0) : 0;
-    notified = { emailCount, pushCount, emailSkippedReason };
+    notified = { emailCount, pushCount, emailSkippedReason, emailError };
   }
 
   return NextResponse.json({ news: doc, notified });

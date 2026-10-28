@@ -63,7 +63,7 @@ export default function HomeHero({
 
       <div className="relative z-10 mx-auto w-full max-w-5xl px-5 py-16 text-center">
         <p className="font-mono-brand text-[11px] uppercase tracking-[0.12em] text-white/55">
-          {seasonComplete ? `${year} Season Complete · See you in May` : `${year} Season · May – September`}
+          {seasonComplete ? `${year} Season Complete · See you in May ${year + 1}` : `${year} Season · May – September`}
         </p>
         {/* font-size is a fluid clamp(), matching Emergent's h1 exactly
             instead of stepping across Tailwind breakpoints. */}

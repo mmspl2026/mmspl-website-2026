@@ -152,6 +152,8 @@ export default async function HomePage() {
         today={today}
         tournamentBanner={tournamentBanner}
         specialCards={mcgregorRailCards}
+        year={standingsYear}
+        seasonComplete={mcgregorConcluded}
       />
 
       <section aria-labelledby="news-heading" className="bg-white py-8 md:py-10">

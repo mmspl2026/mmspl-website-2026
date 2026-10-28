@@ -19,12 +19,19 @@ export default function HomeHero({
   today,
   tournamentBanner,
   specialCards = [],
+  year,
+  seasonComplete = false,
 }: {
   heroImage?: SanityImageWithAlt;
   games: Game[];
   today: string;
   tournamentBanner?: TournamentBanner | null;
   specialCards?: SpecialRailCardData[];
+  year: number;
+  /** True once the year-end tournament has concluded — see the matching
+   * `mcgregorConcluded` flag on the homepage, which is the single source of
+   * truth for "the season itself is done" across the page. */
+  seasonComplete?: boolean;
 }) {
   const imageUrl = heroImage
     ? urlFor(heroImage).width(2400).height(1350).fit("crop").url()
@@ -56,7 +63,7 @@ export default function HomeHero({
 
       <div className="relative z-10 mx-auto w-full max-w-5xl px-5 py-16 text-center">
         <p className="font-mono-brand text-[11px] uppercase tracking-[0.12em] text-white/55">
-          2026 Season &middot; May &ndash; September
+          {seasonComplete ? `${year} Season Complete · See you in May` : `${year} Season · May – September`}
         </p>
         {/* font-size is a fluid clamp(), matching Emergent's h1 exactly
             instead of stepping across Tailwind breakpoints. */}
@@ -71,8 +78,8 @@ export default function HomeHero({
           <Link href="/register" className="btn-primary w-full sm:w-auto">
             Join Our League
           </Link>
-          <Link href="/schedule" className="btn-outline w-full sm:w-auto">
-            2026 Schedule
+          <Link href={seasonComplete ? "/#champions-heading" : "/schedule"} className="btn-outline w-full sm:w-auto">
+            {seasonComplete ? `${year} Recap` : `${year} Schedule`}
           </Link>
         </div>
 

@@ -25,6 +25,7 @@ import BallparksSection from "@/components/BallparksSection";
 import SponsorCTA from "@/components/SponsorCTA";
 import StandingsTable from "@/components/StandingsTable";
 import ChampionsSection from "@/components/ChampionsSection";
+import NextSeasonCTA from "@/components/NextSeasonCTA";
 
 const SEED_DATES: ImportantDate[] = IMPORTANT_DATES_2026.map((d, i) => ({
   _id: `seed-date-${i}`,
@@ -196,6 +197,12 @@ export default async function HomePage() {
         mcgregor={mcgregorResult}
         regularSeasonChampion={regularSeasonChampion}
       />
+
+      {/* Off-season registration teaser — gated on the same registrationOpen
+          admin flag the /register page itself uses, so this disappears on
+          its own the moment registration opens for next season, with no
+          code change needed. */}
+      {!(settings?.registrationOpen ?? true) && <NextSeasonCTA year={standingsYear + 1} />}
 
       <BallparksSection />
 

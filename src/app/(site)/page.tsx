@@ -89,6 +89,17 @@ export default async function HomePage() {
       ? { type: "charity", result: charityResult }
       : null;
   const mcgregorConcluded = hasConcluded(mcgregorResult);
+  // Once the rail has nothing to show, keep it visible (with GameRail's
+  // plain placeholder text) for a few weeks after the season actually
+  // ends, rather than disappearing the moment the last game drops out of
+  // the 7-day lookback window -- only fully hide the empty rail once 21
+  // days have passed since the tournament's planned end. No year-specific
+  // upkeep: driven off mcgregorResult.plannedEnd, same as mcgregorConcluded.
+  const SEASON_END_RAIL_GRACE_DAYS = 21;
+  const emptyRailHiddenAfter = mcgregorResult?.plannedEnd
+    ? addDays(mcgregorResult.plannedEnd, SEASON_END_RAIL_GRACE_DAYS)
+    : null;
+  const suppressEmptyRail = Boolean(emptyRailHiddenAfter && today > emptyRailHiddenAfter);
   const tournamentBanner = activeTournament
     ? {
         label: TOURNAMENT_LABELS[activeTournament.type].full,
@@ -111,10 +122,10 @@ export default async function HomePage() {
   // Thu-Sat round robin + Championship Sunday, appended to the game rail
   // while the McGregor tournament is upcoming or in progress — derived from
   // its planned dates, so this needs no manual upkeep and disappears on its
-  // own once the tournament's done. Once it's over, those day-specific
-  // cards stop being useful, so they're replaced by a single persistent
-  // "season complete" card that stays in the rail through the rest of the
-  // year, until next season's tournament data replaces this one.
+  // own once the tournament's done. Once it's over, these day-specific
+  // cards stop being useful and the rail goes back to empty — the hero's
+  // "<year> Recap" button (see HomeHero) already covers the season-complete
+  // messaging and champions link, so no separate rail card duplicates it.
   const mcgregorRailCards: SpecialRailCardData[] =
     isUpcomingOrLive(mcgregorResult) && mcgregorResult.plannedStart
       ? (() => {
@@ -127,22 +138,7 @@ export default async function HomePage() {
             { date: sun, label: "Championship Sunday", sublabel: "Tournament", href, icon: "trophy" as const },
           ];
         })()
-      : mcgregorConcluded
-        ? [
-            {
-              date: today,
-              label: `End of ${standingsYear} Season`,
-              // Links to the Champions section further down this same page
-              // rather than the tournament page -- the banner pill right
-              // below the rail already covers that link, so this one is
-              // more useful pointing at the champions recap instead.
-              sublabel: mcgregorResult.champion ? "See the champions" : "Tournament complete",
-              href: "/#champions-heading",
-              icon: "flag" as const,
-              hideDate: true,
-            },
-          ]
-        : [];
+      : [];
 
   return (
     <>
@@ -154,6 +150,7 @@ export default async function HomePage() {
         specialCards={mcgregorRailCards}
         year={standingsYear}
         seasonComplete={mcgregorConcluded}
+        suppressEmptyRail={suppressEmptyRail}
       />
 
       <section aria-labelledby="news-heading" className="bg-white py-8 md:py-10">

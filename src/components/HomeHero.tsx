@@ -21,6 +21,7 @@ export default function HomeHero({
   specialCards = [],
   year,
   seasonComplete = false,
+  suppressEmptyRail = false,
 }: {
   heroImage?: SanityImageWithAlt;
   games: Game[];
@@ -32,6 +33,10 @@ export default function HomeHero({
    * `mcgregorConcluded` flag on the homepage, which is the single source of
    * truth for "the season itself is done" across the page. */
   seasonComplete?: boolean;
+  /** True once the rail's multi-week empty-state grace period (see
+   * `suppressEmptyRail` on the homepage) has passed -- hides the rail
+   * entirely instead of falling back to GameRail's placeholder text. */
+  suppressEmptyRail?: boolean;
 }) {
   const imageUrl = heroImage
     ? urlFor(heroImage).width(2400).height(1350).fit("crop").url()
@@ -85,13 +90,21 @@ export default function HomeHero({
 
         {/* Game rail sits in normal document flow right after the buttons —
             Emergent doesn't absolutely-position it at the section's bottom
-            edge, it just stacks it in the same centered content column. */}
-        <div className="mx-auto mt-6 w-full max-w-4xl px-5">
-          <h2 className="mb-2 text-center font-sans text-xs font-semibold uppercase tracking-widest text-white/60">
-            Upcoming Games &amp; Scores
-          </h2>
-          <GameRail games={games} today={today} specialCards={specialCards} />
-        </div>
+            edge, it just stacks it in the same centered content column.
+            Shows GameRail's placeholder text while empty, same as always,
+            until `suppressEmptyRail` flips on (21 days after the season
+            ends — see the homepage) and the whole block hides instead.
+            Needs no manual toggle for next season: `games` is live Sanity
+            data, so real upcoming games showing up makes this reappear
+            regardless of `suppressEmptyRail`. */}
+        {(games.length > 0 || specialCards.length > 0 || !suppressEmptyRail) && (
+          <div className="mx-auto mt-6 w-full max-w-4xl px-5">
+            <h2 className="mb-2 text-center font-sans text-xs font-semibold uppercase tracking-widest text-white/60">
+              Upcoming Games &amp; Scores
+            </h2>
+            <GameRail games={games} today={today} specialCards={specialCards} />
+          </div>
+        )}
 
         {tournamentBanner && (
           <Link

@@ -50,6 +50,23 @@ export default defineType({
             ],
           },
         },
+        {
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alt text",
+              type: "string",
+              description: "Describe the image for screen readers",
+            }),
+            defineField({
+              name: "caption",
+              title: "Caption",
+              type: "string",
+            }),
+          ],
+        },
       ],
       validation: (Rule) => Rule.required(),
     }),

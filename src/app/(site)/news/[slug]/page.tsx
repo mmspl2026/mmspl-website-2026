@@ -27,6 +27,16 @@ const portableTextComponents: PortableTextComponents = {
       );
     },
   },
+  types: {
+    image: ({ value }) => (
+      <figure className="not-prose my-6">
+        <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+          <Image src={urlFor(value).width(1200).height(675).fit("crop").url()} alt={value?.alt || ""} fill className="object-cover" />
+        </div>
+        {value?.caption && <figcaption className="mt-2 text-center text-sm text-black/50">{value.caption}</figcaption>}
+      </figure>
+    ),
+  },
 };
 
 export default async function NewsArticlePage({ params }: { params: { slug: string } }) {

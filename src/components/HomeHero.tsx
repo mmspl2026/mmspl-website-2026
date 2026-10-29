@@ -22,6 +22,7 @@ export default function HomeHero({
   year,
   seasonComplete = false,
   suppressEmptyRail = false,
+  recapHref = "/#champions-heading",
 }: {
   heroImage?: SanityImageWithAlt;
   games: Game[];
@@ -37,6 +38,9 @@ export default function HomeHero({
    * `suppressEmptyRail` on the homepage) has passed -- hides the rail
    * entirely instead of falling back to GameRail's placeholder text. */
   suppressEmptyRail?: boolean;
+  /** Where the "<year> Recap" button points -- the season's recap news
+   * post once it exists, falling back to the Champions section otherwise. */
+  recapHref?: string;
 }) {
   const imageUrl = heroImage
     ? urlFor(heroImage).width(2400).height(1350).fit("crop").url()
@@ -83,7 +87,7 @@ export default function HomeHero({
           <Link href="/register" className="btn-primary w-full sm:w-auto">
             Join Our League
           </Link>
-          <Link href={seasonComplete ? "/#champions-heading" : "/schedule"} className="btn-outline w-full sm:w-auto">
+          <Link href={seasonComplete ? recapHref : "/schedule"} className="btn-outline w-full sm:w-auto">
             {seasonComplete ? `${year} Recap` : `${year} Schedule`}
           </Link>
         </div>

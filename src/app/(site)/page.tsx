@@ -10,6 +10,7 @@ import {
   standingsBySeasonQuery,
   gamesBySeasonQuery,
   tournamentResultQuery,
+  newsBySlugQuery,
 } from "@/lib/sanity/queries";
 import type { AdminSettings, Game, ImportantDate, NewsItem, Season, Standing, TournamentResult, TournamentType } from "@/lib/types";
 import { SEED_NEWS } from "@/lib/seed-data";
@@ -48,12 +49,19 @@ export default async function HomePage() {
   // Real game-log tiebreaks only apply 2026+ — see the matching comment on
   // the /standings page for why older seasons keep the simple order.
   const useRealTiebreaks = standingsYear >= 2026;
-  const [standings, seasonGames, dates, charityResult, mcgregorResult] = await Promise.all([
+  // Convention: each season's recap news post uses the slug `<year>-season-recap`
+  // -- checked here (rather than hardcoding the link) so the hero's "Recap"
+  // button only points at it once it actually exists, falling back to the
+  // Champions section otherwise. No code change needed next year as long as
+  // the recap post follows the same slug pattern.
+  const recapSlug = `${standingsYear}-season-recap`;
+  const [standings, seasonGames, dates, charityResult, mcgregorResult, recapArticle] = await Promise.all([
     sanityFetch<Standing[]>(standingsBySeasonQuery, { year: standingsYear }, []),
     useRealTiebreaks ? sanityFetch<Game[]>(gamesBySeasonQuery, { year: standingsYear }, []) : Promise.resolve([]),
     sanityFetch<ImportantDate[]>(seasonImportantDatesQuery, { seasonStart }, []),
     sanityFetch<TournamentResult | null>(tournamentResultQuery, { year: standingsYear, type: "charity" }, null),
     sanityFetch<TournamentResult | null>(tournamentResultQuery, { year: standingsYear, type: "mcgregor" }, null),
+    sanityFetch<NewsItem | null>(newsBySlugQuery, { slug: recapSlug }, null),
   ]);
 
   // Same tie-break procedure as the full /standings page, so "1st place"
@@ -152,6 +160,7 @@ export default async function HomePage() {
         year={standingsYear}
         seasonComplete={mcgregorConcluded}
         suppressEmptyRail={suppressEmptyRail}
+        recapHref={recapArticle ? `/news/${recapSlug}` : "/#champions-heading"}
       />
 
       <section aria-labelledby="news-heading" className="bg-white py-8 md:py-10">

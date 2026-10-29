@@ -28,11 +28,19 @@ const portableTextComponents: PortableTextComponents = {
     },
   },
   types: {
+    // Forcing a 16:9 crop (as the cover photo does) chopped the tops off
+    // portrait/near-square photos like player headshots. Inline body photos
+    // vary in aspect ratio, so this keeps the image's natural proportions
+    // instead of cropping to a fixed box -- just capped at a max height so
+    // a very tall portrait doesn't dominate the article.
     image: ({ value }) => (
-      <figure className="not-prose my-6">
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg">
-          <Image src={urlFor(value).width(1200).height(675).fit("crop").url()} alt={value?.alt || ""} fill className="object-cover" />
-        </div>
+      <figure className="not-prose my-6 text-center">
+        {/* eslint-disable-next-line @next/next/no-img-element -- natural aspect ratio varies per photo, so a plain img avoids next/image's required fixed width/height */}
+        <img
+          src={urlFor(value).width(1200).fit("max").url()}
+          alt={value?.alt || ""}
+          className="mx-auto max-h-[600px] w-auto max-w-full rounded-lg"
+        />
         {value?.caption && <figcaption className="mt-2 text-center text-sm text-black/50">{value.caption}</figcaption>}
       </figure>
     ),

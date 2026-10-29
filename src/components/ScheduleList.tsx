@@ -7,7 +7,8 @@ import clsx from "clsx";
 import type { Game, TournamentResult } from "@/lib/types";
 import { buildDownloadUrl, slugifyTeamName } from "@/lib/scheduleExport";
 import { getTodayEastern } from "@/utils/timezone";
-import TournamentCards, { TournamentSheetCards } from "./TournamentCards";
+import { TournamentSheetCards } from "./TournamentCards";
+import TournamentCollapsible from "./TournamentCollapsible";
 import SeasonDropdown from "./SeasonDropdown";
 
 const TEAM_STORAGE_KEY = "mmspl-schedule-team";
@@ -438,7 +439,7 @@ export default function ScheduleList({
       </div>
 
       <div className="mt-4">
-        <TournamentCards year={selectedYear} charity={charityResult} mcgregor={mcgregorResult} />
+        <TournamentCollapsible year={selectedYear} charity={charityResult} mcgregor={mcgregorResult} />
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">

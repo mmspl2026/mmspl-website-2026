@@ -38,7 +38,7 @@ export function getCardState(year: number, result: TournamentResult | null): Car
   return { notHeld: false, hasChampion: false, pendingLong: isPastSeason ? "Record not available" : "Pending" };
 }
 
-function DesktopCard({ year, type, result }: { year: number; type: TournamentType; result: TournamentResult | null }) {
+export function DesktopCard({ year, type, result }: { year: number; type: TournamentType; result: TournamentResult | null }) {
   const label = TOURNAMENT_LABELS[type];
   const state = getCardState(year, result);
   const title = state.hasChampion ? `${year} Champions` : `${year} Tournament`;
@@ -155,26 +155,6 @@ export function TournamentSheetCards({
     <div className="space-y-3">
       <SheetCard year={year} type="charity" result={charity} />
       <SheetCard year={year} type="mcgregor" result={mcgregor} />
-    </div>
-  );
-}
-
-// Desktop-only (md: and above) — mobile shows a 🏆 topbar button that opens
-// TournamentSheetCards in a bottom sheet instead. Matches the md: breakpoint
-// the rest of the schedule page's mobile/desktop split uses.
-export default function TournamentCards({
-  year,
-  charity,
-  mcgregor,
-}: {
-  year: number;
-  charity: TournamentResult | null;
-  mcgregor: TournamentResult | null;
-}) {
-  return (
-    <div className="hidden grid-cols-1 gap-3 md:grid md:grid-cols-2">
-      <DesktopCard year={year} type="charity" result={charity} />
-      <DesktopCard year={year} type="mcgregor" result={mcgregor} />
     </div>
   );
 }

@@ -15,7 +15,7 @@ import { urlFor } from "@/lib/sanity/image";
 import { computeSeasonRanking, TIE_BREAK_RULES } from "@/lib/seasonRanking";
 import StandingsTable from "@/components/StandingsTable";
 import SeasonDropdown from "@/components/SeasonDropdown";
-import TournamentCards from "@/components/TournamentCards";
+import TournamentCollapsible from "@/components/TournamentCollapsible";
 import StandingsMobileBar from "@/components/StandingsMobileBar";
 
 export const metadata: Metadata = { title: "Standings" };
@@ -130,8 +130,8 @@ export default async function StandingsPage({
         </div>
 
         {!selectedSeason?.cancelled && (
-          <div className="mt-6 hidden md:block">
-            <TournamentCards year={selectedYear} charity={charityResult} mcgregor={mcgregorResult} />
+          <div className="mt-6">
+            <TournamentCollapsible year={selectedYear} charity={charityResult} mcgregor={mcgregorResult} />
           </div>
         )}
 

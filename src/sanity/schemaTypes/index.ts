@@ -24,6 +24,7 @@ import tournamentPool from "./tournamentPool";
 import tournamentGame from "./tournamentGame";
 import wildCardRanking from "./wildCardRanking";
 import tournamentPrediction from "./tournamentPrediction";
+import shopProduct from "./shopProduct";
 
 export const schemaTypes = [
   season,
@@ -52,4 +53,5 @@ export const schemaTypes = [
   tournamentGame,
   wildCardRanking,
   tournamentPrediction,
+  shopProduct,
 ];

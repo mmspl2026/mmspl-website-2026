@@ -117,16 +117,30 @@ export interface AdminSettings {
   adminInfoHeroImage?: SanityImageWithAlt;
   galleryHeroImage?: SanityImageWithAlt;
   newsHeroImage?: SanityImageWithAlt;
+  shopHeroImage?: SanityImageWithAlt;
   sponsorText?: string;
   homeCommunityPhotos?: { image: SanityImageWithAlt; position?: string }[];
   registrationOpen: boolean;
   registrationFee?: number;
   registrationClosedMessage?: string;
+  shopPaymentsEnabled: boolean;
+  shopComingSoonMessage?: string;
   fromAddress?: string;
   registrationRecipients?: string;
   contactRecipients?: string;
   resendApiKey?: string;
   galleryCategories?: string[];
+}
+
+export interface ShopProduct {
+  _id: string;
+  name: string;
+  price?: number;
+  description?: string;
+  photo?: SanityImageWithAlt;
+  sizes?: string[];
+  fulfillmentNote?: string;
+  active?: boolean;
 }
 
 export interface AdminGame extends Game {

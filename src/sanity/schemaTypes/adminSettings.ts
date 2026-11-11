@@ -36,6 +36,7 @@ export default defineType({
     heroImageField("adminInfoHeroImage", "Admin Page Hero Image"),
     heroImageField("galleryHeroImage", "Gallery Hero Image"),
     heroImageField("newsHeroImage", "News Hero Image"),
+    heroImageField("shopHeroImage", "Shop Hero Image"),
     defineField({
       name: "sponsorText",
       title: "Sponsor CTA Text",
@@ -59,6 +60,20 @@ export default defineType({
       title: "Registration Closed Message",
       type: "text",
       description: "Shown on the Register page when registration is closed.",
+    }),
+    defineField({
+      name: "shopPaymentsEnabled",
+      title: "Shop Payments Enabled",
+      type: "boolean",
+      initialValue: false,
+      description:
+        "Turns real checkout on or off league-wide for the Shop page. Leave off while payment processing is still being set up -- products still show, but with a Coming Soon notice instead of a buy button.",
+    }),
+    defineField({
+      name: "shopComingSoonMessage",
+      title: "Shop Coming Soon Message",
+      type: "text",
+      description: "Shown on the Shop page while shopPaymentsEnabled is off.",
     }),
     defineField({
       name: "fromAddress",

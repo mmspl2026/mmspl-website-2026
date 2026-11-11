@@ -138,11 +138,18 @@ export const adminSettingsQuery = groq`*[_type == "adminSettings"][0]{
   adminInfoHeroImage,
   galleryHeroImage,
   newsHeroImage,
+  shopHeroImage,
   sponsorText,
   homeCommunityPhotos[]{ image, position },
   registrationOpen,
   registrationFee,
-  registrationClosedMessage
+  registrationClosedMessage,
+  shopPaymentsEnabled,
+  shopComingSoonMessage
+}`;
+
+export const activeShopProductsQuery = groq`*[_type == "shopProduct" && active == true] | order(_createdAt asc){
+  _id, name, price, description, photo, sizes, fulfillmentNote
 }`;
 
 // Admin-only — includes the secret resendApiKey. Only ever fetch this from

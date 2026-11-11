@@ -30,6 +30,19 @@ export default defineType({
       type: "datetime",
       initialValue: () => new Date().toISOString(),
     }),
+    defineField({
+      name: "replyText",
+      title: "Last Reply Sent",
+      type: "text",
+      description: "The most recent reply sent to this person from the admin panel's Contacts tab.",
+      readOnly: true,
+    }),
+    defineField({
+      name: "repliedAt",
+      title: "Replied At",
+      type: "datetime",
+      readOnly: true,
+    }),
   ],
   orderings: [{ title: "Newest first", name: "submittedDesc", by: [{ field: "submittedAt", direction: "desc" }] }],
   preview: {

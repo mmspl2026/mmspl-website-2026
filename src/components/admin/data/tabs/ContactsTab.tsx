@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { RotateCw, Trash2 } from "lucide-react";
+import { RotateCw, Trash2, Reply, Send } from "lucide-react";
 import type { ContactStatus, ContactSubmission } from "@/lib/types";
 import { Card, CardHeader, Pill, Select, StatusBadge, DangerButton, Spinner, EmptyState } from "../ui";
 import { useToasts } from "@/components/admin/useToasts";
@@ -27,6 +27,9 @@ export default function ContactsTab() {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]["id"]>("all");
   const [loading, setLoading] = useState(true);
   const [resendingId, setResendingId] = useState<string | null>(null);
+  const [replyOpenId, setReplyOpenId] = useState<string | null>(null);
+  const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
+  const [sendingReplyId, setSendingReplyId] = useState<string | null>(null);
   const { toasts, push, dismiss } = useToasts();
 
   async function load() {
@@ -66,6 +69,31 @@ export default function ContactsTab() {
       push({ tone: "error", message: err instanceof Error ? err.message : "Resend failed." });
     } finally {
       setResendingId(null);
+    }
+  }
+
+  async function handleSendReply(id: string) {
+    const message = (replyDrafts[id] || "").trim();
+    if (!message) return;
+    setSendingReplyId(id);
+    try {
+      const res = await fetch(`/api/admin/contacts/${id}/reply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || "Reply failed.");
+      setSubmissions((prev) =>
+        prev.map((s) => (s._id === id ? { ...s, status: "replied", replyText: message, repliedAt: data.repliedAt } : s))
+      );
+      setReplyDrafts((prev) => ({ ...prev, [id]: "" }));
+      setReplyOpenId(null);
+      push({ tone: "success", message: "Reply sent." });
+    } catch (err) {
+      push({ tone: "error", message: err instanceof Error ? err.message : "Reply failed." });
+    } finally {
+      setSendingReplyId(null);
     }
   }
 
@@ -112,6 +140,16 @@ export default function ContactsTab() {
                   </div>
                 </div>
                 <p className="whitespace-pre-wrap text-sm text-gray-700">{s.message}</p>
+
+                {s.replyText && (
+                  <div className="rounded-[3px] border border-green-200 bg-green-50 p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-green-700">
+                      Your reply{s.repliedAt && ` · ${new Date(s.repliedAt).toLocaleString()}`}
+                    </p>
+                    <p className="mt-1 whitespace-pre-wrap text-sm text-gray-700">{s.replyText}</p>
+                  </div>
+                )}
+
                 <div className="mt-1 flex flex-wrap items-center gap-2">
                   <Select value={s.status} onChange={(e) => updateStatus(s._id, e.target.value as ContactStatus)} className="h-8 text-xs">
                     <option value="new">New</option>
@@ -119,6 +157,14 @@ export default function ContactsTab() {
                     <option value="replied">Replied</option>
                     <option value="email-failed">Email Failed</option>
                   </Select>
+                  <button
+                    type="button"
+                    onClick={() => setReplyOpenId(replyOpenId === s._id ? null : s._id)}
+                    className="inline-flex h-8 items-center gap-1.5 rounded-[3px] border-2 border-gray-300 px-2.5 text-xs font-semibold text-gray-700 hover:border-brand hover:text-brand"
+                  >
+                    <Reply size={12} aria-hidden="true" />
+                    {s.replyText ? "Reply Again" : "Reply"}
+                  </button>
                   <button
                     type="button"
                     onClick={() => handleResend(s._id)}
@@ -133,6 +179,40 @@ export default function ContactsTab() {
                     Delete
                   </DangerButton>
                 </div>
+
+                {replyOpenId === s._id && (
+                  <div className="mt-1 rounded-[3px] border border-gray-200 bg-gray-50 p-3">
+                    <p className="mb-2 text-xs text-gray-500">
+                      Sending to <span className="font-semibold text-gray-700">{s.email}</span> — they&apos;ll see this
+                      as a reply from MMSPL.
+                    </p>
+                    <textarea
+                      value={replyDrafts[s._id] || ""}
+                      onChange={(e) => setReplyDrafts((prev) => ({ ...prev, [s._id]: e.target.value }))}
+                      rows={4}
+                      placeholder="Write your reply…"
+                      className="w-full rounded-[3px] border-2 border-gray-300 p-2 text-sm focus:border-brand focus:outline-none"
+                    />
+                    <div className="mt-2 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleSendReply(s._id)}
+                        disabled={sendingReplyId === s._id || !(replyDrafts[s._id] || "").trim()}
+                        className="inline-flex h-8 items-center gap-1.5 rounded-[3px] bg-brand px-3 text-xs font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
+                      >
+                        <Send size={12} aria-hidden="true" />
+                        {sendingReplyId === s._id ? "Sending…" : "Send Reply"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setReplyOpenId(null)}
+                        className="inline-flex h-8 items-center px-2.5 text-xs font-semibold text-gray-500 hover:text-gray-700"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

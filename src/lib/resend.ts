@@ -84,14 +84,14 @@ export async function isResendConfigured(): Promise<boolean> {
   return Boolean(config.apiKey);
 }
 
-async function send(to: string | string[], subject: string, html: string) {
+async function send(to: string | string[], subject: string, html: string, replyTo?: string[]) {
   const config = await getEmailConfig();
   if (!config.apiKey) {
     console.warn(`Resend API key not set — skipping email "${subject}" to`, to);
     return { skipped: true as const };
   }
   const resend = new Resend(config.apiKey);
-  return resend.emails.send({ from: config.fromEmail, to, subject, html });
+  return resend.emails.send({ from: config.fromEmail, to, subject, html, replyTo });
 }
 
 /** True if the send actually went out (not skipped, no error reported). */
@@ -288,6 +288,23 @@ export async function sendContactNotification(fields: { name: string; email: str
      <p>${fields.message.replace(/\n/g, "<br/>")}</p>`,
   });
   return send(config.contactRecipients, `MMSPL Contact Form: ${fields.subject || fields.name}`, html);
+}
+
+/**
+ * A human-written reply sent from the admin panel's Contacts tab to whoever
+ * submitted the form. reply-to is set to the configured contact recipients
+ * (not the no-reply fromEmail) so if this person replies again, it reaches
+ * a real inbox instead of bouncing.
+ */
+export async function sendContactReply(fields: { to: string; name: string; subject?: string; replyBody: string }) {
+  const config = await getEmailConfig();
+  const html = renderEmail({
+    title: "A Reply From MMSPL",
+    bodyHtml: `<p>Hi ${fields.name},</p>
+     <p>${fields.replyBody.replace(/\n/g, "<br/>")}</p>`,
+  });
+  const subject = fields.subject ? `Re: ${fields.subject}` : "Re: Your message to MMSPL";
+  return send(fields.to, subject, html, config.contactRecipients);
 }
 
 /** Auto-reply sent to whoever submitted the contact form, confirming receipt. */

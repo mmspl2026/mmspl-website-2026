@@ -224,6 +224,8 @@ export interface ContactSubmission {
   message: string;
   status: ContactStatus;
   submittedAt: string;
+  replyText?: string;
+  repliedAt?: string;
 }
 
 export interface NotificationLog {

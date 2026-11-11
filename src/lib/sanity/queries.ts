@@ -270,7 +270,7 @@ export const allRegistrationsQuery = groq`*[_type == "registration"] | order(sub
 }`;
 
 export const allContactSubmissionsQuery = groq`*[_type == "contactSubmission"] | order(submittedAt desc){
-  _id, name, email, subject, message, status, submittedAt
+  _id, name, email, subject, message, status, submittedAt, replyText, repliedAt
 }`;
 
 export const allNotificationLogsQuery = groq`*[_type == "notificationLog"] | order(sentAt desc)[0...50]{

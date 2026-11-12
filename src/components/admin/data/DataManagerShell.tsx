@@ -19,6 +19,7 @@ import {
   FileText,
   Bell,
   Users,
+  Shield,
 } from "lucide-react";
 import type { AdminRole, AdminUser } from "@/lib/types";
 import { LEAGUE_FOUNDING_YEAR } from "@/lib/seed-content";
@@ -35,6 +36,7 @@ import GalleryTab from "./tabs/GalleryTab";
 import DocumentsTab from "./tabs/DocumentsTab";
 import NotifyTab from "./tabs/NotifyTab";
 import UsersTab from "./tabs/UsersTab";
+import TeamCaptainsTab from "./tabs/TeamCaptainsTab";
 
 const TABS = [
   { id: "standings", label: "Standings", icon: BarChart3 },
@@ -50,6 +52,7 @@ const TABS = [
   { id: "documents", label: "Documents", icon: FileText },
   { id: "notify", label: "Notify", icon: Bell },
   { id: "users", label: "Users", icon: Users },
+  { id: "team-captains", label: "Team Captains", icon: Shield },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -137,6 +140,7 @@ export default function DataManagerShell({ user, role }: { user: AdminUser | nul
         {tab === "documents" && <DocumentsTab />}
         {tab === "notify" && <NotifyTab />}
         {tab === "users" && <UsersTab role={role} />}
+        {tab === "team-captains" && <TeamCaptainsTab />}
       </main>
     </div>
   );

@@ -186,6 +186,61 @@ export interface LoginAttempt {
 
 export type RegistrationStatus = "unpaid" | "call-up" | "completed" | "spam";
 
+export interface TeamCaptain {
+  _id: string;
+  name: string;
+  username: string;
+  email: string;
+  team: { _id: string; name: string };
+  active: boolean;
+  mustChangePassword?: boolean;
+  lockedUntil?: string;
+  shareToken?: string;
+  lastLogin?: string;
+}
+
+export interface TeamLoginAttempt {
+  _id: string;
+  username?: string;
+  ip?: string;
+  success: boolean;
+  reason?: string;
+  createdAt: string;
+}
+
+export interface RosterPlayer {
+  _id: string;
+  team: { _id: string; name: string };
+  name: string;
+  jerseyNumber?: string;
+  position?: string;
+  isPitcher?: boolean;
+  status: "active" | "injured";
+  email?: string;
+}
+
+export interface GameStatLine {
+  _id: string;
+  team: string;
+  game: string;
+  player: string;
+  ab: number;
+  h: number;
+  r: number;
+  rbi: number;
+  hr: number;
+  e: number;
+}
+
+export interface BeerAssignment {
+  _id: string;
+  team: string;
+  game: { _id: string; date: string; time: string; homeTeam: { _id: string; name: string }; awayTeam: { _id: string; name: string } };
+  player?: { _id: string; name: string } | null;
+  sevenDayReminderSentAt?: string;
+  oneDayReminderSentAt?: string;
+}
+
 export interface Registration {
   _id: string;
   firstName: string;

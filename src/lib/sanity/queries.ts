@@ -385,3 +385,75 @@ export const tournamentPredictionQuery = groq`*[_type == "tournamentPrediction" 
   _id, year, type, generatedAt, intro, wildCardAdvancers, quarterFinalWinners, semiFinalWinners, finalistPick,
   championPick, championReasoning, picks, finalVerdict
 }`;
+
+// --- Team captain portal ---
+
+export const teamCaptainByUsernameQuery = groq`*[_type == "teamCaptain" && username == $username][0]{
+  _id, name, username, email, active, passwordHash, "teamId": team._ref,
+  mustChangePassword, tempPasswordExpiresAt, failedAttempts, lockedUntil
+}`;
+
+export const recentFailedTeamAttemptsByIpQuery = groq`count(*[
+  _type == "teamLoginAttempt" && ip == $ip && success == false && createdAt > $since
+])`;
+
+export const allTeamCaptainsQuery = groq`*[_type == "teamCaptain"] | order(name asc){
+  _id, name, username, email, active, createdAt, lastLogin, mustChangePassword, lockedUntil,
+  "team": team->{_id, name}, shareToken
+}`;
+
+export const recentTeamLoginAttemptsQuery = groq`*[_type == "teamLoginAttempt"] | order(createdAt desc)[0...50]{
+  _id, username, ip, success, reason, createdAt
+}`;
+
+export const teamCaptainByIdQuery = groq`*[_type == "teamCaptain" && _id == $id][0]{
+  _id, name, username, email, "team": team->{_id, name}, shareToken
+}`;
+
+export const teamCaptainByShareTokenQuery = groq`*[_type == "teamCaptain" && shareToken == $shareToken][0]{
+  _id, "team": team->{_id, name, logo}
+}`;
+
+export const rosterByTeamQuery = groq`*[_type == "rosterPlayer" && team._ref == $teamId] | order(name asc){
+  _id, name, jerseyNumber, position, isPitcher, status, email,
+  "team": team->{_id, name}
+}`;
+
+export const teamGamesQuery = groq`*[_type == "game" && (homeTeam._ref == $teamId || awayTeam._ref == $teamId) && status == "final"] | order(date desc){
+  _id, date, time, field, homeScore, awayScore,
+  "homeTeam": homeTeam->{_id, name}, "awayTeam": awayTeam->{_id, name}
+}`;
+
+export const statLinesByGameQuery = groq`*[_type == "gameStatLine" && team._ref == $teamId && game._ref == $gameId]{
+  _id, "player": player._ref, ab, h, r, rbi, hr, e
+}`;
+
+export const statLinesByTeamQuery = groq`*[_type == "gameStatLine" && team._ref == $teamId]{
+  _id, "player": player._ref, ab, h, r, rbi, hr, e
+}`;
+
+export const beerAssignmentsByTeamQuery = groq`*[_type == "beerAssignment" && team._ref == $teamId]{
+  _id, "game": game->{_id, date, time, "homeTeam": homeTeam->{_id, name}, "awayTeam": awayTeam->{_id, name}},
+  "player": player->{_id, name}, sevenDayReminderSentAt, oneDayReminderSentAt
+} | order(game.date asc)`;
+
+export const dueBeerRemindersQuery = groq`*[_type == "beerAssignment" && defined(player) && (
+  (!defined(sevenDayReminderSentAt) && game->date == $sevenDaysOut) ||
+  (!defined(oneDayReminderSentAt) && game->date == $oneDayOut)
+)]{
+  _id, "team": team->name,
+  game->{_id, date, time, field, "homeTeam": homeTeam->name, "awayTeam": awayTeam->name},
+  "player": player->{_id, name, email}, sevenDayReminderSentAt, oneDayReminderSentAt
+}`;
+
+export const teamUpcomingGamesQuery = groq`*[_type == "game" && (homeTeam._ref == $teamId || awayTeam._ref == $teamId) && status == "scheduled" && date >= $today] | order(date asc){
+  _id, date, time, field, "homeTeam": homeTeam->{_id, name}, "awayTeam": awayTeam->{_id, name}
+}`;
+
+export const pushSubscriptionsByPlayerQuery = groq`*[_type == "pushSubscription" && rosterPlayer._ref == $playerId]{
+  _id, endpoint, p256dh, auth
+}`;
+
+export const pushSubscriptionsByPlayersQuery = groq`*[_type == "pushSubscription" && rosterPlayer._ref in $playerIds]{
+  _id, endpoint, p256dh, auth
+}`;

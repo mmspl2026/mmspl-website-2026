@@ -23,3 +23,9 @@ export function getDateDaysAgoEastern(days: number): string {
   d.setDate(d.getDate() - days);
   return d.toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
 }
+
+export function getDateDaysAheadEastern(days: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+}

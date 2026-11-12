@@ -25,6 +25,11 @@ import tournamentGame from "./tournamentGame";
 import wildCardRanking from "./wildCardRanking";
 import tournamentPrediction from "./tournamentPrediction";
 import shopProduct from "./shopProduct";
+import teamCaptain from "./teamCaptain";
+import teamLoginAttempt from "./teamLoginAttempt";
+import rosterPlayer from "./rosterPlayer";
+import gameStatLine from "./gameStatLine";
+import beerAssignment from "./beerAssignment";
 
 export const schemaTypes = [
   season,
@@ -54,4 +59,9 @@ export const schemaTypes = [
   wildCardRanking,
   tournamentPrediction,
   shopProduct,
+  teamCaptain,
+  teamLoginAttempt,
+  rosterPlayer,
+  gameStatLine,
+  beerAssignment,
 ];

@@ -29,6 +29,13 @@ export default defineType({
       type: "datetime",
       initialValue: () => new Date().toISOString(),
     }),
+    defineField({
+      name: "rosterPlayer",
+      title: "Roster Player",
+      type: "reference",
+      to: [{ type: "rosterPlayer" }],
+      description: "Set when this subscription came from a player's personal beer-list reminder opt-in link, rather than the general league-wide notify page.",
+    }),
   ],
   preview: {
     select: { title: "endpoint", subtitle: "subscribedAt" },

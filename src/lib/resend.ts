@@ -351,6 +351,57 @@ export async function sendAdminPasswordReset(to: string, name: string, tempPassw
   return send(to, "MMSPL Admin: Temporary Password", html);
 }
 
+export async function sendTeamCaptainCredentials(to: string, name: string, teamName: string, username: string, tempPassword: string) {
+  const html = renderEmail({
+    title: "Team Captain Portal Access",
+    bodyHtml: `<p>Hi ${name},</p>
+     <p>You've been set up as the captain of <strong>${teamName}</strong> on the MMSPL Team Portal — manage your roster, record stats, and assign the beer list here.</p>
+     <p>Username: <strong>${username}</strong></p>
+     <p style="font-size:18px; font-weight:bold; font-family:monospace; letter-spacing:1px; background:#f5f5f5; padding:12px 16px; border-radius:6px; display:inline-block;">${tempPassword}</p>
+     <p>This temporary password expires in 24 hours and must be changed the first time you sign in.</p>`,
+    cta: { label: "Sign In", url: `${SITE_URL}/team/login` },
+  });
+  return send(to, "MMSPL Team Portal: Your Captain Access", html);
+}
+
+export async function sendTeamCaptainPasswordReset(to: string, name: string, tempPassword: string) {
+  const html = renderEmail({
+    title: "Team Portal Password Reset",
+    bodyHtml: `<p>Hi ${name},</p>
+     <p>A temporary password was generated for your MMSPL Team Portal account. It expires in 24 hours and must be changed the next time you sign in.</p>
+     <p style="font-size:18px; font-weight:bold; font-family:monospace; letter-spacing:1px; background:#f5f5f5; padding:12px 16px; border-radius:6px; display:inline-block;">${tempPassword}</p>
+     <p>If you didn't request this, contact your league executive right away.</p>`,
+    cta: { label: "Sign In", url: `${SITE_URL}/team/login` },
+  });
+  return send(to, "MMSPL Team Portal: Temporary Password", html);
+}
+
+/** Sent by the daily cron, 7 days and 1 day before a player's assigned beer-duty game. */
+export async function sendBeerReminderEmail(
+  to: string,
+  playerName: string,
+  opts: { teamName: string; opponentName: string; gameDate: string; gameTime: string; field?: string; daysOut: 7 | 1 }
+) {
+  const when = opts.daysOut === 7 ? "in 7 days" : "tomorrow";
+  const html = renderEmail({
+    title: "Beer Duty Reminder",
+    bodyHtml: `<p>Hi ${playerName},</p>
+     <p>You're on the beer list for ${opts.teamName}'s game against ${opts.opponentName} ${when} — <strong>${opts.gameDate} at ${opts.gameTime}${opts.field ? ` (${opts.field})` : ""}</strong>.</p>
+     <p>If you can't make it, please arrange to swap with a teammate.</p>`,
+  });
+  return send(to, `Beer Duty Reminder: ${opts.teamName} vs ${opts.opponentName}`, html);
+}
+
+/** The captain's "Email Link to Team" dashboard action — broadcasts the read-only share link to every roster player with an email on file. */
+export async function sendTeamShareLinkEmail(toRaw: string[], teamName: string, shareUrl: string) {
+  const html = renderEmail({
+    title: `${teamName} Roster & Stats`,
+    bodyHtml: `<p>Your team captain shared this link to the team's roster, stats, and beer list:</p>`,
+    cta: { label: "View Team Page", url: shareUrl },
+  });
+  return sendBulk(toRaw, `${teamName}: Roster & Stats Link`, html);
+}
+
 export async function sendTestEmail(to: string) {
   const html = renderEmail({
     title: "Test Email",

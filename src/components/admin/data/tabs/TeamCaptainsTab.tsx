@@ -129,7 +129,7 @@ export default function TeamCaptainsTab() {
       const res = await fetch(`/api/admin/team-captains/${captain._id}/reset-password`, { method: "POST" });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to reset password.");
-      push({ tone: "success", message: `Temporary password emailed to ${captain.email}.` });
+      push({ tone: "success", message: "Temporary password emailed to the league admin inbox — relay it to the captain." });
       load();
     } catch (err) {
       push({ tone: "error", message: err instanceof Error ? err.message : "Failed to reset password." });
@@ -301,7 +301,7 @@ export default function TeamCaptainsTab() {
             <p className="text-sm text-gray-700">
               {confirmTarget.type === "delete"
                 ? `Permanently delete ${confirmTarget.captain.name} (@${confirmTarget.captain.username})? This cannot be undone. Their team's roster, stats, and beer list are not affected.`
-                : `A temporary password will be generated and emailed to ${confirmTarget.captain.email}. They'll need to set a new password the next time they sign in.`}
+                : `A temporary password will be generated and emailed to the league admin inbox, not ${confirmTarget.captain.name} — relay it to them directly. They'll need to set a new password the next time they sign in.`}
             </p>
             <div className="flex justify-end gap-2">
               <SecondaryButton onClick={() => setConfirmTarget(null)} disabled={busy !== null}>

@@ -68,3 +68,27 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: true });
 }
+
+/** Clears every stat line this team saved for one game — e.g. to undo test data. */
+export async function DELETE(req: NextRequest) {
+  const auth = await requireTeamApiAuth(req);
+  if ("response" in auth) return auth.response;
+  const { teamId } = auth.session;
+
+  const gameId = req.nextUrl.searchParams.get("gameId");
+  if (!gameId) {
+    return NextResponse.json({ error: "gameId is required." }, { status: 400 });
+  }
+
+  const ids = await writeClient.fetch<string[]>(
+    `*[_type == "gameStatLine" && team._ref == $teamId && game._ref == $gameId]._id`,
+    { teamId, gameId }
+  );
+  if (ids.length > 0) {
+    const tx = writeClient.transaction();
+    for (const id of ids) tx.delete(id);
+    await tx.commit();
+  }
+
+  return NextResponse.json({ ok: true, deleted: ids.length });
+}

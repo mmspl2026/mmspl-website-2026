@@ -419,7 +419,7 @@ export const rosterByTeamQuery = groq`*[_type == "rosterPlayer" && team._ref == 
   "team": team->{_id, name}
 }`;
 
-export const teamGamesQuery = groq`*[_type == "game" && (homeTeam._ref == $teamId || awayTeam._ref == $teamId) && status == "final"] | order(date desc){
+export const teamGamesQuery = groq`*[_type == "game" && (homeTeam._ref == $teamId || awayTeam._ref == $teamId) && status == "final" && season->isActive == true] | order(date desc){
   _id, date, time, field, homeScore, awayScore,
   "homeTeam": homeTeam->{_id, name}, "awayTeam": awayTeam->{_id, name}
 }`;
@@ -428,11 +428,13 @@ export const statLinesByGameQuery = groq`*[_type == "gameStatLine" && team._ref 
   _id, "player": player._ref, ab, h, r, rbi, hr, e
 }`;
 
-export const statLinesByTeamQuery = groq`*[_type == "gameStatLine" && team._ref == $teamId]{
+// Scoped to the active season only — a captain starting a new season shouldn't
+// see last year's final stat lines folded into "season" totals.
+export const statLinesByTeamQuery = groq`*[_type == "gameStatLine" && team._ref == $teamId && game->season->isActive == true]{
   _id, "player": player._ref, ab, h, r, rbi, hr, e
 }`;
 
-export const beerAssignmentsByTeamQuery = groq`*[_type == "beerAssignment" && team._ref == $teamId]{
+export const beerAssignmentsByTeamQuery = groq`*[_type == "beerAssignment" && team._ref == $teamId && game->season->isActive == true]{
   _id, "game": game->{_id, date, time, "homeTeam": homeTeam->{_id, name}, "awayTeam": awayTeam->{_id, name}},
   "player": player->{_id, name}, sevenDayReminderSentAt, oneDayReminderSentAt
 } | order(game.date asc)`;
@@ -446,7 +448,7 @@ export const dueBeerRemindersQuery = groq`*[_type == "beerAssignment" && defined
   "player": player->{_id, name, email}, sevenDayReminderSentAt, oneDayReminderSentAt
 }`;
 
-export const teamUpcomingGamesQuery = groq`*[_type == "game" && (homeTeam._ref == $teamId || awayTeam._ref == $teamId) && status == "scheduled" && date >= $today] | order(date asc){
+export const teamUpcomingGamesQuery = groq`*[_type == "game" && (homeTeam._ref == $teamId || awayTeam._ref == $teamId) && status == "scheduled" && date >= $today && season->isActive == true] | order(date asc){
   _id, date, time, field, "homeTeam": homeTeam->{_id, name}, "awayTeam": awayTeam->{_id, name}
 }`;
 

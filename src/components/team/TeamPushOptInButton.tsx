@@ -64,7 +64,7 @@ export default function TeamPushOptInButton({ playerId }: { playerId: string }) 
 
   if (status === "unsupported") {
     return (
-      <p className="flex items-center gap-2 text-sm text-white/60">
+      <p className="flex items-center gap-2 text-sm text-gray-500">
         <AlertCircle size={16} aria-hidden="true" />
         Push notifications aren&rsquo;t supported in this browser.
       </p>
@@ -73,7 +73,7 @@ export default function TeamPushOptInButton({ playerId }: { playerId: string }) 
 
   if (status === "subscribed") {
     return (
-      <p role="status" className="flex items-center gap-2 text-sm font-semibold text-green-400">
+      <p role="status" className="flex items-center gap-2 text-sm font-semibold text-green-600">
         <Check size={18} aria-hidden="true" />
         You&rsquo;re set — beer-duty reminders will show up on this device.
       </p>
@@ -82,7 +82,7 @@ export default function TeamPushOptInButton({ playerId }: { playerId: string }) 
 
   if (status === "denied") {
     return (
-      <p role="alert" className="text-sm text-white/60">
+      <p role="alert" className="text-sm text-gray-500">
         Notifications are blocked for this site. Enable them in your browser&rsquo;s site settings, then try again.
       </p>
     );
@@ -94,13 +94,13 @@ export default function TeamPushOptInButton({ playerId }: { playerId: string }) 
         type="button"
         onClick={handleEnable}
         disabled={status === "subscribing"}
-        className="inline-flex w-full items-center justify-center gap-2 rounded bg-brand px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-700 disabled:opacity-50"
+        className="inline-flex w-full items-center justify-center gap-2 rounded-md bg-brand px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-700 disabled:opacity-50"
       >
         {status === "subscribing" ? <Loader2 size={18} className="animate-spin" aria-hidden="true" /> : <Bell size={18} aria-hidden="true" />}
         {status === "subscribing" ? "Enabling…" : "Enable Beer-Duty Reminders"}
       </button>
       {status === "error" && (
-        <p role="alert" className="mt-2 text-sm text-brand-300">
+        <p role="alert" className="mt-2 text-sm text-brand">
           {errorMessage}
         </p>
       )}

@@ -8,7 +8,7 @@ export default async function TeamChangePasswordPage() {
   await requireTeamSession("/team/change-password");
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#111111] px-4 py-16">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-16">
       <TeamChangePasswordForm />
     </div>
   );

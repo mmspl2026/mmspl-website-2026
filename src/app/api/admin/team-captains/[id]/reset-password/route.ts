@@ -8,8 +8,8 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
   const auth = await requireAdminApiAuth(req);
   if ("response" in auth) return auth.response;
 
-  const target = await writeClient.fetch<{ name: string; email: string } | null>(
-    `*[_type == "teamCaptain" && _id == $id][0]{name, email}`,
+  const target = await writeClient.fetch<{ name: string; username: string; team: { name: string } } | null>(
+    `*[_type == "teamCaptain" && _id == $id][0]{name, username, "team": team->{name}}`,
     { id: params.id }
   );
   if (!target) {
@@ -28,10 +28,10 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     .unset(["lockedUntil", "currentSessionId"])
     .commit();
 
-  const result = await sendTeamCaptainPasswordReset(target.email, target.name, tempPassword);
+  const result = await sendTeamCaptainPasswordReset(target.name, target.team.name, target.username, tempPassword);
   if (!wasEmailSent(result)) {
     return NextResponse.json(
-      { error: "Password was reset, but the notification email failed to send. Check the Email settings tab." },
+      { error: "Password was reset, but the notification email to the admin failed to send. Check the Email settings tab." },
       { status: 502 }
     );
   }

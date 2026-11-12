@@ -57,3 +57,18 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ ok: true });
 }
+
+/** Clears a game's beer assignment entirely — e.g. to undo test data. */
+export async function DELETE(req: NextRequest) {
+  const auth = await requireTeamApiAuth(req);
+  if ("response" in auth) return auth.response;
+  const { teamId } = auth.session;
+
+  const gameId = req.nextUrl.searchParams.get("gameId");
+  if (!gameId) {
+    return NextResponse.json({ error: "gameId is required." }, { status: 400 });
+  }
+
+  await writeClient.delete(assignmentId(teamId, gameId));
+  return NextResponse.json({ ok: true });
+}

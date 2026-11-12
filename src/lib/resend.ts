@@ -364,16 +364,32 @@ export async function sendTeamCaptainCredentials(to: string, name: string, teamN
   return send(to, "MMSPL Team Portal: Your Captain Access", html);
 }
 
-export async function sendTeamCaptainPasswordReset(to: string, name: string, tempPassword: string) {
+/**
+ * Team captain password resets go to the league admin inbox, not the
+ * captain — the admin relays the temp password to them directly (by phone,
+ * in person, etc.) rather than it going out over email, since a lost
+ * account is often a lost/compromised inbox too.
+ */
+export async function sendTeamCaptainPasswordReset(captainName: string, teamName: string, username: string, tempPassword: string) {
   const html = renderEmail({
-    title: "Team Portal Password Reset",
-    bodyHtml: `<p>Hi ${name},</p>
-     <p>A temporary password was generated for your MMSPL Team Portal account. It expires in 24 hours and must be changed the next time you sign in.</p>
+    title: "Team Captain Password Reset",
+    bodyHtml: `<p>A temporary password was generated for <strong>${captainName}</strong> (${teamName}, username <strong>${username}</strong>).</p>
      <p style="font-size:18px; font-weight:bold; font-family:monospace; letter-spacing:1px; background:#f5f5f5; padding:12px 16px; border-radius:6px; display:inline-block;">${tempPassword}</p>
-     <p>If you didn't request this, contact your league executive right away.</p>`,
-    cta: { label: "Sign In", url: `${SITE_URL}/team/login` },
+     <p>It expires in 24 hours and must be changed the next time they sign in. Relay it to the captain directly — this was not emailed to them.</p>`,
+    cta: { label: "Team Captains", url: `${SITE_URL}/admin/data` },
   });
-  return send(to, "MMSPL Team Portal: Temporary Password", html);
+  return send(ADMIN_EMAIL, `MMSPL Team Portal: Reset for ${captainName}`, html);
+}
+
+/** The /team/login "Forgot password?" flow — never resets anything itself, just tells the admin a captain needs one. */
+export async function sendTeamPasswordResetRequest(captainName: string, teamName: string, username: string) {
+  const html = renderEmail({
+    title: "Team Captain Password Reset Requested",
+    bodyHtml: `<p><strong>${captainName}</strong> (${teamName}, username <strong>${username}</strong>) requested a password reset from the Team Portal login page.</p>
+     <p>Use the Team Captains tab in the Data Manager to reset their password.</p>`,
+    cta: { label: "Team Captains", url: `${SITE_URL}/admin/data` },
+  });
+  return send(ADMIN_EMAIL, `MMSPL Team Portal: ${captainName} needs a password reset`, html);
 }
 
 /** Sent by the daily cron, 7 days and 1 day before a player's assigned beer-duty game. */

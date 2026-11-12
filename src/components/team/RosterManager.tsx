@@ -2,9 +2,19 @@
 
 import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Check } from "lucide-react";
+import {
+  Card,
+  PrimaryButton,
+  SecondaryButton,
+  DangerButton,
+  StatusBadge,
+  TextInput,
+  Select,
+  EmptyState,
+  Modal,
+} from "@/components/admin/data/ui";
 import ToastStack from "@/components/admin/ToastStack";
 import { useToasts } from "@/components/admin/useToasts";
-import ConfirmDialog from "@/components/admin/ConfirmDialog";
 import type { RosterPlayer } from "@/lib/types";
 
 const POSITIONS = ["Pitcher", "Catcher", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "Utility"];
@@ -40,39 +50,30 @@ function PlayerFields({
 }) {
   return (
     <div className="grid gap-2 sm:grid-cols-6">
-      <input
+      <TextInput
         value={form.name}
         onChange={(e) => onChange({ ...form, name: e.target.value })}
         placeholder="Name"
-        className="rounded border border-white/20 bg-black px-3 py-2 text-sm text-white placeholder:text-white/30 sm:col-span-2"
+        className="sm:col-span-2"
       />
-      <input
+      <TextInput
         value={form.jerseyNumber}
         onChange={(e) => onChange({ ...form, jerseyNumber: e.target.value })}
         placeholder="#"
-        className="rounded border border-white/20 bg-black px-3 py-2 text-sm text-white placeholder:text-white/30"
       />
-      <select
-        value={form.position}
-        onChange={(e) => onChange({ ...form, position: e.target.value })}
-        className="rounded border border-white/20 bg-black px-3 py-2 text-sm text-white"
-      >
+      <Select value={form.position} onChange={(e) => onChange({ ...form, position: e.target.value })}>
         <option value="">Position</option>
         {POSITIONS.map((p) => (
           <option key={p} value={p}>
             {p}
           </option>
         ))}
-      </select>
-      <select
-        value={form.status}
-        onChange={(e) => onChange({ ...form, status: e.target.value as "active" | "injured" })}
-        className="rounded border border-white/20 bg-black px-3 py-2 text-sm text-white"
-      >
+      </Select>
+      <Select value={form.status} onChange={(e) => onChange({ ...form, status: e.target.value as "active" | "injured" })}>
         <option value="active">Active</option>
         <option value="injured">Injured</option>
-      </select>
-      <label className="flex items-center gap-2 text-xs text-white/70">
+      </Select>
+      <label className="flex items-center gap-2 text-xs text-gray-600">
         <input
           type="checkbox"
           checked={form.isPitcher}
@@ -81,12 +82,12 @@ function PlayerFields({
         />
         Eligible Pitcher (P)
       </label>
-      <input
+      <TextInput
         value={form.email}
         onChange={(e) => onChange({ ...form, email: e.target.value })}
         placeholder="Email (for reminders)"
         type="email"
-        className="rounded border border-white/20 bg-black px-3 py-2 text-sm text-white placeholder:text-white/30 sm:col-span-2"
+        className="sm:col-span-2"
       />
     </div>
   );
@@ -182,50 +183,41 @@ export default function RosterManager({ initialRoster }: { initialRoster: Roster
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl">Roster</h1>
-        <button
-          type="button"
-          onClick={() => setAdding((v) => !v)}
-          className="flex items-center gap-1 rounded bg-brand px-3 py-2 text-xs font-semibold uppercase tracking-wide text-white hover:bg-brand-700"
-        >
+        <h1 className="text-2xl font-bold text-black">Roster</h1>
+        <PrimaryButton onClick={() => setAdding((v) => !v)}>
           <Plus size={14} aria-hidden="true" />
           Add Player
-        </button>
+        </PrimaryButton>
       </div>
 
       {adding && (
-        <div className="rounded-lg border border-white/10 bg-[#1a1a1a] p-4">
+        <Card className="p-4">
           <PlayerFields form={addForm} onChange={setAddForm} />
           <div className="mt-3 flex gap-2">
-            <button
-              type="button"
-              onClick={addPlayer}
-              disabled={working}
-              className="rounded bg-brand px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white hover:bg-brand-700 disabled:opacity-50"
-            >
+            <PrimaryButton onClick={addPlayer} disabled={working}>
               Save Player
-            </button>
-            <button
-              type="button"
+            </PrimaryButton>
+            <SecondaryButton
               onClick={() => {
                 setAdding(false);
                 setAddForm(EMPTY_FORM);
               }}
-              className="rounded border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white/70 hover:text-white"
             >
               Cancel
-            </button>
+            </SecondaryButton>
           </div>
-        </div>
+        </Card>
       )}
 
       {roster.length === 0 ? (
-        <p className="text-sm text-white/40">No players yet. Add your first player above.</p>
+        <Card>
+          <EmptyState>No players yet. Add your first player above.</EmptyState>
+        </Card>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-white/10">
+        <Card className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/10 bg-[#1a1a1a] text-left text-xs uppercase tracking-wide text-white/50">
+              <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
                 <th className="px-3 py-2">Name</th>
                 <th className="px-3 py-2">#</th>
                 <th className="px-3 py-2">Position</th>
@@ -238,53 +230,38 @@ export default function RosterManager({ initialRoster }: { initialRoster: Roster
             <tbody>
               {roster.map((player) =>
                 editingId === player._id ? (
-                  <tr key={player._id} className="border-b border-white/5">
+                  <tr key={player._id} className="border-b border-gray-100">
                     <td colSpan={7} className="p-3">
                       <PlayerFields form={editForm} onChange={setEditForm} />
                       <div className="mt-3 flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => saveEdit(player._id)}
-                          disabled={working}
-                          className="flex items-center gap-1 rounded bg-brand px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-white hover:bg-brand-700 disabled:opacity-50"
-                        >
+                        <PrimaryButton onClick={() => saveEdit(player._id)} disabled={working}>
                           <Check size={14} aria-hidden="true" />
                           Save
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setEditingId(null)}
-                          className="flex items-center gap-1 rounded border border-white/20 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-white/70 hover:text-white"
-                        >
+                        </PrimaryButton>
+                        <SecondaryButton onClick={() => setEditingId(null)}>
                           <X size={14} aria-hidden="true" />
                           Cancel
-                        </button>
+                        </SecondaryButton>
                       </div>
                     </td>
                   </tr>
                 ) : (
-                  <tr key={player._id} className="border-b border-white/5 hover:bg-white/[0.03]">
-                    <td className="px-3 py-2 font-medium">{player.name}</td>
-                    <td className="px-3 py-2 text-white/60">{player.jerseyNumber || "—"}</td>
-                    <td className="px-3 py-2 text-white/60">{player.position || "—"}</td>
-                    <td className="px-3 py-2 text-white/60">{player.isPitcher ? "P" : ""}</td>
+                  <tr key={player._id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="px-3 py-2 font-medium text-black">{player.name}</td>
+                    <td className="px-3 py-2 text-gray-500">{player.jerseyNumber || "—"}</td>
+                    <td className="px-3 py-2 text-gray-500">{player.position || "—"}</td>
+                    <td className="px-3 py-2 text-gray-500">{player.isPitcher ? "P" : ""}</td>
                     <td className="px-3 py-2">
-                      <span
-                        className={`rounded px-2 py-0.5 text-xs font-semibold uppercase ${
-                          player.status === "injured" ? "bg-brand/20 text-brand-300" : "bg-green-900/40 text-green-400"
-                        }`}
-                      >
-                        {player.status}
-                      </span>
+                      <StatusBadge tone={player.status === "injured" ? "red" : "green"}>{player.status}</StatusBadge>
                     </td>
-                    <td className="px-3 py-2 text-white/60">{player.email || "—"}</td>
+                    <td className="px-3 py-2 text-gray-500">{player.email || "—"}</td>
                     <td className="px-3 py-2">
                       <div className="flex items-center justify-end gap-2">
                         <button
                           type="button"
                           onClick={() => startEdit(player)}
                           aria-label={`Edit ${player.name}`}
-                          className="text-white/50 hover:text-white"
+                          className="text-gray-400 hover:text-black"
                         >
                           <Pencil size={16} aria-hidden="true" />
                         </button>
@@ -292,7 +269,7 @@ export default function RosterManager({ initialRoster }: { initialRoster: Roster
                           type="button"
                           onClick={() => setDeleteTarget(player)}
                           aria-label={`Remove ${player.name}`}
-                          className="text-white/50 hover:text-brand-300"
+                          className="text-gray-400 hover:text-brand"
                         >
                           <Trash2 size={16} aria-hidden="true" />
                         </button>
@@ -303,17 +280,24 @@ export default function RosterManager({ initialRoster }: { initialRoster: Roster
               )}
             </tbody>
           </table>
-        </div>
+        </Card>
       )}
 
-      <ConfirmDialog
-        open={Boolean(deleteTarget)}
-        title="Remove Player"
-        description={`Remove ${deleteTarget?.name} from the roster? This cannot be undone.`}
-        confirmLabel="Remove"
-        onConfirm={confirmDelete}
-        onCancel={() => setDeleteTarget(null)}
-      />
+      <Modal open={Boolean(deleteTarget)} onClose={() => setDeleteTarget(null)} title="Remove Player">
+        <div className="space-y-4">
+          <p className="text-sm text-gray-700">
+            Remove {deleteTarget?.name} from the roster? This cannot be undone.
+          </p>
+          <div className="flex justify-end gap-2">
+            <SecondaryButton onClick={() => setDeleteTarget(null)} disabled={working}>
+              Cancel
+            </SecondaryButton>
+            <DangerButton onClick={confirmDelete} disabled={working}>
+              {working ? "Removing…" : "Remove"}
+            </DangerButton>
+          </div>
+        </div>
+      </Modal>
       <ToastStack toasts={toasts} onDismiss={dismiss} />
     </div>
   );

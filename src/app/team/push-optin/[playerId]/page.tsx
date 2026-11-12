@@ -14,11 +14,11 @@ export default async function PushOptInPage({ params }: { params: { playerId: st
   if (!player) notFound();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#111111] px-4 py-16">
-      <div className="w-full max-w-sm rounded-lg border border-white/10 bg-[#1a1a1a] p-8 text-center text-white">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-16">
+      <div className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 text-center text-black shadow-sm">
         <Image src="/mmspl-logo.png" alt="" width={90} height={53} className="mx-auto" priority />
-        <h1 className="mt-4 text-xl">Hi {player.name}</h1>
-        <p className="mt-1 text-sm text-white/50">
+        <h1 className="mt-4 text-xl font-bold text-black">Hi {player.name}</h1>
+        <p className="mt-1 text-sm text-gray-500">
           Turn on push notifications for your {player.team.name} beer-duty reminders — 7 days and 1 day before your
           turn.
         </p>

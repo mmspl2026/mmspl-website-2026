@@ -19,8 +19,8 @@ export default function TeamShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="sticky top-0 z-40 border-b border-white/10 bg-[#111111]">
+    <div className="min-h-screen bg-gray-50 text-black">
+      <div className="sticky top-0 z-40 border-b border-white/10 bg-black text-white">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3">
           <div className="flex items-center gap-3">
             <Image src="/mmspl-logo.png" alt="" width={36} height={21} aria-hidden="true" />

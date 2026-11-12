@@ -18,7 +18,7 @@ export default async function TeamLoginPage({ searchParams }: { searchParams: { 
   if (session) redirect(session.mustChangePassword ? "/team/change-password" : next);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#111111] px-4 py-16">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-16">
       <TeamLoginForm next={next} />
     </div>
   );

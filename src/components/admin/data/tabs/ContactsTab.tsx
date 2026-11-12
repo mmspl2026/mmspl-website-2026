@@ -28,7 +28,7 @@ export default function ContactsTab() {
   const [loading, setLoading] = useState(true);
   const [resendingId, setResendingId] = useState<string | null>(null);
   const [replyOpenId, setReplyOpenId] = useState<string | null>(null);
-  const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
+  const [replyDrafts, setReplyDrafts] = useState<Record<string, { to: string; message: string }>>({});
   const [sendingReplyId, setSendingReplyId] = useState<string | null>(null);
   const { toasts, push, dismiss } = useToasts();
 
@@ -72,24 +72,31 @@ export default function ContactsTab() {
     }
   }
 
+  function openReply(s: ContactSubmission) {
+    setReplyDrafts((prev) => ({ ...prev, [s._id]: prev[s._id] || { to: s.email, message: "" } }));
+    setReplyOpenId(replyOpenId === s._id ? null : s._id);
+  }
+
   async function handleSendReply(id: string) {
-    const message = (replyDrafts[id] || "").trim();
-    if (!message) return;
+    const draft = replyDrafts[id];
+    const to = (draft?.to || "").trim();
+    const message = (draft?.message || "").trim();
+    if (!to || !message) return;
     setSendingReplyId(id);
     try {
       const res = await fetch(`/api/admin/contacts/${id}/reply`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ to, message }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Reply failed.");
       setSubmissions((prev) =>
         prev.map((s) => (s._id === id ? { ...s, status: "replied", replyText: message, repliedAt: data.repliedAt } : s))
       );
-      setReplyDrafts((prev) => ({ ...prev, [id]: "" }));
+      setReplyDrafts((prev) => ({ ...prev, [id]: { to, message: "" } }));
       setReplyOpenId(null);
-      push({ tone: "success", message: "Reply sent." });
+      push({ tone: "success", message: `Reply sent to ${to}.` });
     } catch (err) {
       push({ tone: "error", message: err instanceof Error ? err.message : "Reply failed." });
     } finally {
@@ -159,7 +166,7 @@ export default function ContactsTab() {
                   </Select>
                   <button
                     type="button"
-                    onClick={() => setReplyOpenId(replyOpenId === s._id ? null : s._id)}
+                    onClick={() => openReply(s)}
                     className="inline-flex h-8 items-center gap-1.5 rounded-[3px] border-2 border-gray-300 px-2.5 text-xs font-semibold text-gray-700 hover:border-brand hover:text-brand"
                   >
                     <Reply size={12} aria-hidden="true" />
@@ -182,13 +189,28 @@ export default function ContactsTab() {
 
                 {replyOpenId === s._id && (
                   <div className="mt-1 rounded-[3px] border border-gray-200 bg-gray-50 p-3">
-                    <p className="mb-2 text-xs text-gray-500">
-                      Sending to <span className="font-semibold text-gray-700">{s.email}</span> — they&apos;ll see this
-                      as a reply from MMSPL.
-                    </p>
+                    <label className="mb-2 flex items-center gap-2 text-xs text-gray-500">
+                      To
+                      <input
+                        type="email"
+                        value={replyDrafts[s._id]?.to ?? s.email}
+                        onChange={(e) =>
+                          setReplyDrafts((prev) => ({
+                            ...prev,
+                            [s._id]: { to: e.target.value, message: prev[s._id]?.message ?? "" },
+                          }))
+                        }
+                        className="h-7 flex-1 rounded-[3px] border-2 border-gray-300 px-2 text-xs font-semibold text-gray-700 focus:border-brand focus:outline-none"
+                      />
+                    </label>
                     <textarea
-                      value={replyDrafts[s._id] || ""}
-                      onChange={(e) => setReplyDrafts((prev) => ({ ...prev, [s._id]: e.target.value }))}
+                      value={replyDrafts[s._id]?.message ?? ""}
+                      onChange={(e) =>
+                        setReplyDrafts((prev) => ({
+                          ...prev,
+                          [s._id]: { to: prev[s._id]?.to ?? s.email, message: e.target.value },
+                        }))
+                      }
                       rows={4}
                       placeholder="Write your reply…"
                       className="w-full rounded-[3px] border-2 border-gray-300 p-2 text-sm focus:border-brand focus:outline-none"
@@ -197,7 +219,11 @@ export default function ContactsTab() {
                       <button
                         type="button"
                         onClick={() => handleSendReply(s._id)}
-                        disabled={sendingReplyId === s._id || !(replyDrafts[s._id] || "").trim()}
+                        disabled={
+                          sendingReplyId === s._id ||
+                          !(replyDrafts[s._id]?.to ?? s.email).trim() ||
+                          !(replyDrafts[s._id]?.message ?? "").trim()
+                        }
                         className="inline-flex h-8 items-center gap-1.5 rounded-[3px] bg-brand px-3 text-xs font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
                       >
                         <Send size={12} aria-hidden="true" />

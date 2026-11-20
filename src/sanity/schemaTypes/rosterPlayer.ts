@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { POSITIONS } from "@/lib/positions";
 
 export default defineType({
   name: "rosterPlayer",
@@ -12,7 +13,7 @@ export default defineType({
       name: "position",
       title: "Position",
       type: "string",
-      options: { list: ["Pitcher", "Catcher", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "Utility"] },
+      options: { list: POSITIONS },
     }),
     defineField({
       name: "isPitcher",

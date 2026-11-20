@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { POSITIONS } from "@/lib/positions";
 
 function statField(name: string, title: string) {
   return defineField({ name, title, type: "number", initialValue: 0, validation: (Rule) => Rule.min(0) });
@@ -17,7 +18,7 @@ export default defineType({
       name: "positionPlayed",
       title: "Position Played",
       type: "string",
-      options: { list: ["Pitcher", "Catcher", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "Utility"] },
+      options: { list: POSITIONS },
     }),
     defineField({
       name: "lineupOrder",

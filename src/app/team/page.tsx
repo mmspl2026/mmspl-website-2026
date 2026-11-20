@@ -5,8 +5,9 @@ import { teamCaptainByIdQuery } from "@/lib/sanity/queries";
 import type { TeamCaptain } from "@/lib/types";
 import TeamShell from "@/components/team/TeamShell";
 import DashboardClient from "@/components/team/DashboardClient";
+import { TEAM_APP_METADATA } from "@/lib/appMetadata";
 
-export const metadata: Metadata = { title: "Team Dashboard" };
+export const metadata: Metadata = { ...TEAM_APP_METADATA, title: "Team Dashboard" };
 
 export default async function TeamDashboardPage() {
   const session = await requireTeamSession("/team");

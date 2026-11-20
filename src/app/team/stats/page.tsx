@@ -5,8 +5,9 @@ import { teamCaptainByIdQuery, rosterByTeamQuery, teamGamesQuery } from "@/lib/s
 import type { TeamCaptain, RosterPlayer, Game } from "@/lib/types";
 import TeamShell from "@/components/team/TeamShell";
 import StatsManager from "@/components/team/StatsManager";
+import { TEAM_APP_METADATA } from "@/lib/appMetadata";
 
-export const metadata: Metadata = { title: "Stats" };
+export const metadata: Metadata = { ...TEAM_APP_METADATA, title: "Stats" };
 
 export default async function TeamStatsPage() {
   const session = await requireTeamSession("/team/stats");

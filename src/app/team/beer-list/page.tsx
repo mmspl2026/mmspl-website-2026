@@ -6,8 +6,9 @@ import { getTodayEastern } from "@/utils/timezone";
 import type { TeamCaptain, RosterPlayer, Game, BeerAssignment } from "@/lib/types";
 import TeamShell from "@/components/team/TeamShell";
 import BeerListManager from "@/components/team/BeerListManager";
+import { TEAM_APP_METADATA } from "@/lib/appMetadata";
 
-export const metadata: Metadata = { title: "Beer List" };
+export const metadata: Metadata = { ...TEAM_APP_METADATA, title: "Beer List" };
 
 export default async function TeamBeerListPage() {
   const session = await requireTeamSession("/team/beer-list");

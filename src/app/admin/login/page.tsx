@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { ADMIN_SESSION_COOKIE, verifySession } from "@/lib/admin-auth";
 import LoginForm from "@/components/admin/LoginForm";
+import { ADMIN_APP_METADATA } from "@/lib/appMetadata";
 
-export const metadata: Metadata = { title: "Admin Login" };
+export const metadata: Metadata = { ...ADMIN_APP_METADATA, title: "Admin Login" };
 
 // Only ever send people back into /admin/* — guards against this becoming
 // an open redirect via a crafted ?next= value.

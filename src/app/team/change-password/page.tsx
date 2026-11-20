@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { requireTeamSession } from "@/lib/team-auth";
 import TeamChangePasswordForm from "@/components/team/TeamChangePasswordForm";
+import { TEAM_APP_METADATA } from "@/lib/appMetadata";
 
-export const metadata: Metadata = { title: "Change Password" };
+export const metadata: Metadata = { ...TEAM_APP_METADATA, title: "Change Password" };
 
 export default async function TeamChangePasswordPage() {
   await requireTeamSession("/team/change-password");

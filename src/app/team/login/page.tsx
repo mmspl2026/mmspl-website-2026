@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { TEAM_SESSION_COOKIE, verifyTeamSession } from "@/lib/team-auth";
 import TeamLoginForm from "@/components/team/TeamLoginForm";
+import { TEAM_APP_METADATA } from "@/lib/appMetadata";
 
-export const metadata: Metadata = { title: "Team Login" };
+export const metadata: Metadata = { ...TEAM_APP_METADATA, title: "Team Login" };
 
 function safeNext(next: string | undefined): string {
   if (next && next.startsWith("/team/") && next !== "/team/login") return next;

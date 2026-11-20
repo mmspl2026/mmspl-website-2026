@@ -5,8 +5,9 @@ import { writeClient } from "@/lib/sanity/client";
 import { adminUserByIdQuery } from "@/lib/sanity/queries";
 import type { AdminUser } from "@/lib/types";
 import DataManagerShell from "@/components/admin/data/DataManagerShell";
+import { ADMIN_DATA_APP_METADATA } from "@/lib/appMetadata";
 
-export const metadata: Metadata = { title: "Admin — Data Manager" };
+export const metadata: Metadata = { ...ADMIN_DATA_APP_METADATA, title: "Admin — Data Manager" };
 
 export default async function AdminDataPage() {
   const session = await requireAdminSession("/admin/data");

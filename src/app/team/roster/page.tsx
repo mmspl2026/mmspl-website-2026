@@ -5,8 +5,9 @@ import { teamCaptainByIdQuery, rosterByTeamQuery } from "@/lib/sanity/queries";
 import type { TeamCaptain, RosterPlayer } from "@/lib/types";
 import TeamShell from "@/components/team/TeamShell";
 import RosterManager from "@/components/team/RosterManager";
+import { TEAM_APP_METADATA } from "@/lib/appMetadata";
 
-export const metadata: Metadata = { title: "Roster" };
+export const metadata: Metadata = { ...TEAM_APP_METADATA, title: "Roster" };
 
 export default async function TeamRosterPage() {
   const session = await requireTeamSession("/team/roster");

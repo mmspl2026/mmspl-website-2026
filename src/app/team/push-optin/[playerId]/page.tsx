@@ -5,6 +5,9 @@ import { writeClient } from "@/lib/sanity/client";
 import TeamPushOptInButton from "@/components/team/TeamPushOptInButton";
 
 export const metadata: Metadata = { title: "Beer Duty Reminders", robots: { index: false, follow: false } };
+// Public page, no cookies()/headers() — force fresh data so a deleted
+// roster player 404s immediately instead of staying cached as valid.
+export const dynamic = "force-dynamic";
 
 export default async function PushOptInPage({ params }: { params: { playerId: string } }) {
   const player = await writeClient.fetch<{ _id: string; name: string; team: { name: string } } | null>(

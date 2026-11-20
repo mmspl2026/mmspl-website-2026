@@ -456,6 +456,14 @@ export const teamUpcomingGamesQuery = groq`*[_type == "game" && (homeTeam._ref =
   _id, date, time, field, "homeTeam": homeTeam->{_id, name}, "awayTeam": awayTeam->{_id, name}
 }`;
 
+// Every game (any status) for the team's active season, chronological —
+// powers the public share page's game picker so a captain can point a
+// teammate at one specific game's lineup, past or future.
+export const teamAllGamesQuery = groq`*[_type == "game" && (homeTeam._ref == $teamId || awayTeam._ref == $teamId) && season->isActive == true] | order(date asc){
+  _id, date, time, field, status, homeScore, awayScore,
+  "homeTeam": homeTeam->{_id, name}, "awayTeam": awayTeam->{_id, name}
+}`;
+
 export const pushSubscriptionsByPlayerQuery = groq`*[_type == "pushSubscription" && rosterPlayer._ref == $playerId]{
   _id, endpoint, p256dh, auth
 }`;

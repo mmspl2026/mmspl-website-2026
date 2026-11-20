@@ -4,6 +4,8 @@ export interface StatLine {
   _id: string;
   player: string;
   attended: boolean;
+  positionPlayed?: string;
+  lineupOrder?: number;
   ab: number;
   h: number;
   r: number;

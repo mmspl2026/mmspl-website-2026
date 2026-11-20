@@ -424,14 +424,18 @@ export const teamGamesQuery = groq`*[_type == "game" && (homeTeam._ref == $teamI
   "homeTeam": homeTeam->{_id, name}, "awayTeam": awayTeam->{_id, name}
 }`;
 
-export const statLinesByGameQuery = groq`*[_type == "gameStatLine" && team._ref == $teamId && game._ref == $gameId]{
-  _id, "player": player._ref, ab, h, r, rbi, hr, e
+export const statLinesByGameQuery = groq`*[_type == "gameStatLine" && team._ref == $teamId && game._ref == $gameId] | order(lineupOrder asc){
+  _id, "player": player._ref, attended, positionPlayed, lineupOrder, ab, h, r, rbi, hr, e
+}`;
+
+export const beerAssignmentByGameQuery = groq`*[_type == "beerAssignment" && team._ref == $teamId && game._ref == $gameId][0]{
+  "playerName": player->name
 }`;
 
 // Scoped to the active season only — a captain starting a new season shouldn't
 // see last year's final stat lines folded into "season" totals.
 export const statLinesByTeamQuery = groq`*[_type == "gameStatLine" && team._ref == $teamId && game->season->isActive == true]{
-  _id, "player": player._ref, ab, h, r, rbi, hr, e
+  _id, "player": player._ref, attended, ab, h, r, rbi, hr, e
 }`;
 
 export const beerAssignmentsByTeamQuery = groq`*[_type == "beerAssignment" && team._ref == $teamId && game->season->isActive == true]{

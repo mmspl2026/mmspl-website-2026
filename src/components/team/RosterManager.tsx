@@ -16,8 +16,7 @@ import {
 import ToastStack from "@/components/admin/ToastStack";
 import { useToasts } from "@/components/admin/useToasts";
 import type { RosterPlayer } from "@/lib/types";
-
-const POSITIONS = ["Pitcher", "Catcher", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "Utility"];
+import { POSITIONS } from "@/lib/positions";
 
 interface PlayerForm {
   name: string;

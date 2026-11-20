@@ -3,6 +3,7 @@ import type { RosterPlayer } from "./types";
 export interface StatLine {
   _id: string;
   player: string;
+  attended: boolean;
   ab: number;
   h: number;
   r: number;
@@ -32,7 +33,7 @@ export function computeSeasonTotals(roster: RosterPlayer[], lines: StatLine[]): 
     const h = sum("h");
     return {
       player,
-      gp: playerLines.length,
+      gp: playerLines.filter((l) => l.attended).length,
       ab,
       h,
       r: sum("r"),

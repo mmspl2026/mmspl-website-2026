@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireTeamApiAuth } from "@/lib/team-auth";
 import { writeClient } from "@/lib/sanity/client";
-import { statLinesByGameQuery, statLinesByTeamQuery, rosterByTeamQuery } from "@/lib/sanity/queries";
+import { statLinesByGameQuery, statLinesByTeamQuery, rosterByTeamQuery, beerAssignmentByGameQuery } from "@/lib/sanity/queries";
 import { computeSeasonTotals, type StatLine } from "@/lib/teamStats";
 import type { RosterPlayer } from "@/lib/types";
 
@@ -20,8 +20,11 @@ export async function GET(req: NextRequest) {
 
   const gameId = req.nextUrl.searchParams.get("gameId");
   if (gameId) {
-    const lines = await writeClient.fetch<StoredLine[]>(statLinesByGameQuery, { teamId, gameId });
-    return NextResponse.json({ lines });
+    const [lines, beerAssignment] = await Promise.all([
+      writeClient.fetch<StoredLine[]>(statLinesByGameQuery, { teamId, gameId }),
+      writeClient.fetch<{ playerName?: string } | null>(beerAssignmentByGameQuery, { teamId, gameId }),
+    ]);
+    return NextResponse.json({ lines, beerPlayerName: beerAssignment?.playerName || null });
   }
 
   // Season totals: compute by summing every saved line per player.
@@ -46,9 +49,9 @@ export async function POST(req: NextRequest) {
   }
 
   const tx = writeClient.transaction();
-  for (const line of lines) {
+  lines.forEach((line: Record<string, unknown>, index: number) => {
     const playerId = typeof line?.playerId === "string" ? line.playerId : "";
-    if (!playerId) continue;
+    if (!playerId) return;
     const num = (v: unknown) => Math.max(0, Number(v) || 0);
     tx.createOrReplace({
       _id: lineId(teamId, gameId, playerId),
@@ -56,6 +59,9 @@ export async function POST(req: NextRequest) {
       team: { _type: "reference", _ref: teamId },
       game: { _type: "reference", _ref: gameId },
       player: { _type: "reference", _ref: playerId },
+      attended: Boolean(line.attended),
+      positionPlayed: typeof line.positionPlayed === "string" && line.positionPlayed ? line.positionPlayed : undefined,
+      lineupOrder: index,
       ab: num(line.ab),
       h: num(line.h),
       r: num(line.r),
@@ -63,7 +69,7 @@ export async function POST(req: NextRequest) {
       hr: num(line.hr),
       e: num(line.e),
     });
-  }
+  });
   await tx.commit();
 
   return NextResponse.json({ ok: true });

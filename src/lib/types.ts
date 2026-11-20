@@ -224,6 +224,9 @@ export interface GameStatLine {
   team: string;
   game: string;
   player: string;
+  attended: boolean;
+  positionPlayed?: string;
+  lineupOrder?: number;
   ab: number;
   h: number;
   r: number;

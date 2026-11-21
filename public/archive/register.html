@@ -79,27 +79,28 @@
 				</div>
 			    <div class="post">
 					<!-- <h2 class="title">Registration Form</h2> -->
+				  <div style="border:1px solid #AA1111;background:#FBEBEB;color:#8E0E0E;padding:10px;margin-bottom:10px;font-size:90%"><strong>This is an archived page.</strong> Registration here is closed and this form no longer submits. To register for the current season, visit the <a href="https://mmspl-website-2026.vercel.app/register" style="color:#8E0E0E;text-decoration:underline">live MMSPL site</a>.</div>
 				  <h2 class="title">Registration for 2026 Call-Up List</h2>	
 				  <div class="entry">
-						<form method="post" enctype="multipart/form-data" action="res/php/register.php" accept-charset="utf-8">
+						<form method="post" accept-charset="utf-8" onsubmit="return false;">
 							<div class="register">
-								<input type="hidden" name="subregister" value="1"/>
-								<input type="text" name="MiddleName" id="middle_name" value=""/>
+								<input type="hidden" name="subregister" value="1" disabled="disabled"/>
+								<input type="text" name="MiddleName" id="middle_name" value="" disabled="disabled"/>
 
 								<fieldset>
 								<legend>Personal Info:</legend>
-								<label for="Name">First and Last Name:</label><input type="text" name="Name" id="Name" value="" maxlength=""/><div> </div>
-								<label for="Address1">Street Address:</label><input type="text" name="Address1" id="Address1" value="" maxlength=""/><div> </div>
-								<label for="Address2">Unit:</label><input type="text" name="Address2" id="Address2" value="" maxlength=""/><div> </div>
-								<label for="City">City:</label><input type="text" name="City" id="City" value="" maxlength=""/><div> </div>
-								<label for="Postalcode">Postal Code:</label><input type="text" name="Postalcode" id="Postalcode" value="" maxlength=""/><div> </div>
-								<label for="PhoneNumber">Home Number:</label><input type="text" name="PhoneNumber" id="PhoneNumber" value="" maxlength=""/><div> </div>
-								<label for="CellNumber">Work/Mobile Number:</label><input type="text" name="CellNumber" id="CellNumber" value="" maxlength=""/><div> </div>
-								<label for="Email">E-mail:</label><input type="text" name="Email" id="Email" value="" maxlength=""/><div> </div>
-								<label for="Email2">Alterate E-Mail:</label><input type="text" name="Email2" id="Email2" value="" maxlength=""/><div> </div>
-								<label for="DOB">Date of Birth (mm/dd/yyyy):</label><input type="text" name="DOB" id="DOB" value="" maxlength=""/><div> </div>
+								<label for="Name">First and Last Name:</label><input type="text" name="Name" id="Name" value="" maxlength="" disabled="disabled"/><div> </div>
+								<label for="Address1">Street Address:</label><input type="text" name="Address1" id="Address1" value="" maxlength="" disabled="disabled"/><div> </div>
+								<label for="Address2">Unit:</label><input type="text" name="Address2" id="Address2" value="" maxlength="" disabled="disabled"/><div> </div>
+								<label for="City">City:</label><input type="text" name="City" id="City" value="" maxlength="" disabled="disabled"/><div> </div>
+								<label for="Postalcode">Postal Code:</label><input type="text" name="Postalcode" id="Postalcode" value="" maxlength="" disabled="disabled"/><div> </div>
+								<label for="PhoneNumber">Home Number:</label><input type="text" name="PhoneNumber" id="PhoneNumber" value="" maxlength="" disabled="disabled"/><div> </div>
+								<label for="CellNumber">Work/Mobile Number:</label><input type="text" name="CellNumber" id="CellNumber" value="" maxlength="" disabled="disabled"/><div> </div>
+								<label for="Email">E-mail:</label><input type="text" name="Email" id="Email" value="" maxlength="" disabled="disabled"/><div> </div>
+								<label for="Email2">Alterate E-Mail:</label><input type="text" name="Email2" id="Email2" value="" maxlength="" disabled="disabled"/><div> </div>
+								<label for="DOB">Date of Birth (mm/dd/yyyy):</label><input type="text" name="DOB" id="DOB" value="" maxlength="" disabled="disabled"/><div> </div>
 								<label for="FoundUs">I heard about this league:</label>
-                                <select name="FoundUs" id="FoundUs">
+                                <select name="FoundUs" id="FoundUs" disabled="disabled">
                                     <option value="Internet search" selected="selected">Internet search</option>
                                     <option value="Family League Member">Family League Member</option>
                                     <option value="Friend">Friend</option>
@@ -112,21 +113,21 @@
 								<fieldset>
 								<legend>Playing Experience:</legend>
 								<span style="font-weight:bold">The highest level of ball I have played is:</span><div> </div>
-								<label for="Level">SPN/SPO/NSA Category:</label><select name="Level" id="Level"><option value="---" selected="selected">Not Sure</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E / Rec</option></select><div> </div>
-								<label for="Position">Preferred Position:</label><select name="Position" id="Position"><option value="NoPreference" selected="selected">No Preference</option><option value="Infield">Infield</option><option value="Outfield">Outfield</option></select><div> </div>
-								<label for="Experience">Years of Experience:</label><select name="Experience" id="Experience"><option value="0-3" selected="selected">0-3</option><option value="4-6">4-6</option><option value="7-9">7-9</option><option value="10 ">10 + </option></select><div> </div>
-								<label for="PlayingComments">Comments on Experience:</label><textarea name="PlayingComments" id="PlayingComments" rows="1" cols="1"></textarea><div> </div>
+								<label for="Level">SPN/SPO/NSA Category:</label><select name="Level" id="Level" disabled="disabled"><option value="---" selected="selected">Not Sure</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E / Rec</option></select><div> </div>
+								<label for="Position">Preferred Position:</label><select name="Position" id="Position" disabled="disabled"><option value="NoPreference" selected="selected">No Preference</option><option value="Infield">Infield</option><option value="Outfield">Outfield</option></select><div> </div>
+								<label for="Experience">Years of Experience:</label><select name="Experience" id="Experience" disabled="disabled"><option value="0-3" selected="selected">0-3</option><option value="4-6">4-6</option><option value="7-9">7-9</option><option value="10 ">10 + </option></select><div> </div>
+								<label for="PlayingComments">Comments on Experience:</label><textarea name="PlayingComments" id="PlayingComments" rows="1" cols="1" disabled="disabled"></textarea><div> </div>
 								</fieldset>
 
 								<fieldset>
 								<legend>Pitching Experience:</legend>
-								<label for="Pitcher">I am able to Pitch:</label><select name="Pitcher" id="Pitcher"><option value="No" selected="selected">No</option><option value="Occasional">On an occasional basis</option><option value="FullTime">As my primary position</option></select><div> </div>
-								<label for="PitcherExperience">Years Pitched:</label><select name="PitcherExperience" id="PitcherExperience"><option value="0-3" selected="selected">0-3</option><option value="4-6">4-6</option><option value="7-9">7-9</option><option value="10 ">10 + </option></select><div> </div>
-								<label for="PitcherComments">Comments on Experience:</label><textarea name="PitcherComments" id="PitcherComments" rows="1" cols="1"></textarea><div> </div>
+								<label for="Pitcher">I am able to Pitch:</label><select name="Pitcher" id="Pitcher" disabled="disabled"><option value="No" selected="selected">No</option><option value="Occasional">On an occasional basis</option><option value="FullTime">As my primary position</option></select><div> </div>
+								<label for="PitcherExperience">Years Pitched:</label><select name="PitcherExperience" id="PitcherExperience" disabled="disabled"><option value="0-3" selected="selected">0-3</option><option value="4-6">4-6</option><option value="7-9">7-9</option><option value="10 ">10 + </option></select><div> </div>
+								<label for="PitcherComments">Comments on Experience:</label><textarea name="PitcherComments" id="PitcherComments" rows="1" cols="1" disabled="disabled"></textarea><div> </div>
 								</fieldset>
 
 								<div style="text-align:center;height:auto">
-									<input type="submit" value=" Register " /> <input type="reset" value=" Reset "/>
+									<input type="submit" value=" Register "  disabled="disabled"/> <input type="reset" value=" Reset " disabled="disabled"/>
 								</div>
 							</div>
 						</form>

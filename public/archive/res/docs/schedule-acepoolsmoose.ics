@@ -1,0 +1,300 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//Ace Pools Moose Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - Ace Pools Moose
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260512T223000Z
+DTEND:20260512T235000Z
+SUMMARY:CN: Ace Pools Moose (H) vs Markham Knights
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Markham Knights\nPark: Centenni
+ al North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260514T223000Z
+DTEND:20260514T235000Z
+SUMMARY:CN: Pilkey Glass Pirates vs Ace Pools Moose (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Ace Pools Moose\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260520T013000Z
+DTEND:20260520T025000Z
+SUMMARY:CN: The Condo Kings Army vs Ace Pools Moose (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Ace Pools Moose\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260522T013000Z
+DTEND:20260522T025000Z
+SUMMARY:ML: Ace Pools Moose (H) vs DC Chiropractic Nads
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: DC Chiropractic Nads\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260527T000000Z
+DTEND:20260527T012000Z
+SUMMARY:CN: Ace Pools Moose (H) vs Northtown Sox
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Northtown Sox\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260603T013000Z
+DTEND:20260603T025000Z
+SUMMARY:ML: Ace Pools Moose (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: McCalmont Financial Beavers\nPa
+ rk: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260605T000000Z
+DTEND:20260605T012000Z
+SUMMARY:ML: The Classics vs Ace Pools Moose (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Ace Pools Moose\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260610T000000Z
+DTEND:20260610T012000Z
+SUMMARY:ML: Ace Pools Moose (H) vs Derek Houghton Century 21
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Derek Houghton Century 21\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260612T013000Z
+DTEND:20260612T025000Z
+SUMMARY:CN: Opal Electric Shamrocks vs Ace Pools Moose (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: Ace Pools Moose\nP
+ ark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260617T013000Z
+DTEND:20260617T025000Z
+SUMMARY:ML: Northtown Sox vs Ace Pools Moose (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: Ace Pools Moose\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260624T013000Z
+DTEND:20260624T025000Z
+SUMMARY:CN: The Classics vs Ace Pools Moose (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Ace Pools Moose\nPark: Centennial 
+ North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260626T013000Z
+DTEND:20260626T025000Z
+SUMMARY:ML: Ace Pools Moose (H) vs OK Braves
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260708T000000Z
+DTEND:20260708T012000Z
+SUMMARY:CN: Markham Knights vs Ace Pools Moose (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Ace Pools Moose\nPark: Centenni
+ al North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260714T223000Z
+DTEND:20260714T235000Z
+SUMMARY:CN: S&H Raiders vs Ace Pools Moose (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Ace Pools Moose\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260716T223000Z
+DTEND:20260716T235000Z
+SUMMARY:ML: Ace Pools Moose (H) vs Opal Electric Shamrocks
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Opal Electric Shamrocks\nP
+ ark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260721T223000Z
+DTEND:20260721T235000Z
+SUMMARY:ML: DC Chiropractic Nads vs Ace Pools Moose (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Ace Pools Moose\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260724T000000Z
+DTEND:20260724T012000Z
+SUMMARY:CN: McCalmont Financial Beavers vs Ace Pools Moose (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: Ace Pools Moose\nPa
+ rk: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260729T013000Z
+DTEND:20260729T025000Z
+SUMMARY:CN: Ace Pools Moose (H) vs Markham Goodyear Rangers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Markham Goodyear Rangers\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260731T000000Z
+DTEND:20260731T012000Z
+SUMMARY:CN: Ace Pools Moose (H) vs The Condo Kings Army
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: The Condo Kings Army\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260804T223000Z
+DTEND:20260804T235000Z
+SUMMARY:ML: Derek Houghton Century 21 vs Ace Pools Moose (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: Ace Pools Moose\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260811T223000Z
+DTEND:20260811T235000Z
+SUMMARY:ML: Red Hot Dawgs vs Ace Pools Moose (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Ace Pools Moose\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260814T000000Z
+DTEND:20260814T012000Z
+SUMMARY:CN: Ace Pools Moose (H) vs Pilkey Glass Pirates
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Pilkey Glass Pirates\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260819T000000Z
+DTEND:20260819T012000Z
+SUMMARY:ML: Markham Goodyear Rangers vs Ace Pools Moose (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Ace Pools Moose\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260821T013000Z
+DTEND:20260821T025000Z
+SUMMARY:ML: Ace Pools Moose (H) vs Red Hot Dawgs
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Red Hot Dawgs\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260828T000000Z
+DTEND:20260828T012000Z
+SUMMARY:CN: Ace Pools Moose (H) vs The Classics
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: The Classics\nPark: Centennial 
+ North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260902T013000Z
+DTEND:20260902T025000Z
+SUMMARY:ML: Ace Pools Moose (H) vs Derek Houghton Century 21
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Derek Houghton Century 21\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260904T000000Z
+DTEND:20260904T012000Z
+SUMMARY:CN: Opal Electric Shamrocks vs Ace Pools Moose (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: Ace Pools Moose\nP
+ ark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260909T000000Z
+DTEND:20260909T012000Z
+SUMMARY:ML: Ace Pools Moose (H) vs Northtown Sox
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Northtown Sox\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260911T013000Z
+DTEND:20260911T025000Z
+SUMMARY:CN: Ace Pools Moose (H) vs S&H Raiders
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: S&H Raiders\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026acepoolsmoose-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260916T000000Z
+DTEND:20260916T012000Z
+SUMMARY:ML: OK Braves vs Ace Pools Moose (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Ace Pools Moose\nPark: Mintleaf
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,300 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//Markham Knights Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - Markham Knights
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260512T223000Z
+DTEND:20260512T235000Z
+SUMMARY:CN: Ace Pools Moose vs Markham Knights (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Markham Knights\nPark: Centenni
+ al North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260515T013000Z
+DTEND:20260515T025000Z
+SUMMARY:CN: Northtown Sox vs Markham Knights (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: Markham Knights\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260520T000000Z
+DTEND:20260520T012000Z
+SUMMARY:CN: DC Chiropractic Nads vs Markham Knights (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Markham Knights\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260521T223000Z
+DTEND:20260521T235000Z
+SUMMARY:CN: Red Hot Dawgs vs Markham Knights (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Markham Knights\nPark: Centennial
+  North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260527T000000Z
+DTEND:20260527T012000Z
+SUMMARY:ML: Markham Goodyear Rangers vs Markham Knights (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Markham Knights\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260602T223000Z
+DTEND:20260602T235000Z
+SUMMARY:ML: Markham Knights (H) vs The Condo Kings Army
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: The Condo Kings Army\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260604T223000Z
+DTEND:20260604T235000Z
+SUMMARY:CN: Markham Knights (H) vs Derek Houghton Century 21
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Derek Houghton Century 21\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260609T223000Z
+DTEND:20260609T235000Z
+SUMMARY:ML: Markham Knights (H) vs Red Hot Dawgs
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Red Hot Dawgs\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260612T013000Z
+DTEND:20260612T025000Z
+SUMMARY:ML: Markham Knights (H) vs OK Braves
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260617T000000Z
+DTEND:20260617T012000Z
+SUMMARY:CN: Markham Goodyear Rangers vs Markham Knights (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Markham Knights\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260626T013000Z
+DTEND:20260626T025000Z
+SUMMARY:CN: Markham Knights (H) vs S&H Raiders
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: S&H Raiders\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260701T013000Z
+DTEND:20260701T025000Z
+SUMMARY:CN: Derek Houghton Century 21 vs Markham Knights (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: Markham Knights\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260708T000000Z
+DTEND:20260708T012000Z
+SUMMARY:CN: Markham Knights (H) vs Ace Pools Moose
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Ace Pools Moose\nPark: Centenni
+ al North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260715T013000Z
+DTEND:20260715T025000Z
+SUMMARY:ML: Markham Knights (H) vs The Classics
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: The Classics\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260717T000000Z
+DTEND:20260717T012000Z
+SUMMARY:ML: OK Braves vs Markham Knights (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Markham Knights\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260722T000000Z
+DTEND:20260722T012000Z
+SUMMARY:CN: Markham Knights (H) vs Northtown Sox
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Northtown Sox\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260723T223000Z
+DTEND:20260723T235000Z
+SUMMARY:CN: The Condo Kings Army vs Markham Knights (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Markham Knights\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260729T000000Z
+DTEND:20260729T012000Z
+SUMMARY:ML: Markham Knights (H) vs DC Chiropractic Nads
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: DC Chiropractic Nads\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260731T013000Z
+DTEND:20260731T025000Z
+SUMMARY:CN: Red Hot Dawgs vs Markham Knights (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Markham Knights\nPark: Centennial
+  North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260805T013000Z
+DTEND:20260805T025000Z
+SUMMARY:ML: Markham Knights (H) vs Opal Electric Shamrocks
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Opal Electric Shamrocks\nP
+ ark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260812T000000Z
+DTEND:20260812T012000Z
+SUMMARY:ML: Pilkey Glass Pirates vs Markham Knights (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Markham Knights\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260813T223000Z
+DTEND:20260813T235000Z
+SUMMARY:ML: McCalmont Financial Beavers vs Markham Knights (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: Markham Knights\nPa
+ rk: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260818T223000Z
+DTEND:20260818T235000Z
+SUMMARY:ML: The Classics vs Markham Knights (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Markham Knights\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260821T000000Z
+DTEND:20260821T012000Z
+SUMMARY:ML: Markham Knights (H) vs Pilkey Glass Pirates
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Pilkey Glass Pirates\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260825T223000Z
+DTEND:20260825T235000Z
+SUMMARY:ML: S&H Raiders vs Markham Knights (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Markham Knights\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260827T223000Z
+DTEND:20260827T235000Z
+SUMMARY:CN: Markham Knights (H) vs Derek Houghton Century 21
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Derek Houghton Century 21\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260904T013000Z
+DTEND:20260904T025000Z
+SUMMARY:ML: Markham Knights (H) vs OK Braves
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260909T013000Z
+DTEND:20260909T025000Z
+SUMMARY:CN: Markham Knights (H) vs Markham Goodyear Rangers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Markham Goodyear Rangers\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260910T223000Z
+DTEND:20260910T235000Z
+SUMMARY:ML: Markham Knights (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: McCalmont Financial Beavers\nPa
+ rk: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamknights-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260916T000000Z
+DTEND:20260916T012000Z
+SUMMARY:CN: Opal Electric Shamrocks vs Markham Knights (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: Markham Knights\nP
+ ark: Centennial North
+END:VEVENT
+END:VCALENDAR

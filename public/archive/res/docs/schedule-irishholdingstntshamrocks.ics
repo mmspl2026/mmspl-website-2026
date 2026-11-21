@@ -1,0 +1,307 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//Irish Holdings TNT Shamrocks Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - Irish Holdings TNT Shamrocks
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260515T013000Z
+DTEND:20260515T025000Z
+SUMMARY:ML: OK Braves vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Irish Holdings TNT Shamrocks\nPark: M
+ intleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260520T000000Z
+DTEND:20260520T012000Z
+SUMMARY:ML: Irish Holdings TNT Shamrocks (H) vs Derek Houghton Century 21
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Derek Houghton Cen
+ tury 21\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260522T000000Z
+DTEND:20260522T012000Z
+SUMMARY:ML: Irish Holdings TNT Shamrocks (H) vs The Condo Kings Army
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: The Condo Kings Ar
+ my\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260526T223000Z
+DTEND:20260526T235000Z
+SUMMARY:ML: Irish Holdings TNT Shamrocks (H) vs Pilkey Glass Pirates
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Pilkey Glass Pirat
+ es\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260602T223000Z
+DTEND:20260602T235000Z
+SUMMARY:CN: Red Hot Dawgs vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Irish Holdings TNT Shamrocks\nPar
+ k: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260605T013000Z
+DTEND:20260605T025000Z
+SUMMARY:CN: Irish Holdings TNT Shamrocks (H) vs Polyson Sox
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Polyson Sox\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260609T223000Z
+DTEND:20260609T235000Z
+SUMMARY:CN: Irish Holdings TNT Shamrocks (H) vs Markham Goodyear Rangers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Markham Goodyear R
+ angers\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260612T013000Z
+DTEND:20260612T025000Z
+SUMMARY:CN: Irish Holdings TNT Shamrocks (H) vs Ace Pools Moose
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Ace Pools Moose\nP
+ ark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260617T013000Z
+DTEND:20260617T025000Z
+SUMMARY:CN: Pilkey Glass Pirates vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Irish Holdings TNT Shamroc
+ ks\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260618T223000Z
+DTEND:20260618T235000Z
+SUMMARY:CN: Irish Holdings TNT Shamrocks (H) vs DC Chiropractic Nads
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: DC Chiropractic Na
+ ds\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260626T000000Z
+DTEND:20260626T012000Z
+SUMMARY:CN: DC Chiropractic Nads vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Irish Holdings TNT Shamroc
+ ks\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260701T013000Z
+DTEND:20260701T025000Z
+SUMMARY:ML: Irish Holdings TNT Shamrocks (H) vs Polyson Sox
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Polyson Sox\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260708T013000Z
+DTEND:20260708T025000Z
+SUMMARY:CN: Irish Holdings TNT Shamrocks (H) vs S&H Raiders
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: S&H Raiders\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260710T013000Z
+DTEND:20260710T025000Z
+SUMMARY:ML: S&H Raiders vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Irish Holdings TNT Shamrocks\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260714T223000Z
+DTEND:20260714T235000Z
+SUMMARY:ML: Irish Holdings TNT Shamrocks (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: McCalmont Financia
+ l Beavers\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260716T223000Z
+DTEND:20260716T235000Z
+SUMMARY:ML: Ace Pools Moose vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Irish Holdings TNT Shamrocks\nP
+ ark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260722T000000Z
+DTEND:20260722T012000Z
+SUMMARY:ML: Irish Holdings TNT Shamrocks (H) vs Red Hot Dawgs
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Red Hot Dawgs\nPar
+ k: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260723T223000Z
+DTEND:20260723T235000Z
+SUMMARY:ML: Irish Holdings TNT Shamrocks (H) vs OK Braves
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: OK Braves\nPark: M
+ intleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260730T223000Z
+DTEND:20260730T235000Z
+SUMMARY:ML: Derek Houghton Century 21 vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: Irish Holdings TNT Sh
+ amrocks\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260805T013000Z
+DTEND:20260805T025000Z
+SUMMARY:ML: Markham Knights vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Irish Holdings TNT Shamrocks\nP
+ ark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260807T013000Z
+DTEND:20260807T025000Z
+SUMMARY:ML: The Classics vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Irish Holdings TNT Shamrocks\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260812T013000Z
+DTEND:20260812T025000Z
+SUMMARY:CN: The Condo Kings Army vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Irish Holdings TNT Shamroc
+ ks\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260814T000000Z
+DTEND:20260814T012000Z
+SUMMARY:ML: Markham Goodyear Rangers vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Irish Holdings TNT Sha
+ mrocks\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260818T223000Z
+DTEND:20260818T235000Z
+SUMMARY:CN: McCalmont Financial Beavers vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: Irish Holdings TNT 
+ Shamrocks\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260821T000000Z
+DTEND:20260821T012000Z
+SUMMARY:CN: Irish Holdings TNT Shamrocks (H) vs The Classics
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: The Classics\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260826T013000Z
+DTEND:20260826T025000Z
+SUMMARY:CN: Polyson Sox vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: Irish Holdings TNT Shamrocks\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260902T000000Z
+DTEND:20260902T012000Z
+SUMMARY:ML: Markham Goodyear Rangers vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Irish Holdings TNT Sha
+ mrocks\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260904T000000Z
+DTEND:20260904T012000Z
+SUMMARY:CN: Irish Holdings TNT Shamrocks (H) vs Ace Pools Moose
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Ace Pools Moose\nP
+ ark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260908T223000Z
+DTEND:20260908T235000Z
+SUMMARY:ML: Pilkey Glass Pirates vs Irish Holdings TNT Shamrocks (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Irish Holdings TNT Shamroc
+ ks\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026irishholdingstntshamrocks-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260916T000000Z
+DTEND:20260916T012000Z
+SUMMARY:CN: Irish Holdings TNT Shamrocks (H) vs Markham Knights
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Markham Knights\nP
+ ark: Centennial North
+END:VEVENT
+END:VCALENDAR

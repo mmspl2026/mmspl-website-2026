@@ -1,0 +1,47 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 90%;
+}
+
+.menu, .sidebar {
+	display:none;
+}
+
+.dataTable {
+	width:100%;
+}
+
+.gamescoretime {
+	width:70px;
+	font-size:11pt;
+	color:#000000;
+}
+
+.gamescorecol {
+	width:200px;
+} 	
+
+.gamescore {
+	border:1px solid #C0C0C0;
+	background-color: #FFFFFF;
+}
+
+.gamescore tr td {
+	padding-top:3px;
+	padding-bottom:3px;
+	border:1px solid #C0C0C0;
+	background-color: #FFFFFF;
+	color:#000000;	
+	text-align: center;
+	font-size:10pt;
+}		
+
+.gamescore .team {
+	width:150px;
+}
+
+.gamescore .score {
+	width: 20px;
+}

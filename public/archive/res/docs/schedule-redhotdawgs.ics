@@ -1,0 +1,298 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//Red Hot Dawgs Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - Red Hot Dawgs
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260513T013000Z
+DTEND:20260513T025000Z
+SUMMARY:CN: S&H Raiders vs Red Hot Dawgs (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Red Hot Dawgs\nPark: Centennial Nor
+ th
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260514T223000Z
+DTEND:20260514T235000Z
+SUMMARY:ML: Red Hot Dawgs (H) vs Markham Goodyear Rangers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Markham Goodyear Rangers\nPark: M
+ intleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260521T223000Z
+DTEND:20260521T235000Z
+SUMMARY:CN: Red Hot Dawgs (H) vs Markham Knights
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Markham Knights\nPark: Centennial
+  North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260527T013000Z
+DTEND:20260527T025000Z
+SUMMARY:CN: OK Braves vs Red Hot Dawgs (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Red Hot Dawgs\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260602T223000Z
+DTEND:20260602T235000Z
+SUMMARY:CN: Red Hot Dawgs (H) vs Opal Electric Shamrocks
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Opal Electric Shamrocks\nPar
+ k: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260605T000000Z
+DTEND:20260605T012000Z
+SUMMARY:CN: DC Chiropractic Nads vs Red Hot Dawgs (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Red Hot Dawgs\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260609T223000Z
+DTEND:20260609T235000Z
+SUMMARY:ML: Markham Knights vs Red Hot Dawgs (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Red Hot Dawgs\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260617T000000Z
+DTEND:20260617T012000Z
+SUMMARY:ML: Red Hot Dawgs (H) vs OK Braves
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260619T000000Z
+DTEND:20260619T012000Z
+SUMMARY:ML: Pilkey Glass Pirates vs Red Hot Dawgs (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Red Hot Dawgs\nPark: Mintl
+ eaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260623T223000Z
+DTEND:20260623T235000Z
+SUMMARY:ML: Red Hot Dawgs (H) vs Derek Houghton Century 21
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Derek Houghton Century 21\nPark: 
+ Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260625T223000Z
+DTEND:20260625T235000Z
+SUMMARY:CN: Red Hot Dawgs (H) vs Pilkey Glass Pirates
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Pilkey Glass Pirates\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260701T000000Z
+DTEND:20260701T012000Z
+SUMMARY:CN: Red Hot Dawgs (H) vs McCalmont Financial Beavers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: McCalmont Financial Beavers\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260707T223000Z
+DTEND:20260707T235000Z
+SUMMARY:CN: Red Hot Dawgs (H) vs The Classics
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: The Classics\nPark: Centennial No
+ rth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260709T223000Z
+DTEND:20260709T235000Z
+SUMMARY:CN: Markham Goodyear Rangers vs Red Hot Dawgs (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Red Hot Dawgs\nPark: C
+ entennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260715T000000Z
+DTEND:20260715T012000Z
+SUMMARY:ML: Red Hot Dawgs (H) vs The Condo Kings Army
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: The Condo Kings Army\nPark: Mintl
+ eaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260722T000000Z
+DTEND:20260722T012000Z
+SUMMARY:ML: Opal Electric Shamrocks vs Red Hot Dawgs (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: Red Hot Dawgs\nPar
+ k: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260728T223000Z
+DTEND:20260728T235000Z
+SUMMARY:ML: Red Hot Dawgs (H) vs Northtown Sox
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Northtown Sox\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260731T013000Z
+DTEND:20260731T025000Z
+SUMMARY:CN: Red Hot Dawgs (H) vs Markham Knights
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Markham Knights\nPark: Centennial
+  North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260805T013000Z
+DTEND:20260805T025000Z
+SUMMARY:CN: Red Hot Dawgs (H) vs McCalmont Financial Beavers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: McCalmont Financial Beavers\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260807T000000Z
+DTEND:20260807T012000Z
+SUMMARY:ML: Derek Houghton Century 21 vs Red Hot Dawgs (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: Red Hot Dawgs\nPark: 
+ Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260811T223000Z
+DTEND:20260811T235000Z
+SUMMARY:ML: Red Hot Dawgs (H) vs Ace Pools Moose
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Ace Pools Moose\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260814T013000Z
+DTEND:20260814T025000Z
+SUMMARY:CN: Red Hot Dawgs (H) vs DC Chiropractic Nads
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: DC Chiropractic Nads\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260819T013000Z
+DTEND:20260819T025000Z
+SUMMARY:ML: Red Hot Dawgs (H) vs S&H Raiders
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: S&H Raiders\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260821T013000Z
+DTEND:20260821T025000Z
+SUMMARY:ML: Ace Pools Moose vs Red Hot Dawgs (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Red Hot Dawgs\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260826T013000Z
+DTEND:20260826T025000Z
+SUMMARY:ML: McCalmont Financial Beavers vs Red Hot Dawgs (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: Red Hot Dawgs\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260902T013000Z
+DTEND:20260902T025000Z
+SUMMARY:CN: The Condo Kings Army vs Red Hot Dawgs (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Red Hot Dawgs\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260903T223000Z
+DTEND:20260903T235000Z
+SUMMARY:CN: Northtown Sox vs Red Hot Dawgs (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: Red Hot Dawgs\nPark: Centennial Nor
+ th
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260909T000000Z
+DTEND:20260909T012000Z
+SUMMARY:CN: OK Braves vs Red Hot Dawgs (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Red Hot Dawgs\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260911T013000Z
+DTEND:20260911T025000Z
+SUMMARY:ML: The Condo Kings Army vs Red Hot Dawgs (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Red Hot Dawgs\nPark: Mintl
+ eaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026redhotdawgs-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260915T223000Z
+DTEND:20260915T235000Z
+SUMMARY:ML: The Classics vs Red Hot Dawgs (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Red Hot Dawgs\nPark: Mintleaf
+END:VEVENT
+END:VCALENDAR

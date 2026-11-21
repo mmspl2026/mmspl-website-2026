@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta name="keywords" content="Markham, Slo-Pitch, Slopitch, softball, york region, recreation, baseball, men, activities, markham sports council, sports, toronto, ontario, nsa, spn, league, leagues, mintleaf, centennial park, markville, slow pitch, slowpitch, MMSPL, NSA, SPN, SPO,"/>
+	<meta name="description" content="Markham Men's Slo-Pitch League" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Markham Men's Slo-Pitch League</title>
+	<link href="res/style.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="res/print.css" rel="stylesheet" type="text/css" media="print" />
+
+	<style type="text/css">
+		fieldset { border:1px solid #D2D4C9; margin-bottom:10px; padding-top:10px; }
+		legend { padding: 0.2em 0.5em; border:1px solid #D2D4C9; font-weight:bold; font-size:110%; }
+		textarea{ width: 220px; height:100px; resize: none; border:1px solid #D2D4C9; }
+		input[type=text] { width: 220px; }
+		select { width: 220px; }
+	</style>
+
+    <script src="res/jquery/js/jquery-1.5.1.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+        $(document).ready(function() { $('#middle_name').hide(); });
+    </script>
+</head>
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<img src="res/img/mmspl-logo-patch-216x125.png" height="125px" width="216px" style="float:right;padding-left:5px;padding-right:5px" alt="MMSPL"/>
+			<div id="title">
+				<h1>Markham Men's Slo-Pitch League</h1>
+				Established 1968
+			</div>
+			<div style="clear:both;height:5px">&nbsp;</div>
+			<div class="menu">
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li class="current"><a href="register.html">Register</a></li>
+					<li><a href="standings.html">Standings</a></li>
+					<li><a href="schedule.html">Schedules</a></li>
+					<li><a href="admin.html">Admin</a></li>
+					<li><a href="about.html">About Us</a></li>
+					<li><a href="awards.html">Awards</a></li>
+					<li><a href="contact.html">Contact</a></li>
+					<li><a href="community.html">Players Businesses</a></li>
+				</ul>
+			</div>
+			<!-- end .menu -->
+		</div>
+		<!-- end #header -->
+
+		<div id="page">
+
+
+			<div class="sidebar" style="width:420px; font-size:90%">
+				<ul>
+					<li>
+						<h3>League Information</h3>
+						<ul>
+						<li style="border-bottom:none">The Markham Men's Slo-Pitch League is a semi-competitive, slo-pitch league. We have 14 teams with 15 players each. We play 30 regular season games between mid-May to early-September. Included in league fees are a Charity Tournament (early-June) and a Play-off Tournament (mid-September) in which each team is guaranteed 3 games. Players range in age from 25 and up.</li>
+						<li style="border-bottom:none">Our key objective is to ensure that each of the 14 teams is competitive. We attempt to do this by running a 'draft' at the start of each season. New players are 'rated' in various ways (self-rating and practice) and then individually drafted to a team depending on need. We do not accept team or group registrations.</li>
+						<li style="border-bottom:none">Players must be at least 25 years of age during the calendar year and reside within the City of Markham, or be a principle owner of a business that pays business taxes to the City of Markham. PLEASE NOTE: players from outside of these boundaries can play should the league require additional players.</li>
+						<li style="border-bottom:none"><strong>FEES for new players for the 2026 season are $270.</strong> Please e-transfer funds to <strong>mmspl.finances@gmail.com</strong> and include your name in the memo field.  We will confirm with you via email when the funds have been received.
+						</li>
+						<li style="border-bottom:none">New players are recruited on the basis of date of payment and attendance at the new player evaluation session. For example, if the league requires 20 players, the first 20 to pay and attend at least one session will be guaranteed placement on a team.  If all roster spots are filled, you may join the waiting / call-up list, and are then eligible to play in games when a team requires extra players.</li>
+						<li>If you are interested feel free to fill out the registration form and we will be in touch to discuss your possibility of joining our league.</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!-- end sidebar - left -->
+
+			<div id="content" style="width:500px">
+				<div class="post">
+					<div class="menu">
+						<ul>
+							<li class="current"><a href="register.html">Registration Form</a></li>
+							<li><a href="register-list.html">2026 Registration List</a></li>
+						</ul>
+					</div>
+				</div>
+			    <div class="post">
+					<!-- <h2 class="title">Registration Form</h2> -->
+				  <h2 class="title">Registration for 2026 Call-Up List</h2>	
+				  <div class="entry">
+						<form method="post" enctype="multipart/form-data" action="res/php/register.php" accept-charset="utf-8">
+							<div class="register">
+								<input type="hidden" name="subregister" value="1"/>
+								<input type="text" name="MiddleName" id="middle_name" value=""/>
+
+								<fieldset>
+								<legend>Personal Info:</legend>
+								<label for="Name">First and Last Name:</label><input type="text" name="Name" id="Name" value="" maxlength=""/><div> </div>
+								<label for="Address1">Street Address:</label><input type="text" name="Address1" id="Address1" value="" maxlength=""/><div> </div>
+								<label for="Address2">Unit:</label><input type="text" name="Address2" id="Address2" value="" maxlength=""/><div> </div>
+								<label for="City">City:</label><input type="text" name="City" id="City" value="" maxlength=""/><div> </div>
+								<label for="Postalcode">Postal Code:</label><input type="text" name="Postalcode" id="Postalcode" value="" maxlength=""/><div> </div>
+								<label for="PhoneNumber">Home Number:</label><input type="text" name="PhoneNumber" id="PhoneNumber" value="" maxlength=""/><div> </div>
+								<label for="CellNumber">Work/Mobile Number:</label><input type="text" name="CellNumber" id="CellNumber" value="" maxlength=""/><div> </div>
+								<label for="Email">E-mail:</label><input type="text" name="Email" id="Email" value="" maxlength=""/><div> </div>
+								<label for="Email2">Alterate E-Mail:</label><input type="text" name="Email2" id="Email2" value="" maxlength=""/><div> </div>
+								<label for="DOB">Date of Birth (mm/dd/yyyy):</label><input type="text" name="DOB" id="DOB" value="" maxlength=""/><div> </div>
+								<label for="FoundUs">I heard about this league:</label>
+                                <select name="FoundUs" id="FoundUs">
+                                    <option value="Internet search" selected="selected">Internet search</option>
+                                    <option value="Family League Member">Family League Member</option>
+                                    <option value="Friend">Friend</option>
+                                    <option value="Facebook">Facebook</option>
+                                    <option value="Ads Within Community">Ads Within Community</option>
+                                    <option value="Online Ad">Online Ad</option>
+                                </select>
+								</fieldset>
+
+								<fieldset>
+								<legend>Playing Experience:</legend>
+								<span style="font-weight:bold">The highest level of ball I have played is:</span><div> </div>
+								<label for="Level">SPN/SPO/NSA Category:</label><select name="Level" id="Level"><option value="---" selected="selected">Not Sure</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option><option value="E">E / Rec</option></select><div> </div>
+								<label for="Position">Preferred Position:</label><select name="Position" id="Position"><option value="NoPreference" selected="selected">No Preference</option><option value="Infield">Infield</option><option value="Outfield">Outfield</option></select><div> </div>
+								<label for="Experience">Years of Experience:</label><select name="Experience" id="Experience"><option value="0-3" selected="selected">0-3</option><option value="4-6">4-6</option><option value="7-9">7-9</option><option value="10 ">10 + </option></select><div> </div>
+								<label for="PlayingComments">Comments on Experience:</label><textarea name="PlayingComments" id="PlayingComments" rows="1" cols="1"></textarea><div> </div>
+								</fieldset>
+
+								<fieldset>
+								<legend>Pitching Experience:</legend>
+								<label for="Pitcher">I am able to Pitch:</label><select name="Pitcher" id="Pitcher"><option value="No" selected="selected">No</option><option value="Occasional">On an occasional basis</option><option value="FullTime">As my primary position</option></select><div> </div>
+								<label for="PitcherExperience">Years Pitched:</label><select name="PitcherExperience" id="PitcherExperience"><option value="0-3" selected="selected">0-3</option><option value="4-6">4-6</option><option value="7-9">7-9</option><option value="10 ">10 + </option></select><div> </div>
+								<label for="PitcherComments">Comments on Experience:</label><textarea name="PitcherComments" id="PitcherComments" rows="1" cols="1"></textarea><div> </div>
+								</fieldset>
+
+								<div style="text-align:center;height:auto">
+									<input type="submit" value=" Register " /> <input type="reset" value=" Reset "/>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- end #content -->
+
+			<br style="clear: both;"/>
+		</div>
+		<!-- end #page -->
+
+		<div id="footer">&nbsp;</div>
+		<!-- end #footer -->
+	</div>
+</body>
+</html>

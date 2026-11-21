@@ -1,0 +1,307 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//Pilkey Glass Pirates Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - Pilkey Glass Pirates
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260513T000000Z
+DTEND:20260513T012000Z
+SUMMARY:ML: Northtown Sox vs Pilkey Glass Pirates (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: Pilkey Glass Pirates\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260514T223000Z
+DTEND:20260514T235000Z
+SUMMARY:CN: Pilkey Glass Pirates (H) vs Ace Pools Moose
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Ace Pools Moose\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260520T013000Z
+DTEND:20260520T025000Z
+SUMMARY:ML: Pilkey Glass Pirates (H) vs The Classics
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: The Classics\nPark: Mintle
+ af
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260526T223000Z
+DTEND:20260526T235000Z
+SUMMARY:ML: Opal Electric Shamrocks vs Pilkey Glass Pirates (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: Pilkey Glass Pirat
+ es\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260603T000000Z
+DTEND:20260603T012000Z
+SUMMARY:ML: DC Chiropractic Nads vs Pilkey Glass Pirates (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Pilkey Glass Pirates\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260604T223000Z
+DTEND:20260604T235000Z
+SUMMARY:ML: Pilkey Glass Pirates (H) vs The Condo Kings Army
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: The Condo Kings Army\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260612T000000Z
+DTEND:20260612T012000Z
+SUMMARY:CN: Pilkey Glass Pirates (H) vs Derek Houghton Century 21
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Derek Houghton Century 21\
+ nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260617T013000Z
+DTEND:20260617T025000Z
+SUMMARY:CN: Pilkey Glass Pirates (H) vs Opal Electric Shamrocks
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Irish Holdings TNT Shamroc
+ ks\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260619T000000Z
+DTEND:20260619T012000Z
+SUMMARY:ML: Pilkey Glass Pirates (H) vs Red Hot Dawgs
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Red Hot Dawgs\nPark: Mintl
+ eaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260624T000000Z
+DTEND:20260624T012000Z
+SUMMARY:ML: Pilkey Glass Pirates (H) vs S&H Raiders
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: S&H Raiders\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260625T223000Z
+DTEND:20260625T235000Z
+SUMMARY:CN: Red Hot Dawgs vs Pilkey Glass Pirates (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Pilkey Glass Pirates\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260630T223000Z
+DTEND:20260630T235000Z
+SUMMARY:ML: The Condo Kings Army vs Pilkey Glass Pirates (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Pilkey Glass Pirates\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260709T223000Z
+DTEND:20260709T235000Z
+SUMMARY:ML: Pilkey Glass Pirates (H) vs Northtown Sox
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Northtown Sox\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260715T000000Z
+DTEND:20260715T012000Z
+SUMMARY:CN: OK Braves vs Pilkey Glass Pirates (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Pilkey Glass Pirates\nPark: Centennia
+ l North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260717T013000Z
+DTEND:20260717T025000Z
+SUMMARY:CN: Derek Houghton Century 21 vs Pilkey Glass Pirates (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: Pilkey Glass Pirates\
+ nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260722T013000Z
+DTEND:20260722T025000Z
+SUMMARY:ML: The Classics vs Pilkey Glass Pirates (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Pilkey Glass Pirates\nPark: Mintle
+ af
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260724T013000Z
+DTEND:20260724T025000Z
+SUMMARY:ML: Pilkey Glass Pirates (H) vs DC Chiropractic Nads
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: DC Chiropractic Nads\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260729T013000Z
+DTEND:20260729T025000Z
+SUMMARY:ML: Pilkey Glass Pirates (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: McCalmont Financial Beaver
+ s\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260730T223000Z
+DTEND:20260730T235000Z
+SUMMARY:CN: Markham Goodyear Rangers vs Pilkey Glass Pirates (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Pilkey Glass Pirates\n
+ Park: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260806T223000Z
+DTEND:20260806T235000Z
+SUMMARY:CN: S&H Raiders vs Pilkey Glass Pirates (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Pilkey Glass Pirates\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260812T000000Z
+DTEND:20260812T012000Z
+SUMMARY:ML: Pilkey Glass Pirates (H) vs Markham Knights
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Markham Knights\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260814T000000Z
+DTEND:20260814T012000Z
+SUMMARY:CN: Ace Pools Moose vs Pilkey Glass Pirates (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Pilkey Glass Pirates\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260819T013000Z
+DTEND:20260819T025000Z
+SUMMARY:CN: Pilkey Glass Pirates (H) vs OK Braves
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: OK Braves\nPark: Centennia
+ l North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260821T000000Z
+DTEND:20260821T012000Z
+SUMMARY:ML: Markham Knights vs Pilkey Glass Pirates (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Pilkey Glass Pirates\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260826T000000Z
+DTEND:20260826T012000Z
+SUMMARY:CN: The Condo Kings Army vs Pilkey Glass Pirates (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Pilkey Glass Pirates\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260828T013000Z
+DTEND:20260828T025000Z
+SUMMARY:CN: Pilkey Glass Pirates (H) vs McCalmont Financial Beavers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: McCalmont Financial Beaver
+ s\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260903T223000Z
+DTEND:20260903T235000Z
+SUMMARY:ML: Derek Houghton Century 21 vs Pilkey Glass Pirates (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: Pilkey Glass Pirates\
+ nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260908T223000Z
+DTEND:20260908T235000Z
+SUMMARY:ML: Pilkey Glass Pirates (H) vs Opal Electric Shamrocks
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Irish Holdings TNT Shamroc
+ ks\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260910T223000Z
+DTEND:20260910T235000Z
+SUMMARY:CN: Pilkey Glass Pirates (H) vs Markham Goodyear Rangers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Markham Goodyear Rangers\n
+ Park: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026pilkeyglasspirates-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260916T013000Z
+DTEND:20260916T025000Z
+SUMMARY:ML: McCalmont Financial Beavers vs Pilkey Glass Pirates (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: Pilkey Glass Pirate
+ s\nPark: Mintleaf
+END:VEVENT
+END:VCALENDAR

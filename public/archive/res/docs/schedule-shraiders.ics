@@ -1,0 +1,300 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//S&H Raiders Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - S&H Raiders
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260513T013000Z
+DTEND:20260513T025000Z
+SUMMARY:CN: S&H Raiders (H) vs Red Hot Dawgs
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Red Hot Dawgs\nPark: Centennial Nor
+ th
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260515T000000Z
+DTEND:20260515T012000Z
+SUMMARY:ML: S&H Raiders (H) vs The Condo Kings Army
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: The Condo Kings Army\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260519T223000Z
+DTEND:20260519T235000Z
+SUMMARY:CN: S&H Raiders (H) vs OK Braves
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: OK Braves\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260522T000000Z
+DTEND:20260522T012000Z
+SUMMARY:CN: S&H Raiders (H) vs Markham Goodyear Rangers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Markham Goodyear Rangers\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260526T223000Z
+DTEND:20260526T235000Z
+SUMMARY:CN: S&H Raiders (H) vs Derek Houghton Century 21
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Derek Houghton Century 21\nPark: Ce
+ ntennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260603T000000Z
+DTEND:20260603T012000Z
+SUMMARY:CN: S&H Raiders (H) vs The Classics
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: The Classics\nPark: Centennial Nort
+ h
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260610T013000Z
+DTEND:20260610T025000Z
+SUMMARY:ML: S&H Raiders (H) vs DC Chiropractic Nads
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: DC Chiropractic Nads\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260611T223000Z
+DTEND:20260611T235000Z
+SUMMARY:CN: McCalmont Financial Beavers vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: S&H Raiders\nPark: 
+ Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260616T223000Z
+DTEND:20260616T235000Z
+SUMMARY:ML: Derek Houghton Century 21 vs S&H Raiders (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: S&H Raiders\nPark: Mi
+ ntleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260619T000000Z
+DTEND:20260619T012000Z
+SUMMARY:CN: Northtown Sox vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: S&H Raiders\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260624T000000Z
+DTEND:20260624T012000Z
+SUMMARY:ML: Pilkey Glass Pirates vs S&H Raiders (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: S&H Raiders\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260626T013000Z
+DTEND:20260626T025000Z
+SUMMARY:CN: Markham Knights vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: S&H Raiders\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260708T013000Z
+DTEND:20260708T025000Z
+SUMMARY:CN: Opal Electric Shamrocks vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: S&H Raiders\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260710T013000Z
+DTEND:20260710T025000Z
+SUMMARY:ML: S&H Raiders (H) vs Opal Electric Shamrocks
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Opal Electric Shamrocks\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260714T223000Z
+DTEND:20260714T235000Z
+SUMMARY:CN: S&H Raiders (H) vs Ace Pools Moose
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Ace Pools Moose\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260717T013000Z
+DTEND:20260717T025000Z
+SUMMARY:ML: The Condo Kings Army vs S&H Raiders (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: S&H Raiders\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260722T013000Z
+DTEND:20260722T025000Z
+SUMMARY:CN: McCalmont Financial Beavers vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: S&H Raiders\nPark: 
+ Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260724T000000Z
+DTEND:20260724T012000Z
+SUMMARY:ML: The Classics vs S&H Raiders (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: S&H Raiders\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260729T000000Z
+DTEND:20260729T012000Z
+SUMMARY:CN: OK Braves vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: S&H Raiders\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260805T000000Z
+DTEND:20260805T012000Z
+SUMMARY:ML: S&H Raiders (H) vs DC Chiropractic Nads
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: DC Chiropractic Nads\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260806T223000Z
+DTEND:20260806T235000Z
+SUMMARY:CN: S&H Raiders (H) vs Pilkey Glass Pirates
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Pilkey Glass Pirates\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260812T000000Z
+DTEND:20260812T012000Z
+SUMMARY:CN: S&H Raiders (H) vs Northtown Sox
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Northtown Sox\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260819T013000Z
+DTEND:20260819T025000Z
+SUMMARY:ML: Red Hot Dawgs vs S&H Raiders (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: S&H Raiders\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260821T013000Z
+DTEND:20260821T025000Z
+SUMMARY:CN: Markham Goodyear Rangers vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: S&H Raiders\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260825T223000Z
+DTEND:20260825T235000Z
+SUMMARY:ML: S&H Raiders (H) vs Markham Knights
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Markham Knights\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260828T000000Z
+DTEND:20260828T012000Z
+SUMMARY:ML: S&H Raiders (H) vs The Condo Kings Army
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: The Condo Kings Army\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260902T000000Z
+DTEND:20260902T012000Z
+SUMMARY:CN: DC Chiropractic Nads vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: S&H Raiders\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260904T000000Z
+DTEND:20260904T012000Z
+SUMMARY:ML: S&H Raiders (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: McCalmont Financial Beavers\nPark: 
+ Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260908T223000Z
+DTEND:20260908T235000Z
+SUMMARY:CN: Derek Houghton Century 21 vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: S&H Raiders\nPark: Ce
+ ntennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026shraiders-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260911T013000Z
+DTEND:20260911T025000Z
+SUMMARY:CN: Ace Pools Moose vs S&H Raiders (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: S&H Raiders\nPark: Centennial N
+ orth
+END:VEVENT
+END:VCALENDAR

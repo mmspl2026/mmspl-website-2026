@@ -1,0 +1,298 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//The Classics Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - The Classics
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260513T013000Z
+DTEND:20260513T025000Z
+SUMMARY:ML: Derek Houghton Century 21 vs The Classics (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: The Classics\nPark: M
+ intleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260520T013000Z
+DTEND:20260520T025000Z
+SUMMARY:ML: Pilkey Glass Pirates vs The Classics (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: The Classics\nPark: Mintle
+ af
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260522T013000Z
+DTEND:20260522T025000Z
+SUMMARY:CN: OK Braves vs The Classics (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: The Classics\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260527T013000Z
+DTEND:20260527T025000Z
+SUMMARY:ML: McCalmont Financial Beavers vs The Classics (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: The Classics\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260603T000000Z
+DTEND:20260603T012000Z
+SUMMARY:CN: S&H Raiders vs The Classics (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: The Classics\nPark: Centennial Nort
+ h
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260605T000000Z
+DTEND:20260605T012000Z
+SUMMARY:ML: The Classics (H) vs Ace Pools Moose
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Ace Pools Moose\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260610T013000Z
+DTEND:20260610T025000Z
+SUMMARY:CN: The Condo Kings Army vs The Classics (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: The Classics\nPark: Centen
+ nial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260612T000000Z
+DTEND:20260612T012000Z
+SUMMARY:ML: The Classics (H) vs DC Chiropractic Nads
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: DC Chiropractic Nads\nPark: Mintle
+ af
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260618T223000Z
+DTEND:20260618T235000Z
+SUMMARY:ML: The Classics (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: McCalmont Financial Beavers\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260624T013000Z
+DTEND:20260624T025000Z
+SUMMARY:CN: The Classics (H) vs Ace Pools Moose
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Ace Pools Moose\nPark: Centennial 
+ North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260625T223000Z
+DTEND:20260625T235000Z
+SUMMARY:ML: Northtown Sox vs The Classics (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: The Classics\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260701T000000Z
+DTEND:20260701T012000Z
+SUMMARY:ML: The Classics (H) vs Markham Goodyear Rangers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Markham Goodyear Rangers\nPark: Mi
+ ntleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260707T223000Z
+DTEND:20260707T235000Z
+SUMMARY:CN: Red Hot Dawgs vs The Classics (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: The Classics\nPark: Centennial No
+ rth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260710T000000Z
+DTEND:20260710T012000Z
+SUMMARY:CN: The Classics (H) vs Derek Houghton Century 21
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Derek Houghton Century 21\nPark: C
+ entennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260715T013000Z
+DTEND:20260715T025000Z
+SUMMARY:ML: Markham Knights vs The Classics (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: The Classics\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260716T223000Z
+DTEND:20260716T235000Z
+SUMMARY:CN: DC Chiropractic Nads vs The Classics (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: The Classics\nPark: Centen
+ nial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260722T013000Z
+DTEND:20260722T025000Z
+SUMMARY:ML: The Classics (H) vs Pilkey Glass Pirates
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Pilkey Glass Pirates\nPark: Mintle
+ af
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260724T000000Z
+DTEND:20260724T012000Z
+SUMMARY:ML: The Classics (H) vs S&H Raiders
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: S&H Raiders\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260728T223000Z
+DTEND:20260728T235000Z
+SUMMARY:CN: The Classics (H) vs The Condo Kings Army
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: The Condo Kings Army\nPark: Centen
+ nial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260731T013000Z
+DTEND:20260731T025000Z
+SUMMARY:ML: DC Chiropractic Nads vs The Classics (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: The Classics\nPark: Mintle
+ af
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260805T000000Z
+DTEND:20260805T012000Z
+SUMMARY:CN: Markham Goodyear Rangers vs The Classics (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: The Classics\nPark: Ce
+ ntennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260807T013000Z
+DTEND:20260807T025000Z
+SUMMARY:ML: The Classics (H) vs Opal Electric Shamrocks
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Opal Electric Shamrocks\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260813T223000Z
+DTEND:20260813T235000Z
+SUMMARY:CN: The Classics (H) vs OK Braves
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: OK Braves\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260818T223000Z
+DTEND:20260818T235000Z
+SUMMARY:ML: The Classics (H) vs Markham Knights
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Markham Knights\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260821T000000Z
+DTEND:20260821T012000Z
+SUMMARY:CN: Opal Electric Shamrocks vs The Classics (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: The Classics\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260826T000000Z
+DTEND:20260826T012000Z
+SUMMARY:ML: The Classics (H) vs Markham Goodyear Rangers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Markham Goodyear Rangers\nPark: Mi
+ ntleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260828T000000Z
+DTEND:20260828T012000Z
+SUMMARY:CN: Ace Pools Moose vs The Classics (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: The Classics\nPark: Centennial 
+ North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260901T223000Z
+DTEND:20260901T235000Z
+SUMMARY:CN: McCalmont Financial Beavers vs The Classics (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: The Classics\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260911T000000Z
+DTEND:20260911T012000Z
+SUMMARY:ML: The Classics (H) vs Northtown Sox
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Northtown Sox\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026theclassics-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260915T223000Z
+DTEND:20260915T235000Z
+SUMMARY:ML: The Classics (H) vs Red Hot Dawgs
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Red Hot Dawgs\nPark: Mintleaf
+END:VEVENT
+END:VCALENDAR

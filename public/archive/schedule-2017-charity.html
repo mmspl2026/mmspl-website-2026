@@ -1,0 +1,545 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta name="keywords" content="Markham, Slo-Pitch, Slopitch, softball, york region, recreation, baseball, men, activities, markham sports council, sports, toronto, ontario, nsa, spn, league, leagues, mintleaf, centennial park, markville, slow pitch, slowpitch, MMSPL, NSA, SPN, SPO,"/>
+	<meta name="description" content="Markham Men's Slo-Pitch League" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>Markham Men's Slo-Pitch League</title>
+	<link href="res/style.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="res/print.css" rel="stylesheet" type="text/css" media="print" />	
+	<link href="res/jquery/css/custom-theme/jquery-ui-1.8.11.custom.css" rel="stylesheet" type="text/css"/>	
+	<script src="res/jquery/js/jquery-1.5.1.min.js" type="text/javascript"></script>
+	<script src="res/jquery/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>	
+	
+	<style type="text/css">
+		.winner { font-weight:bold; }
+	</style>
+	
+	<script type="text/javascript">
+	/* <![CDATA[ */
+		$(function() {
+		
+			$("div.team").css("cursor","pointer");
+		
+			$("div.team").click(function() {
+				var clickedTeam = $(this).text().substr(5);
+				$("td.team, div.team").each(function(index){
+					if ($(this).text().indexOf(clickedTeam) != -1) {
+						$(this).css("background-color","#ffff99");
+					} else {
+						$(this).css("background-color","");
+					}
+				});
+			});	
+		});
+		
+	/* ]]> */
+	</script>
+	
+</head>
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<img src="res/img/mmspl-logo-patch-216x125.png" height="125px" width="216px" style="float:right;padding-left:5px;padding-right:5px" alt="MMSPL"/>
+			<div id="title">
+				<h1>Markham Men's Slo-Pitch League</h1>
+				Established 1968
+			</div>
+			<div style="clear:both;height:5px">&nbsp;</div>
+			<div class="menu">
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="register.html">Register</a></li>
+					<li><a href="standings-2017.html">Standings</a></li>
+					<li class="current"><a href="schedule.html">Schedules</a></li>
+					<li><a href="admin.html">Admin</a></li>
+					<li><a href="about.html">About Us</a></li>
+					<li><a href="awards.html">Awards</a></li>
+					<li><a href="contact.html">Contact</a></li>
+					<li><a href="community.html">Players Businesses</a></li>  
+				</ul>
+			</div>
+			<!-- end .menu -->
+		</div>
+		<!-- end #header -->
+		
+		<div id="page">
+		
+			<div id="content" style="width:928px">
+			
+				<div class="post">
+					<h2 class="title">2017 Charity Tournament</h2>
+
+					<div class="entry" style="background-color:#FFFFFF; color:#000000;border-top: 1px solid #D2D4C9;">
+						<div style="text-align:center">
+							<h3 style="padding-bottom:10px">In support of</h3>
+							<table style="width:100%">
+								<tr>
+									<td style="vertical-align:middle">
+										<a target="_blank" href="http://mdba.goalline.ca" style="font-weight:bold;color:black">
+										<img src="res/img/2012-charity-mdba.jpg" width="102px" height="107px" alt="Markham District Baseball Association"/>
+										</a>
+									</td>
+									<td style="vertical-align:middle">
+										<a href="http://www.ontariolymealliance.ca/" target="_blank"> 
+                                        <img src="res/img/2015-charity-ola.jpg" width="139px" alt="Ontario Lyme Alliance"/> 
+                                        </a>
+									</td>
+									<td style="vertical-align:middle">
+										<a href="http://sandgate.ca" target="_blank"> 
+                                        <img src="res/img/2015-charity-sandgate.png" width="107px" alt="Sandgate Women's Shelter"/> 
+                                        </a>
+									</td>
+									<td style="vertical-align:middle">
+										<a href="http://victoriaangel.org/" target="_blank"> 
+                                        <img src="res/img/2015-charity-va.png" width="139px" alt="Victoria Angel"/> 
+                                        </a>
+									</td>
+									<td style="vertical-align:middle">
+										<a href="http://centrefordreams.ca/" target="_blank"> 
+                                        <img src="res/img/2016-charity-cfd.jpg" width= "130px" alt="Centre For Dreams"/> 
+                                        </a>
+									</td>
+								</tr>
+								
+								<tr>
+									<td style="vertical-align:middle">
+										<a target="_blank" href="http://mdba.goalline.ca" style="font-weight:bold">
+										<div style="font-weight:bold;padding-top:5px">Markham District<br>Baseball Association</div>
+										</a>
+									</td>
+									<td style="vertical-align:middle">
+										<a target="_blank" href="http://www.ontariolymealliance.ca/" style="font-weight:bold">
+										<div style="font-weight:bold;padding-top:5px">Ontario Lyme Alliance</div>
+										</a>
+									</td>
+									<td style="vertical-align:middle">
+										<a target="_blank" href="http://sandgate.ca" style="font-weight:bold">
+										<div style="font-weight:bold;padding-top:5px">Sandgate<br>Women's Shelter</div>
+										</a>
+									</td>
+									<td style="vertical-align:middle">
+										<a target="_blank" href="http://victoriaangel.org/" style="font-weight:bold">
+										<div style="font-weight:bold;padding-top:5px">Victoria Angel<br>Public Cord Blood Bank</div>
+										</a>
+									</td>
+									<td style="vertical-align:middle">
+										<a target="_blank" href="http://centrefordreams.ca" style="font-weight:bold">
+										<div style="font-weight:bold;padding-top:5px">Centre For Dreams</div>
+										</a>
+									</td>
+								</tr>
+								<tr>
+									<td style="vertical-align:middle;font-weight:bold;padding-top:10px;font-style:italic;">
+										$1,000 raised!
+									</td>
+									<td style="vertical-align:middle;font-weight:bold;padding-top:10px;font-style:italic;">
+										$1,000 raised!
+									</td>
+									<td style="vertical-align:middle;font-weight:bold;padding-top:10px;font-style:italic;">
+										$1,000+<br> worth of items donated!
+									</td>
+									<td style="vertical-align:middle;font-weight:bold;padding-top:10px;font-style:italic;">
+										$1,000 raised!
+									</td>
+									<td style="vertical-align:middle;font-weight:bold;padding-top:10px;font-style:italic;">
+										$1,000 raised!
+									</td>
+								</tr>
+                                <!--
+                                <tr>
+                                    <td colspan=5 style="padding-top:10px;font-weight:bold;font-style:italic;">
+                                        8,000 lbs. of clothing donated to the Canadian Diabetes Association Clothesline Program!
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan=5 style="padding-top:10px;font-weight:bold;font-style:italic;">
+                                        $115 raised for Lonny Kirlin's entry in the Ride to Conquer Cancer by 50/50 draw!
+                                    </td>
+                                </tr>
+                                -->
+							</table>							
+						</div>
+					</div>
+					<div class="entry" style='text-align:center;'>
+						<table align="center">
+							<tr>
+								<td>
+									<p class="pictureframe">
+										<img src="res/img/2017-charity-champions-310x185.jpg" width="310" height="185" alt="Champions"/>
+										<span>Champions - Derek Houghton Century 21</span>
+									</p>
+								</td>
+								<td>
+									<p class="pictureframe">
+										<img src="res/img/2017-charity-finalists-310x185.jpg" width="310" height="185" alt="Finalists"/>
+										<span>Finalists - Ace Pools Moose</span>
+									</p>
+								</td>
+							</tr>
+						</table>
+					</div>					
+					<div class="entry">						
+						<table border="0" cellspacing="0" class="tourney" style="font-size:10pt">
+							<tr style="display:none;">
+								<td class="seed" colspan="3" style="padding:10px;font-weight:bold;color:#417FDA">Click here to see the schedule based on the current standings.</td>
+							</tr>
+							<tr>
+								<td colspan="3" style="padding:10px;font-weight:bold">Click on a team name to highlight all of their games.</td>
+							</tr>
+							<tr>
+								<td style="text-align:left;padding-left:5px;padding-right:5px">
+									<div class="box">
+										<div class="heading">Box A</div>
+										<div class="team" style="font-weight:bold">A1 - Prime Flooring Brew Jays</div>
+										<div class="team" style="font-weight:bold">A2 - The Classics</div>
+										<div class="team" style="font-weight:bold">A3 - Markham Knights</div>
+										<div class="team" style="font-weight:bold">A4 - Main's Mansion Nads</div>
+									</div>
+									<div class="box">
+										<div class="heading">Box C</div>
+										<div class="team" style="font-weight:bold">C1 - Beavers</div>
+										<div class="team" style="font-weight:bold">C2 - OK Braves</div>
+										<div class="team" style="font-weight:bold">C3 - Pilkey Glass Pirates</div>
+										<div class="team" style="font-weight:bold">C4 - Sibra Kitchens Bolts</div>
+									</div>
+								</td>
+								<td>
+									<img src="res/img/award-charity-250x411.jpg" width="125px" height="206px" alt="Kevan MacDonald Cup">
+								</td>
+								<td style="text-align:left;padding-left:5px;padding-right:5px">
+									<div class="box">
+										<div class="heading">Box B</div>
+										<div class="team" style="font-weight:bold">B1 - Main's Mansion Rangers</div>
+										<div class="team" style="font-weight:bold">B2 - Red Hot Dawgs</div>
+										<div class="team" style="font-weight:bold">B3 - Ace Pools Moose</div>
+										<div class="team" style="font-weight:bold">B4 - S+H Raiders</div>
+									</div>
+									<div class="box">
+										<div class="heading">Box D</div>
+										<div class="team" style="font-weight:bold">D1 - Derek Houghton C21</div>
+										<div class="team" style="font-weight:bold">D2 - Northtown Sox</div>
+										<div class="team" style="font-weight:bold">D3 - Seagate Jets</div>
+										<div class="team" style="font-weight:bold">D4 - The Condo Kings Army</div>
+									</div>
+								</td>
+							</tr>
+						</table>	
+					</div>
+					
+					<div class="entry">				
+						<table border="0" cellspacing="0" class="dataTable">
+							<tr class="headerRow"><td>Date</td><td>Time</td><td align="center">Centennial North</td><td align="center">Centennial South</td><td align="center">Mintleaf</td></tr>
+							
+<tr class="evenRow"> <td style="font-weight:bold">Thu, June 1</td> <td style="font-weight:bold">7:00</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">A1 - Prime Flooring Brew Jays</td><td class="score" align="right">9</td></tr>
+		<tr class="winner"><td class="team">A2 - The Classics</td><td class="score" align="right">20</td></tr>
+	</table>							
+</td>	
+<td align="center">
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">B1 - Main's Mansion Rangers</td><td class="score" align="right">15</td></tr>
+		<tr><td class="team">B2 - Red Hot Dawgs</td><td class="score" align="right">9</td></tr>
+	</table>							
+</td>	
+</tr>							
+
+<tr class="oddRow"> <td style="font-weight:bold">Thu, June 1</td> <td style="font-weight:bold">8:30</td>
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">A3 - Markham Knights</td><td class="score" align="right">24</td></tr>
+		<tr><td class="team">A4 - Main's Mansion Nads</td><td class="score" align="right">12</td></tr>
+	</table>							
+</td>	
+<td align="center">
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">B3 - Ace Pools Moose</td><td class="score" align="right">14</td></tr>
+		<tr class="winner"><td class="team">B4 - S+H Raiders</td><td class="score" align="right">35</td></tr>
+	</table>							
+
+</td>	
+</tr>			
+
+<tr><td colspan=5>&nbsp;</td></tr>
+
+<tr class="evenRow"> <td style="font-weight:bold">Fri, June 2</td> <td style="font-weight:bold">7:00</td>
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">C1 - Beavers</td><td class="score" align="right">16</td></tr>
+		<tr><td class="team">C2 - OK Braves</td><td class="score" align="right">11</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">C3 - Pilkey Glass Pirates</td><td class="score" align="right">27</td></tr>
+		<tr><td class="team">C4 - Sibra Kitchens Bolts</td><td class="score" align="right">12</td></tr>
+	</table>							
+</td>	
+<td align="center">
+</td>	
+</tr>				
+
+<tr class="oddRow"> <td style="font-weight:bold">Fri, June 2</td> <td style="font-weight:bold">8:30</td>
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">D1 - Derek Houghton C21</td><td class="score" align="right">27</td></tr>
+		<tr><td class="team">D2 - Northtown Sox</td><td class="score" align="right">7</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">D3 - Seagate Jets</td><td class="score" align="right">22</td></tr>
+		<tr><td class="team">D4 - The Condo Kings Army</td><td class="score" align="right">7</td></tr>
+	</table>							
+</td>	
+<td align="center">
+</td>	
+</tr>			
+
+<tr><td colspan=5>&nbsp;</td></tr>
+
+<tr class="evenRow"> <td style="font-weight:bold">Sat, June 3</td>	<td style="font-weight:bold">8:30</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">B1 - Main's Mansion Rangers</td><td class="score" align="right">9</td></tr>
+		<tr class="winner"><td class="team">B3 - Ace Pools Moose</td><td class="score" align="right">20</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">B2 - Red Hot Dawgs</td><td class="score" align="right">15</td></tr>
+		<tr class="winner"><td class="team">B4 - S+H Raiders</td><td class="score" align="right">16</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">C2 - OK Braves</td><td class="score" align="right">21</td></tr>
+		<tr><td class="team">C4 - Sibra Kitchens Bolts</td><td class="score" align="right">6</td></tr>
+	</table>							
+</td>	
+</tr>	
+
+<tr class="oddRow"> <td style="font-weight:bold">Sat, June 3</td>	<td style="font-weight:bold">10:00</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">A1 - Prime Flooring Brew Jays</td><td class="score" align="right">12</td></tr>
+		<tr class="winner"><td class="team">A3 - Markham Knights</td><td class="score" align="right">15</td></tr>
+	</table>							
+</td>
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">A2 - The Classics</td><td class="score" align="right">27</td></tr>
+		<tr><td class="team">A4 - Main's Mansion Nads</td><td class="score" align="right">7</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">C1 - Beavers</td><td class="score" align="right">17</td></tr>
+		<tr><td class="team">C3 - Pilkey Glass Pirates</td><td class="score" align="right">12</td></tr>
+	</table>							
+</td>	
+</tr>	
+
+<tr class="evenRow"> <td style="font-weight:bold">Sat, June 3</td>	<td style="font-weight:bold">11:30</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">B1 - Main's Mansion Rangers</td><td class="score" align="right">8</td></tr>
+		<tr class="winner"><td class="team">B4 - S+H Raiders</td><td class="score" align="right">21</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">B2 - Red Hot Dawgs</td><td class="score" align="right">16</td></tr>
+		<tr><td class="team">B3 - Ace Pools Moose</td><td class="score" align="right">14</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">D2 - Northtown Sox</td><td class="score" align="right">20</td></tr>
+		<tr><td class="team">D4 - The Condo Kings Army</td><td class="score" align="right">15</td></tr>
+	</table>							
+</td>	
+</tr>
+
+<tr class="oddRow"> <td style="font-weight:bold">Sat, June 3</td>	<td style="font-weight:bold">1:00</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">A2 - The Classics</td><td class="score" align="right">9</td></tr>
+		<tr class="winner"><td class="team">A3 - Markham Knights</td><td class="score" align="right">17</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">A1 - Prime Flooring Brew Jays</td><td class="score" align="right">19</td></tr>
+		<tr><td class="team">A4 - Main's Mansion Nads</td><td class="score" align="right">16</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">D1 - Derek Houghton C21</td><td class="score" align="right">16</td></tr>
+		<tr><td class="team">D3 - Seagate Jets</td><td class="score" align="right">14</td></tr>
+	</table>							
+</td>	
+</tr>
+                            
+<tr><td colspan=5>&nbsp;</td></tr>
+<tr class="hiliteRow"><td colspan="5" align="center" style="font-weight:bold;padding-left:20px;">2:45 - Cheque Presentation @ Centennial North</td> </tr>
+<tr><td colspan=5>&nbsp;</td></tr>
+
+<tr class="oddRow"> <td style="font-weight:bold">Sat, June 3</td>	<td style="font-weight:bold">3:00</td>
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">C2 - OK Braves</td><td class="score" align="right">12</td></tr>
+		<tr><td class="team">C3 - Pilkey Glass Pirates</td><td class="score" align="right">7</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">C1 - Beavers</td><td class="score" align="right">6</td></tr>
+		<tr class="winner"><td class="team">C4 - Sibra Kitchens Bolts</td><td class="score" align="right">17</td></tr>
+	</table>							
+</td>	
+<td align="center">
+</td>	
+</tr>
+
+<tr class="evenRow"> <td style="font-weight:bold">Sat, June 3</td>	<td style="font-weight:bold">4:30</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">D2 - Northtown Sox</td><td class="score" align="right">3</td></tr>
+		<tr class="winner"><td class="team">D3 - Seagate Jets</td><td class="score" align="right">15</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr class="winner"><td class="team">D1 - Derek Houghton C21</td><td class="score" align="right">21</td></tr>
+		<tr><td class="team">D4 - The Condo Kings Army</td><td class="score" align="right">4</td></tr>
+	</table>							
+</td>	
+<td align="center">
+</td>	
+</tr>
+
+<tr><td colspan=5>&nbsp;</td></tr>
+
+<tr class="hiliteRow" style="font-weight:bold">	<td colspan="5" align="center">Championship Sunday</td> </tr>
+                            
+<tr><td colspan=5>&nbsp;</td></tr>
+
+
+<tr class="oddRow"> <td style="font-weight:bold">Sun, July 30</td>		<td style="font-weight:bold">10:00</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td colspan="2">QF1</td></tr>
+		<tr><td class="team">A3 - Markham Knights</td><td class="score" align="right">-</td></tr>
+		<tr class="winner"><td class="team">C2 - OK Braves</td><td class="score" align="right">W</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr><td colspan="2">QF2</td></tr>
+		<tr class="winner"><td class="team">B4 - S+H Raiders</td><td class="score" align="right">W</td></tr>
+		<tr><td class="team">C3 - Pilkey Glass Pirates</td><td class="score" align="right">-</td></tr>
+	</table>							
+</td>	
+<td align="center" rowspan="2" class="gamescorecol oddRow">
+	<div style="color:#FFFFFF;background-color:#AA1111;border: solid 1px #000000;padding:10px;font-weight:bold">
+	Quarter Final Playoffs<br/><br/>
+	Top 8 teams* seeded due to June 4 Rainouts<br/><br/>
+    * - Classics replaced by Pilkey Glass Pirates
+	</div>
+</td>	
+</tr>
+
+<tr class="oddRow"> <td style="font-weight:bold">Sun, July 30</td>		<td style="font-weight:bold">11:30</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td colspan="2">QF3</td></tr>
+		<tr class="winner"><td class="team">D1 - Derek Houghton C21</td><td class="score" align="right">W</td></tr>
+		<tr><td class="team">D3 - Seagate Jets</td><td class="score" align="right">-</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr><td colspan="2">QF4</td></tr>
+		<tr><td class="team">C1 - Beavers</td><td class="score" align="right">-</td></tr>
+		<tr class="winner"><td class="team">B3 - Ace Pools Moose</td><td class="score" align="right">W</td></tr>
+	</table>							
+</td>	
+<!--
+<td align="center">
+</td>	
+-->
+</tr>
+
+<tr class="evenRow"> <td style="font-weight:bold">Sun, July 30</td>		<td style="font-weight:bold">1:15</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td colspan="2">SF1</td></tr>
+		<tr><td class="team">B4 - S+H Raiders</td><td class="score" align="right">-</td></tr>
+		<tr class="winner"><td class="team">B3 - Ace Pools Moose</td><td class="score" align="right">W</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<table class="gamescore">
+		<tr><td colspan="2">SF2</td></tr>
+		<tr><td class="team">C2 - OK Braves</td><td class="score" align="right">-</td></tr>
+		<tr class="winner"><td class="team">D1 - Derek Houghton C21</td><td class="score" align="right">W</td></tr>
+	</table>							
+</td>	
+<td align="center">
+	<div style="color:#FFFFFF;background-color:#AA1111;border: solid 1px #000000;padding:10px;font-weight:bold">Semi-Finals</div>
+</td>	
+</tr>					
+
+<tr class="oddRow"> <td style="font-weight:bold">Sun, July 30</td>		<td style="font-weight:bold">3:00</td>
+<td align="center">
+	<table class="gamescore">
+		<tr><td class="team">B3 - Ace Pools Moose</td><td class="score" align="right">3</td></tr>
+		<tr class="winner"><td class="team">D1 - Derek Houghton C21</td><td class="score" align="right">10</td></tr>
+	</table>							
+</td>	
+<td></td>
+<td align="center">
+	<div style="color:#FFFFFF;background-color:#AA1111;border: solid 1px #000000;padding:10px;font-weight:bold">Final</div>
+</td>
+</tr>	
+
+<tr><td colspan=5>&nbsp;</td></tr>
+
+<tr class="hiliteRow" >	
+	<td colspan="5" align="left">
+		<div style="margin:5px;border:1px solid #000000;padding:5px;font-size:10pt">
+			All games - The option to select home or away is determined by coin toss.<br/>
+			Teams finishing with the 13-16th round-robin records will be eliminated<br/>
+			Wild Card 1-4 = Level 2 Qualifer (1-4 best records of Non Box Winners), game times selected by draw<br/>
+			Wild Card 5-8 = Level 3 Qualifer (5-8 best records of Non Box Winners), opponents selected by draw<br/>
+			Only Wild Card (WC) Games may not be against teams from the same box; WC 5-8 will be redrawn<br/>
+		</div>
+	</td> 
+</tr>
+
+
+						</table>
+					</div>	
+				</div>				
+
+			</div>
+			<!-- end #content -->
+
+			<br style="clear: both;"/>
+		</div>
+		<!-- end #page -->
+		
+		<div id="footer">&nbsp;</div>
+		<!-- end #footer -->
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta name="keywords" content="Markham, Slo-Pitch, Slopitch, softball, york region, recreation, baseball, men, activities, markham sports council, sports, toronto, ontario, nsa, spn, league, leagues, mintleaf, centennial park, markville, slow pitch, slowpitch, MMSPL, NSA, SPN, SPO,"/>
+	<meta name="description" content="Markham Men's Slo-Pitch League"/>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title>Markham Men's Slo-Pitch League</title>
+	<link href="res/style.css" rel="stylesheet" type="text/css" media="screen"/>
+	<link href="res/print.css" rel="stylesheet" type="text/css" media="print"/>
+	<link href="res/jquery/css/custom-theme/jquery-ui-1.8.11.custom.css" rel="stylesheet" type="text/css"/>
+	<script src="res/jquery/js/jquery-1.5.1.min.js" type="text/javascript"></script>
+	<script src="res/jquery/js/jquery-ui-1.8.11.custom.min.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+	/* <![CDATA[ */
+		$(function() {
+            $('#batstrigger').click(function(){
+                $('.post').hide();
+                $('#batsrule').show();
+                return false;
+            });
+
+            $( "#login-button" ).button();
+
+			$.ajaxSetup({ cache: false });
+
+			$( '#login-form' ).submit(function() {
+
+				var un = $("#username").val();
+				var pw = $("#password").val();
+
+				if (jQuery.trim(un).length == 0 || jQuery.trim(pw).length == 0) {
+					$("#error").text('Invalid username or password');
+					$("#error").show("slide");
+				} else {
+
+					$("#error").hide();
+					$("#login-form").hide();
+					$("#waiting").show();
+
+					$.ajax({
+					  type: 'POST',
+					  url: 'admin.php',
+					  data: $(this).serialize(),
+					  dataType: 'json'
+					})
+					.success(function(json) {
+						if (json.logged_in) {
+							try {
+								document.location.href = 'admin.php';
+							} catch (e) {
+								$("#uid").text(json.name);
+								$("#waiting").hide();
+								$("#secdocs").show();
+							}
+						} else {
+							$("#waiting").hide();
+							$("#error").text('Invalid username or password');
+							$("#error").show("slide");
+							$("#login-form").show();
+						}
+					})
+					.error(function(xhr, status, errorThrown) {
+						$("#error").text('Error during login: ' + xhr.status + ' ' + xhr.statusText);
+						$("#waiting").hide();
+						$("#error").show("slide");
+						$("#login-form").show();
+					});
+				}
+
+				return false; // cancel standard post...
+
+			});
+
+			$.getJSON(
+				"admin.php?isLogin=1",
+				function( json ) {
+					if (json.logged_in) {
+						$("#uid").text(json.name);
+						$("#waiting").hide();
+						$("#secdocs").show();
+					} else {
+						$("#waiting").hide();
+						$("#login-form").show();
+					}
+				}
+			)
+			.error(function(xhr, status, errorThrown) {
+				$("#error").text('Error checking login status: ' + xhr.status + ' ' + xhr.statusText);
+				$("#waiting").hide();
+				$("#error").show("slide");
+				$("#login-form").show();
+			});
+
+			///////////////////////////////////////////////////////////////////
+			// forgot password support - start
+			///////////////////////////////////////////////////////////////////
+			$("#forgot-link").click(function(event){
+				event.preventDefault();
+				$( "#forgot-div" ).dialog( "open" );
+			});
+
+			$( "#forgot-div" ).dialog({
+				autoOpen: false,
+				resizable: false,
+				draggable: false,
+				width: '400px',
+				modal: true,
+
+                buttons: [{
+					id:"forgot-btn-change",
+					text: "Reset My Password",
+					click: function() {
+						var f1 = $("#forgot-1").val();
+
+						if (jQuery.trim(f1).length == 0) {
+							$("#forgot-error").text('Please provide your account email address.');
+							$("#forgot-error").show("slide");
+						} else {
+
+							$("#forgot-error").hide();
+							$("#forgot-form").hide();
+							$("#forgot-waiting").show();
+
+							$.ajax({
+							  type: 'POST',
+							  url: 'admin.php',
+							  data: $("#forgot-form").serialize(),
+							  dataType: 'json'
+							})
+							.success(function(json) {
+								if (json.isOK) {
+									$("#forgot-waiting").hide();
+									$("#forgot-btn-change").hide();
+									$("#forgot-btn-cancel > .ui-button-text").text("OK");
+									$("#forgot-error").hide();
+									$("#forgot-msg").text(json.message);
+									$("#forgot-msg").show();
+								} else {
+									$("#forgot-waiting").hide();
+									$("#forgot-form").show();
+									$("#forgot-error").text(json.message);
+									$("#forgot-error").show("slide");
+								}
+							})
+							.error(function(xhr, status, errorThrown) {
+								$("#forgot-waiting").hide();
+								$("#forgot-form").show();
+								$("#forgot-error").text('Error resetting password: ' + xhr.status + ' ' + xhr.statusText);
+								$("#forgot-error").show("slide");
+							});
+
+						}
+					}
+				},{
+					id:"forgot-btn-cancel",
+					text: "Cancel",
+					click: function() {
+						$(this).dialog("close");
+					}
+				}],
+				open: function() {
+					$("#forgot-waiting").hide();
+					$("#forgot-btn-cancel > .ui-button-text").text("Cancel");
+					$("#forgot-btn-change").show();
+					$("#forgot-error").hide();
+					$("#forgot-msg").hide();
+					$("#forgot-form").show();
+					$("#forgot-1").val('');
+					$("#forgot-2").val('');
+					$("#forgot-1").focus();
+				}
+
+			});
+			///////////////////////////////////////////////////////////////////
+			// forgot password support - end
+			///////////////////////////////////////////////////////////////////
+
+			///////////////////////////////////////////////////////////////////
+			// signup support - start
+			///////////////////////////////////////////////////////////////////
+			$("#signup-link").click(function(event){
+				event.preventDefault();
+				$( "#signup-div" ).dialog( "open" );
+			});
+
+			$( "#signup-div" ).dialog({
+				autoOpen: false,
+				resizable: false,
+				draggable: false,
+				width: '400px',
+				modal: true,
+
+                buttons: [{
+					id:"signup-btn-change",
+					text: "Create My Account",
+					click: function() {
+						var f1 = jQuery.trim($("#signup-email").val()).length;
+						var f2 = jQuery.trim($("#signup-fname").val()).length;
+						var f3 = jQuery.trim($("#signup-lname").val()).length;
+
+						if (f1 == 0 || f2 == 0 || f3 == 0) {
+							$("#signup-error").text('Please provide all the account information.');
+							$("#signup-error").show("slide");
+
+							if (f1 == 0) $("#signup-email").parent().prev().effect("highlight", null, 2500);
+							if (f2 == 0) $("#signup-fname").parent().prev().effect("highlight", null, 2500);
+							if (f3 == 0) $("#signup-lname").parent().prev().effect("highlight", null, 2500);
+
+						} else {
+
+							$("#signup-error").hide();
+							$("#signup-form").hide();
+							$("#signup-waiting").show();
+
+							$.ajax({
+							  type: 'POST',
+							  url: 'admin.php',
+							  data: $("#signup-form").serialize(),
+							  dataType: 'json'
+							})
+							.success(function(json) {
+								if (json.isOK) {
+									$("#signup-waiting").hide();
+									$("#signup-btn-change").hide();
+									$("#signup-btn-cancel > .ui-button-text").text("OK");
+									$("#signup-error").hide();
+									$("#signup-msg").text(json.message);
+									$("#signup-msg").show();
+								} else {
+									$("#signup-waiting").hide();
+									$("#signup-form").show();
+									$("#signup-error").text(json.message);
+									$("#signup-error").show("slide");
+								}
+							})
+							.error(function(xhr, status, errorThrown) {
+								$("#signup-waiting").hide();
+								$("#signup-form").show();
+								$("#signup-error").text('Error creating user account: ' + xhr.status + ' ' + xhr.statusText);
+								$("#signup-error").show("slide");
+							});
+
+						}
+					}
+				},{
+					id:"signup-btn-cancel",
+					text: "Cancel",
+					click: function() {
+						$(this).dialog("close");
+					}
+				}],
+				open: function() {
+					$("#signup-waiting").hide();
+					$("#signup-btn-cancel > .ui-button-text").text("Cancel");
+					$("#signup-btn-change").show();
+					$("#signup-error").hide();
+					$("#signup-msg").hide();
+					$("#signup-form").show();
+					$("#signup-email").val('');
+					$("#signup-fname").val('');
+					$("#signup-lname").val('');
+					$("#signup-email").focus();
+				}
+
+			});
+			///////////////////////////////////////////////////////////////////
+			// signup password support - end
+			///////////////////////////////////////////////////////////////////
+
+		});
+	/* ]]> */
+	</script>
+
+
+	<div id="wrapper">
+		<div id="header">
+			<img src="res/img/mmspl-logo-patch-216x125.png" height="125px" width="216px" style="float:right;padding-left:5px;padding-right:5px" alt="MMSPL"/>
+			<div id="title">
+				<h1>Markham Men's Slo-Pitch League</h1>
+				Established 1968
+			</div>
+			<div style="clear:both;height:5px">&nbsp;</div>
+			<div class="menu">
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="register.html">Register</a></li>
+					<li><a href="standings.html">Standings</a></li>
+					<li><a href="schedule.html">Schedules</a></li>
+					<li class="current"><a href="admin.html">Admin</a></li>
+					<li><a href="about.html">About Us</a></li>
+					<li><a href="awards.html">Awards</a></li>
+					<li><a href="contact.html">Contact</a></li>
+					<li><a href="community.html">Players Businesses</a></li>
+				</ul>
+			</div>
+
+			<!-- end .menu -->
+		</div>
+		<!-- end #header -->
+
+		<div id="page">
+
+			<div class="sidebar">
+				<ul>
+                    <!--
+					<li>
+						<h3>MMSPL Secure Zone</h3>
+						<ul>
+							<li>
+								<div id='waiting'>
+									<img id="running" style="vertical-align:middle" src="res/img/ajax-loader.gif" width="32" height="32" alt="Loading..." />
+								</div>
+								<div id='error' style="display:none;margin-bottom:8px;padding:2px;border:solid 2px #AA1111"> </div>
+								<form id='login-form' style="display:none" method="post" enctype="multipart/form-data" action="admin.php" accept-charset="utf-8">
+									<div>
+										<input type="hidden" name="sublogin" value="1"/>
+										<div style="padding-bottom:10px">
+											<label for="username">Email:</label><br/>
+											<input type="text" name="username" id="username" value="" maxlength="50" style="width:190px;"/>
+										</div>
+										<div style="padding-bottom:10px">
+											<label for="password">Password:</label><br/>
+											<input type="password" name="password" id="password" value="" maxlength="" style="width:190px;"/>
+										</div>
+										<div style="text-align:right">
+											<input id='login-button' type="submit" value=" Log In " />
+										</div>
+									</div>
+									<div style="padding-top:10px">
+										<hr/>
+										<div style="padding-top:5px">
+											<a id="forgot-link" href="#">Forgot your Password?</a>
+										</div>
+										<div style="padding-top:5px">
+											<a id="signup-link" href="#">Don't have an MMSPL Account?</a>
+										</div>
+									</div>
+								</form>
+								<div id='secdocs' style="display:none">
+									<div style="padding-bottom:10px">
+										<table style="width:100%;border-collapse: collapse;padding: 0px">
+											<tr>
+												<td id="uid"></td>
+												<td style="text-align:right"><a href="admin.php?logout=1">Logout</a></td>
+											</tr>
+										</table>
+									</div>
+									<div style="padding-bottom:10px"><a href="admin.php">Enter Secure Zone</a></div>
+								</div>
+							</li>
+						</ul>
+					</li>
+                    -->
+					<li>
+						<h2>League Rules</h2>
+						<ul>
+							<li><a href="res/docs/2025-constitution.docx">2025 League Constitution</a></li>
+							<li><a href="res/docs/2025-house-rules.docx">2025 MMSPL House Rules</a></li>
+							<li><a href="#" id="batstrigger">MMSPL Bat Policy</a></li>
+							<li><a href="res/docs/2018-spn-rulebook-v2.pdf" target="_blank">SPN Rule Book</a></li>
+							<li><a href="http://www.teamusa.org/USA-Softball/Play-ASA/Certified-ASA-Equipment.aspx" target="_blank">Certified ASA Equipment</a></li>
+						</ul>
+					</li>
+					<li>
+						<h2>Other Documents</h2>
+						<ul>
+						    <li><a href="res/docs/2025-AGM.pdf">2025 AGM Minutes</a></li>
+						    <li><a href="res/docs/2024-AGM.pdf">2024 AGM Minutes</a></li>
+						    <li><a href="res/docs/2024-captains-meeting-minutes.pdf">2024 Captains Meeting Minutes</a></li>
+							<li><a href="res/docs/2023-AGM.pdf">2023 AGM Minutes</a></li>
+							<li><a href="res/docs/2022-AGM-Minutes.docx">2022 AGM Minutes</a></li>
+							<li><a href="res/docs/2022-captains-meeting-minutes.docx">2022 Captains Meeting Minutes</a></li>
+							<li><a href="res/docs/2021-captains-meeting-minutes.docx">2021 Captains Meeting Minutes</a></li>
+							<li><a href="res/docs/2019-AGM.pdf">2019 AGM Minutes</a></li>
+							<li><a href="res/docs/2018-AGM-Minutes.docx">2018 AGM Minutes</a></li>
+							<li><a href="res/docs/2017-AGM-Minutes.docx">2017 AGM Minutes</a></li>
+							<li><a href="res/docs/2016-AGM-Minutes.docx">2016 AGM Minutes</a></li>
+							<li><a href="res/docs/2015-AGM-minutes.docx">2015 AGM Minutes</a></li>
+							<li><a href="res/docs/2015-draft-order.pdf">2015 Draft Order</a></li>
+							<li><a href="res/docs/2014-AGM-minutes.docx">2014 AGM Minutes</a></li>
+							<li><a href="res/docs/2014-draft-order.pdf">2014 Draft Order</a></li>
+							<li><a href="res/docs/2013-AGM-Minutes.docx">2013 AGM Minutes</a></li>
+							<li><a href="res/docs/2013-March-4-minutes.docx">2013 March 4 Meeting Minutes</a></li>
+							<li><a href="res/docs/2013-draft-order.pdf">2013 Draft Order</a></li>
+							<li><a href="res/docs/2012-AGM-Minutes.doc">2012 AGM Minutes</a></li>
+							<li><a href="res/docs/2012-draft-order.pdf">2012 Draft Order</a></li>
+							<li><a href="res/docs/2012-March-15-minutes.docx">2012 March 15 Meeting Minutes</a></li>
+							<li><a href="res/docs/2012-February-15-minutes.doc">2012 February 15 Meeting Minutes</a></li>
+							<li><a href="res/docs/2011-AGM-Minutes.docx">2011 AGM Minutes</a></li>
+							<li><a href="res/docs/2010-AGM-Minutes.docx">2010 AGM Minutes</a></li>
+							<li><a href="res/docs/2010-AGM-Presentation.pptx">2010 AGM Presentation</a></li>
+							<li><a href="res/docs/2009 MMSPL AGM Minutes.doc">2009 AGM Minutes</a></li>
+							<li><a href="res/docs/LCC Draft Recommendations-REVISED DRAFT-Oct 2009.pdf">2009 LLC Recommendation</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!-- end sidebar - left -->
+
+			<div id="content">
+				<div class="post">
+					<h2 class="title">2026 League Executives</h2>
+					<div class="entry">
+						<table border="0" cellspacing="0" class="admin">
+							<tr>
+								<td><span class="top">President</span><br/>Mark Parent<br/><span class="bottom">Ace Pools Moose</span><br/><a href="mailto:president@mmspl.ca?subject=Message to MMSPL President">Email</a></td>
+								<td><span class="top">1st Vice-President</span><br/>Sean Bansavatar<br/><span class="bottom">S+H Raiders</span><br/><a href="mailto:first-vice-president@mmspl.ca?subject=Message to MMSPL 1st Vice President">Email</a></td>
+								<td><span class="top">2nd Vice-President</span><br/>Evange Bethanis<br/><span class="bottom">Irish Holdings Shamrocks</span><br/><a href="mailto:second-vice-president@mmspl.ca?subject=Message to MMSPL 2nd Vice President">Email</a></td>
+							</tr>
+							<tr>
+								<td><span class="top">Treasurer</span><br/>Dave Newson<br/><span class="bottom">Ace Pools Moose</span><br/><a href="mailto:treasurer@mmspl.ca?subject=Message to MMSPL Treasurer">Email</a></td>
+								<td><span class="top">Secretary</span><br/>Avi Bhatia<br/><span class="bottom">The Condo Kings Army</span><br/><a href="mailto:secretary@mmspl.ca?subject=Message to MMSPL Secretary">Email</a></td>
+                                <td><span class="top">Equipment Manager</span><br/>Bryan Anderson<br/><span class="bottom">Markham Knights</span><br/><a href="mailto:manager@mmspl.ca?subject=Message to MMSPL Equipment Manager">Email</a></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="post">
+					<h2 class="title">2026 Executive Council - Team Representatives</h2>
+					<div class="entry">
+						<table border="0" cellspacing="0" class="admin">
+							<tr>
+								<td><span class="top">Ken Bailie</span><br/>Ace Pools Moose</td>
+            					<td><span class="top">Rudy Pitton</span><br/>Brickhouse OK Braves</td>
+								<td><span class="top">Patrick Belgar</span><br/>DC Chiropractic Nads</td>
+								<td><span class="top">Andrew Ming</span><br/>Derek Houghton Century 21</td>
+							</tr>
+							<tr>
+								<td><span class="top">Wendell Tseng</span><br/>Golf19 Goodyear Rangers</td>
+								<td><span class="top">Erik Brokelman</span><br/>Irish Holdings Shamrocks</td>
+								<td><span class="top">Victor Chau</span><br/>Markham Knights</td>
+								<td><span class="top">Eric Opsahl</span><br/>McCalmont Financial Beavers</td>
+							</tr>
+							<tr>
+								<td><span class="top">Matt DeKuyper</span><br/>Polyson Sox</td>
+								<td><span class="top">Gabe Tsang</span><br/>Pilkey Glass Pirates</td>
+								<td><span class="top">Lonny Kirlin</span><br/>Red Hot Dawgs</td>
+								<td><span class="top">Greg Ashmead</span><br/>S+H Raiders</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td><span class="top">Jeff Knight</span><br/>The Classics</td>
+								<td><span class="top">Frank Filntissis</span><br/>The Condo Kings Army</td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+
+                <div id="batsrule" class="post" style="display:none">
+                    <h2 class="title">MMSPL Bat Policy</h2>
+                    <div class="entry">
+                        <p>Effective this year, if your current bat does not have the following imprints on it, then it will not be accepted into our games this season and going forward.</p>
+
+                        <p>The new bat rule requires all teams to line all bats in dugout intended for use in the game with the "thumbprint" clearly visible. The umpire will look at all bats, giving the go ahead for them to be used. No SPN approved "thumbprint" = illegal. If any bat is found before game, that bat is removed. If an illegal bat is brought into the game, that player is automatically out and his spot in the order becomes an out every time.</p>
+
+                        <p>Looking for a new bat? Ensure it follows up to date SPN guidelines and has either of the following imprints as indicated below or you will not be able to use your bat during any MMSPL league games.</p>
+                        <img src="res/img/2018-spn-bat-policy.png" width="658px"/>
+                    </div>
+                </div>
+
+
+			</div>
+			<!-- end #content -->
+
+			<br style="clear: both;"/>
+		</div>
+		<!-- end #page -->
+
+		<div id="footer">&nbsp;</div>
+		<!-- end #footer -->
+	</div>
+
+	<div style="display:none">
+		<div id="forgot-div" title="Forgot your password?">
+			<div id="forgot-waiting" style="vertical-align:middle">
+				<img style="vertical-align:middle" src="/web/20240614230013im_/http://mmspl.ca/res/img/ajax-loader.gif" width="32" height="32" alt="Resetting Password..."/>
+				<span style="padding-left:15px;font-weight:bold;vertical-align:middle" id="forgot-waiting-text">Resetting Password...</span>
+			</div>
+			<div id="forgot-error" style="display:none;margin-bottom:8px;padding:2px;border:solid 2px #AA1111"> </div>
+			<div id="forgot-msg"></div>
+			<form id="forgot-form" enctype="multipart/form-data" action="admin.php" method="POST">
+				<input type="hidden" name="subforgot" value="1"/>
+				<div style="padding-bottom:10px">
+					No problem... just provide your email address below, and a new password will be sent to you in a few minutes.
+				</div>
+				<table style="width:100%">
+					<tr>
+						<td style="text-align:right"><label for="forgot-1">Email:</label></td>
+						<td><input type="text" name="forgot-1" id="forgot-1" value="" maxlength="" style="width:190px;"/></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<div id="signup-div" title="Request MMSPL Secure Zone Access">
+			<div id="signup-waiting" style="vertical-align:middle">
+				<img style="vertical-align:middle" src="/web/20240614230013im_/http://mmspl.ca/res/img/ajax-loader.gif" width="32" height="32" alt="Requesting Account..."/>
+				<span style="padding-left:15px;font-weight:bold;vertical-align:middle" id="signup-waiting-text">Requesting Account...</span>
+			</div>
+			<div id="signup-error" style="display:none;margin-bottom:8px;padding:2px;border:solid 2px #AA1111"> </div>
+			<div id="signup-msg"></div>
+			<form id="signup-form" enctype="multipart/form-data" action="admin.php" method="POST">
+				<input type="hidden" name="subsignup" value="1"/>
+				<div style="padding-bottom:10px">
+					Fill in the form below to request access to the MMSPL Secure Zone.<br/>
+				</div>
+				<table style="width:100%">
+					<tr>
+						<td style="text-align:right"><label for="signup-email">Email:</label></td>
+						<td><input type="text" name="signup-email" id="signup-email" value="" maxlength="" style="width:190px;"/></td>
+					</tr>
+					<tr>
+						<td style="text-align:right"><label for="signup-fname">First Name:</label></td>
+						<td><input type="text" name="signup-fname" id="signup-fname" value="" maxlength="" style="width:190px;"/></td>
+					</tr>
+					<tr>
+						<td style="text-align:right"><label for="signup-lname">Last Name:</label></td>
+						<td><input type="text" name="signup-lname" id="signup-lname" value="" maxlength="" style="width:190px;"/></td>
+					</tr>
+					<tr>
+					<td></td>
+					<td>(All fields are mandatory)</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+	</div>
+
+</body>
+</html>

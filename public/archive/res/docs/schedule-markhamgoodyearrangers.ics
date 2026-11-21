@@ -1,0 +1,307 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//Markham Goodyear Rangers Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - Markham Goodyear Rangers
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260514T223000Z
+DTEND:20260514T235000Z
+SUMMARY:ML: Red Hot Dawgs vs Markham Goodyear Rangers (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Markham Goodyear Rangers\nPark: M
+ intleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260519T223000Z
+DTEND:20260519T235000Z
+SUMMARY:ML: Markham Goodyear Rangers (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: McCalmont Financial Be
+ avers\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260522T000000Z
+DTEND:20260522T012000Z
+SUMMARY:CN: S&H Raiders vs Markham Goodyear Rangers (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Markham Goodyear Rangers\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260527T000000Z
+DTEND:20260527T012000Z
+SUMMARY:ML: Markham Goodyear Rangers (H) vs Markham Knights
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Markham Knights\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260603T013000Z
+DTEND:20260603T025000Z
+SUMMARY:CN: Derek Houghton Century 21 vs Markham Goodyear Rangers (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: Markham Goodyear Rang
+ ers\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260609T223000Z
+DTEND:20260609T235000Z
+SUMMARY:CN: Opal Electric Shamrocks vs Markham Goodyear Rangers (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: Markham Goodyear R
+ angers\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260611T223000Z
+DTEND:20260611T235000Z
+SUMMARY:ML: Markham Goodyear Rangers (H) vs Northtown Sox
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Northtown Sox\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260617T000000Z
+DTEND:20260617T012000Z
+SUMMARY:CN: Markham Goodyear Rangers (H) vs Markham Knights
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Markham Knights\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260619T013000Z
+DTEND:20260619T025000Z
+SUMMARY:ML: The Condo Kings Army vs Markham Goodyear Rangers (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Markham Goodyear Rangers\n
+ Park: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260624T013000Z
+DTEND:20260624T025000Z
+SUMMARY:ML: Markham Goodyear Rangers (H) vs DC Chiropractic Nads
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: DC Chiropractic Nads\n
+ Park: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260701T000000Z
+DTEND:20260701T012000Z
+SUMMARY:ML: The Classics vs Markham Goodyear Rangers (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Markham Goodyear Rangers\nPark: Mi
+ ntleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260707T223000Z
+DTEND:20260707T235000Z
+SUMMARY:ML: OK Braves vs Markham Goodyear Rangers (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Markham Goodyear Rangers\nPark: Mintl
+ eaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260709T223000Z
+DTEND:20260709T235000Z
+SUMMARY:CN: Markham Goodyear Rangers (H) vs Red Hot Dawgs
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Red Hot Dawgs\nPark: C
+ entennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260715T013000Z
+DTEND:20260715T025000Z
+SUMMARY:CN: Northtown Sox vs Markham Goodyear Rangers (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: Markham Goodyear Rangers\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260717T000000Z
+DTEND:20260717T012000Z
+SUMMARY:CN: McCalmont Financial Beavers vs Markham Goodyear Rangers (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: Markham Goodyear Ra
+ ngers\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260724T013000Z
+DTEND:20260724T025000Z
+SUMMARY:CN: Markham Goodyear Rangers (H) vs Derek Houghton Century 21
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Derek Houghton Century
+  21\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260729T013000Z
+DTEND:20260729T025000Z
+SUMMARY:CN: Ace Pools Moose vs Markham Goodyear Rangers (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Markham Goodyear Rangers\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260730T223000Z
+DTEND:20260730T235000Z
+SUMMARY:CN: Markham Goodyear Rangers (H) vs Pilkey Glass Pirates
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Pilkey Glass Pirates\n
+ Park: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260805T000000Z
+DTEND:20260805T012000Z
+SUMMARY:CN: Markham Goodyear Rangers (H) vs The Classics
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: The Classics\nPark: Ce
+ ntennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260806T223000Z
+DTEND:20260806T235000Z
+SUMMARY:ML: DC Chiropractic Nads vs Markham Goodyear Rangers (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Markham Goodyear Rangers\n
+ Park: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260811T223000Z
+DTEND:20260811T235000Z
+SUMMARY:CN: Markham Goodyear Rangers (H) vs OK Braves
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: OK Braves\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260814T000000Z
+DTEND:20260814T012000Z
+SUMMARY:ML: Markham Goodyear Rangers (H) vs Opal Electric Shamrocks
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Irish Holdings TNT Sha
+ mrocks\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260819T000000Z
+DTEND:20260819T012000Z
+SUMMARY:ML: Markham Goodyear Rangers (H) vs Ace Pools Moose
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Ace Pools Moose\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260821T013000Z
+DTEND:20260821T025000Z
+SUMMARY:CN: Markham Goodyear Rangers (H) vs S&H Raiders
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: S&H Raiders\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260826T000000Z
+DTEND:20260826T012000Z
+SUMMARY:ML: The Classics vs Markham Goodyear Rangers (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Markham Goodyear Rangers\nPark: Mi
+ ntleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260828T013000Z
+DTEND:20260828T025000Z
+SUMMARY:ML: Northtown Sox vs Markham Goodyear Rangers (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: Markham Goodyear Rangers\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260902T000000Z
+DTEND:20260902T012000Z
+SUMMARY:ML: Markham Goodyear Rangers (H) vs Opal Electric Shamrocks
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Irish Holdings TNT Sha
+ mrocks\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260909T013000Z
+DTEND:20260909T025000Z
+SUMMARY:CN: Markham Knights vs Markham Goodyear Rangers (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Markham Goodyear Rangers\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260910T223000Z
+DTEND:20260910T235000Z
+SUMMARY:CN: Pilkey Glass Pirates vs Markham Goodyear Rangers (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Markham Goodyear Rangers\n
+ Park: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026markhamgoodyearrangers-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260916T013000Z
+DTEND:20260916T025000Z
+SUMMARY:CN: Markham Goodyear Rangers (H) vs The Condo Kings Army
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: The Condo Kings Army\n
+ Park: Centennial North
+END:VEVENT
+END:VCALENDAR

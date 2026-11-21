@@ -1,0 +1,305 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//The Condo Kings Army Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - The Condo Kings Army
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260512T223000Z
+DTEND:20260512T235000Z
+SUMMARY:ML: The Condo Kings Army (H) vs OK Braves
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260515T000000Z
+DTEND:20260515T012000Z
+SUMMARY:ML: S&H Raiders vs The Condo Kings Army (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: The Condo Kings Army\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260520T013000Z
+DTEND:20260520T025000Z
+SUMMARY:CN: The Condo Kings Army (H) vs Ace Pools Moose
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Ace Pools Moose\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260522T000000Z
+DTEND:20260522T012000Z
+SUMMARY:ML: Opal Electric Shamrocks vs The Condo Kings Army (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: The Condo Kings Ar
+ my\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260602T223000Z
+DTEND:20260602T235000Z
+SUMMARY:ML: Markham Knights vs The Condo Kings Army (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: The Condo Kings Army\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260604T223000Z
+DTEND:20260604T235000Z
+SUMMARY:ML: Pilkey Glass Pirates vs The Condo Kings Army (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: The Condo Kings Army\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260610T013000Z
+DTEND:20260610T025000Z
+SUMMARY:CN: The Condo Kings Army (H) vs The Classics
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: The Classics\nPark: Centen
+ nial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260616T223000Z
+DTEND:20260616T235000Z
+SUMMARY:CN: The Condo Kings Army (H) vs DC Chiropractic Nads
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: DC Chiropractic Nads\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260619T013000Z
+DTEND:20260619T025000Z
+SUMMARY:ML: The Condo Kings Army (H) vs Markham Goodyear Rangers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Markham Goodyear Rangers\n
+ Park: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260623T223000Z
+DTEND:20260623T235000Z
+SUMMARY:CN: The Condo Kings Army (H) vs Northtown Sox
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Northtown Sox\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260630T223000Z
+DTEND:20260630T235000Z
+SUMMARY:ML: The Condo Kings Army (H) vs Pilkey Glass Pirates
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Pilkey Glass Pirates\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260708T000000Z
+DTEND:20260708T012000Z
+SUMMARY:ML: Derek Houghton Century 21 vs The Condo Kings Army (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: The Condo Kings Army\
+ nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260710T000000Z
+DTEND:20260710T012000Z
+SUMMARY:ML: OK Braves vs The Condo Kings Army (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: The Condo Kings Army\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260715T000000Z
+DTEND:20260715T012000Z
+SUMMARY:ML: Red Hot Dawgs vs The Condo Kings Army (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: The Condo Kings Army\nPark: Mintl
+ eaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260717T013000Z
+DTEND:20260717T025000Z
+SUMMARY:ML: The Condo Kings Army (H) vs S&H Raiders
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: S&H Raiders\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260723T223000Z
+DTEND:20260723T235000Z
+SUMMARY:CN: The Condo Kings Army (H) vs Markham Knights
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Markham Knights\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260728T223000Z
+DTEND:20260728T235000Z
+SUMMARY:CN: The Classics vs The Condo Kings Army (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: The Condo Kings Army\nPark: Centen
+ nial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260731T000000Z
+DTEND:20260731T012000Z
+SUMMARY:CN: Ace Pools Moose vs The Condo Kings Army (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: The Condo Kings Army\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260804T223000Z
+DTEND:20260804T235000Z
+SUMMARY:CN: Northtown Sox vs The Condo Kings Army (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: The Condo Kings Army\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260807T013000Z
+DTEND:20260807T025000Z
+SUMMARY:CN: McCalmont Financial Beavers vs The Condo Kings Army (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: The Condo Kings Arm
+ y\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260812T013000Z
+DTEND:20260812T025000Z
+SUMMARY:CN: The Condo Kings Army (H) vs Opal Electric Shamrocks
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Irish Holdings TNT Shamroc
+ ks\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260819T000000Z
+DTEND:20260819T012000Z
+SUMMARY:CN: The Condo Kings Army (H) vs Derek Houghton Century 21
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Derek Houghton Century 21\
+ nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260820T223000Z
+DTEND:20260820T235000Z
+SUMMARY:ML: The Condo Kings Army (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: McCalmont Financial Beaver
+ s\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260826T000000Z
+DTEND:20260826T012000Z
+SUMMARY:CN: The Condo Kings Army (H) vs Pilkey Glass Pirates
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Pilkey Glass Pirates\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260828T000000Z
+DTEND:20260828T012000Z
+SUMMARY:ML: S&H Raiders vs The Condo Kings Army (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: The Condo Kings Army\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260902T013000Z
+DTEND:20260902T025000Z
+SUMMARY:CN: The Condo Kings Army (H) vs Red Hot Dawgs
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Red Hot Dawgs\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260904T013000Z
+DTEND:20260904T025000Z
+SUMMARY:CN: DC Chiropractic Nads vs The Condo Kings Army (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: The Condo Kings Army\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260909T013000Z
+DTEND:20260909T025000Z
+SUMMARY:ML: DC Chiropractic Nads vs The Condo Kings Army (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: The Condo Kings Army\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260911T013000Z
+DTEND:20260911T025000Z
+SUMMARY:ML: The Condo Kings Army (H) vs Red Hot Dawgs
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Red Hot Dawgs\nPark: Mintl
+ eaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026thecondokingsarmy-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260916T013000Z
+DTEND:20260916T025000Z
+SUMMARY:CN: Markham Goodyear Rangers vs The Condo Kings Army (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: The Condo Kings Army\n
+ Park: Centennial North
+END:VEVENT
+END:VCALENDAR

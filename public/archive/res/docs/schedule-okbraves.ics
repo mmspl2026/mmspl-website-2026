@@ -1,0 +1,289 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//OK Braves Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - OK Braves
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260512T223000Z
+DTEND:20260512T235000Z
+SUMMARY:ML: The Condo Kings Army vs OK Braves (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260515T013000Z
+DTEND:20260515T025000Z
+SUMMARY:ML: OK Braves (H) vs Opal Electric Shamrocks
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Opal Electric Shamrocks\nPark: M
+ intleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260519T223000Z
+DTEND:20260519T235000Z
+SUMMARY:CN: S&H Raiders vs OK Braves (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: OK Braves\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260522T013000Z
+DTEND:20260522T025000Z
+SUMMARY:CN: OK Braves (H) vs The Classics
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: The Classics\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260527T013000Z
+DTEND:20260527T025000Z
+SUMMARY:CN: OK Braves (H) vs Red Hot Dawgs
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Red Hot Dawgs\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260605T013000Z
+DTEND:20260605T025000Z
+SUMMARY:ML: OK Braves (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: McCalmont Financial Beavers\nPark: Mi
+ ntleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260610T000000Z
+DTEND:20260610T012000Z
+SUMMARY:CN: OK Braves (H) vs Northtown Sox
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Northtown Sox\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260612T013000Z
+DTEND:20260612T025000Z
+SUMMARY:ML: Markham Knights vs OK Braves (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260617T000000Z
+DTEND:20260617T012000Z
+SUMMARY:ML: Red Hot Dawgs vs OK Braves (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260619T013000Z
+DTEND:20260619T025000Z
+SUMMARY:CN: OK Braves (H) vs Derek Houghton Century 21
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Derek Houghton Century 21\nPark: Cent
+ ennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260624T000000Z
+DTEND:20260624T012000Z
+SUMMARY:CN: McCalmont Financial Beavers vs OK Braves (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: OK Braves\nPark: Ce
+ ntennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260626T013000Z
+DTEND:20260626T025000Z
+SUMMARY:ML: Ace Pools Moose vs OK Braves (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260630T223000Z
+DTEND:20260630T235000Z
+SUMMARY:CN: DC Chiropractic Nads vs OK Braves (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: OK Braves\nPark: Centennia
+ l North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260707T223000Z
+DTEND:20260707T235000Z
+SUMMARY:ML: OK Braves (H) vs Markham Goodyear Rangers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Markham Goodyear Rangers\nPark: Mintl
+ eaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260710T000000Z
+DTEND:20260710T012000Z
+SUMMARY:ML: OK Braves (H) vs The Condo Kings Army
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: The Condo Kings Army\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260715T000000Z
+DTEND:20260715T012000Z
+SUMMARY:CN: OK Braves (H) vs Pilkey Glass Pirates
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Pilkey Glass Pirates\nPark: Centennia
+ l North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260717T000000Z
+DTEND:20260717T012000Z
+SUMMARY:ML: OK Braves (H) vs Markham Knights
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Markham Knights\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260721T223000Z
+DTEND:20260721T235000Z
+SUMMARY:CN: Derek Houghton Century 21 vs OK Braves (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: OK Braves\nPark: Cent
+ ennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260723T223000Z
+DTEND:20260723T235000Z
+SUMMARY:ML: Opal Electric Shamrocks vs OK Braves (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: OK Braves\nPark: M
+ intleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260729T000000Z
+DTEND:20260729T012000Z
+SUMMARY:CN: OK Braves (H) vs S&H Raiders
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: S&H Raiders\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260807T000000Z
+DTEND:20260807T012000Z
+SUMMARY:CN: Northtown Sox vs OK Braves (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: OK Braves\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260811T223000Z
+DTEND:20260811T235000Z
+SUMMARY:CN: Markham Goodyear Rangers vs OK Braves (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: OK Braves\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260813T223000Z
+DTEND:20260813T235000Z
+SUMMARY:CN: The Classics vs OK Braves (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: OK Braves\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260819T013000Z
+DTEND:20260819T025000Z
+SUMMARY:CN: Pilkey Glass Pirates vs OK Braves (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: OK Braves\nPark: Centennia
+ l North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260827T223000Z
+DTEND:20260827T235000Z
+SUMMARY:ML: OK Braves (H) vs DC Chiropractic Nads
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: DC Chiropractic Nads\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260901T223000Z
+DTEND:20260901T235000Z
+SUMMARY:ML: Northtown Sox vs OK Braves (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260904T013000Z
+DTEND:20260904T025000Z
+SUMMARY:ML: Markham Knights vs OK Braves (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260909T000000Z
+DTEND:20260909T012000Z
+SUMMARY:CN: OK Braves (H) vs Red Hot Dawgs
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Red Hot Dawgs\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260911T000000Z
+DTEND:20260911T012000Z
+SUMMARY:CN: OK Braves (H) vs DC Chiropractic Nads
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: DC Chiropractic Nads\nPark: Centennia
+ l North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026okbraves-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260916T000000Z
+DTEND:20260916T012000Z
+SUMMARY:ML: OK Braves (H) vs Ace Pools Moose
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Ace Pools Moose\nPark: Mintleaf
+END:VEVENT
+END:VCALENDAR

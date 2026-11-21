@@ -1,0 +1,297 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//Polyson Sox Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - Polyson Sox
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260513T000000Z
+DTEND:20260513T012000Z
+SUMMARY:ML: Polyson Sox (H) vs Pilkey Glass Pirates
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: Pilkey Glass Pirates\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260515T013000Z
+DTEND:20260515T025000Z
+SUMMARY:CN: Polyson Sox (H) vs Markham Knights
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: Markham Knights\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260521T223000Z
+DTEND:20260521T235000Z
+SUMMARY:ML: Polyson Sox (H) vs McCalmont Financial Beavers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: McCalmont Financial Beavers\nPark: 
+ Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260527T000000Z
+DTEND:20260527T012000Z
+SUMMARY:CN: Ace Pools Moose vs Polyson Sox (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Polyson Sox\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260605T013000Z
+DTEND:20260605T025000Z
+SUMMARY:CN: Irish Holdings TNT Shamrocks vs Polyson Sox (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Polyson Sox\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260610T000000Z
+DTEND:20260610T012000Z
+SUMMARY:CN: OK Braves vs Polyson Sox (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: Polyson Sox\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260611T223000Z
+DTEND:20260611T235000Z
+SUMMARY:ML: Markham Goodyear Rangers vs Polyson Sox (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: Polyson Sox\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260617T013000Z
+DTEND:20260617T025000Z
+SUMMARY:ML: Polyson Sox (H) vs Ace Pools Moose
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: Ace Pools Moose\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260619T000000Z
+DTEND:20260619T012000Z
+SUMMARY:CN: Polyson Sox (H) vs S&H Raiders
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: S&H Raiders\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260623T223000Z
+DTEND:20260623T235000Z
+SUMMARY:CN: The Condo Kings Army vs Polyson Sox (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: Polyson Sox\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260625T223000Z
+DTEND:20260625T235000Z
+SUMMARY:ML: Polyson Sox (H) vs The Classics
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: The Classics\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260701T013000Z
+DTEND:20260701T025000Z
+SUMMARY:ML: Irish Holdings TNT Shamrocks vs Polyson Sox (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Irish Holdings TNT Shamrocks\nVisitor: Polyson Sox\nPark:
+  Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260708T013000Z
+DTEND:20260708T025000Z
+SUMMARY:ML: Polyson Sox (H) vs DC Chiropractic Nads
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: DC Chiropractic Nads\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260709T223000Z
+DTEND:20260709T235000Z
+SUMMARY:ML: Pilkey Glass Pirates vs Polyson Sox (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: Polyson Sox\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260715T013000Z
+DTEND:20260715T025000Z
+SUMMARY:CN: Polyson Sox (H) vs Markham Goodyear Rangers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: Markham Goodyear Rangers\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260722T000000Z
+DTEND:20260722T012000Z
+SUMMARY:CN: Markham Knights vs Polyson Sox (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: Polyson Sox\nPark: Centennial N
+ orth
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260728T223000Z
+DTEND:20260728T235000Z
+SUMMARY:ML: Red Hot Dawgs vs Polyson Sox (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: Polyson Sox\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260731T000000Z
+DTEND:20260731T012000Z
+SUMMARY:ML: McCalmont Financial Beavers vs Polyson Sox (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: Polyson Sox\nPark: 
+ Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260804T223000Z
+DTEND:20260804T235000Z
+SUMMARY:CN: Polyson Sox (H) vs The Condo Kings Army
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: The Condo Kings Army\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260807T000000Z
+DTEND:20260807T012000Z
+SUMMARY:CN: Polyson Sox (H) vs OK Braves
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: OK Braves\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260812T000000Z
+DTEND:20260812T012000Z
+SUMMARY:CN: S&H Raiders vs Polyson Sox (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: Polyson Sox\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260814T013000Z
+DTEND:20260814T025000Z
+SUMMARY:ML: Polyson Sox (H) vs Derek Houghton Century 21
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: Derek Houghton Century 21\nPark: Mi
+ ntleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260820T223000Z
+DTEND:20260820T235000Z
+SUMMARY:CN: DC Chiropractic Nads vs Polyson Sox (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Polyson Sox\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260826T013000Z
+DTEND:20260826T025000Z
+SUMMARY:CN: Polyson Sox (H) vs Irish Holdings TNT Shamrocks
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: Irish Holdings TNT Shamrocks\nPark:
+  Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260828T013000Z
+DTEND:20260828T025000Z
+SUMMARY:ML: Polyson Sox (H) vs Markham Goodyear Rangers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: Markham Goodyear Rangers\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260901T223000Z
+DTEND:20260901T235000Z
+SUMMARY:ML: Polyson Sox (H) vs OK Braves
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: OK Braves\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260903T223000Z
+DTEND:20260903T235000Z
+SUMMARY:CN: Polyson Sox (H) vs Red Hot Dawgs
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Polyson Sox\nVisitor: Red Hot Dawgs\nPark: Centennial Nor
+ th
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260909T000000Z
+DTEND:20260909T012000Z
+SUMMARY:ML: Ace Pools Moose vs Polyson Sox (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: Polyson Sox\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260911T000000Z
+DTEND:20260911T012000Z
+SUMMARY:ML: The Classics vs Polyson Sox (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: Polyson Sox\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026polysonsox-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260915T223000Z
+DTEND:20260915T235000Z
+SUMMARY:CN: Derek Houghton Century 21 vs Polyson Sox (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: Polyson Sox\nPark: Ce
+ ntennial North
+END:VEVENT
+END:VCALENDAR

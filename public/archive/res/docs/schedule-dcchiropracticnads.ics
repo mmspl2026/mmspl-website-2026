@@ -1,0 +1,306 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//MMSPL//DC Chiropractic Nads Schedule 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:MMSPL 2026 - DC Chiropractic Nads
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-000@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260513T000000Z
+DTEND:20260513T012000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs McCalmont Financial Beavers
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: McCalmont Financial Beaver
+ s\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-001@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260520T000000Z
+DTEND:20260520T012000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs Markham Knights
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Markham Knights\nPark: Cen
+ tennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-002@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260522T013000Z
+DTEND:20260522T025000Z
+SUMMARY:ML: Ace Pools Moose vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Ace Pools Moose\nVisitor: DC Chiropractic Nads\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-003@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260603T000000Z
+DTEND:20260603T012000Z
+SUMMARY:ML: DC Chiropractic Nads (H) vs Pilkey Glass Pirates
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Pilkey Glass Pirates\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-004@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260605T000000Z
+DTEND:20260605T012000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs Red Hot Dawgs
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Red Hot Dawgs\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-005@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260610T013000Z
+DTEND:20260610T025000Z
+SUMMARY:ML: S&H Raiders vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: DC Chiropractic Nads\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-006@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260612T000000Z
+DTEND:20260612T012000Z
+SUMMARY:ML: The Classics vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: The Classics\nVisitor: DC Chiropractic Nads\nPark: Mintle
+ af
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-007@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260616T223000Z
+DTEND:20260616T235000Z
+SUMMARY:CN: The Condo Kings Army vs DC Chiropractic Nads (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: The Condo Kings Army\nVisitor: DC Chiropractic Nads\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-008@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260618T223000Z
+DTEND:20260618T235000Z
+SUMMARY:CN: Opal Electric Shamrocks vs DC Chiropractic Nads (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Opal Electric Shamrocks\nVisitor: DC Chiropractic Na
+ ds\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-009@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260624T013000Z
+DTEND:20260624T025000Z
+SUMMARY:ML: Markham Goodyear Rangers vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Goodyear Rangers\nVisitor: DC Chiropractic Nads\n
+ Park: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-010@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260626T000000Z
+DTEND:20260626T012000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs Opal Electric Shamrocks
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Irish Holdings TNT Shamroc
+ ks\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-011@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260630T223000Z
+DTEND:20260630T235000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs OK Braves
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: OK Braves\nPark: Centennia
+ l North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-012@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260708T013000Z
+DTEND:20260708T025000Z
+SUMMARY:ML: Northtown Sox vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Northtown Sox\nVisitor: DC Chiropractic Nads\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-013@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260710T013000Z
+DTEND:20260710T025000Z
+SUMMARY:CN: McCalmont Financial Beavers vs DC Chiropractic Nads (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: McCalmont Financial Beavers\nVisitor: DC Chiropractic Nad
+ s\nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-014@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260716T223000Z
+DTEND:20260716T235000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs The Classics
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: The Classics\nPark: Centen
+ nial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-015@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260721T223000Z
+DTEND:20260721T235000Z
+SUMMARY:ML: DC Chiropractic Nads (H) vs Ace Pools Moose
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Ace Pools Moose\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-016@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260724T013000Z
+DTEND:20260724T025000Z
+SUMMARY:ML: Pilkey Glass Pirates vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Pilkey Glass Pirates\nVisitor: DC Chiropractic Nads\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-017@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260729T000000Z
+DTEND:20260729T012000Z
+SUMMARY:ML: Markham Knights vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Markham Knights\nVisitor: DC Chiropractic Nads\nPark: Min
+ tleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-018@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260731T013000Z
+DTEND:20260731T025000Z
+SUMMARY:ML: DC Chiropractic Nads (H) vs The Classics
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: The Classics\nPark: Mintle
+ af
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-019@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260805T000000Z
+DTEND:20260805T012000Z
+SUMMARY:ML: S&H Raiders vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: S&H Raiders\nVisitor: DC Chiropractic Nads\nPark: Mintlea
+ f
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-020@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260806T223000Z
+DTEND:20260806T235000Z
+SUMMARY:ML: DC Chiropractic Nads (H) vs Markham Goodyear Rangers
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Markham Goodyear Rangers\n
+ Park: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-021@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260812T013000Z
+DTEND:20260812T025000Z
+SUMMARY:ML: Derek Houghton Century 21 vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: Derek Houghton Century 21\nVisitor: DC Chiropractic Nads\
+ nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-022@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260814T013000Z
+DTEND:20260814T025000Z
+SUMMARY:CN: Red Hot Dawgs vs DC Chiropractic Nads (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: Red Hot Dawgs\nVisitor: DC Chiropractic Nads\nPark: Cente
+ nnial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-023@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260820T223000Z
+DTEND:20260820T235000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs Northtown Sox
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Northtown Sox\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-024@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260825T223000Z
+DTEND:20260825T235000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs Derek Houghton Century 21
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: Derek Houghton Century 21\
+ nPark: Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-025@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260827T223000Z
+DTEND:20260827T235000Z
+SUMMARY:ML: OK Braves vs DC Chiropractic Nads (A)
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: DC Chiropractic Nads\nPark: Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-026@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260902T000000Z
+DTEND:20260902T012000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs S&H Raiders
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: S&H Raiders\nPark: Centenn
+ ial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-027@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260904T013000Z
+DTEND:20260904T025000Z
+SUMMARY:CN: DC Chiropractic Nads (H) vs The Condo Kings Army
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: The Condo Kings Army\nPark
+ : Centennial North
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-028@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260909T013000Z
+DTEND:20260909T025000Z
+SUMMARY:ML: DC Chiropractic Nads (H) vs The Condo Kings Army
+LOCATION:Mintleaf Park\, Markham\, ON
+DESCRIPTION:Home: DC Chiropractic Nads\nVisitor: The Condo Kings Army\nPark
+ : Mintleaf
+END:VEVENT
+BEGIN:VEVENT
+UID:mmspl-2026-mmspl2026dcchiropracticnads-029@mmspl.ca
+DTSTAMP:20260505T035306Z
+DTSTART:20260911T000000Z
+DTEND:20260911T012000Z
+SUMMARY:CN: OK Braves vs DC Chiropractic Nads (A)
+LOCATION:Centennial North Park\, Markham\, ON
+DESCRIPTION:Home: OK Braves\nVisitor: DC Chiropractic Nads\nPark: Centennia
+ l North
+END:VEVENT
+END:VCALENDAR

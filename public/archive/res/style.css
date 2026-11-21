@@ -1,0 +1,440 @@
+body {
+	margin: 0;
+	padding: 0;
+	background: #333333;
+	background-image: url("../res/img/gradient.png"); 
+	background-repeat:repeat-x;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 90%;
+	color: #787878;
+}
+
+form {
+	margin: 0;
+	padding: 0;
+}
+
+textarea {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 90%;
+}
+
+h1, h2, h3, h4, h5 {
+	margin: 0;
+	padding: 0;
+}
+
+p, ul, ol {
+	margin-top: 0;
+}
+
+a {
+	color: #417FDA;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #417FDA;
+}
+
+a:hover {
+	color: #417FDA;
+	text-decoration:underline;
+}
+
+a img {
+	border:none;
+}
+
+#wrapper {
+	width: 968px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+/* Header */
+#header {
+	margin: 0 auto;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+/* Title */
+#title {
+	color:#FFFFFF;
+	padding:20px;
+}
+
+/* Menu */
+.menu {
+	height: 50px; 
+	margin: 0 auto;
+	padding: 0;
+}
+
+.menu ul {
+	margin: 0;
+	padding: 0;
+	padding-left: 10px;
+	list-style: none;
+}
+
+.menu li {
+	float: left;
+	height: 50px;
+}
+
+.menu a {
+	display: block;
+	margin-top: 10px;
+	margin-right: 5px;
+	padding: 7px 18px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #FFFFFF;
+	border: none;
+}
+
+.menu a:hover, .menu li.current a {
+	background-color:#AA1111;
+}
+
+.menu.standings ul li a {
+    padding: 7px 20px;
+	margin-right: 3px;    
+}
+
+.post .menu {
+	background-color:#EBEBEB;
+}
+.post .menu a {
+	color: #000000;
+	font-weight: bold;
+	border: 1px solid #D2D4C9;
+}
+.post .menu a:hover, .post .menu li.current a {
+	color:#FFFFFF;
+}
+
+/* Page */
+#page {
+	width: 968px;
+	margin: 0 auto;
+	background-color: #FFFFFF;
+	padding-bottom:10px;
+}
+
+/* Content */
+#content {
+	float: right;
+	width: 700px;
+	padding: 20px 20px 0 0;
+}
+
+/* Post */
+.post {
+	margin-bottom: 8px;
+	background-color:#EBEBEB;
+	border: 1px solid #D2D4C9;
+}
+
+.post .title {
+	text-transform:uppercase;
+	padding: 15px 20px 15px 20px;
+	color: #000000;
+}
+
+.post .entry {
+	border-top: 1px solid #D2D4C9;
+	padding: 10px 20px 15px 20px;
+}
+
+/* Admin tables */
+.admin {
+	table-layout:fixed;
+	width:100%;
+	border-spacing:0px 0px;
+	border: 1px solid #000000;
+	color:#000000;
+	text-align: center;
+}
+
+.admin td {
+	padding:10px;
+	border: 1px solid #000000;
+	background-color: #FFFFFF;
+}
+
+.admin td span.top {
+	font-weight:bold;
+}
+
+.admin td span.bottom {
+	font-style:italic;
+}
+
+/* Tourney table */
+.tourney {
+	table-layout:fixed;
+	width:100%;
+	border-spacing:0px 0px;
+	border: 1px solid #000000;
+	color:#000000;
+	text-align: center;
+}
+
+.tourney td {
+	padding:0px;
+	background-color: #FFFFFF;
+}
+
+/* box */
+.box {
+	margin:10px;
+	border-left:1px solid #000000;
+	border-right:1px solid #000000;
+}
+
+.box .heading {
+	background-color:#000000;
+	color:#FFFFFF;
+	font-weight:bold;
+	padding:5px;
+}
+.box .team {
+	padding:2px;
+	border-bottom:1px solid #000000;
+}
+
+/* Data tables */
+.dataTable {
+	width:100%;
+	border-spacing:0px 0px;
+	color:#000000;
+}
+
+.dataTable td {
+	padding:3px;
+}
+
+.zebra tr:nth-child(even), .evenRow {
+    background-color: #D4D4D4;
+}
+
+.zebra tr:nth-child(odd), .oddRow {
+    background-color: #FFFFFF;
+}
+
+.headerRow {
+	background-color:#333333 !important;
+	color:#FFFFFF !important;
+}
+
+.hiliteRow {
+	background-color:#AA1111;
+	color:#FFFFFF;
+}
+
+.paid {
+	font-weight:bold;
+}
+
+.paging {
+	text-align:right;
+	padding-top:10px;
+	padding-bottom: 10px;
+}
+
+.paging span {
+	font-weight:bold;
+}
+
+.paging a {
+	padding-left:5px;
+	padding-right:5px;
+}
+
+.paging a:hover, .paging a.selected {
+	color:#FFFFFF;
+	background-color: #7f7f7f;	
+	text-decoration:none;
+}
+
+/* Sidebar */
+.sidebar {
+	font-size: 80%;
+	float: left;
+	padding: 20px 0 0 20px;
+	width: 220px;
+}
+
+.sidebar h2, .sidebar h3 {
+	padding: 10px;
+	background-color: #333333;
+	color: #FFFFFF;
+}
+
+.sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.sidebar li {
+	margin: 0;
+	padding: 0;
+}
+
+.sidebar li ul {
+	padding-bottom: 30px;
+}
+
+.sidebar li li {
+	border-bottom: 1px solid #D2D4C9;
+	border-left: 1px solid #D2D4C9;
+	border-right: 1px solid #D2D4C9;
+	padding: 10px;
+}
+
+.sidebar li li span {
+	display: block;
+	padding: 0;
+	padding-top:2px;
+	padding-left:10px;
+	font-style: italic;
+}
+
+.sidebar p {
+	padding-bottom: 20px;
+	text-align: justify;
+}
+
+
+/* Register Form */
+.register {
+	font-size:80%;
+ }
+ 
+.register label{
+	width: 150px;
+	text-align:right;
+	margin-top:3px;
+	padding-right:10px;
+	float: left;
+}
+
+.register span label{
+	width: auto;
+	float: none;
+	text-align:left;
+	padding-top:0px;
+	padding-right:5px;
+}
+
+.register div {
+	height: 5px; 
+	clear: left;
+}
+
+.register textarea {
+	font-size:inherit;
+}
+
+/* picture frame */
+.pictureframe {
+	background-color: #AA1111;
+	padding: 10px;
+	text-align:center;	
+}
+
+.pictureframe span{
+	display: block;
+	color: #FFFFFF;
+	padding-top:10px;
+	font-weight:bold;
+}
+
+/* sponsor frame */
+.sponsor {
+	text-align:center;
+}
+
+/* game score grids */
+.gamescore {
+	border:1px solid #C0C0C0;
+	background-color: #FFFFFF;
+}
+
+.gamescore tr td {
+	padding-top:3px;
+	padding-bottom:3px;
+	border:1px solid #C0C0C0;
+	background-color: #FFFFFF;
+	color:#000000;	
+	text-align: center;
+	font-size:9pt;
+}		
+
+.gamescore .team {
+	width:190px;
+}
+
+.gamescore .score {
+	width: 15px;
+}
+
+.gamescoretime {
+	width:55px;
+	font-size:10pt;
+	color:#000000;
+}
+
+.gamescorecol {
+	width:210px;
+} 	
+
+.updated {
+	background-color:#F1F19B;
+	color:#000000;
+	font-style:italic;
+	font-weight:bold;
+}
+
+/* Footer */
+#footer {
+	height: 20px;
+}
+
+#hrDerbyTip {
+	display:none;
+}
+
+.hrDerbyTipContents {
+	border:3px solid #000000;
+	background-color: #dddddd;
+	color:#000000;
+	padding-bottom:0px;
+	margin-bottom:0px;
+}
+
+.hrDerbyTipTitle {
+	text-align:center;
+	font-size:120%;
+	font-weight:bold;
+	border-bottom: 3px solid #000000;
+	margin-bottom:5px;
+	padding:5px;
+	background-color:#AA1111;
+	color:#FFFFFF;
+}
+
+#hrDerbyTip table {
+	width:100;
+	margin:0px;
+	padding:5px;
+}
+
+.hrDerbyTipTeam {
+	font-weight:bold;
+	padding-right:10px;
+}
